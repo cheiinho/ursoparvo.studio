@@ -24,8 +24,11 @@ export default function SectionReveal({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          if (delay > 0) el.style.transitionDelay = `${delay}s`;
+          el.style.transitionDelay = delay > 0 ? `${delay}s` : "";
           el.classList.add("reveal-visible");
+          // Clear delay after transition fires so stale inline style doesn't leak
+          const clear = () => { el.style.transitionDelay = ""; };
+          el.addEventListener("transitionend", clear, { once: true });
           observer.disconnect();
         }
       },
@@ -38,7 +41,9 @@ export default function SectionReveal({
 
   return (
     <Tag
-      ref={ref as React.Ref<never>}
+      ref={(el: HTMLElement | null) => {
+        if (ref) ref.current = el;
+      }}
       className={`reveal-root ${className}`}
     >
       {children}
