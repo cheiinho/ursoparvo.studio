@@ -1,23 +1,18 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { FlowGradientBackground } from "@/components/ui/flow-gradient-hero-section";
-import { GradientBackground } from "@/components/ui/gradient-backgrounds";
-
+/**
+ * Studio-paper backdrop: a calm, near-solid warm off-white with a very subtle
+ * radial sweep — matching the 3D bear's studio environment. Replaces the
+ * animated WebGL flow gradient so the bear and the work stay the only heroes
+ * (and so the homepage runs one fewer WebGL context).
+ */
 export function SiteBackground() {
-  const [useStatic, setUseStatic] = useState(false);
-
-  useEffect(() => {
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const setMode = () => setUseStatic(reduced.matches);
-    setMode();
-    reduced.addEventListener("change", setMode);
-    return () => reduced.removeEventListener("change", setMode);
-  }, []);
-
-  if (useStatic) {
-    return <GradientBackground variant="indigo" />;
-  }
-
-  return <FlowGradientBackground />;
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none fixed inset-0 -z-10"
+      style={{
+        background:
+          "radial-gradient(130% 100% at 50% 16%, #ffffff 0%, #f3f1ec 48%, #e7e4dd 100%)",
+      }}
+    />
+  );
 }

@@ -28,7 +28,7 @@ type HeroProps = {
 };
 
 const heroWordClass =
-  "font-display text-[clamp(4.15rem,16.5vw,24rem)] font-normal leading-[0.95] tracking-[-0.03em] text-yellow md:text-[clamp(7.25rem,20vw,24rem)] md:leading-[0.9] md:whitespace-nowrap";
+  "font-display text-[clamp(4.15rem,16.5vw,24rem)] font-normal leading-[0.95] tracking-[-0.03em] text-ink md:text-[clamp(7.25rem,20vw,24rem)] md:leading-[0.9] md:whitespace-nowrap";
 
 const heroFlankClass =
   "absolute top-[44%] hidden w-[44%] -translate-y-[calc(50%-0.6rem)] md:block md:w-[45%] md:top-[46%] md:-translate-y-[calc(50%-1.25vh)]";
