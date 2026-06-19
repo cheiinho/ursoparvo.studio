@@ -103,17 +103,17 @@ export default function Bear3DScene({
     camera.lookAt(config.lookAt[0], config.lookAt[1], config.lookAt[2]);
 
     if (isEditorial) {
-      scene.add(new THREE.HemisphereLight(0xffffff, 0xe8ecff, 1.05));
+      scene.add(new THREE.HemisphereLight(0xffffff, 0xfff2cf, 1.18));
 
-      const key = new THREE.DirectionalLight(0xffffff, 0.62);
+      const key = new THREE.DirectionalLight(0xffffff, 0.7);
       key.position.set(2.2, 5.5, 4.5);
       scene.add(key);
 
-      const fill = new THREE.DirectionalLight(0xfff5b0, 0.32);
+      const fill = new THREE.DirectionalLight(0xfff0a0, 0.3);
       fill.position.set(-3.5, 1.2, 3);
       scene.add(fill);
 
-      const rim = new THREE.DirectionalLight(0x6366f1, 0.4);
+      const rim = new THREE.DirectionalLight(0x8a8aff, 0.22);
       rim.position.set(0.4, 2, -5);
       scene.add(rim);
     } else {

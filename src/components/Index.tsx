@@ -5,7 +5,8 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { GalleryItem } from "@/components/ui/circular-gallery-2";
-import { projects, projectPreviewSrc } from "@/data/projects";
+import { projects } from "@/data/projects";
+import { projectPoster } from "@/lib/projectPoster";
 
 const CircularGallery = dynamic(
   () =>
@@ -20,21 +21,6 @@ const CircularGallery = dynamic(
     ),
   },
 );
-
-const galleryImages: Record<string, string> = {
-  nordhaven:
-    "https://images.unsplash.com/photo-1499951360447-b19be8fe836f?w=800&q=80",
-  forma:
-    "https://images.unsplash.com/photo-1561070791-252571790854?w=800&q=80",
-  arcadia:
-    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
-  meridian:
-    "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80",
-  clayworks:
-    "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80",
-  mossline:
-    "https://images.unsplash.com/photo-1507842217343-583bb7270ef7?w=800&q=80",
-};
 
 const galleryOrder = [
   "nordhaven",
@@ -57,9 +43,7 @@ export default function Index({ onCarouselVelocity }: IndexProps) {
       galleryOrder.map((id) => {
         const project = projects.find((p) => p.id === id)!;
         return {
-          image:
-            galleryImages[project.id] ??
-            projectPreviewSrc(project.name, project.previewColor),
+          image: projectPoster(project.id, project.name, project.year),
           text: project.name,
           href: `/work/${project.id}`,
         };
