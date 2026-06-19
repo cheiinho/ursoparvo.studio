@@ -55,24 +55,26 @@ export default function Index({ onCarouselVelocity }: IndexProps) {
   return (
     <section
       id="index"
-      className="relative z-[2] -mt-[6vh] h-[52dvh] min-h-[360px] w-full scroll-mt-20"
+      className="relative z-[2] -mt-[6vh] flex w-full flex-col scroll-mt-20"
       aria-label="Selected work"
     >
-      <CircularGallery
-        items={galleryItems}
-        bend={3}
-        borderRadius={0.05}
-        scrollEase={0.02}
-        fontClassName="font-display"
-        className="h-full w-full"
-        aria-label="Project gallery"
-        onScrollVelocity={onCarouselVelocity}
-        onNavigate={(href) => router.push(href)}
-        onActiveIndex={setActiveIndex}
-      />
+      <div className="h-[42dvh] min-h-[300px] w-full">
+        <CircularGallery
+          items={galleryItems}
+          bend={3}
+          borderRadius={0.05}
+          scrollEase={0.02}
+          fontClassName="font-display"
+          className="h-full w-full"
+          aria-label="Project gallery"
+          onScrollVelocity={onCarouselVelocity}
+          onNavigate={(href) => router.push(href)}
+          onActiveIndex={setActiveIndex}
+        />
+      </div>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 px-6 pb-8 md:px-10 md:pb-10">
-        <div className="mx-auto flex max-w-[1400px] flex-col items-center gap-3">
+      <div className="px-6 pb-14 pt-8 md:px-10 md:pb-16 md:pt-10">
+        <div className="mx-auto flex max-w-[1400px] flex-col items-center gap-4">
           <p
             key={activeIndex}
             className="display text-2xl text-ink transition-opacity duration-300 md:text-3xl"
