@@ -27,6 +27,7 @@ interface CircularGalleryProps extends React.HTMLAttributes<HTMLDivElement> {
   scrollEase?: number;
   fontClassName?: string;
   onScrollVelocity?: (velocity: number) => void;
+  onNavigate?: (href: string) => void;
 }
 
 interface ScrollState {
@@ -318,6 +319,7 @@ class App {
   viewport!: { width: number; height: number };
   raf = 0;
   onScrollVelocity?: (velocity: number) => void;
+  onNavigate?: (href: string) => void;
   boundOnResize!: () => void;
   boundOnWheel!: (e: Event) => void;
   boundOnTouchDown!: (e: MouseEvent | TouchEvent) => void;
@@ -334,6 +336,7 @@ class App {
       scrollEase,
       reducedMotion,
       onScrollVelocity,
+      onNavigate,
     }: {
       items?: GalleryItem[];
       bend: number;
@@ -342,10 +345,12 @@ class App {
       scrollEase: number;
       reducedMotion: boolean;
       onScrollVelocity?: (velocity: number) => void;
+      onNavigate?: (href: string) => void;
     },
   ) {
     this.container = container;
     this.onScrollVelocity = onScrollVelocity;
+    this.onNavigate = onNavigate;
     this.scrollSpeed = scrollSpeed;
     this.reducedMotion = reducedMotion;
     this.scrollEase = scrollEase;
@@ -466,7 +471,7 @@ class App {
       const rawIndex = Math.round(Math.abs(this.scroll.target) / width);
       const itemIndex = rawIndex % this.sourceItems.length;
       const href = this.sourceItems[itemIndex]?.href;
-      if (href) window.location.assign(href);
+      if (href) this.onNavigate?.(href);
     }
   }
 
@@ -579,11 +584,14 @@ const CircularGallery = ({
   className,
   fontClassName,
   onScrollVelocity,
+  onNavigate,
   ...props
 }: CircularGalleryProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const onScrollVelocityRef = useRef(onScrollVelocity);
   onScrollVelocityRef.current = onScrollVelocity;
+  const onNavigateRef = useRef(onNavigate);
+  onNavigateRef.current = onNavigate;
 
   useEffect(() => {
     const container = containerRef.current;
@@ -601,6 +609,7 @@ const CircularGallery = ({
       scrollEase: reducedMotion ? 1 : scrollEase,
       reducedMotion,
       onScrollVelocity: (velocity) => onScrollVelocityRef.current?.(velocity),
+      onNavigate: (href) => onNavigateRef.current?.(href),
     });
 
     const motionMediaQuery = window.matchMedia(
