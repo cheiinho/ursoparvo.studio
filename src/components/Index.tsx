@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { useMemo, useState } from "react";
 import type { GalleryItem } from "@/components/ui/circular-gallery-2";
 import { projects } from "@/data/projects";
@@ -74,15 +75,27 @@ export default function Index({ onCarouselVelocity }: IndexProps) {
         <div className="mx-auto flex max-w-[1400px] flex-col items-center gap-3">
           <p
             key={activeIndex}
-            className="display text-sm text-ink/50 transition-opacity duration-300 md:text-base"
+            className="display text-2xl text-ink transition-opacity duration-300 md:text-3xl"
           >
             {galleryItems[activeIndex]?.text ?? ""}
           </p>
           <Link
             href="/work"
-            className="pointer-events-auto press text-sm font-normal text-ink/60 transition-colors duration-200 hover:text-ink md:text-base"
+            className="pointer-events-auto press nav-cta-split group inline-flex h-auto items-stretch gap-0.5 rounded-full border-0 bg-transparent p-0 text-sm font-normal shadow-none md:text-base"
           >
-            View all work →
+            <span className="nav-cta-split__label rounded-full bg-primary px-5 py-2.5 text-primary-foreground md:px-6 md:py-3">
+              View all work
+            </span>
+            <span className="nav-cta-split__arrow relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary text-primary-foreground">
+              <ArrowUpRight
+                className="nav-cta-split__icon nav-cta-split__icon--out size-4 md:size-[18px]"
+                aria-hidden
+              />
+              <ArrowUpRight
+                className="nav-cta-split__icon nav-cta-split__icon--in absolute size-4 md:size-[18px]"
+                aria-hidden
+              />
+            </span>
           </Link>
         </div>
       </div>

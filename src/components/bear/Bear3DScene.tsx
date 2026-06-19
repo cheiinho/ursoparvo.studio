@@ -2,17 +2,6 @@
 
 import { useEffect, useRef, type RefObject } from "react";
 import * as THREE from "three";
-import {
-  addPartWithOutline,
-  createBrandMaterials,
-  disposeBrandMaterials,
-} from "@/lib/bear3d/brandMaterials";
-import {
-  addInkMesh,
-  createLogoFaceGeometries,
-  disposeLogoFaceGeometries,
-  getLogoFaceAnchors,
-} from "@/lib/bear3d/faceShapes";
 
 export type Bear3DVariant = "hero" | "full";
 
@@ -32,25 +21,29 @@ const CAROUSEL_MOMENTUM_FRICTION = 0.9;
 const CAROUSEL_VELOCITY_SMOOTH = 0.22;
 
 const VARIANTS = {
+  // Homepage hero: pulled back so the bear stays small enough for the
+  // "hello there" wordmark to read. No ground/contact shadow (it floats
+  // over the animated gradient) and shadow maps off for performance.
   hero: {
-    fov: 36,
-    camera: [0, 0.38, 9.2] as const,
-    lookAt: [0, 0.26, 0] as const,
-    bearY: 0.26,
-    bearScale: 0.8,
+    fov: 33,
+    camera: [0, 0.5, 9.6] as const,
+    lookAt: [0, 0.18, 0] as const,
+    scale: 0.8,
     autoRotate: 0,
-    outlineScale: 1.04,
-    editorial: true,
+    shadows: false,
+    groundShadow: false,
+    contactBlob: false,
   },
+  // /bear page: full studio framing with cast + contact shadows.
   full: {
-    fov: 34,
-    camera: [0, 0.45, 7.2] as const,
-    lookAt: [0, 0.15, 0] as const,
-    bearY: 0.35,
-    bearScale: 1,
-    autoRotate: 0.0032,
-    outlineScale: 1.06,
-    editorial: false,
+    fov: 33,
+    camera: [0, 0.5, 7.1] as const,
+    lookAt: [0, 0.12, 0] as const,
+    scale: 1,
+    autoRotate: 0.0028,
+    shadows: true,
+    groundShadow: true,
+    contactBlob: true,
   },
 } as const;
 
@@ -78,87 +71,247 @@ export default function Bear3DScene({
     if (!canvas) return;
 
     const config = VARIANTS[variant];
-    const isEditorial = config.editorial;
     const reduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
+    const isMobile = window.innerWidth < 768;
 
     const renderer = new THREE.WebGLRenderer({
       canvas,
       antialias: true,
       alpha: true,
     });
-    const isMobile = window.innerWidth < 768;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2));
-    renderer.shadowMap.enabled = !isEditorial;
-    if (!isEditorial) {
-      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    }
+    renderer.setPixelRatio(
+      Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2),
+    );
     renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.0;
+    renderer.shadowMap.enabled = config.shadows;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     const scene = new THREE.Scene();
-
     const camera = new THREE.PerspectiveCamera(config.fov, 1, 0.1, 100);
     camera.position.set(config.camera[0], config.camera[1], config.camera[2]);
     camera.lookAt(config.lookAt[0], config.lookAt[1], config.lookAt[2]);
 
-    if (isEditorial) {
-      scene.add(new THREE.HemisphereLight(0xffffff, 0xfff2cf, 1.18));
+    // ---------- Studio environment (procedural softbox PMREM) ----------
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    pmrem.compileEquirectangularShader();
 
-      const key = new THREE.DirectionalLight(0xffffff, 0.7);
-      key.position.set(2.2, 5.5, 4.5);
-      scene.add(key);
-
-      const fill = new THREE.DirectionalLight(0xfff0a0, 0.3);
-      fill.position.set(-3.5, 1.2, 3);
-      scene.add(fill);
-
-      const rim = new THREE.DirectionalLight(0x8a8aff, 0.22);
-      rim.position.set(0.4, 2, -5);
-      scene.add(rim);
-    } else {
-      scene.add(new THREE.HemisphereLight(0xffffff, 0xf5f2ea, 1.12));
-
-      const key = new THREE.DirectionalLight(0xffffff, 0.95);
-      key.position.set(2.8, 6, 4.8);
-      key.castShadow = true;
-      key.shadow.mapSize.set(2048, 2048);
-      key.shadow.camera.near = 1;
-      key.shadow.camera.far = 20;
-      key.shadow.camera.left = -6;
-      key.shadow.camera.right = 6;
-      key.shadow.camera.top = 6;
-      key.shadow.camera.bottom = -6;
-      key.shadow.radius = 4;
-      key.shadow.bias = -0.0004;
-      scene.add(key);
-
-      const fill = new THREE.DirectionalLight(0xfff8d0, 0.58);
-      fill.position.set(-4.5, 1.4, 3);
-      scene.add(fill);
-
-      const rim = new THREE.DirectionalLight(0xffffff, 0.28);
-      rim.position.set(-0.5, 2.5, -4.5);
-      scene.add(rim);
+    function buildEnv() {
+      const c = document.createElement("canvas");
+      c.width = 1024;
+      c.height = 512;
+      const g = c.getContext("2d")!;
+      const grd = g.createLinearGradient(0, 0, 0, 512);
+      grd.addColorStop(0, "#ffffff");
+      grd.addColorStop(0.55, "#e9e8e3");
+      grd.addColorStop(1, "#bfbeb8");
+      g.fillStyle = grd;
+      g.fillRect(0, 0, 1024, 512);
+      const blob = (x: number, y: number, r: number, a: number) => {
+        const rg = g.createRadialGradient(x, y, 0, x, y, r);
+        rg.addColorStop(0, `rgba(255,255,255,${a})`);
+        rg.addColorStop(1, "rgba(255,255,255,0)");
+        g.fillStyle = rg;
+        g.beginPath();
+        g.arc(x, y, r, 0, Math.PI * 2);
+        g.fill();
+      };
+      blob(720, 150, 260, 1.0);
+      blob(220, 220, 200, 0.6);
+      blob(512, 40, 400, 0.45);
+      const tex = new THREE.CanvasTexture(c);
+      tex.mapping = THREE.EquirectangularReflectionMapping;
+      tex.colorSpace = THREE.SRGBColorSpace;
+      const rt = pmrem.fromEquirectangular(tex);
+      tex.dispose();
+      return rt;
     }
 
-    const brand = createBrandMaterials({
-      style: isEditorial ? "editorial" : "expressive",
+    const envRT = buildEnv();
+    scene.environment = envRT.texture;
+
+    // ---------- Lighting ----------
+    const hemi = new THREE.HemisphereLight(0xffffff, 0xbfbdb4, 0.4);
+    scene.add(hemi);
+    const key = new THREE.DirectionalLight(0xffffff, 1.1);
+    key.position.set(3.4, 6.0, 4.2);
+    key.castShadow = config.shadows;
+    key.shadow.mapSize.set(isMobile ? 1024 : 2048, isMobile ? 1024 : 2048);
+    key.shadow.camera.near = 1;
+    key.shadow.camera.far = 22;
+    key.shadow.camera.left = -6;
+    key.shadow.camera.right = 6;
+    key.shadow.camera.top = 6;
+    key.shadow.camera.bottom = -6;
+    key.shadow.radius = 7;
+    key.shadow.bias = -0.0004;
+    scene.add(key);
+    const rim = new THREE.DirectionalLight(0xffffff, 0.6);
+    rim.position.set(-2, 3, -4.5);
+    scene.add(rim);
+
+    // ---------- Velvet: micro-fuzz normal map (value-noise -> Sobel) ----------
+    function velvetNormal(size: number) {
+      const noiseCanvas = (res: number) => {
+        const nc = document.createElement("canvas");
+        nc.width = nc.height = res;
+        const ng = nc.getContext("2d")!;
+        const im = ng.createImageData(res, res);
+        const d = im.data;
+        for (let i = 0; i < res * res; i++) {
+          const v = Math.random() * 255;
+          d[i * 4] = d[i * 4 + 1] = d[i * 4 + 2] = v;
+          d[i * 4 + 3] = 255;
+        }
+        ng.putImageData(im, 0, 0);
+        return nc;
+      };
+      const hc = document.createElement("canvas");
+      hc.width = hc.height = size;
+      const hg = hc.getContext("2d")!;
+      hg.imageSmoothingEnabled = true;
+      hg.drawImage(noiseCanvas(Math.max(8, size >> 2)), 0, 0, size, size);
+      hg.globalAlpha = 0.5;
+      hg.drawImage(noiseCanvas(Math.max(16, size >> 1)), 0, 0, size, size);
+      hg.globalAlpha = 1;
+      const h = hg.getImageData(0, 0, size, size).data;
+      const nc = document.createElement("canvas");
+      nc.width = nc.height = size;
+      const ng = nc.getContext("2d")!;
+      const nim = ng.createImageData(size, size);
+      const nd = nim.data;
+      const H = (x: number, y: number) => {
+        x = (x + size) % size;
+        y = (y + size) % size;
+        return h[(y * size + x) * 4] / 255;
+      };
+      const st = 2.2;
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+          const dx = (H(x - 1, y) - H(x + 1, y)) * st;
+          const dy = (H(x, y - 1) - H(x, y + 1)) * st;
+          const nz = 1.0;
+          const len = Math.sqrt(dx * dx + dy * dy + nz * nz);
+          const k = (y * size + x) * 4;
+          nd[k] = ((dx / len) * 0.5 + 0.5) * 255;
+          nd[k + 1] = ((dy / len) * 0.5 + 0.5) * 255;
+          nd[k + 2] = ((nz / len) * 0.5 + 0.5) * 255;
+          nd[k + 3] = 255;
+        }
+      }
+      ng.putImageData(nim, 0, 0);
+      const tex = new THREE.CanvasTexture(nc);
+      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(5, 5);
+      return tex;
+    }
+    const fuzz = velvetNormal(256);
+
+    // ---------- Velvet sheen: grazing-angle retroreflection (shader inject) ----------
+    function addVelvet(
+      mat: THREE.MeshPhysicalMaterial,
+      sheenHex: number,
+      intensity: number,
+      power: number,
+    ) {
+      const col = new THREE.Color(sheenHex).convertSRGBToLinear();
+      mat.onBeforeCompile = (shader) => {
+        const inject = [
+          "float _nv = 1.0 - clamp(dot(normalize(normal), normalize(vViewPosition)), 0.0, 1.0);",
+          `float _sheen = pow(_nv, ${power.toFixed(2)});`,
+          `outgoingLight += vec3(${col.r.toFixed(4)},${col.g.toFixed(4)},${col.b.toFixed(4)}) * _sheen * ${intensity.toFixed(3)};`,
+        ].join("\n");
+        // three >= r154 renamed <output_fragment> to <opaque_fragment>.
+        const token = shader.fragmentShader.includes("#include <opaque_fragment>")
+          ? "#include <opaque_fragment>"
+          : "#include <output_fragment>";
+        shader.fragmentShader = shader.fragmentShader.replace(
+          token,
+          `${inject}\n${token}`,
+        );
+      };
+      mat.customProgramCacheKey = () =>
+        `velvet_${sheenHex}_${intensity}_${power}`;
+      return mat;
+    }
+
+    // ---------- Materials ----------
+    const physical = (
+      color: number,
+      opts?: THREE.MeshPhysicalMaterialParameters,
+    ) =>
+      new THREE.MeshPhysicalMaterial(
+        Object.assign(
+          { color, roughness: 0.5, metalness: 0.0, clearcoat: 0.0, envMapIntensity: 0.6 },
+          opts || {},
+        ),
+      );
+
+    const matYellow = addVelvet(
+      physical(0xf2dc34, {
+        roughness: 0.86,
+        normalMap: fuzz,
+        normalScale: new THREE.Vector2(0.28, 0.28),
+      }),
+      0xfff2a8,
+      0.6,
+      2.6,
+    );
+    const matPad = addVelvet(
+      physical(0xf4e79a, {
+        roughness: 0.9,
+        normalMap: fuzz,
+        normalScale: new THREE.Vector2(0.24, 0.24),
+      }),
+      0xfff7d2,
+      0.5,
+      2.4,
+    );
+    const matEarIn = addVelvet(
+      physical(0xe6cd2a, {
+        roughness: 0.9,
+        normalMap: fuzz,
+        normalScale: new THREE.Vector2(0.3, 0.3),
+        emissive: 0xffcf6a,
+        emissiveIntensity: 0.14,
+      }),
+      0xfff0a0,
+      0.55,
+      2.6,
+    );
+    const matEarShell = addVelvet(
+      physical(0xeed02e, {
+        roughness: 0.82,
+        normalMap: fuzz,
+        normalScale: new THREE.Vector2(0.28, 0.28),
+      }),
+      0xffd98a,
+      1.15,
+      1.7,
+    );
+    const matDark = physical(0x141414, {
+      roughness: 0.26,
+      clearcoat: 0.7,
+      clearcoatRoughness: 0.16,
+      envMapIntensity: 1.0,
     });
-    const { yellow, muzzle, earIn, ink, outline } = brand;
+    const matGlint = new THREE.MeshBasicMaterial({ color: 0xffffff });
 
-    const ball = new THREE.SphereGeometry(1, 48, 36);
-    const disposables: THREE.BufferGeometry[] = [ball];
-    const shadowMat = isEditorial
-      ? null
-      : new THREE.ShadowMaterial({ opacity: 0.08 });
+    const allMaterials: THREE.Material[] = [
+      matYellow,
+      matPad,
+      matEarIn,
+      matEarShell,
+      matDark,
+      matGlint,
+    ];
 
-    const partShadows = {
-      castShadow: !isEditorial,
-      receiveShadow: !isEditorial,
-    };
-
-    function part(
+    const BALL = new THREE.SphereGeometry(1, 64, 48);
+    const extraGeometries: THREE.BufferGeometry[] = [];
+    const part = (
       mat: THREE.Material,
       sx: number,
       sy: number,
@@ -166,120 +319,144 @@ export default function Bear3DScene({
       x: number,
       y: number,
       z: number,
-      parent: THREE.Object3D,
-      withOutline = false,
-    ) {
-      if (withOutline) {
-        return addPartWithOutline(
-          ball,
-          mat,
-          outline,
-          sx,
-          sy,
-          sz,
-          x,
-          y,
-          z,
-          parent,
-          config.outlineScale,
-          partShadows,
-        );
-      }
-      const mesh = new THREE.Mesh(ball, mat);
-      mesh.scale.set(sx, sy, sz);
-      mesh.position.set(x, y, z);
-      mesh.castShadow = partShadows.castShadow;
-      mesh.receiveShadow = partShadows.receiveShadow;
-      parent.add(mesh);
-      return mesh;
-    }
+      noShadow = false,
+    ) => {
+      const m = new THREE.Mesh(BALL, mat);
+      m.scale.set(sx, sy, sz);
+      m.position.set(x, y, z);
+      m.castShadow = config.shadows && !noShadow;
+      m.receiveShadow = config.shadows && !noShadow;
+      return m;
+    };
 
+    // ---------- Build ----------
     const pivot = new THREE.Group();
     const bear = new THREE.Group();
+    bear.scale.setScalar(config.scale);
     pivot.add(bear);
     scene.add(pivot);
-    bear.scale.setScalar(config.bearScale);
 
     const bodyG = new THREE.Group();
     bear.add(bodyG);
+    bodyG.add(part(matYellow, 1.0, 1.12, 0.92, 0, -0.55, 0));
+    bodyG.add(part(matPad, 0.6, 0.72, 0.5, 0, -0.55, 0.6));
+    bodyG.add(part(matYellow, 0.72, 0.52, 0.62, 0, 0.2, 0));
 
-    bodyG.add(part(yellow, 0.9, 0.94, 0.76, 0, -0.68, 0, bodyG, true));
-    bodyG.add(part(muzzle, 0.56, 0.58, 0.38, 0, -0.64, 0.52, bodyG, true));
-
-    function leg(side: number) {
+    const leg = (side: number) => {
       const g = new THREE.Group();
-      part(yellow, 0.34, 0.28, 0.38, side * 0.4, -1.38, 0.12, g, true);
-      part(muzzle, 0.18, 0.13, 0.1, side * 0.4, -1.46, 0.52, g, true);
+      g.add(part(matYellow, 0.42, 0.32, 0.5, side * 0.44, -1.4, 0.16));
+      g.add(part(matPad, 0.22, 0.15, 0.12, side * 0.44, -1.46, 0.6));
       return g;
-    }
+    };
     bodyG.add(leg(-1), leg(1));
 
-    function arm(side: number) {
-      const g = new THREE.Group();
-      g.position.set(side * 0.64, -0.24, 0.3);
-      part(yellow, 0.28, 0.46, 0.28, 0, 0, 0, g, true);
-      part(muzzle, 0.18, 0.16, 0.14, -side * 0.14, -0.38, 0.32, g, true);
-      g.rotation.z = side * 0.72;
-      g.rotation.x = -0.32;
+    type ArmGroup = THREE.Group & { userData: { base: THREE.Euler } };
+    const arm = (side: number, fwd: number): ArmGroup => {
+      const g = new THREE.Group() as ArmGroup;
+      g.position.set(side * 0.66, -0.1, 0.28 + fwd);
+      g.add(part(matYellow, 0.26, 0.46, 0.28, 0, 0, 0));
+      g.add(part(matPad, 0.18, 0.16, 0.14, -side * 0.16, -0.4, 0.16));
+      g.userData.base = new THREE.Euler(-0.2, 0, side * 0.95);
+      g.rotation.copy(g.userData.base);
       return g;
-    }
-    const armL = arm(-1);
-    const armR = arm(1);
+    };
+    const armL = arm(-1, 0.0);
+    const armR = arm(1, 0.06);
     bodyG.add(armL, armR);
 
     const headG = new THREE.Group();
-    headG.position.set(0, 0.74, 0);
+    headG.position.set(0, 0.9, 0);
     bear.add(headG);
+    headG.add(part(matYellow, 1.06, 1.0, 0.98, 0, 0, 0));
+    headG.add(part(matPad, 0.5, 0.4, 0.42, 0, -0.26, 0.74));
+    headG.add(part(matDark, 0.17, 0.13, 0.12, 0, -0.14, 1.12, true));
 
-    headG.add(part(yellow, 1.16, 1.22, 0.96, 0, 0, 0, headG, true));
-
-    function ear(side: number) {
-      const g = new THREE.Group();
-      g.position.set(side * 0.54, 1.1, 0.12);
-      part(yellow, 0.31, 0.31, 0.26, 0, 0, 0, g, true);
-      part(earIn, 0.17, 0.17, 0.14, 0, 0, 0.1, g, false);
+    type EarGroup = THREE.Group & { userData: { flop: number; fvel: number } };
+    const ear = (side: number): EarGroup => {
+      const g = new THREE.Group() as EarGroup;
+      g.position.set(side * 0.72, 0.84, -0.03);
+      g.add(part(matEarShell, 0.44, 0.46, 0.34, 0, 0, 0));
+      g.add(part(matEarIn, 0.23, 0.25, 0.2, 0, 0, 0.2));
+      g.userData.flop = 0;
+      g.userData.fvel = 0;
       return g;
-    }
+    };
     const earL = ear(-1);
     const earR = ear(1);
     headG.add(earL, earR);
 
-    headG.add(part(muzzle, 0.52, 0.40, 0.28, 0, -0.36, 0.68, headG, true));
-
-    const faceGeo = createLogoFaceGeometries();
-    const anchors = getLogoFaceAnchors();
-
-    addInkMesh(faceGeo.nose, ink, anchors.nose, headG, 14);
-
-    addInkMesh(faceGeo.mouthStem, ink, anchors.mouthStem, headG, 15);
-    addInkMesh(faceGeo.mouthCurveL, ink, anchors.mouthSplit, headG, 15);
-    addInkMesh(faceGeo.mouthCurveR, ink, anchors.mouthSplit, headG, 15);
-
-    function faceEye(side: "left" | "right") {
+    const eye = (side: number) => {
       const g = new THREE.Group();
-      const anchor = side === "left" ? anchors.leftEye : anchors.rightEye;
-      g.position.copy(anchor);
-      const mesh = new THREE.Mesh(faceGeo.eye, ink);
-      mesh.renderOrder = 16;
-      g.add(mesh);
-      headG.add(g);
+      g.position.set(side * 0.4, 0.16, 0.8);
+      g.add(part(matDark, 0.15, 0.22, 0.12, 0, 0, 0, true));
+      g.add(part(matGlint, 0.04, 0.05, 0.03, -side * 0.045, 0.08, 0.1, true));
+      g.rotation.z = side * 0.3;
       return g;
-    }
-    const eyeL = faceEye("left");
-    const eyeR = faceEye("right");
+    };
+    const eyeL = eye(-1);
+    const eyeR = eye(1);
+    headG.add(eyeL, eyeR);
+    const eyeBaseL = eyeL.position.clone();
+    const eyeBaseR = eyeR.position.clone();
 
-    const groundGeo = new THREE.PlaneGeometry(40, 40);
-    disposables.push(groundGeo);
-    if (shadowMat) {
-      const ground = new THREE.Mesh(groundGeo, shadowMat);
+    bear.position.y = 0.32;
+
+    // ---------- Shadows ----------
+    if (config.contactBlob) {
+      const c = document.createElement("canvas");
+      c.width = c.height = 256;
+      const g = c.getContext("2d")!;
+      const rg = g.createRadialGradient(128, 128, 4, 128, 128, 124);
+      rg.addColorStop(0, "rgba(0,0,0,0.5)");
+      rg.addColorStop(0.55, "rgba(0,0,0,0.22)");
+      rg.addColorStop(1, "rgba(0,0,0,0)");
+      g.fillStyle = rg;
+      g.fillRect(0, 0, 256, 256);
+      const tex = new THREE.CanvasTexture(c);
+      const blobGeo = new THREE.PlaneGeometry(4.4, 3.0);
+      extraGeometries.push(blobGeo);
+      const blobMat = new THREE.MeshBasicMaterial({
+        map: tex,
+        transparent: true,
+        depthWrite: false,
+      });
+      allMaterials.push(blobMat);
+      const blob = new THREE.Mesh(blobGeo, blobMat);
+      blob.rotation.x = -Math.PI / 2;
+      blob.position.set(0, -1.69, 0.15);
+      scene.add(blob);
+    }
+
+    let groundMat: THREE.ShadowMaterial | null = null;
+    if (config.groundShadow) {
+      const groundGeo = new THREE.PlaneGeometry(40, 40);
+      extraGeometries.push(groundGeo);
+      groundMat = new THREE.ShadowMaterial({ opacity: 0.12 });
+      const ground = new THREE.Mesh(groundGeo, groundMat);
       ground.rotation.x = -Math.PI / 2;
-      ground.position.y = -2;
+      ground.position.y = -1.7;
       ground.receiveShadow = true;
       scene.add(ground);
     }
 
-    bear.position.y = config.bearY;
+    // ---------- Spring helper (secondary motion) ----------
+    type Spring = { x: number; v: number };
+    const springStep = (
+      o: Spring | { flop: number; fvel: number },
+      kx: "x" | "flop",
+      kv: "v" | "fvel",
+      target: number,
+      k: number,
+      d: number,
+      dt: number,
+    ) => {
+      const obj = o as Record<string, number>;
+      const f = (target - obj[kx]) * k - obj[kv] * d;
+      obj[kv] += f * dt;
+      obj[kx] += obj[kv] * dt;
+    };
 
+    // ---------- Interaction ----------
     let dragging = false;
     let lastX = 0;
     let lastY = 0;
@@ -287,35 +464,65 @@ export default function Bear3DScene({
     let targetRotX = 0;
     let velY = 0;
     let lastInteract = performance.now();
-    let waving = 0;
-    let carouselYaw = 0;
-    let carouselPitch = 0;
-    let carouselRoll = 0;
-    let carouselMomentum = 0;
-    let carouselVelocitySmooth = 0;
+    let lastMove = 0;
+    const ptr = { x: 0, y: 0 };
+    let downT = 0;
+    let moved = 0;
 
+    let waving = 0;
+    let jumpY = 0;
+    let jumpV = 0;
+    let onGround = true;
+    const squash: Spring = { x: 0, v: 0 };
+    const armB: Spring = { x: 0, v: 0 };
+    let dizzy = 0;
+    const triggerJump = () => {
+      if (onGround) {
+        jumpV = 5.2;
+        onGround = false;
+        squash.v += 14;
+        lastInteract = performance.now();
+      }
+    };
+
+    const ptOf = (e: PointerEvent) => ({ x: e.clientX, y: e.clientY });
     const onDown = (e: PointerEvent) => {
       dragging = true;
-      lastInteract = performance.now();
-      lastX = e.clientX;
-      lastY = e.clientY;
+      const p = ptOf(e);
+      lastX = p.x;
+      lastY = p.y;
+      downT = performance.now();
+      moved = 0;
       velY = 0;
-    };
-
-    const onMove = (e: PointerEvent) => {
-      if (!dragging) return;
-      const dx = e.clientX - lastX;
-      const dy = e.clientY - lastY;
-      lastX = e.clientX;
-      lastY = e.clientY;
-      targetRotY += dx * 0.01;
-      targetRotX += dy * 0.006;
-      targetRotX = Math.max(-0.45, Math.min(0.45, targetRotX));
-      velY = dx * 0.01;
       lastInteract = performance.now();
     };
-
+    const onMove = (e: PointerEvent) => {
+      const p = ptOf(e);
+      ptr.x = (p.x / window.innerWidth) * 2 - 1;
+      ptr.y = (p.y / window.innerHeight) * 2 - 1;
+      lastMove = performance.now();
+      if (dragging) {
+        const dx = p.x - lastX;
+        const dy = p.y - lastY;
+        lastX = p.x;
+        lastY = p.y;
+        moved += Math.abs(dx) + Math.abs(dy);
+        targetRotY += dx * 0.01;
+        targetRotX += dy * 0.006;
+        targetRotX = Math.max(-0.6, Math.min(0.6, targetRotX));
+        velY = dx * 0.01;
+        lastInteract = performance.now();
+      }
+    };
     const onUp = () => {
+      if (dragging) {
+        const d = performance.now() - downT;
+        if (moved < 7 && d < 320) {
+          triggerJump();
+        } else if (Math.abs(velY) > 0.11) {
+          dizzy = Math.min(2.0, dizzy + 0.9 + Math.abs(velY) * 3.0);
+        }
+      }
       dragging = false;
     };
 
@@ -332,39 +539,77 @@ export default function Bear3DScene({
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
     };
-
     const ro = new ResizeObserver(resize);
     if (canvas.parentElement) ro.observe(canvas.parentElement);
     window.addEventListener("resize", resize);
     resize();
 
+    // ---------- Idle state machine ----------
+    type IdleState = "none" | "look" | "headshake" | "sigh" | "earflick";
+    let idleState: IdleState = "none";
+    let idleStart = 0;
+    let idleDur = 0;
+    let idleLook = 0;
+    let idleAt = performance.now() + 3000 + Math.random() * 3000;
+    const pickIdle = () => {
+      const r = Math.random();
+      if (r < 0.34) {
+        idleState = "look";
+        idleLook = (Math.random() * 2 - 1) * 0.42;
+        idleDur = 1.7;
+      } else if (r < 0.6) {
+        idleState = "headshake";
+        idleDur = 1.0;
+      } else if (r < 0.82) {
+        idleState = "sigh";
+        idleDur = 1.6;
+      } else {
+        idleState = "earflick";
+        idleDur = 0.7;
+        earL.userData.fvel += Math.random() < 0.5 ? 6 : -6;
+      }
+      idleStart = performance.now();
+    };
+
+    // ---------- Carousel-driven lean (homepage integration) ----------
+    let carouselYaw = 0;
+    let carouselPitch = 0;
+    let carouselRoll = 0;
+    let carouselMomentum = 0;
+    let carouselVelocitySmooth = 0;
+
+    // ---------- Loop ----------
     const clock = new THREE.Clock();
     let blinkTimer = 2.5;
     let blinking = 0;
+    let prevY = 0.32;
     let frameId = 0;
 
     const animate = () => {
       frameId = requestAnimationFrame(animate);
       const dt = Math.min(clock.getDelta(), 0.05);
       const t = clock.elapsedTime;
+      const now = performance.now();
 
-      const idle = performance.now() - lastInteract > 2600;
+      // spin
+      const idle = now - lastInteract > 2800;
       if (!dragging) {
         targetRotY += velY;
         velY *= 0.94;
         if (idle && !reduced) targetRotY += config.autoRotate;
       }
+      const prevPivotY = pivot.rotation.y;
       pivot.rotation.y += (targetRotY - pivot.rotation.y) * 0.12;
       pivot.rotation.x += (targetRotX - pivot.rotation.x) * 0.12;
+      const spinVel = pivot.rotation.y - prevPivotY;
 
+      // carousel lean (subtle, additive on the bear group)
       const carouselVelocity =
         !reduced && carouselVelocityRefRef.current
           ? carouselVelocityRefRef.current.current
           : 0;
-
       carouselVelocitySmooth +=
         (carouselVelocity - carouselVelocitySmooth) * CAROUSEL_VELOCITY_SMOOTH;
-
       const carouselActive = Math.abs(carouselVelocitySmooth) > 0.00035;
       if (carouselActive) {
         carouselMomentum += carouselVelocitySmooth * CAROUSEL_MOMENTUM_GAIN;
@@ -373,12 +618,8 @@ export default function Bear3DScene({
       }
       carouselMomentum = Math.max(
         -CAROUSEL_MAX_YAW / CAROUSEL_VELOCITY_SCALE,
-        Math.min(
-          CAROUSEL_MAX_YAW / CAROUSEL_VELOCITY_SCALE,
-          carouselMomentum,
-        ),
+        Math.min(CAROUSEL_MAX_YAW / CAROUSEL_VELOCITY_SCALE, carouselMomentum),
       );
-
       const intent = carouselMomentum * CAROUSEL_VELOCITY_SCALE;
       const targetCarouselYaw = Math.max(
         -CAROUSEL_MAX_YAW,
@@ -387,61 +628,153 @@ export default function Bear3DScene({
       const leanAmount = Math.min(1, Math.abs(intent) / CAROUSEL_MAX_YAW);
       const targetCarouselPitch = leanAmount * CAROUSEL_MAX_PITCH;
       const targetCarouselRoll = -targetCarouselYaw * 0.28;
-
       const yawSpring = carouselActive ? 0.13 : 0.055;
       const pitchSpring = carouselActive ? 0.18 : 0.07;
       const rollSpring = carouselActive ? 0.11 : 0.05;
-
       carouselYaw += (targetCarouselYaw - carouselYaw) * yawSpring;
       carouselPitch += (targetCarouselPitch - carouselPitch) * pitchSpring;
       carouselRoll += (targetCarouselRoll - carouselRoll) * rollSpring;
-
       bear.rotation.y = carouselYaw;
       bear.rotation.x = carouselPitch;
       bear.rotation.z = carouselRoll;
 
-      if (!reduced && !isEditorial) {
-        const br = 1 + Math.sin(t * 1.5) * 0.014;
-        bodyG.scale.set(1, br, 1);
-        bear.position.y = config.bearY + Math.sin(t * 1.5) * 0.028;
-        headG.rotation.z = Math.sin(t * 0.8) * 0.035;
-        headG.rotation.y = Math.sin(t * 0.5) * 0.04;
-        headG.position.y = 0.74 + Math.sin(t * 1.5) * 0.018;
-        earL.rotation.z = Math.sin(t * 2.2) * 0.05;
-        earR.rotation.z = -Math.sin(t * 2.2) * 0.05;
-        armL.rotation.x = -0.32 + Math.sin(t * 1.2) * 0.035;
-        armR.rotation.x = -0.32 + Math.sin(t * 1.2 + 0.6) * 0.035;
-      } else if (!reduced && isEditorial) {
-        bear.position.y = config.bearY;
+      // jump physics
+      if (!onGround) {
+        jumpV -= 16 * dt;
+        jumpY += jumpV * dt;
+        if (jumpY <= 0) {
+          jumpY = 0;
+          if (jumpV < -1.2) {
+            squash.v -= 18;
+            jumpV = -jumpV * 0.34;
+          } else {
+            jumpV = 0;
+            onGround = true;
+          }
+        }
       }
+
+      // dizzy decay + idle state machine
+      if (dizzy > 0) dizzy = Math.max(0, dizzy - dt * 0.9);
+      const busy = dragging || waving > 0 || dizzy > 0 || !onGround;
+      if (!busy && now - lastInteract > 3000) {
+        if (idleState === "none" && now > idleAt) pickIdle();
+      } else if (idleState !== "none") {
+        idleState = "none";
+        idleAt = now + 2500 + Math.random() * 3000;
+      }
+      let idleEnv = 0;
+      let idleElapsed = 0;
+      if (idleState !== "none") {
+        idleElapsed = (now - idleStart) / 1000;
+        idleEnv = Math.sin(Math.PI * Math.min(idleElapsed / idleDur, 1));
+        if (idleElapsed >= idleDur) {
+          idleState = "none";
+          idleAt = now + 2600 + Math.random() * 3200;
+        }
+      }
+
+      // glance: follow cursor when active, else idle look
+      const pointerActive = now - lastMove < 2500;
+      let glY = pointerActive
+        ? -ptr.x * 0.32 - pivot.rotation.y
+        : idleState === "look"
+          ? idleLook * idleEnv
+          : 0;
+      const glX = pointerActive ? ptr.y * 0.2 : 0;
+      glY = Math.max(-0.5, Math.min(0.5, glY));
+      const swayZ = reduced ? 0 : Math.sin(t * 0.8) * 0.035;
+      headG.rotation.y += (glY - headG.rotation.y) * 0.08;
+      headG.rotation.x += (glX - headG.rotation.x) * 0.08;
+      headG.rotation.z = swayZ;
+      if (idleState === "headshake")
+        headG.rotation.y += Math.sin(idleElapsed * 18) * 0.13 * idleEnv;
+
+      // breathing + sigh + body height (bob + jump)
+      const breath = reduced ? 0 : Math.sin(t * 1.5) * 0.016;
+      const sighBoost = idleState === "sigh" ? idleEnv * 0.05 : 0;
+      const sink = idleState === "sigh" ? idleEnv * 0.05 : 0;
+      const curY =
+        0.32 + (reduced ? 0 : Math.sin(t * 1.5) * 0.03) - sink + jumpY * 0.42;
+      bear.position.y = curY;
+      headG.position.y = 0.9 + (reduced ? 0 : Math.sin(t * 1.5) * 0.018);
+
+      // squash & stretch (volume-preserving-ish)
+      springStep(squash, "x", "v", 0, 160, 13, dt);
+      const sy = 1 + squash.x * 0.12 + breath + sighBoost;
+      const sxz = 1 - squash.x * 0.06;
+      bodyG.scale.set(sxz, sy, sxz);
+
+      // ears: idle wiggle + secondary-motion flop from vertical & spin velocity
+      const vy = (curY - prevY) / Math.max(dt, 0.001);
+      prevY = curY;
+      const flopTarget = -vy * 0.35;
+      springStep(earL.userData, "flop", "fvel", flopTarget, 90, 9, dt);
+      springStep(earR.userData, "flop", "fvel", flopTarget, 90, 9, dt);
+      const eW = reduced ? 0 : Math.sin(t * 2.2) * 0.05;
+      earL.rotation.x = earL.userData.flop;
+      earR.rotation.x = earR.userData.flop;
+      earL.rotation.z =
+        eW - spinVel * 1.2 + (idleState === "sigh" ? idleEnv * 0.18 : 0);
+      earR.rotation.z =
+        -eW - spinVel * 1.2 + (idleState === "sigh" ? idleEnv * 0.18 : 0);
+
+      // arms: settle to base + bounce on vertical velocity + wave
+      springStep(armB, "x", "v", -vy * 0.4, 80, 10, dt);
+      [armL, armR].forEach((a, i) => {
+        const b = a.userData.base;
+        a.rotation.x +=
+          (b.x + armB.x * 0.5 + (reduced ? 0 : Math.sin(t * 1.2 + i) * 0.03) -
+            a.rotation.x) *
+          0.1;
+        a.rotation.z += (b.z - a.rotation.z) * 0.1;
+        a.rotation.y += (0 - a.rotation.y) * 0.1;
+      });
 
       if (wavePendingRef.current) {
         waving = 1;
         wavePendingRef.current = false;
         lastInteract = performance.now();
       }
-
       if (waving > 0) {
-        waving = Math.max(0, waving - dt * 0.55);
+        waving = Math.max(0, waving - dt * 0.5);
         const s = waving;
-        armR.rotation.z = 0.72 - s * 0.5 - 2.0 * s;
-        armR.rotation.x = -0.32 - s * 0.9;
-        armR.rotation.y = Math.sin(t * 16) * 0.5 * s;
-        headG.rotation.z += Math.sin(t * 16) * 0.04 * s;
-      } else {
-        armR.rotation.z += (0.72 - armR.rotation.z) * 0.08;
-        armR.rotation.y += (0 - armR.rotation.y) * 0.1;
+        armR.rotation.z = armR.userData.base.z * (1 - s) + -2.4 * s;
+        armR.rotation.x = armR.userData.base.x * (1 - s) + -0.5 * s;
+        armR.rotation.y = Math.sin(t * 15) * 0.55 * s;
+        headG.rotation.z += Math.sin(t * 15) * 0.05 * s;
       }
 
+      // dizzy: googly eyes + head wobble
+      if (dizzy > 0) {
+        const dz = Math.min(1, dizzy);
+        eyeL.position.set(
+          eyeBaseL.x + Math.cos(t * 16) * 0.05 * dz,
+          eyeBaseL.y + Math.sin(t * 16) * 0.05 * dz,
+          eyeBaseL.z,
+        );
+        eyeR.position.set(
+          eyeBaseR.x + Math.cos(t * 16 + 1.1) * 0.05 * dz,
+          eyeBaseR.y + Math.sin(t * 16 + 1.1) * 0.05 * dz,
+          eyeBaseR.z,
+        );
+        headG.rotation.z += Math.sin(t * 20) * 0.09 * dz;
+        headG.rotation.x += Math.sin(t * 15) * 0.05 * dz;
+      } else {
+        eyeL.position.copy(eyeBaseL);
+        eyeR.position.copy(eyeBaseR);
+      }
+
+      // blink (suppressed while dizzy so the googly reads)
       blinkTimer -= dt;
-      if (blinkTimer <= 0 && blinking === 0) {
-        blinking = 1;
-        blinkTimer = 3.2 + Math.random() * 2.5;
+      if (blinkTimer <= 0 && blinking === 0 && dizzy <= 0) {
+        blinking = 0.0001;
+        blinkTimer = 3.4 + Math.random() * 2.5;
       }
       if (blinking > 0) {
         blinking += dt * 9;
-        const k = Math.sin(Math.min(blinking, Math.PI));
-        const open = 1 - k;
+        const bk = Math.sin(Math.min(blinking, Math.PI));
+        const open = 1 - bk;
         eyeL.scale.y = Math.max(0.08, open);
         eyeR.scale.y = Math.max(0.08, open);
         if (blinking >= Math.PI) {
@@ -468,11 +801,14 @@ export default function Bear3DScene({
       window.removeEventListener("pointercancel", onUp);
       window.removeEventListener("resize", resize);
       ro.disconnect();
+      BALL.dispose();
+      fuzz.dispose();
+      extraGeometries.forEach((g) => g.dispose());
+      allMaterials.forEach((m) => m.dispose());
+      groundMat?.dispose();
+      envRT.dispose();
+      pmrem.dispose();
       renderer.dispose();
-      disposables.forEach((geo) => geo.dispose());
-      disposeLogoFaceGeometries(faceGeo);
-      shadowMat?.dispose();
-      disposeBrandMaterials(brand);
     };
   }, [variant]);
 
@@ -480,7 +816,7 @@ export default function Bear3DScene({
     <canvas
       ref={canvasRef}
       className={`block h-full w-full cursor-grab touch-none active:cursor-grabbing ${className}`}
-      aria-label="Urso Parvo 3D — drag to rotate"
+      aria-label="Urso Parvo 3D — drag to rotate, tap to jump"
     />
   );
 }
