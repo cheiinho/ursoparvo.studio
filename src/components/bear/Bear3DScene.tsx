@@ -39,7 +39,7 @@ const VARIANTS = {
     bearY: 0.26,
     bearScale: 0.8,
     autoRotate: 0,
-    outlineScale: 1.025,
+    outlineScale: 1.04,
     editorial: true,
   },
   full: {
@@ -231,20 +231,20 @@ export default function Bear3DScene({
     headG.position.set(0, 0.74, 0);
     bear.add(headG);
 
-    headG.add(part(yellow, 1.2, 1.12, 1.0, 0, 0, 0, headG, true));
+    headG.add(part(yellow, 1.16, 1.22, 0.96, 0, 0, 0, headG, true));
 
     function ear(side: number) {
       const g = new THREE.Group();
-      g.position.set(side * 0.6, 1.02, -0.06);
-      part(yellow, 0.34, 0.32, 0.2, 0, 0, 0, g, true);
-      part(earIn, 0.18, 0.18, 0.12, 0, 0, 0.12, g, false);
+      g.position.set(side * 0.54, 1.1, 0.12);
+      part(yellow, 0.31, 0.31, 0.26, 0, 0, 0, g, true);
+      part(earIn, 0.17, 0.17, 0.14, 0, 0, 0.1, g, false);
       return g;
     }
     const earL = ear(-1);
     const earR = ear(1);
     headG.add(earL, earR);
 
-    headG.add(part(muzzle, 0.5, 0.38, 0.26, 0, -0.34, 0.7, headG, true));
+    headG.add(part(muzzle, 0.52, 0.40, 0.28, 0, -0.36, 0.68, headG, true));
 
     const faceGeo = createLogoFaceGeometries();
     const anchors = getLogoFaceAnchors();
