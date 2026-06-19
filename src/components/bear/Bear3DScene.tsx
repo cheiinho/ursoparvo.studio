@@ -3,11 +3,8 @@
 import { useEffect, useRef, type RefObject } from "react";
 import * as THREE from "three";
 
-export type Bear3DVariant = "hero" | "full";
-
 type Bear3DSceneProps = {
   waveTick?: number;
-  variant?: Bear3DVariant;
   className?: string;
   onReady?: () => void;
   carouselVelocityRef?: RefObject<number>;
@@ -20,36 +17,19 @@ const CAROUSEL_MOMENTUM_GAIN = 0.42;
 const CAROUSEL_MOMENTUM_FRICTION = 0.9;
 const CAROUSEL_VELOCITY_SMOOTH = 0.22;
 
-const VARIANTS = {
-  // Homepage hero: pulled back so the bear stays small enough for the
-  // "hello there" wordmark to read. No ground/contact shadow (it floats
-  // over the animated gradient) and shadow maps off for performance.
-  hero: {
-    fov: 33,
-    camera: [0, 0.5, 9.6] as const,
-    lookAt: [0, 0.18, 0] as const,
-    scale: 0.8,
-    autoRotate: 0,
-    shadows: false,
-    groundShadow: false,
-    contactBlob: false,
-  },
-  // /bear page: full studio framing with cast + contact shadows.
-  full: {
-    fov: 33,
-    camera: [0, 0.5, 7.1] as const,
-    lookAt: [0, 0.12, 0] as const,
-    scale: 1,
-    autoRotate: 0.0028,
-    shadows: true,
-    groundShadow: true,
-    contactBlob: true,
-  },
+// Homepage hero framing: pulled back and scaled down so the bear stays small
+// enough for the "hello there" wordmark to read. Front-facing (no auto-spin),
+// no shadows — it floats over the animated gradient.
+const CONFIG = {
+  fov: 33,
+  camera: [0, 0.5, 9.6] as const,
+  lookAt: [0, 0.18, 0] as const,
+  scale: 0.8,
+  autoRotate: 0,
 } as const;
 
 export default function Bear3DScene({
   waveTick = 0,
-  variant = "hero",
   className = "",
   onReady,
   carouselVelocityRef,
@@ -70,7 +50,7 @@ export default function Bear3DScene({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const config = VARIANTS[variant];
+    const config = CONFIG;
     const reduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
@@ -87,8 +67,7 @@ export default function Bear3DScene({
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.0;
-    renderer.shadowMap.enabled = config.shadows;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.enabled = false;
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(config.fov, 1, 0.1, 100);
@@ -138,16 +117,6 @@ export default function Bear3DScene({
     scene.add(hemi);
     const key = new THREE.DirectionalLight(0xffffff, 1.1);
     key.position.set(3.4, 6.0, 4.2);
-    key.castShadow = config.shadows;
-    key.shadow.mapSize.set(isMobile ? 1024 : 2048, isMobile ? 1024 : 2048);
-    key.shadow.camera.near = 1;
-    key.shadow.camera.far = 22;
-    key.shadow.camera.left = -6;
-    key.shadow.camera.right = 6;
-    key.shadow.camera.top = 6;
-    key.shadow.camera.bottom = -6;
-    key.shadow.radius = 7;
-    key.shadow.bias = -0.0004;
     scene.add(key);
     const rim = new THREE.DirectionalLight(0xffffff, 0.6);
     rim.position.set(-2, 3, -4.5);
@@ -324,8 +293,8 @@ export default function Bear3DScene({
       const m = new THREE.Mesh(BALL, mat);
       m.scale.set(sx, sy, sz);
       m.position.set(x, y, z);
-      m.castShadow = config.shadows && !noShadow;
-      m.receiveShadow = config.shadows && !noShadow;
+      m.castShadow = false;
+      m.receiveShadow = false;
       return m;
     };
 
@@ -400,44 +369,6 @@ export default function Bear3DScene({
     const eyeBaseR = eyeR.position.clone();
 
     bear.position.y = 0.32;
-
-    // ---------- Shadows ----------
-    if (config.contactBlob) {
-      const c = document.createElement("canvas");
-      c.width = c.height = 256;
-      const g = c.getContext("2d")!;
-      const rg = g.createRadialGradient(128, 128, 4, 128, 128, 124);
-      rg.addColorStop(0, "rgba(0,0,0,0.5)");
-      rg.addColorStop(0.55, "rgba(0,0,0,0.22)");
-      rg.addColorStop(1, "rgba(0,0,0,0)");
-      g.fillStyle = rg;
-      g.fillRect(0, 0, 256, 256);
-      const tex = new THREE.CanvasTexture(c);
-      const blobGeo = new THREE.PlaneGeometry(4.4, 3.0);
-      extraGeometries.push(blobGeo);
-      const blobMat = new THREE.MeshBasicMaterial({
-        map: tex,
-        transparent: true,
-        depthWrite: false,
-      });
-      allMaterials.push(blobMat);
-      const blob = new THREE.Mesh(blobGeo, blobMat);
-      blob.rotation.x = -Math.PI / 2;
-      blob.position.set(0, -1.69, 0.15);
-      scene.add(blob);
-    }
-
-    let groundMat: THREE.ShadowMaterial | null = null;
-    if (config.groundShadow) {
-      const groundGeo = new THREE.PlaneGeometry(40, 40);
-      extraGeometries.push(groundGeo);
-      groundMat = new THREE.ShadowMaterial({ opacity: 0.12 });
-      const ground = new THREE.Mesh(groundGeo, groundMat);
-      ground.rotation.x = -Math.PI / 2;
-      ground.position.y = -1.7;
-      ground.receiveShadow = true;
-      scene.add(ground);
-    }
 
     // ---------- Spring helper (secondary motion) ----------
     type Spring = { x: number; v: number };
@@ -803,14 +734,12 @@ export default function Bear3DScene({
       ro.disconnect();
       BALL.dispose();
       fuzz.dispose();
-      extraGeometries.forEach((g) => g.dispose());
       allMaterials.forEach((m) => m.dispose());
-      groundMat?.dispose();
       envRT.dispose();
       pmrem.dispose();
       renderer.dispose();
     };
-  }, [variant]);
+  }, []);
 
   return (
     <canvas

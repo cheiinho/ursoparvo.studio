@@ -62,7 +62,6 @@ export default function Hero({ onReady, carouselVelocityRef }: HeroProps) {
       </div>
       <div className="absolute inset-0 z-10 flex items-center justify-center">
         <Bear3DScene
-          variant="hero"
           waveTick={waveTick}
           onReady={onReady}
           carouselVelocityRef={carouselVelocityRef}
