@@ -312,6 +312,7 @@ class FlowGradientApp {
         if (this.animationId) cancelAnimationFrame(this.animationId);
         this.animationId = null;
       } else {
+        if (this._idleTickTimeoutId) { clearTimeout(this._idleTickTimeoutId); this._idleTickTimeoutId = undefined; }
         this.tick(); // restart loop
       }
     }
@@ -349,7 +350,10 @@ class FlowGradientApp {
     if (this._idleFps) {
       this._idleFps = false;
       // If the loop stopped (was throttled), restart it
-      if (!this.isPaused && !this.animationId) this.tick();
+      if (!this.isPaused && !this.animationId) {
+        if (this._idleTickTimeoutId) { clearTimeout(this._idleTickTimeoutId); this._idleTickTimeoutId = undefined; }
+        this.tick();
+      }
     }
     this._scheduleIdle();
   };
