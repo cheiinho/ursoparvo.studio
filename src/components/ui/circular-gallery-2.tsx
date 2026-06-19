@@ -28,6 +28,7 @@ interface CircularGalleryProps extends React.HTMLAttributes<HTMLDivElement> {
   fontClassName?: string;
   onScrollVelocity?: (velocity: number) => void;
   onNavigate?: (href: string) => void;
+  onActiveIndex?: (index: number) => void;
 }
 
 interface ScrollState {
@@ -320,6 +321,8 @@ class App {
   raf = 0;
   onScrollVelocity?: (velocity: number) => void;
   onNavigate?: (href: string) => void;
+  onActiveIndex?: (index: number) => void;
+  private _lastActiveIndex = -1;
   boundOnResize!: () => void;
   boundOnWheel!: (e: Event) => void;
   boundOnTouchDown!: (e: MouseEvent | TouchEvent) => void;
@@ -337,6 +340,7 @@ class App {
       reducedMotion,
       onScrollVelocity,
       onNavigate,
+      onActiveIndex,
     }: {
       items?: GalleryItem[];
       bend: number;
@@ -346,11 +350,13 @@ class App {
       reducedMotion: boolean;
       onScrollVelocity?: (velocity: number) => void;
       onNavigate?: (href: string) => void;
+      onActiveIndex?: (index: number) => void;
     },
   ) {
     this.container = container;
     this.onScrollVelocity = onScrollVelocity;
     this.onNavigate = onNavigate;
+    this.onActiveIndex = onActiveIndex;
     this.scrollSpeed = scrollSpeed;
     this.reducedMotion = reducedMotion;
     this.scrollEase = scrollEase;
@@ -528,6 +534,16 @@ class App {
       this.medias?.forEach((media) => media.update(this.scroll, direction));
       this.renderer.render({ scene: this.scene, camera: this.camera });
       this.scroll.last = this.scroll.current;
+
+      if (this.medias?.[0] && this.sourceItems.length > 0) {
+        const width = this.medias[0].width;
+        const rawIndex = Math.round(Math.abs(this.scroll.current) / width);
+        const activeIndex = rawIndex % this.sourceItems.length;
+        if (activeIndex !== this._lastActiveIndex) {
+          this._lastActiveIndex = activeIndex;
+          this.onActiveIndex?.(activeIndex);
+        }
+      }
     }
     this.raf = window.requestAnimationFrame(this.update);
   }
@@ -585,6 +601,7 @@ const CircularGallery = ({
   fontClassName,
   onScrollVelocity,
   onNavigate,
+  onActiveIndex,
   ...props
 }: CircularGalleryProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -592,6 +609,8 @@ const CircularGallery = ({
   onScrollVelocityRef.current = onScrollVelocity;
   const onNavigateRef = useRef(onNavigate);
   onNavigateRef.current = onNavigate;
+  const onActiveIndexRef = useRef(onActiveIndex);
+  onActiveIndexRef.current = onActiveIndex;
 
   useEffect(() => {
     const container = containerRef.current;
@@ -610,6 +629,7 @@ const CircularGallery = ({
       reducedMotion,
       onScrollVelocity: (velocity) => onScrollVelocityRef.current?.(velocity),
       onNavigate: (href) => onNavigateRef.current?.(href),
+      onActiveIndex: (index) => onActiveIndexRef.current?.(index),
     });
 
     const motionMediaQuery = window.matchMedia(

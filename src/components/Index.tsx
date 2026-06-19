@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import type { GalleryItem } from "@/components/ui/circular-gallery-2";
 import { projects, projectPreviewSrc } from "@/data/projects";
 
@@ -51,6 +51,7 @@ type IndexProps = {
 
 export default function Index({ onCarouselVelocity }: IndexProps) {
   const router = useRouter();
+  const [activeIndex, setActiveIndex] = useState(0);
   const galleryItems = useMemo<GalleryItem[]>(
     () =>
       galleryOrder.map((id) => {
@@ -82,10 +83,17 @@ export default function Index({ onCarouselVelocity }: IndexProps) {
         aria-label="Project gallery"
         onScrollVelocity={onCarouselVelocity}
         onNavigate={(href) => router.push(href)}
+        onActiveIndex={setActiveIndex}
       />
 
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 px-6 pb-8 md:px-10 md:pb-10">
-        <div className="mx-auto flex max-w-[1400px] justify-center">
+        <div className="mx-auto flex max-w-[1400px] flex-col items-center gap-3">
+          <p
+            key={activeIndex}
+            className="display text-sm text-ink/50 transition-opacity duration-300 md:text-base"
+          >
+            {galleryItems[activeIndex]?.text ?? ""}
+          </p>
           <Link
             href="/work"
             className="pointer-events-auto press text-sm font-normal text-ink/60 transition-colors duration-200 hover:text-ink md:text-base"
