@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Cookie Policy — UrsoParvo Studio",
+  title: "Cookie Policy · UrsoParvo Studio",
 };
 
 export default function CookiesPage() {

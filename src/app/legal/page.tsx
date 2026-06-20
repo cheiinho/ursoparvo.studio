@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Legal Notice — UrsoParvo Studio",
+  title: "Legal Notice · UrsoParvo Studio",
 };
 
 export default function LegalNoticePage() {

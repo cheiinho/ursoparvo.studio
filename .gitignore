@@ -44,3 +44,6 @@ next-env.d.ts
 /graphify-out/
 /.superpowers/
 /.screenshots/
+
+# Cursor IDE
+/.cursor/

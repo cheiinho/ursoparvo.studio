@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — UrsoParvo Studio",
+  title: "Privacy Policy · UrsoParvo Studio",
 };
 
 export default function PrivacyPage() {

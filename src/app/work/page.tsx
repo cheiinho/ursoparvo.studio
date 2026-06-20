@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import WorkPageContent from "@/components/WorkPageContent";
 
 export const metadata: Metadata = {
-  title: "Work — UrsoParvo Studio",
-  description:
-    "Selected projects in brand identity, art direction, digital experience, and more.",
+  title: "Work · UrsoParvo Studio",
+  description: "Selected projects. Identity, print, digital, packaging.",
 };
 
 export default function WorkPage() {

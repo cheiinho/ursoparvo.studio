@@ -1,11 +1,10 @@
 "use client";
 
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
-import { Button } from "@/components/ui/button";
 import { NavHeader } from "@/components/ui/nav-header";
 import NavMobileMenu from "@/components/NavMobileMenu";
 import { BEAR_ICON_PX_MD } from "@/constants/bear";
@@ -119,33 +118,16 @@ export default function Nav({ visible }: NavProps) {
           />
         </Link>
 
-        <div className="col-start-3 hidden items-center justify-end gap-4 xl:flex md:gap-6">
+        <div className="col-start-3 hidden items-center justify-end gap-5 xl:flex md:gap-7">
           <NavHeader tabIndex={interactive ? 0 : -1} />
-          <Button
-            render={
-              <a
-                href="mailto:hello@ursoparvo.studio"
-                data-cursor-hover
-                tabIndex={interactive ? 0 : -1}
-              />
-            }
-            nativeButton={false}
-            className="press nav-cta-split group inline-flex h-auto items-stretch gap-0.5 rounded-full border-0 bg-transparent p-0 text-sm font-normal shadow-none hover:bg-transparent md:text-base"
+          <a
+            href="mailto:hello@ursoparvo.studio"
+            data-cursor-hover
+            tabIndex={interactive ? 0 : -1}
+            className="press link-underline text-sm font-normal text-ink/70 transition-colors duration-200 hover:text-ink md:text-base"
           >
-            <span className="nav-cta-split__label rounded-full bg-primary px-5 py-2 text-primary-foreground md:px-6 md:py-2.5">
-              Get in touch
-            </span>
-            <span className="nav-cta-split__arrow relative flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary text-primary-foreground md:size-10">
-              <ArrowUpRight
-                className="nav-cta-split__icon nav-cta-split__icon--out size-4 md:size-[18px]"
-                aria-hidden
-              />
-              <ArrowUpRight
-                className="nav-cta-split__icon nav-cta-split__icon--in absolute size-4 md:size-[18px]"
-                aria-hidden
-              />
-            </span>
-          </Button>
+            Get in touch
+          </a>
         </div>
 
         <button

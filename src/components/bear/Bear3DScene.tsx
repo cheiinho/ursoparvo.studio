@@ -745,7 +745,7 @@ export default function Bear3DScene({
     <canvas
       ref={canvasRef}
       className={`block h-full w-full cursor-grab touch-none active:cursor-grabbing ${className}`}
-      aria-label="Urso Parvo 3D — drag to rotate, tap to jump"
+      aria-label="Urso Parvo 3D. Drag to rotate, tap to jump."
     />
   );
 }

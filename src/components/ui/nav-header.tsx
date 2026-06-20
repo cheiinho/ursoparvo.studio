@@ -35,9 +35,11 @@ function NavHeader({ tabIndex = 0 }: NavHeaderProps) {
   const pathname = usePathname();
   const containerRef = useRef<HTMLDivElement>(null);
   const workTabRef = useRef<HTMLLIElement>(null);
+  const aboutTabRef = useRef<HTMLLIElement>(null);
 
   const isWorkActive =
     pathname === "/work" || pathname.startsWith("/work/");
+  const isAboutActive = pathname === "/about";
 
   const measureTab = useCallback((tab: HTMLLIElement | null) => {
     const container = containerRef.current;
@@ -54,13 +56,24 @@ function NavHeader({ tabIndex = 0 }: NavHeaderProps) {
   }, []);
 
   useEffect(() => {
-    if (!isWorkActive) return;
-    setPosition(measureTab(workTabRef.current));
-  }, [isWorkActive, measureTab, pathname]);
+    if (isWorkActive) {
+      setPosition(measureTab(workTabRef.current));
+      return;
+    }
+    if (isAboutActive) {
+      setPosition(measureTab(aboutTabRef.current));
+      return;
+    }
+    setPosition(HIDDEN_CURSOR);
+  }, [isAboutActive, isWorkActive, measureTab, pathname]);
 
   const handleMouseLeave = () => {
     if (isWorkActive) {
       setPosition(measureTab(workTabRef.current));
+      return;
+    }
+    if (isAboutActive) {
+      setPosition(measureTab(aboutTabRef.current));
       return;
     }
     setPosition(HIDDEN_CURSOR);
@@ -85,8 +98,10 @@ function NavHeader({ tabIndex = 0 }: NavHeaderProps) {
           Work
         </NavTab>
         <NavTab
-          href="/#end"
+          ref={aboutTabRef}
+          href="/about"
           setPosition={setPosition}
+          active={isAboutActive}
           reduceMotion={!!reduceMotion}
           tabIndex={tabIndex}
         >

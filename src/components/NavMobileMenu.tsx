@@ -12,7 +12,7 @@ const INSTAGRAM_URL =
 
 export const NAV_MOBILE_LINKS = [
   { href: "/work", label: "Work" },
-  { href: "/#end", label: "About" },
+  { href: "/about", label: "About" },
   { href: INSTAGRAM_URL, label: "Instagram", external: true },
   {
     href: "mailto:hello@ursoparvo.studio",
@@ -100,7 +100,7 @@ export default function NavMobileMenu({
                 opacity: open ? 1 : 0,
               }}
             >
-              {link.external ? (
+              {"external" in link && link.external ? (
                 <a
                   href={link.href}
                   target={
@@ -140,7 +140,7 @@ export default function NavMobileMenu({
           opacity: open ? 1 : 0,
         }}
       >
-        <p className="tech !text-yellow">Design & branding studio</p>
+        <p className="tech !text-yellow">Solo design practice</p>
         <a
           href="mailto:hello@ursoparvo.studio"
           className="press mt-2 inline-block text-sm !text-white transition-colors duration-200 hover:text-yellow md:text-base"

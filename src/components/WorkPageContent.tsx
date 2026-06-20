@@ -1,15 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import Nav from "@/components/Nav";
 import WorkList from "@/components/WorkList";
 import { projects } from "@/data/projects";
 
 export default function WorkPageContent() {
+  const [previewId, setPreviewId] = useState<string | null>(projects[0]?.id ?? null);
+
   return (
     <>
       <Nav visible />
-      <main className="min-h-dvh bg-background">
+      <main className="page-enter min-h-dvh bg-background">
         <section
           className="scroll-mt-20 border-t border-border px-6 py-24 md:px-10 md:py-32"
           aria-label="All work"
@@ -24,7 +27,7 @@ export default function WorkPageContent() {
                 >
                   ← Home
                 </Link>
-                <h1 className="display text-[clamp(2rem,5vw,3.5rem)] leading-none">
+                <h1 className="display text-h1 leading-none text-ink">
                   Selected work
                 </h1>
               </div>
@@ -33,7 +36,10 @@ export default function WorkPageContent() {
               </p>
             </div>
 
-            <WorkList />
+            <WorkList
+              previewProjectId={previewId}
+              onPreviewChange={setPreviewId}
+            />
           </div>
         </section>
       </main>
