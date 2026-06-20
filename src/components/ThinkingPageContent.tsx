@@ -89,11 +89,13 @@ export default function ThinkingPageContent() {
             aria-label="Motto"
             className="grid-editorial mt-[var(--space-xl)] border-t border-border pt-[var(--space-xl)] md:mt-[var(--space-2xl)] md:pt-[var(--space-2xl)]"
           >
-            <SectionReveal className="col-narrow">
-              <p className="display text-[clamp(1.75rem,5vw,3rem)] leading-snug text-ink">
+            <SectionReveal variant="mask" className="col-full">
+              <p className="display text-hero leading-[0.92] text-ink">
                 Um parvo é sempre um parvo.
               </p>
-              <p className="measure mt-6 text-body leading-[1.65] text-ink-muted md:text-lg">
+            </SectionReveal>
+            <SectionReveal className="col-right mt-8" delay={0.12}>
+              <p className="measure text-body leading-[1.65] text-ink-muted md:text-lg">
                 A fool is always a fool. The name is the point. No pretending to
                 be a fifty-person agency. No slick pitch before we have spoken. I
                 say what I think. The work has to carry the rest.
@@ -121,21 +123,42 @@ export default function ThinkingPageContent() {
 
           <section
             aria-label="Seven laws"
-            className="grid-editorial mt-[var(--space-xl)] border-t border-border bg-ground py-[var(--space-xl)] md:mt-[var(--space-2xl)]"
+            className="mt-[var(--space-xl)] border-t border-border bg-ground py-[var(--space-xl)] md:mt-[var(--space-2xl)] md:py-[var(--space-2xl)]"
           >
-            <SectionReveal className="col-full mb-12">
-              <h2 className="display text-h2 text-ink">Seven laws</h2>
-              <p className="measure mt-4 text-body text-ink-muted">
-                The filter for every decision on this site and in client work.
-              </p>
-            </SectionReveal>
-            <ol className="col-narrow space-y-8">
-              {LAWS.map((law, i) => (
-                <SectionReveal key={law.n} as="li" delay={i * 0.03}>
-                  <p className="tech mb-2 text-ink/40">{law.n}</p>
-                  <p className="text-body leading-[1.65] text-ink">{law.text}</p>
-                </SectionReveal>
-              ))}
+            <div className="grid-editorial">
+              <SectionReveal variant="mask" className="col-full mb-10 md:mb-16">
+                <h2 className="display text-hero leading-[0.9] text-ink">
+                  Seven laws
+                </h2>
+                <p className="measure mt-6 text-body text-ink-muted">
+                  The filter for every decision on this site and in client work.
+                </p>
+              </SectionReveal>
+            </div>
+            <ol>
+              {LAWS.map((law, i) => {
+                const numLeft = i % 2 === 0;
+                return (
+                  <SectionReveal
+                    key={law.n}
+                    as="li"
+                    variant="mask"
+                    className="law-row grid-editorial"
+                  >
+                    <span
+                      className={`law-row__num law-row__num--${numLeft ? "left" : "right"}`}
+                      aria-hidden
+                    >
+                      {law.n}
+                    </span>
+                    <p
+                      className={`law-row__text law-row__text--${numLeft ? "right" : "left"}`}
+                    >
+                      {law.text}
+                    </p>
+                  </SectionReveal>
+                );
+              })}
             </ol>
           </section>
         </article>
