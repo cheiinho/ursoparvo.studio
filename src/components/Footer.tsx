@@ -22,6 +22,11 @@ export default function Footer({ className = "" }: FooterProps) {
       className={`bg-transparent px-6 py-10 md:px-10 md:py-12 ${className}`}
     >
       <div className="mx-auto flex max-w-[1400px] flex-col items-center gap-5 text-center">
+        <p className="tech normal-case text-ink/35">
+          Set in Instrument Serif &amp; Inter · Designed and built in Coimbra,
+          Portugal
+        </p>
+
         <p className="text-sm text-ink/60">
           © {year} UrsoParvo Studio. All rights reserved.
         </p>
