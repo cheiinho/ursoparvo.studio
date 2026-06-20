@@ -529,6 +529,18 @@ a {
   }
 }
 
+.hero-parallax-words {
+  transform: translate3d(var(--hx, 0px), var(--hy, 0px), 0);
+  transition: transform 500ms var(--ease-out);
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-parallax-words {
+    transform: none;
+  }
+}
+
 .hero-scroll-line {
   transform-origin: top;
   animation: hero-scroll-pulse 1.8s ease-in-out infinite;

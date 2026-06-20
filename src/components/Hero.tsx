@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { useEffect, useRef } from "react";
 
 const Bear3DScene = dynamic(() => import("@/components/bear/Bear3DScene"), {
   ssr: false,
@@ -32,8 +33,40 @@ const heroFlankClass =
   "absolute top-[44%] hidden w-[44%] -translate-y-[calc(50%-0.6rem)] md:block md:w-[45%] md:top-[46%] md:-translate-y-[calc(50%-1.25vh)]";
 
 export default function Hero({ onReady }: HeroProps) {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const fine = window.matchMedia("(pointer: fine)").matches;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (!fine || reduced) return;
+
+    let frame = 0;
+    let hx = 0;
+    let hy = 0;
+    const onMove = (e: PointerEvent) => {
+      const r = el.getBoundingClientRect();
+      hx = ((e.clientX - r.left) / r.width) * 2 - 1;
+      hy = ((e.clientY - r.top) / r.height) * 2 - 1;
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        el.style.setProperty("--hx", `${(hx * 18).toFixed(2)}px`);
+        el.style.setProperty("--hy", `${(hy * 10).toFixed(2)}px`);
+      });
+    };
+    el.addEventListener("pointermove", onMove, { passive: true });
+    return () => {
+      el.removeEventListener("pointermove", onMove);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="hero"
       className="relative h-[72dvh] min-h-[520px] w-full overflow-x-hidden pt-[5vh]"
     >
@@ -42,7 +75,7 @@ export default function Hero({ onReady }: HeroProps) {
         digital experience.
       </h1>
       <div
-        className="pointer-events-none absolute inset-0 z-0 select-none overflow-visible"
+        className="hero-parallax-words pointer-events-none absolute inset-0 z-0 select-none overflow-visible"
         aria-hidden="true"
       >
         <div className="absolute inset-0 flex flex-col items-center justify-between pt-[6vh] pb-[20vh] text-center md:hidden">
