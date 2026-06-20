@@ -160,3 +160,68 @@ export function projectPoster(
 
   return `data:image/svg+xml,${encodeURIComponent(svg)}`;
 }
+
+/* ---- Application-image placeholders (varied per index) ----
+   Used in case studies until real project photography is supplied. Distinct
+   from the cover poster so the "Applications" grid doesn't repeat the cover. */
+
+function appSpread(t: PosterTheme) {
+  return `
+    <rect width="${W}" height="${H}" fill="${t.base}"/>
+    <rect x="${W * 0.08}" y="${H * 0.12}" width="${W * 0.84}" height="${H * 0.76}" fill="#fbfaf7"/>
+    <rect x="${W * 0.08}" y="${H * 0.12}" width="${W * 0.4}" height="${H * 0.76}" fill="${t.accent}" opacity="0.9"/>
+    <circle cx="${W * 0.28}" cy="${H * 0.5}" r="96" fill="${YELLOW}"/>
+    <g fill="${t.ink}" opacity="0.18">
+      <rect x="${W * 0.54}" y="${H * 0.3}" width="${W * 0.3}" height="14"/>
+      <rect x="${W * 0.54}" y="${H * 0.38}" width="${W * 0.34}" height="14"/>
+      <rect x="${W * 0.54}" y="${H * 0.46}" width="${W * 0.22}" height="14"/>
+    </g>`;
+}
+
+function appLockup(t: PosterTheme) {
+  return `
+    <rect width="${W}" height="${H}" fill="${t.accent}"/>
+    <circle cx="${W * 0.5}" cy="${H * 0.46}" r="190" fill="none" stroke="${t.base}" stroke-width="4"/>
+    <circle cx="${W * 0.5}" cy="${H * 0.46}" r="30" fill="${YELLOW}"/>
+    <rect x="${W * 0.5 - 130}" y="${H * 0.78}" width="260" height="12" fill="${t.base}" opacity="0.7"/>`;
+}
+
+function appSwatches(t: PosterTheme) {
+  const chips = [t.accent, YELLOW, t.ink, "#ffffff"];
+  const cw = (W * 0.8) / chips.length;
+  const cells = chips
+    .map(
+      (c, i) =>
+        `<rect x="${W * 0.1 + i * cw}" y="${H * 0.2}" width="${cw - 24}" height="${H * 0.6}" fill="${c}" stroke="${t.ink}" stroke-opacity="0.08"/>`,
+    )
+    .join("");
+  return `<rect width="${W}" height="${H}" fill="${t.base}"/>${cells}`;
+}
+
+function appSignage(t: PosterTheme, name: string) {
+  return `
+    <rect width="${W}" height="${H}" fill="${t.base}"/>
+    <rect x="${W * 0.12}" y="${H * 0.14}" width="${W * 0.76}" height="${H * 0.72}" fill="${t.ink}"/>
+    <text x="${W * 0.5}" y="${H * 0.66}" font-family="${SERIF}" font-size="420" fill="${t.base}" text-anchor="middle">${name.charAt(0)}</text>
+    <circle cx="${W * 0.8}" cy="${H * 0.28}" r="40" fill="${YELLOW}"/>`;
+}
+
+const APP_COMPOSERS = [appSpread, appLockup, appSwatches, appSignage];
+
+/** A varied, on-brand placeholder for a case-study application image. */
+export function projectApplicationImage(
+  id: string,
+  name: string,
+  index: number,
+): string {
+  const theme = THEMES[id] ?? { base: "#e8e4dc", ink: INK, accent: BLUE };
+  const compose = APP_COMPOSERS[index % APP_COMPOSERS.length];
+  const inner = compose(theme, name);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${inner}</svg>`;
+  return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+}
+
+/** True when a stored image path points at a real local asset (not a placeholder URL). */
+export function isRealImage(src: string): boolean {
+  return !!src && !/^https?:\/\//i.test(src) && !src.startsWith("data:");
+}

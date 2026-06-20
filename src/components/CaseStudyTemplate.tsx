@@ -5,7 +5,11 @@ import {
   projectHref,
   type Project,
 } from "@/data/projects";
-import { projectPoster } from "@/lib/projectPoster";
+import {
+  isRealImage,
+  projectApplicationImage,
+  projectPoster,
+} from "@/lib/projectPoster";
 
 type CaseStudyTemplateProps = {
   project: Project;
@@ -161,27 +165,32 @@ export default function CaseStudyTemplate({ project }: CaseStudyTemplateProps) {
           <p className="tech text-ink/40">Applications</p>
         </SectionReveal>
 
-        {caseStudy.applicationImages.map((src, i) => (
-          <SectionReveal
-            key={src}
-            className={i === 0 ? "col-full" : "col-offset"}
-            delay={i * 0.04}
-          >
-            <div className="project-image overflow-hidden rounded-lg">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={src}
-                alt=""
-                width={1600}
-                height={1000}
-                className={`w-full object-cover ${
-                  i === 0 ? "aspect-[16/9]" : "aspect-[4/3]"
-                }`}
-                loading={i === 0 ? "eager" : "lazy"}
-              />
-            </div>
-          </SectionReveal>
-        ))}
+        {caseStudy.applicationImages.map((src, i) => {
+          const resolved = isRealImage(src)
+            ? src
+            : projectApplicationImage(project.id, project.name, i);
+          return (
+            <SectionReveal
+              key={i}
+              className={i === 0 ? "col-full" : "col-offset"}
+              delay={i * 0.04}
+            >
+              <div className="project-image overflow-hidden rounded-lg">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={resolved}
+                  alt=""
+                  width={1600}
+                  height={1000}
+                  className={`w-full object-cover ${
+                    i === 0 ? "aspect-[16/9]" : "aspect-[4/3]"
+                  }`}
+                  loading={i === 0 ? "eager" : "lazy"}
+                />
+              </div>
+            </SectionReveal>
+          );
+        })}
       </section>
 
       {/* 06 Outcome */}
