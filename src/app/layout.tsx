@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import BearCompanion from "@/components/BearCompanion";
 import CursorDot from "@/components/CursorDot";
+import Intro from "@/components/Intro";
 import { SiteBackground } from "@/components/ui/site-background";
 import { inter, instrumentSerif } from "@/lib/fonts";
 import "./globals.css";
@@ -45,6 +46,7 @@ export default function RootLayout({
         <CursorDot />
         <BearCompanion />
         {children}
+        <Intro />
       </body>
     </html>
   );
