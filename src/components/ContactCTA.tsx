@@ -9,7 +9,7 @@ export default function ContactCTA() {
     >
       <div className="grid-editorial items-end">
         <SectionReveal className="col-wide max-w-xl">
-          <h2 className="display text-h2 text-ink">Got something in mind?</h2>
+          <h2 className="display text-h1 text-ink">Got something in mind?</h2>
           <p className="measure mt-4 text-body leading-[1.65] text-ink-muted md:text-lg">
             Email me. I usually reply within a couple of days. You&apos;ll talk
             to me, not a team.

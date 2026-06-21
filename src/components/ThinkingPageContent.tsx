@@ -65,7 +65,7 @@ export default function ThinkingPageContent() {
           <section aria-label="On permanence" className="grid-editorial">
             <SectionReveal className="col-narrow">
               <p className="tech mb-8 text-ink/40">Point of view</p>
-              <h1 className="display text-h1 text-ink">On permanence.</h1>
+              <h1 className="display text-hero leading-[0.92] text-ink">On permanence.</h1>
               <div className="measure mt-10 space-y-6 text-body leading-[1.65] text-ink md:text-lg">
                 <p>
                   I design brands that do not need to be redesigned. Not because
@@ -110,7 +110,7 @@ export default function ThinkingPageContent() {
             <div className="col-full space-y-12 md:space-y-16">
               {POSITIONS.map((item, i) => (
                 <SectionReveal key={item.title} className="col-narrow" delay={i * 0.04}>
-                  <h2 className="display mb-4 text-xl text-ink md:text-2xl">
+                  <h2 className="display mb-4 text-h2 text-ink">
                     {item.title}
                   </h2>
                   <p className="measure text-body leading-[1.65] text-ink-muted">

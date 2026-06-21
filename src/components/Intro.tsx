@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 /**
- * Branded entrance: a paper curtain with a serif "olá" that wipes up to reveal
+ * Branded entrance: a paper curtain with "olá" that wipes up to reveal
  * the site. Plays once per session (sessionStorage), skips on reduced-motion,
  * and lifts within ~1.6s. The real content renders underneath the whole time,
  * so the overlay is purely decorative (aria-hidden) and never blocks access.

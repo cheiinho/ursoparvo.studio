@@ -2,8 +2,7 @@
 
 :root {
   --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
-  --font-serif: var(--font-instrument-serif), "Instrument Serif", serif;
-  --font-display: var(--font-serif);
+  --font-display: var(--font-sans);
   --paper: #ffffff;
   --ink: #111111;
   --ink-muted: #666666;
@@ -100,8 +99,7 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
-  --font-serif: var(--font-instrument-serif), "Instrument Serif", serif;
-  --font-display: var(--font-serif);
+  --font-display: var(--font-sans);
   --ease-out-emil: var(--ease-out);
   --ease-in-out-emil: var(--ease-in-out);
   --color-ground: var(--ground);
@@ -112,21 +110,21 @@
    Display roles are weight 400 by intent — the elegance lives in the regular.
    `static` so the tokens are always emitted as CSS variables, not tree-shaken. */
 @theme static {
-  --text-hero: clamp(3.5rem, 10vw, 7.5rem);
-  --text-hero--line-height: 0.95;
-  --text-hero--letter-spacing: -0.02em;
+  --text-hero: clamp(4.25rem, 13vw, 10rem);
+  --text-hero--line-height: 0.92;
+  --text-hero--letter-spacing: -0.035em;
 
-  --text-h1: clamp(2rem, 4vw, 3rem);
-  --text-h1--line-height: 1.05;
-  --text-h1--letter-spacing: -0.02em;
+  --text-h1: clamp(2.5rem, 6vw, 4.75rem);
+  --text-h1--line-height: 0.98;
+  --text-h1--letter-spacing: -0.03em;
 
-  --text-h2: clamp(1.5rem, 3vw, 2rem);
-  --text-h2--line-height: 1.1;
-  --text-h2--letter-spacing: -0.01em;
+  --text-h2: clamp(2rem, 4.5vw, 3.25rem);
+  --text-h2--line-height: 1.02;
+  --text-h2--letter-spacing: -0.025em;
 
-  --text-project: clamp(1.75rem, 5vw, 3.5rem);
-  --text-project--line-height: 1;
-  --text-project--letter-spacing: -0.02em;
+  --text-project: clamp(2.25rem, 6vw, 4.5rem);
+  --text-project--line-height: 0.98;
+  --text-project--letter-spacing: -0.03em;
 
   --text-body: 1rem;
   --text-body--line-height: 1.65;
@@ -149,10 +147,15 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  font-weight: 400;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+:where(h1, h2, h3, h4, h5, h6, b, strong) {
+  font-weight: 400;
 }
 
 ::selection {
@@ -236,9 +239,10 @@ a {
 }
 .law-row__num {
   font-family: var(--font-display);
-  font-size: clamp(3.5rem, 11vw, 10rem);
-  line-height: 0.8;
-  color: rgba(17, 17, 17, 0.13);
+  font-size: clamp(4rem, 12vw, 11rem);
+  line-height: 0.82;
+  letter-spacing: -0.04em;
+  color: rgba(17, 17, 17, 0.1);
   align-self: center;
 }
 .law-row__num--left {
@@ -252,8 +256,8 @@ a {
 .law-row__text {
   font-family: var(--font-display);
   font-size: var(--text-h2);
-  line-height: 1.1;
-  letter-spacing: -0.01em;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
   color: var(--ink);
 }
 .law-row__text--right {
@@ -292,8 +296,8 @@ a {
 .display {
   font-family: var(--font-display);
   font-weight: 400;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
+  letter-spacing: -0.03em;
+  line-height: 0.98;
 }
 
 .accent {

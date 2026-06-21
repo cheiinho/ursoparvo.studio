@@ -10,12 +10,14 @@ type Bear3DSceneProps = {
   carouselVelocityRef?: RefObject<number>;
 };
 
-const CAROUSEL_MAX_YAW = 0.22;
-const CAROUSEL_MAX_PITCH = 0.16;
-const CAROUSEL_VELOCITY_SCALE = 3.4;
-const CAROUSEL_MOMENTUM_GAIN = 0.42;
-const CAROUSEL_MOMENTUM_FRICTION = 0.9;
-const CAROUSEL_VELOCITY_SMOOTH = 0.22;
+const CAROUSEL_MAX_YAW = 0.28;
+const CAROUSEL_MAX_PITCH = 0.2;
+const CAROUSEL_VELOCITY_SCALE = 4.2;
+const CAROUSEL_MOMENTUM_GAIN = 0.52;
+const CAROUSEL_MOMENTUM_FRICTION = 0.88;
+const CAROUSEL_VELOCITY_SMOOTH = 0.28;
+const GALLERY_BASE_PITCH = 0.22;
+const GALLERY_BASE_HEAD_PITCH = 0.42;
 
 // Homepage hero framing: pulled back and scaled down so the bear stays small
 // enough for the "hello there" wordmark to read. Front-facing (no auto-spin),
@@ -534,10 +536,11 @@ export default function Bear3DScene({
       pivot.rotation.x += (targetRotX - pivot.rotation.x) * 0.12;
       const spinVel = pivot.rotation.y - prevPivotY;
 
-      // carousel lean (subtle, additive on the bear group)
+      // carousel lean (homepage gallery integration)
+      const galleryMode = Boolean(carouselVelocityRefRef.current);
       const carouselVelocity =
-        !reduced && carouselVelocityRefRef.current
-          ? carouselVelocityRefRef.current.current
+        !reduced && galleryMode
+          ? carouselVelocityRefRef.current!.current
           : 0;
       carouselVelocitySmooth +=
         (carouselVelocity - carouselVelocitySmooth) * CAROUSEL_VELOCITY_SMOOTH;
@@ -557,7 +560,8 @@ export default function Bear3DScene({
         Math.min(CAROUSEL_MAX_YAW, intent),
       );
       const leanAmount = Math.min(1, Math.abs(intent) / CAROUSEL_MAX_YAW);
-      const targetCarouselPitch = leanAmount * CAROUSEL_MAX_PITCH;
+      const targetCarouselPitch =
+        (galleryMode ? GALLERY_BASE_PITCH : 0) + leanAmount * CAROUSEL_MAX_PITCH;
       const targetCarouselRoll = -targetCarouselYaw * 0.28;
       const yawSpring = carouselActive ? 0.13 : 0.055;
       const pitchSpring = carouselActive ? 0.18 : 0.07;
@@ -612,7 +616,11 @@ export default function Bear3DScene({
         : idleState === "look"
           ? idleLook * idleEnv
           : 0;
-      const glX = pointerActive ? ptr.y * 0.2 : 0;
+      const glX = pointerActive
+        ? ptr.y * 0.2
+        : galleryMode
+          ? GALLERY_BASE_HEAD_PITCH + leanAmount * 0.08
+          : 0;
       glY = Math.max(-0.5, Math.min(0.5, glY));
       const swayZ = reduced ? 0 : Math.sin(t * 0.8) * 0.035;
       headG.rotation.y += (glY - headG.rotation.y) * 0.08;

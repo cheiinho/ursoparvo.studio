@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type RefObject } from "react";
 
 const Bear3DScene = dynamic(() => import("@/components/bear/Bear3DScene"), {
   ssr: false,
@@ -24,15 +24,16 @@ const Bear3DScene = dynamic(() => import("@/components/bear/Bear3DScene"), {
 
 type HeroProps = {
   onReady?: () => void;
+  carouselVelocityRef?: RefObject<number>;
 };
 
 const heroWordClass =
-  "font-display text-[clamp(4.15rem,16.5vw,24rem)] font-normal leading-[0.95] tracking-[-0.03em] text-ink md:text-[clamp(7.25rem,20vw,24rem)] md:leading-[0.9] md:whitespace-nowrap";
+  "display text-[clamp(4.25rem,17vw,26rem)] leading-[0.92] tracking-[-0.04em] text-ink md:text-[clamp(7.5rem,21vw,26rem)] md:leading-[0.88] md:whitespace-nowrap";
 
 const heroFlankClass =
   "absolute top-[44%] hidden w-[44%] -translate-y-[calc(50%-0.6rem)] md:block md:w-[45%] md:top-[46%] md:-translate-y-[calc(50%-1.25vh)]";
 
-export default function Hero({ onReady }: HeroProps) {
+export default function Hero({ onReady, carouselVelocityRef }: HeroProps) {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -68,7 +69,7 @@ export default function Hero({ onReady }: HeroProps) {
     <section
       ref={sectionRef}
       id="hero"
-      className="relative h-[72dvh] min-h-[520px] w-full overflow-x-hidden pt-[5vh]"
+      className="relative z-10 h-[72dvh] min-h-[520px] w-full overflow-x-visible pt-[5vh]"
     >
       <h1 className="sr-only">
         UrsoParvo — independent design studio. Brand identity, art direction and
@@ -94,10 +95,10 @@ export default function Hero({ onReady }: HeroProps) {
         </p>
       </div>
       <div className="absolute inset-0 z-10 flex items-center justify-center">
-        <Bear3DScene onReady={onReady} />
+        <Bear3DScene onReady={onReady} carouselVelocityRef={carouselVelocityRef} />
       </div>
       <div className="pointer-events-none absolute inset-x-0 bottom-6 z-30 flex flex-col items-center gap-5 px-6 text-center">
-        <p className="max-w-[34ch] font-display text-[clamp(1.05rem,2.6vw,1.6rem)] leading-snug text-ink/55">
+        <p className="max-w-[36ch] text-[clamp(1.1rem,2.8vw,1.75rem)] font-normal leading-snug tracking-[-0.02em] text-ink/55">
           Brands built to outlast trends.
         </p>
         <p className="tech normal-case !text-[0.6875rem] text-ink/40">

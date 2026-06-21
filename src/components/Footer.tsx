@@ -23,8 +23,7 @@ export default function Footer({ className = "" }: FooterProps) {
     >
       <div className="mx-auto flex max-w-[1400px] flex-col items-center gap-5 text-center">
         <p className="tech normal-case text-ink/35">
-          Set in Instrument Serif &amp; Inter · Designed and built in Coimbra,
-          Portugal
+          Set in Inter · Designed and built in Coimbra, Portugal
         </p>
 
         <p className="text-sm text-ink/60">

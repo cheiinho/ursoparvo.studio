@@ -27,7 +27,7 @@ export default function WorkPageContent() {
                 >
                   ← Home
                 </Link>
-                <h1 className="display text-h1 leading-none text-ink">
+                <h1 className="display text-hero leading-[0.92] text-ink">
                   Selected work
                 </h1>
               </div>

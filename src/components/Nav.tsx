@@ -90,9 +90,8 @@ export default function Nav({ visible }: NavProps) {
           data-cursor-hover
           tabIndex={interactive ? 0 : -1}
         >
-          <span translate="no">
-            <span className="font-bold">UrsoParvo</span>{" "}
-            <span className="font-normal">Studio</span>
+          <span translate="no" className="font-normal">
+            UrsoParvo Studio
           </span>
         </Link>
 

@@ -482,8 +482,10 @@ class App {
   }
 
   onWheel(e: WheelEvent) {
-    const delta = e.deltaY || e.detail;
-    this.scroll.target += (delta > 0 ? this.scrollSpeed : -this.scrollSpeed) * 0.2;
+    e.preventDefault();
+    const delta =
+      Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY || e.detail;
+    this.scroll.target += delta * this.scrollSpeed * 0.12;
     this.onCheckDebounce();
   }
 
@@ -560,7 +562,9 @@ class App {
     this.boundOnTouchUp = this.onTouchUp;
 
     window.addEventListener("resize", this.boundOnResize);
-    window.addEventListener("wheel", this.boundOnWheel);
+    this.container.addEventListener("wheel", this.boundOnWheel, {
+      passive: false,
+    });
     this.container.addEventListener("mousedown", this.boundOnTouchDown);
     window.addEventListener("mousemove", this.boundOnTouchMove);
     window.addEventListener("mouseup", this.boundOnTouchUp);
@@ -576,7 +580,7 @@ class App {
   destroy() {
     window.cancelAnimationFrame(this.raf);
     window.removeEventListener("resize", this.boundOnResize);
-    window.removeEventListener("wheel", this.boundOnWheel);
+    this.container.removeEventListener("wheel", this.boundOnWheel);
     this.container.removeEventListener("mousedown", this.boundOnTouchDown);
     window.removeEventListener("mousemove", this.boundOnTouchMove);
     window.removeEventListener("mouseup", this.boundOnTouchUp);
