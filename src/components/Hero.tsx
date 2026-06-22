@@ -101,9 +101,6 @@ export default function Hero({ onReady, carouselVelocityRef }: HeroProps) {
         <p className="max-w-[36ch] text-[clamp(1.1rem,2.8vw,1.75rem)] font-normal leading-snug tracking-[-0.02em] text-ink/55">
           Brands built to outlast trends.
         </p>
-        <p className="tech normal-case !text-[0.6875rem] text-ink/40">
-          Solo practice · Coimbra · 2026
-        </p>
         <span
           className="hero-scroll-line h-8 w-px bg-ink/25"
           aria-hidden="true"
