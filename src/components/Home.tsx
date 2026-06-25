@@ -7,10 +7,12 @@ import Index from "@/components/Index";
 import PositioningSection from "@/components/PositioningSection";
 import Nav from "@/components/Nav";
 import ContactCTA from "@/components/ContactCTA";
+import { hasPublishedWork } from "@/data/projects";
 
 export default function Home() {
   const [headerVisible, setHeaderVisible] = useState(false);
   const carouselVelocityRef = useRef(0);
+  const showWorkGallery = hasPublishedWork();
 
   return (
     <>
@@ -18,17 +20,22 @@ export default function Home() {
       <main className="page-enter">
         <section
           id="landing"
-          className="relative isolate overflow-visible pb-32 md:pb-48"
+          className={`relative isolate overflow-visible ${
+            showWorkGallery ? "pb-32 md:pb-48" : "pb-16 md:pb-24"
+          }`}
         >
           <Hero
             onReady={() => setHeaderVisible(true)}
-            carouselVelocityRef={carouselVelocityRef}
+            carouselVelocityRef={showWorkGallery ? carouselVelocityRef : undefined}
+            galleryOverlap={showWorkGallery}
           />
-          <Index
-            onCarouselVelocity={(velocity) => {
-              carouselVelocityRef.current = velocity;
-            }}
-          />
+          {showWorkGallery && (
+            <Index
+              onCarouselVelocity={(velocity) => {
+                carouselVelocityRef.current = velocity;
+              }}
+            />
+          )}
         </section>
         <PositioningSection />
         <ContactCTA />

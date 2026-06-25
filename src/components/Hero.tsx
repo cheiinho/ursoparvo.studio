@@ -25,6 +25,7 @@ const Bear3DScene = dynamic(() => import("@/components/bear/Bear3DScene"), {
 type HeroProps = {
   onReady?: () => void;
   carouselVelocityRef?: RefObject<number>;
+  galleryOverlap?: boolean;
 };
 
 const heroWordClass =
@@ -33,7 +34,11 @@ const heroWordClass =
 const heroFlankClass =
   "absolute top-[44%] hidden w-[44%] -translate-y-[calc(50%-0.6rem)] md:block md:w-[45%] md:top-[46%] md:-translate-y-[calc(50%-1.25vh)]";
 
-export default function Hero({ onReady, carouselVelocityRef }: HeroProps) {
+export default function Hero({
+  onReady,
+  carouselVelocityRef,
+  galleryOverlap = false,
+}: HeroProps) {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -97,7 +102,13 @@ export default function Hero({ onReady, carouselVelocityRef }: HeroProps) {
       <div className="absolute inset-0 z-10 flex items-center justify-center">
         <Bear3DScene onReady={onReady} carouselVelocityRef={carouselVelocityRef} />
       </div>
-      <div className="pointer-events-none absolute inset-x-0 bottom-6 z-30 flex flex-col items-center gap-5 px-6 text-center">
+      <div
+        className={`pointer-events-none absolute inset-x-0 z-30 flex flex-col items-center gap-4 px-6 text-center ${
+          galleryOverlap
+            ? "bottom-[calc(14vh+3rem)] md:bottom-[calc(16vh+3.5rem)]"
+            : "bottom-6"
+        }`}
+      >
         <p className="max-w-[36ch] text-[clamp(1.1rem,2.8vw,1.75rem)] font-normal leading-snug tracking-[-0.02em] text-ink/55">
           Brands built to outlast trends.
         </p>

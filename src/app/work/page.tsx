@@ -3,7 +3,7 @@ import WorkPageContent from "@/components/WorkPageContent";
 
 export const metadata: Metadata = {
   title: "Work · UrsoParvo Studio",
-  description: "Selected projects. Identity, print, digital, packaging.",
+  description: "Solo design studio in Coimbra. Brand identity, art direction, digital.",
 };
 
 export default function WorkPage() {

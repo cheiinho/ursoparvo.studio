@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import type { GalleryItem } from "@/components/ui/circular-gallery-2";
-import { projects } from "@/data/projects";
+import { hasPublishedWork, projects } from "@/data/projects";
 import { projectPoster } from "@/lib/projectPoster";
 
 const CircularGallery = dynamic(
@@ -23,15 +23,6 @@ const CircularGallery = dynamic(
   },
 );
 
-const galleryOrder = [
-  "nordhaven",
-  "forma",
-  "arcadia",
-  "clayworks",
-  "meridian",
-  "mossline",
-] as const;
-
 type IndexProps = {
   onCarouselVelocity?: (velocity: number) => void;
 };
@@ -41,16 +32,15 @@ export default function Index({ onCarouselVelocity }: IndexProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const galleryItems = useMemo<GalleryItem[]>(
     () =>
-      galleryOrder.map((id) => {
-        const project = projects.find((p) => p.id === id)!;
-        return {
-          image: projectPoster(project.id, project.name, project.year),
-          text: project.name,
-          href: `/work/${project.id}`,
-        };
-      }),
+      projects.map((project) => ({
+        image: projectPoster(project.id, project.name, project.year),
+        text: project.name,
+        href: `/work/${project.id}`,
+      })),
     [],
   );
+
+  if (!hasPublishedWork()) return null;
 
   return (
     <section
