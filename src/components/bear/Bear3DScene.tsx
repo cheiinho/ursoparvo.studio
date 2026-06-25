@@ -54,11 +54,11 @@ function computeHeroFrame(w: number, h: number): HeroFrame {
   const narrow = Math.min(1, Math.max(0, (0.92 - aspect) / 0.45));
 
   return {
-    fov: 29.5 - narrow * 2.5,
-    camY: 0.36 + tall * 0.06,
-    camZ: 6.4 - tall * 0.55 - narrow * 0.35,
-    lookY: 0.16 + tall * 0.03,
-    scale: Math.min(1.05, 0.88 + tall * 0.12 + narrow * 0.1),
+    fov: 31 - narrow * 2,
+    camY: 0.34 + tall * 0.04,
+    camZ: 7.4 - tall * 0.35 - narrow * 0.15,
+    lookY: 0.1 + tall * 0.02,
+    scale: Math.min(0.94, 0.8 + tall * 0.08 + narrow * 0.05),
   };
 }
 

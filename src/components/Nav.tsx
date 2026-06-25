@@ -15,7 +15,6 @@ type NavProps = {
 
 export default function Nav({ visible }: NavProps) {
   const [pastHero, setPastHero] = useState(false);
-  const [hasScrolled, setHasScrolled] = useState(false);
   const [hasLanding, setHasLanding] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuId = useId();
@@ -37,13 +36,6 @@ export default function Nav({ visible }: NavProps) {
   }, []);
 
   useEffect(() => {
-    const onScroll = () => setHasScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
     setMenuOpen(false);
   }, [pathname]);
 
@@ -58,13 +50,14 @@ export default function Nav({ visible }: NavProps) {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [menuOpen]);
 
+  const isHome = pathname === "/";
   const onHero =
-    visible && hasLanding && !pastHero && !hasScrolled && !menuOpen;
+    isHome && visible && hasLanding && !pastHero && !menuOpen;
   const showNavBear = visible && !onHero && !menuOpen;
   const headerBg = menuOpen
     ? "border-transparent bg-transparent"
     : onHero
-      ? "bg-transparent"
+      ? "border-transparent bg-transparent"
       : "border-b border-border bg-background";
   const interactive = visible && !menuOpen;
 
@@ -132,9 +125,9 @@ export default function Nav({ visible }: NavProps) {
 
         <button
           type="button"
-          className={`press relative z-[220] col-start-3 flex size-11 items-center justify-center justify-self-end rounded-full border border-ink/15 bg-white text-ink transition-colors duration-200 xl:hidden ${
-            menuOpen ? "pointer-events-auto" : ""
-          }`}
+          className={`press relative z-[220] col-start-3 flex size-11 items-center justify-center justify-self-end rounded-full border border-ink/15 text-ink transition-colors duration-200 xl:hidden ${
+            onHero ? "bg-transparent" : "bg-white"
+          } ${menuOpen ? "pointer-events-auto" : ""}`}
           aria-expanded={menuOpen}
           aria-controls={menuId}
           aria-label={menuOpen ? "Close menu" : "Open menu"}

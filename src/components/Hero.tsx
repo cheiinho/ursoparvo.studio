@@ -74,7 +74,7 @@ export default function Hero({
     <section
       ref={sectionRef}
       id="hero"
-      className={`relative z-10 flex w-full min-h-[calc(100svh-3.5rem)] flex-col overflow-hidden px-4 pt-14 md:block md:h-[72dvh] md:min-h-[520px] md:px-0 md:pt-[5vh] ${
+      className={`relative z-10 flex w-full min-h-[calc(100svh-3.5rem)] flex-col overflow-x-hidden px-4 pt-0 md:block md:h-[72dvh] md:min-h-[520px] md:overflow-hidden md:px-0 md:pt-[5vh] ${
         galleryOverlap ? "pb-20 md:pb-0" : "pb-4 md:pb-0"
       }`}
     >
@@ -99,7 +99,7 @@ export default function Hero({
         </p>
       </div>
 
-      <div className="hero-bear-stage relative z-10 min-h-0 w-full flex-1 md:absolute md:inset-0">
+      <div className="hero-bear-stage relative z-10 min-h-0 w-full flex-1 pt-14 md:absolute md:inset-0 md:pt-0">
         <Bear3DScene onReady={onReady} carouselVelocityRef={carouselVelocityRef} />
       </div>
 
