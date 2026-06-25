@@ -30,35 +30,49 @@ type HeroFrame = {
   scale: number;
 };
 
+/** Approximate model height at scale 1 (feet to ear tips). */
+const BEAR_HEIGHT = 2.05;
+
+function cameraDistance(
+  fovDeg: number,
+  objectHeight: number,
+  viewportFill: number,
+): number {
+  const halfFov = (fovDeg * Math.PI) / 360;
+  return objectHeight / (2 * Math.tan(halfFov) * viewportFill);
+}
+
 /** Fit the bear to any viewport from the canvas parent box (aspect + size). */
 function computeHeroFrame(w: number, h: number): HeroFrame {
   const width = Math.max(w, 1);
   const height = Math.max(h, 1);
   const aspect = width / height;
-  const minDim = Math.min(width, height);
 
-  // Desktop / landscape: leave room for hello · there
-  if (aspect >= 1.22) {
-    const wide = Math.min(1, (aspect - 1.22) / 1.15);
+  // Desktop / landscape: room for hello · there
+  if (aspect >= 1.15) {
+    const wide = Math.min(1, (aspect - 1.15) / 1.25);
+    const fov = 33;
+    const scale = 0.76 - wide * 0.05;
+    const fill = 0.36 - wide * 0.05;
     return {
-      fov: 33,
-      camY: 0.5,
-      camZ: 9.1 + wide * 1.1,
-      lookY: 0.18,
-      scale: 0.76 - wide * 0.05,
+      fov,
+      camY: 0.46,
+      camZ: cameraDistance(fov, BEAR_HEIGHT * scale, fill) + 0.6,
+      lookY: 0.2,
+      scale,
     };
   }
 
-  // Portrait phones & tall narrow stages
-  const tall = Math.min(1, Math.max(0, (minDim - 280) / 360));
-  const narrow = Math.min(1, Math.max(0, (0.92 - aspect) / 0.45));
-
+  // Portrait: full bear visible, ~40% of stage height
+  const fov = 36;
+  const scale = 0.68;
+  const fill = 0.3;
   return {
-    fov: 31 - narrow * 2,
-    camY: 0.34 + tall * 0.04,
-    camZ: 7.4 - tall * 0.35 - narrow * 0.15,
-    lookY: 0.1 + tall * 0.02,
-    scale: Math.min(0.94, 0.8 + tall * 0.08 + narrow * 0.05),
+    fov,
+    camY: 0.4,
+    camZ: cameraDistance(fov, BEAR_HEIGHT * scale, fill),
+    lookY: 0.18,
+    scale,
   };
 }
 
@@ -604,9 +618,10 @@ export default function Bear3DScene({
 
     const resize = () => {
       const parent = canvas.parentElement ?? canvas;
-      const w = parent.clientWidth || window.innerWidth;
-      const h = parent.clientHeight || window.innerHeight;
-      if (w < 1 || h < 1) return;
+      let w = parent.clientWidth;
+      let h = parent.clientHeight;
+      if (w < 1) w = window.innerWidth;
+      if (h < 1) h = Math.round(window.innerHeight * 0.52);
       renderer.setSize(w, h, false);
       const frame = computeHeroFrame(w, h);
       camera.fov = frame.fov;
@@ -616,7 +631,7 @@ export default function Bear3DScene({
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
     };
-    const ro = new ResizeObserver(resize);
+    const ro = new ResizeObserver(() => requestAnimationFrame(resize));
     if (canvas.parentElement) ro.observe(canvas.parentElement);
     window.addEventListener("resize", resize);
     resize();
