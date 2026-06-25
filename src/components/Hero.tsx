@@ -16,7 +16,7 @@ const Bear3DScene = dynamic(() => import("@/components/bear/Bear3DScene"), {
         alt=""
         width={160}
         height={160}
-        className="h-28 w-28 animate-pulse opacity-50 md:h-[120px] md:w-[120px]"
+        className="h-36 w-36 animate-pulse opacity-50 md:h-[120px] md:w-[120px]"
       />
     </div>
   ),
@@ -74,8 +74,8 @@ export default function Hero({
     <section
       ref={sectionRef}
       id="hero"
-      className={`relative z-10 flex min-h-[min(74dvh,600px)] w-full flex-col items-center overflow-hidden px-4 pt-[4.5rem] md:block md:h-[72dvh] md:min-h-[520px] md:px-0 md:pt-[5vh] md:pb-0 ${
-        galleryOverlap ? "pb-28" : "pb-24"
+      className={`relative z-10 flex min-h-[calc(100dvh-5rem)] w-full flex-col overflow-hidden px-0 pt-16 md:block md:h-[72dvh] md:min-h-[520px] md:pt-[5vh] md:pb-0 ${
+        galleryOverlap ? "pb-20 md:pb-0" : "pb-16 md:pb-0"
       }`}
     >
       <h1 className="sr-only">
@@ -99,18 +99,18 @@ export default function Hero({
         </p>
       </div>
 
-      <div className="relative z-10 flex h-[min(54dvh,420px)] w-full max-w-[min(94vw,400px)] flex-1 items-center justify-center md:absolute md:inset-0 md:h-full md:max-w-none">
+      <div className="relative z-10 min-h-0 w-full flex-1 md:absolute md:inset-0 md:h-full">
         <Bear3DScene onReady={onReady} carouselVelocityRef={carouselVelocityRef} />
       </div>
 
       <div
-        className={`pointer-events-none relative z-30 flex w-full max-w-[22ch] flex-col items-center gap-3 text-center md:absolute md:inset-x-0 md:max-w-none md:gap-4 md:px-6 ${
+        className={`pointer-events-none relative z-30 shrink-0 px-6 pt-3 pb-2 text-center md:absolute md:inset-x-0 md:max-w-none md:px-6 md:pt-0 md:pb-0 ${
           galleryOverlap
             ? "md:bottom-[calc(16vh+3.5rem)]"
             : "md:bottom-6"
         }`}
       >
-        <p className="text-[1.05rem] leading-snug tracking-[-0.02em] text-ink/55 md:max-w-[36ch] md:text-[clamp(1.1rem,2.8vw,1.75rem)]">
+        <p className="mx-auto max-w-[22ch] text-[1.05rem] leading-snug tracking-[-0.02em] text-ink/55 md:max-w-[36ch] md:text-[clamp(1.1rem,2.8vw,1.75rem)]">
           Brands built to outlast trends.
         </p>
         <span

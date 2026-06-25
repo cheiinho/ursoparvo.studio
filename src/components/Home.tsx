@@ -21,7 +21,7 @@ export default function Home() {
         <section
           id="landing"
           className={`relative isolate overflow-visible ${
-            showWorkGallery ? "pb-24 md:pb-48" : "pb-12 md:pb-24"
+            showWorkGallery ? "pb-20 md:pb-48" : "pb-8 md:pb-24"
           }`}
         >
           <Hero

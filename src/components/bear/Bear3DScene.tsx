@@ -31,10 +31,10 @@ const CONFIG = {
 } as const;
 
 const MOBILE_CONFIG = {
-  fov: 34,
-  camera: [0, 0.38, 8.4] as const,
-  lookAt: [0, 0.16, 0] as const,
-  scale: 0.92,
+  fov: 27,
+  camera: [0, 0.48, 5.6] as const,
+  lookAt: [0, 0.24, 0] as const,
+  scale: 1.22,
   autoRotate: 0,
 } as const;
 
