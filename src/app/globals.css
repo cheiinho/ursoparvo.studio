@@ -57,7 +57,7 @@
   /* Golden reading measure for body copy */
   --measure: 62ch;
   /* Warm off-white "ground" surface (use for sections that aren't pure paper) */
-  --ground: #f0efec;
+  --ground: #ffffff;
   /* Yellow is the single accent — buttons, hover, cursor, key bullets only.
      Never as a background, never as text on white. */
 

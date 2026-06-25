@@ -16,7 +16,7 @@ const Bear3DScene = dynamic(() => import("@/components/bear/Bear3DScene"), {
         alt=""
         width={160}
         height={160}
-        className="h-36 w-36 animate-pulse opacity-50 md:h-[120px] md:w-[120px]"
+        className="h-32 w-32 animate-pulse opacity-50 md:h-[120px] md:w-[120px]"
       />
     </div>
   ),
@@ -74,8 +74,8 @@ export default function Hero({
     <section
       ref={sectionRef}
       id="hero"
-      className={`relative z-10 flex min-h-[calc(100dvh-5rem)] w-full flex-col overflow-hidden px-0 pt-16 md:block md:h-[72dvh] md:min-h-[520px] md:pt-[5vh] md:pb-0 ${
-        galleryOverlap ? "pb-20 md:pb-0" : "pb-16 md:pb-0"
+      className={`relative z-10 flex w-full flex-col items-center overflow-hidden px-4 pt-16 md:block md:h-[72dvh] md:min-h-[520px] md:px-0 md:pt-[5vh] md:pb-0 ${
+        galleryOverlap ? "pb-20 md:pb-0" : "pb-14 md:pb-0"
       }`}
     >
       <h1 className="sr-only">
@@ -99,7 +99,7 @@ export default function Hero({
         </p>
       </div>
 
-      <div className="relative z-10 min-h-0 w-full flex-1 md:absolute md:inset-0 md:h-full">
+      <div className="relative z-10 flex h-[min(50dvh,380px)] w-full max-w-[min(86vw,340px)] items-center justify-center md:absolute md:inset-0 md:h-full md:max-w-none">
         <Bear3DScene onReady={onReady} carouselVelocityRef={carouselVelocityRef} />
       </div>
 

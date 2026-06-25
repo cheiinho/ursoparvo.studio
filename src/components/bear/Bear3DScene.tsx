@@ -31,10 +31,10 @@ const CONFIG = {
 } as const;
 
 const MOBILE_CONFIG = {
-  fov: 27,
-  camera: [0, 0.48, 5.6] as const,
-  lookAt: [0, 0.24, 0] as const,
-  scale: 1.22,
+  fov: 32,
+  camera: [0, 0.4, 7.4] as const,
+  lookAt: [0, 0.18, 0] as const,
+  scale: 0.9,
   autoRotate: 0,
 } as const;
 
@@ -95,8 +95,8 @@ export default function Bear3DScene({
       const g = c.getContext("2d")!;
       const grd = g.createLinearGradient(0, 0, 0, 512);
       grd.addColorStop(0, "#ffffff");
-      grd.addColorStop(0.55, "#e9e8e3");
-      grd.addColorStop(1, "#bfbeb8");
+      grd.addColorStop(0.55, "#fafafa");
+      grd.addColorStop(1, "#f0f0f0");
       g.fillStyle = grd;
       g.fillRect(0, 0, 1024, 512);
       const blob = (x: number, y: number, r: number, a: number) => {
