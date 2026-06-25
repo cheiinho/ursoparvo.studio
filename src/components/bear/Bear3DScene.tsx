@@ -30,6 +30,14 @@ const CONFIG = {
   autoRotate: 0,
 } as const;
 
+const MOBILE_CONFIG = {
+  fov: 38,
+  camera: [0, 0.15, 11.2] as const,
+  lookAt: [0, 0.02, 0] as const,
+  scale: 0.58,
+  autoRotate: 0,
+} as const;
+
 export default function Bear3DScene({
   waveTick = 0,
   className = "",
@@ -52,11 +60,11 @@ export default function Bear3DScene({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const config = CONFIG;
+    const isMobile = window.innerWidth < 768;
+    const config = isMobile ? MOBILE_CONFIG : CONFIG;
     const reduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    const isMobile = window.innerWidth < 768;
 
     const renderer = new THREE.WebGLRenderer({
       canvas,

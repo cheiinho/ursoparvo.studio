@@ -79,11 +79,11 @@ export default function Nav({ visible }: NavProps) {
     >
       <nav
         aria-label="Main"
-        className="relative mx-auto grid h-16 max-w-[1400px] grid-cols-[1fr_auto_1fr] items-center px-6 md:h-20 md:px-10"
+        className="relative mx-auto grid h-14 max-w-[1400px] grid-cols-[1fr_auto_1fr] items-center px-5 md:h-20 md:px-10"
       >
         <Link
           href="/"
-          className={`press col-start-1 justify-self-start text-base text-ink md:text-lg ${
+          className={`press col-start-1 justify-self-start text-sm text-ink sm:text-base md:text-lg ${
             menuOpen ? "invisible" : ""
           }`}
           aria-label="UrsoParvo Studio home"
@@ -91,7 +91,8 @@ export default function Nav({ visible }: NavProps) {
           tabIndex={interactive ? 0 : -1}
         >
           <span translate="no" className="font-normal">
-            UrsoParvo Studio
+            <span className="sm:hidden">UrsoParvo</span>
+            <span className="hidden sm:inline">UrsoParvo Studio</span>
           </span>
         </Link>
 

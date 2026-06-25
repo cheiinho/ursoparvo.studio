@@ -22,7 +22,7 @@ export const NAV_MOBILE_LINKS = [
 ] as const;
 
 const linkClass =
-  "press display text-[clamp(3rem,13vw,6.5rem)] leading-[0.9] tracking-[-0.04em] text-white transition-colors duration-200 hover:text-yellow";
+  "press display text-[clamp(2.35rem,10.5vw,6.5rem)] leading-[0.92] tracking-[-0.04em] text-white transition-colors duration-200 hover:text-yellow";
 
 type NavMobileMenuProps = {
   id: string;

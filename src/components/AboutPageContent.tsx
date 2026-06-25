@@ -8,7 +8,7 @@ export default function AboutPageContent() {
     <>
       <Nav visible />
       <main className="page-enter min-h-dvh bg-background">
-        <article className="grid-editorial pb-[var(--space-xl)] pt-24 md:pb-[var(--space-2xl)] md:pt-32">
+        <article className="grid-editorial pb-[var(--space-xl)] pt-20 md:pb-[var(--space-2xl)] md:pt-32">
           <SectionReveal className="col-full mb-4">
             <p className="tech text-ink/40">About</p>
           </SectionReveal>

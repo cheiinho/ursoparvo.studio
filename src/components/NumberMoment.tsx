@@ -66,10 +66,10 @@ export default function NumberMoment({
         <SectionReveal variant="mask" className="col-full mb-10 md:mb-16">
           <p className="tech text-ink/40">{eyebrow}</p>
         </SectionReveal>
-        <ul className="col-full grid grid-cols-1 gap-12 md:grid-cols-3 md:gap-8">
+        <ul className="col-full grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-8">
           {stats.map((s, i) => (
             <SectionReveal as="li" key={i} delay={i * 0.08}>
-              <p className="display leading-[0.82] text-ink text-[clamp(5rem,14vw,11rem)]">
+              <p className="display text-[clamp(3.5rem,18vw,11rem)] leading-[0.82] text-ink">
                 {typeof s.value === "number" ? (
                   <CountUp target={s.value} />
                 ) : (

@@ -16,15 +16,15 @@ export default function ContactCTA() {
           </p>
         </SectionReveal>
         <SectionReveal
-          className="col-full mt-8 flex justify-start md:col-span-5 md:col-start-8 md:mt-0 md:justify-end"
+          className="col-full mt-8 flex w-full justify-start md:col-span-5 md:col-start-8 md:mt-0 md:w-auto md:justify-end"
           delay={0.06}
         >
           <a
             href="mailto:hello@ursoparvo.studio"
-            className="press nav-cta-split group inline-flex h-auto items-stretch gap-0.5 rounded-full border-0 bg-transparent p-0 text-sm font-normal shadow-none md:text-base"
+            className="press nav-cta-split group inline-flex h-auto w-full max-w-full items-stretch gap-0.5 rounded-full border-0 bg-transparent p-0 text-sm font-normal shadow-none sm:w-auto md:text-base"
             data-cursor-hover
           >
-            <span className="nav-cta-split__label rounded-full bg-primary px-5 py-2.5 text-primary-foreground md:px-6 md:py-3">
+            <span className="nav-cta-split__label rounded-full bg-primary px-5 py-3 text-primary-foreground sm:py-2.5 md:px-6 md:py-3">
               hello@ursoparvo.studio
             </span>
             <span className="nav-cta-split__arrow relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary text-primary-foreground">

@@ -29,10 +29,10 @@ type HeroProps = {
 };
 
 const heroWordClass =
-  "display text-[clamp(4.25rem,17vw,26rem)] leading-[0.92] tracking-[-0.04em] text-ink md:text-[clamp(7.5rem,21vw,26rem)] md:leading-[0.88] md:whitespace-nowrap";
+  "display text-[clamp(7.5rem,21vw,26rem)] leading-[0.88] tracking-[-0.04em] text-ink whitespace-nowrap";
 
 const heroFlankClass =
-  "absolute top-[44%] hidden w-[44%] -translate-y-[calc(50%-0.6rem)] md:block md:w-[45%] md:top-[46%] md:-translate-y-[calc(50%-1.25vh)]";
+  "absolute top-[46%] w-[45%] -translate-y-[calc(50%-1.25vh)]";
 
 export default function Hero({
   onReady,
@@ -74,46 +74,47 @@ export default function Hero({
     <section
       ref={sectionRef}
       id="hero"
-      className="relative z-10 h-[72dvh] min-h-[520px] w-full overflow-x-visible pt-[5vh]"
+      className={`relative z-10 flex min-h-[min(68dvh,560px)] w-full flex-col items-center overflow-hidden px-6 pt-[4.5rem] md:block md:h-[72dvh] md:min-h-[520px] md:px-0 md:pt-[5vh] md:pb-0 ${
+        galleryOverlap ? "pb-28" : "pb-24"
+      }`}
     >
       <h1 className="sr-only">
         UrsoParvo — independent design studio. Brand identity, art direction and
         digital experience.
       </h1>
+
       <div
-        className="hero-parallax-words pointer-events-none absolute inset-0 z-0 select-none overflow-visible"
+        className="hero-parallax-words pointer-events-none absolute inset-0 z-0 hidden select-none overflow-visible md:block"
         aria-hidden="true"
       >
-        <div className="absolute inset-0 flex flex-col items-center justify-between pt-[6vh] pb-[20vh] text-center md:hidden">
-          <p className={heroWordClass}>hello</p>
-          <p className={heroWordClass}>there</p>
-        </div>
         <p
-          className={`${heroFlankClass} left-[4%] pr-[3%] text-right md:left-[5%] md:pr-[4%] ${heroWordClass}`}
+          className={`${heroFlankClass} left-[5%] pr-[4%] text-right ${heroWordClass}`}
         >
           hello
         </p>
         <p
-          className={`${heroFlankClass} right-[4%] pl-[3%] text-left md:right-[5%] md:pl-[4%] ${heroWordClass}`}
+          className={`${heroFlankClass} right-[5%] pl-[4%] text-left ${heroWordClass}`}
         >
           there
         </p>
       </div>
-      <div className="absolute inset-0 z-10 flex items-center justify-center">
+
+      <div className="relative z-10 flex h-[min(42dvh,320px)] w-full max-w-[min(78vw,280px)] flex-1 items-center justify-center md:absolute md:inset-0 md:h-full md:max-w-none">
         <Bear3DScene onReady={onReady} carouselVelocityRef={carouselVelocityRef} />
       </div>
+
       <div
-        className={`pointer-events-none absolute inset-x-0 z-30 flex flex-col items-center gap-4 px-6 text-center ${
+        className={`pointer-events-none relative z-30 flex w-full max-w-[22ch] flex-col items-center gap-3 text-center md:absolute md:inset-x-0 md:max-w-none md:gap-4 md:px-6 ${
           galleryOverlap
-            ? "bottom-[calc(14vh+3rem)] md:bottom-[calc(16vh+3.5rem)]"
-            : "bottom-6"
+            ? "md:bottom-[calc(16vh+3.5rem)]"
+            : "md:bottom-6"
         }`}
       >
-        <p className="max-w-[36ch] text-[clamp(1.1rem,2.8vw,1.75rem)] font-normal leading-snug tracking-[-0.02em] text-ink/55">
+        <p className="text-[1.05rem] leading-snug tracking-[-0.02em] text-ink/55 md:max-w-[36ch] md:text-[clamp(1.1rem,2.8vw,1.75rem)]">
           Brands built to outlast trends.
         </p>
         <span
-          className="hero-scroll-line h-8 w-px bg-ink/25"
+          className="hero-scroll-line hidden h-8 w-px bg-ink/25 md:block"
           aria-hidden="true"
         />
       </div>

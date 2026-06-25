@@ -45,10 +45,10 @@ export default function Index({ onCarouselVelocity }: IndexProps) {
   return (
     <section
       id="work"
-      className="relative z-[1] -mt-[14vh] flex w-full flex-col scroll-mt-20 md:-mt-[16vh]"
+      className="relative z-[1] -mt-[8vh] flex w-full flex-col scroll-mt-20 md:-mt-[16vh]"
       aria-label="Selected work"
     >
-      <div className="h-[44dvh] min-h-[320px] w-full touch-pan-x">
+      <div className="h-[36dvh] min-h-[240px] w-full touch-pan-x md:h-[44dvh] md:min-h-[320px]">
         <CircularGallery
           items={galleryItems}
           bend={3}
@@ -63,7 +63,7 @@ export default function Index({ onCarouselVelocity }: IndexProps) {
         />
       </div>
 
-      <div className="px-6 pb-14 pt-8 md:px-10 md:pb-16 md:pt-10">
+      <div className="px-5 pb-12 pt-6 md:px-10 md:pb-16 md:pt-10">
         <div className="mx-auto flex max-w-[1400px] flex-col items-center gap-4">
           <p
             key={activeIndex}

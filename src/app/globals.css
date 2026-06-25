@@ -56,8 +56,6 @@
 
   /* Golden reading measure for body copy */
   --measure: 62ch;
-
-  /* ---- Design system: color (formalized) ---- */
   /* Warm off-white "ground" surface (use for sections that aren't pure paper) */
   --ground: #f0efec;
   /* Yellow is the single accent — buttons, hover, cursor, key bullets only.
@@ -69,6 +67,16 @@
   --muted-dk: #9a9a94;
 
   color-scheme: light;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --space-lg: 48px;
+    --space-xl: 72px;
+    --space-2xl: 104px;
+    --grid-pad: 24px;
+    --grid-gutter: 16px;
+  }
 }
 
 @theme inline {
@@ -134,12 +142,37 @@
   --text-label--letter-spacing: 0.14em;
 }
 
+@media (max-width: 767px) {
+  .text-hero {
+    font-size: clamp(2.75rem, 11vw, 4rem);
+    line-height: 0.94;
+  }
+
+  .text-h1 {
+    font-size: clamp(2rem, 8vw, 2.75rem);
+  }
+
+  .text-h2 {
+    font-size: clamp(1.65rem, 6.5vw, 2.25rem);
+  }
+
+  .text-project {
+    font-size: clamp(1.75rem, 7vw, 2.5rem);
+  }
+}
+
 * {
   box-sizing: border-box;
 }
 
 html {
   scroll-behavior: smooth;
+}
+
+@media (max-width: 767px) {
+  html {
+    overflow-x: clip;
+  }
 }
 
 body {
@@ -611,6 +644,12 @@ html.intro-lock body {
   transform: translate3d(var(--hx, 0px), var(--hy, 0px), 0);
   transition: transform 500ms var(--ease-out);
   will-change: transform;
+}
+
+@media (max-width: 767px) {
+  .hero-parallax-words {
+    display: none !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

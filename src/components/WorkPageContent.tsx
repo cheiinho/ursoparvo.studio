@@ -7,11 +7,11 @@ export default function WorkPageContent() {
       <Nav visible />
       <main className="page-enter min-h-dvh bg-background">
         <section
-          className="scroll-mt-20 border-t border-border px-6 py-20 md:px-10 md:py-28"
+          className="scroll-mt-20 border-t border-border px-5 py-16 md:px-10 md:py-28"
           aria-label="All work"
         >
           <div className="mx-auto max-w-[1400px]">
-            <h1 className="display mb-12 text-hero leading-[0.92] text-ink md:mb-16">
+            <h1 className="display mb-10 text-hero leading-[0.92] text-ink md:mb-16">
               Selected work
             </h1>
             <WorkList />

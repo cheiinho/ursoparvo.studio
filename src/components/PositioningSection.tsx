@@ -6,7 +6,7 @@ export default function PositioningSection() {
   return (
     <section
       aria-label="Studio positioning"
-      className="border-t border-border bg-yellow py-[var(--space-xl)] md:py-[var(--space-2xl)]"
+      className="border-t border-border bg-yellow py-[var(--space-lg)] md:py-[var(--space-2xl)]"
     >
       <div className="grid-editorial">
         <SectionReveal variant="mask" className="col-wide">
@@ -14,7 +14,7 @@ export default function PositioningSection() {
             Built to last.
           </h2>
         </SectionReveal>
-        <SectionReveal className="col-narrow mt-10 md:mt-14" delay={0.08}>
+        <SectionReveal className="col-narrow mt-8 md:mt-14" delay={0.08}>
           <p className="measure text-body leading-[1.65] text-ink md:text-lg">
             Most brands look right for about five years. Then the gradient ages,
             the type feels off, and someone calls for a rebrand. I work the other
