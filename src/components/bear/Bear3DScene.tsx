@@ -22,24 +22,45 @@ const GALLERY_BASE_HEAD_PITCH = 0.42;
 const MOTION_LEAN_MAX_YAW = 0.3;
 const MOTION_LEAN_MAX_PITCH = 0.16;
 
-// Homepage hero framing: pulled back and scaled down so the bear stays small
-// enough for the "hello there" wordmark to read. Front-facing (no auto-spin),
-// no shadows — it floats over the animated gradient.
-const CONFIG = {
-  fov: 33,
-  camera: [0, 0.5, 9.6] as const,
-  lookAt: [0, 0.18, 0] as const,
-  scale: 0.8,
-  autoRotate: 0,
-} as const;
+type HeroFrame = {
+  fov: number;
+  camY: number;
+  camZ: number;
+  lookY: number;
+  scale: number;
+};
 
-const MOBILE_CONFIG = {
-  fov: 32,
-  camera: [0, 0.4, 7.4] as const,
-  lookAt: [0, 0.18, 0] as const,
-  scale: 0.9,
-  autoRotate: 0,
-} as const;
+/** Fit the bear to any viewport from the canvas parent box (aspect + size). */
+function computeHeroFrame(w: number, h: number): HeroFrame {
+  const width = Math.max(w, 1);
+  const height = Math.max(h, 1);
+  const aspect = width / height;
+  const minDim = Math.min(width, height);
+
+  // Desktop / landscape: leave room for hello · there
+  if (aspect >= 1.22) {
+    const wide = Math.min(1, (aspect - 1.22) / 1.15);
+    return {
+      fov: 33,
+      camY: 0.5,
+      camZ: 9.1 + wide * 1.1,
+      lookY: 0.18,
+      scale: 0.76 - wide * 0.05,
+    };
+  }
+
+  // Portrait phones & tall narrow stages
+  const tall = Math.min(1, Math.max(0, (minDim - 280) / 360));
+  const narrow = Math.min(1, Math.max(0, (0.92 - aspect) / 0.45));
+
+  return {
+    fov: 29.5 - narrow * 2.5,
+    camY: 0.36 + tall * 0.06,
+    camZ: 6.4 - tall * 0.55 - narrow * 0.35,
+    lookY: 0.16 + tall * 0.03,
+    scale: Math.min(1.05, 0.88 + tall * 0.12 + narrow * 0.1),
+  };
+}
 
 export default function Bear3DScene({
   waveTick = 0,
@@ -63,13 +84,12 @@ export default function Bear3DScene({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const isMobile = window.innerWidth < 768;
-    const config = isMobile ? MOBILE_CONFIG : CONFIG;
+    const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
     const reduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
     const canUseMotion =
-      isMobile &&
+      coarsePointer &&
       !reduced &&
       typeof window !== "undefined" &&
       "DeviceOrientationEvent" in window;
@@ -80,7 +100,7 @@ export default function Bear3DScene({
       alpha: true,
     });
     renderer.setPixelRatio(
-      Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2),
+      Math.min(window.devicePixelRatio || 1, coarsePointer ? 1.5 : 2),
     );
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -88,9 +108,7 @@ export default function Bear3DScene({
     renderer.shadowMap.enabled = false;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(config.fov, 1, 0.1, 100);
-    camera.position.set(config.camera[0], config.camera[1], config.camera[2]);
-    camera.lookAt(config.lookAt[0], config.lookAt[1], config.lookAt[2]);
+    const camera = new THREE.PerspectiveCamera(33, 1, 0.1, 100);
 
     // ---------- Studio environment (procedural softbox PMREM) ----------
     const pmrem = new THREE.PMREMGenerator(renderer);
@@ -319,7 +337,6 @@ export default function Bear3DScene({
     // ---------- Build ----------
     const pivot = new THREE.Group();
     const bear = new THREE.Group();
-    bear.scale.setScalar(config.scale);
     pivot.add(bear);
     scene.add(pivot);
 
@@ -589,7 +606,13 @@ export default function Bear3DScene({
       const parent = canvas.parentElement ?? canvas;
       const w = parent.clientWidth || window.innerWidth;
       const h = parent.clientHeight || window.innerHeight;
+      if (w < 1 || h < 1) return;
       renderer.setSize(w, h, false);
+      const frame = computeHeroFrame(w, h);
+      camera.fov = frame.fov;
+      camera.position.set(0, frame.camY, frame.camZ);
+      camera.lookAt(0, frame.lookY, 0);
+      bear.scale.setScalar(frame.scale);
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
     };
@@ -650,7 +673,6 @@ export default function Bear3DScene({
       if (!dragging) {
         targetRotY += velY;
         velY *= 0.94;
-        if (idle && !reduced) targetRotY += config.autoRotate;
       }
       const prevPivotY = pivot.rotation.y;
       pivot.rotation.y += (targetRotY - pivot.rotation.y) * 0.12;
