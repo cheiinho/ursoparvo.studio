@@ -19,6 +19,9 @@ const CAROUSEL_VELOCITY_SMOOTH = 0.28;
 const GALLERY_BASE_PITCH = 0.22;
 const GALLERY_BASE_HEAD_PITCH = 0.42;
 
+const MOTION_LEAN_MAX_YAW = 0.3;
+const MOTION_LEAN_MAX_PITCH = 0.16;
+
 // Homepage hero framing: pulled back and scaled down so the bear stays small
 // enough for the "hello there" wordmark to read. Front-facing (no auto-spin),
 // no shadows — it floats over the animated gradient.
@@ -65,6 +68,11 @@ export default function Bear3DScene({
     const reduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
+    const canUseMotion =
+      isMobile &&
+      !reduced &&
+      typeof window !== "undefined" &&
+      "DeviceOrientationEvent" in window;
 
     const renderer = new THREE.WebGLRenderer({
       canvas,
@@ -407,6 +415,18 @@ export default function Bear3DScene({
     let lastInteract = performance.now();
     let lastMove = 0;
     const ptr = { x: 0, y: 0 };
+    const motion = {
+      gamma: 0,
+      beta: 48,
+      prevGamma: 0,
+      enabled: false,
+      listening: false,
+      lastEvent: 0,
+      lastMag: 9.8,
+    };
+    let motionLeanYaw = 0;
+    let motionLeanPitch = 0;
+    let motionLeanRoll = 0;
     let downT = 0;
     let moved = 0;
 
@@ -427,6 +447,98 @@ export default function Bear3DScene({
     };
 
     const ptOf = (e: PointerEvent) => ({ x: e.clientX, y: e.clientY });
+
+    const mapOrientationToPtr = (gamma: number, beta: number) => {
+      ptr.x = Math.max(-1, Math.min(1, gamma / 36));
+      ptr.y = Math.max(-1, Math.min(1, (beta - 48) / 36));
+      lastMove = performance.now();
+    };
+
+    const onOrientation = (e: DeviceOrientationEvent) => {
+      if (e.gamma == null || e.beta == null) return;
+      const dg = e.gamma - motion.gamma;
+      motion.prevGamma = motion.gamma;
+      motion.gamma = e.gamma;
+      motion.beta = e.beta;
+      motion.lastEvent = performance.now();
+      motion.enabled = true;
+      mapOrientationToPtr(e.gamma, e.beta);
+
+      if (Math.abs(dg) > 2) {
+        waving = Math.min(1, waving + 0.28 + Math.abs(dg) * 0.04);
+        lastInteract = performance.now();
+      }
+    };
+
+    const onDeviceMotion = (e: DeviceMotionEvent) => {
+      const linear = e.acceleration;
+      const gravity = e.accelerationIncludingGravity;
+      const src =
+        linear && linear.x != null
+          ? linear
+          : gravity && gravity.x != null
+            ? gravity
+            : null;
+      if (!src || src.x == null || src.y == null || src.z == null) return;
+
+      const mag = Math.sqrt(src.x * src.x + src.y * src.y + src.z * src.z);
+      const jerk = Math.abs(mag - motion.lastMag);
+      motion.lastMag = mag;
+      motion.lastEvent = performance.now();
+      motion.enabled = true;
+
+      if (jerk > 2.4) {
+        waving = 1;
+        lastInteract = performance.now();
+      } else if (jerk > 1.1) {
+        waving = Math.max(waving, 0.55);
+        lastInteract = performance.now();
+      }
+    };
+
+    const attachMotionListeners = () => {
+      if (motion.listening) return;
+      window.addEventListener("deviceorientation", onOrientation);
+      window.addEventListener("devicemotion", onDeviceMotion, { passive: true });
+      motion.listening = true;
+      motion.enabled = true;
+    };
+
+    const enableMotionSensors = async () => {
+      if (!canUseMotion || motion.listening) return;
+
+      try {
+        const orientationCtor = DeviceOrientationEvent as unknown as {
+          requestPermission?: () => Promise<PermissionState>;
+        };
+        if (typeof orientationCtor.requestPermission === "function") {
+          const state = await orientationCtor.requestPermission();
+          if (state !== "granted") return;
+        }
+
+        const motionCtor = DeviceMotionEvent as unknown as {
+          requestPermission?: () => Promise<PermissionState>;
+        };
+        if (typeof motionCtor.requestPermission === "function") {
+          const state = await motionCtor.requestPermission();
+          if (state !== "granted") return;
+        }
+
+        attachMotionListeners();
+      } catch {
+        // Permission denied or unavailable.
+      }
+    };
+
+    if (canUseMotion) {
+      const orientationCtor = DeviceOrientationEvent as unknown as {
+        requestPermission?: () => Promise<PermissionState>;
+      };
+      if (typeof orientationCtor.requestPermission !== "function") {
+        attachMotionListeners();
+      }
+    }
+
     const onDown = (e: PointerEvent) => {
       dragging = true;
       const p = ptOf(e);
@@ -436,6 +548,7 @@ export default function Bear3DScene({
       moved = 0;
       velY = 0;
       lastInteract = performance.now();
+      if (canUseMotion && !motion.listening) void enableMotionSensors();
     };
     const onMove = (e: PointerEvent) => {
       const p = ptOf(e);
@@ -577,9 +690,44 @@ export default function Bear3DScene({
       carouselYaw += (targetCarouselYaw - carouselYaw) * yawSpring;
       carouselPitch += (targetCarouselPitch - carouselPitch) * pitchSpring;
       carouselRoll += (targetCarouselRoll - carouselRoll) * rollSpring;
-      bear.rotation.y = carouselYaw;
-      bear.rotation.x = carouselPitch;
-      bear.rotation.z = carouselRoll;
+
+      const motionLive =
+        canUseMotion &&
+        motion.enabled &&
+        !reduced &&
+        now - motion.lastEvent < 1400;
+
+      if (galleryMode && !reduced) {
+        bear.rotation.y = carouselYaw;
+        bear.rotation.x = carouselPitch;
+        bear.rotation.z = carouselRoll;
+      } else if (motionLive) {
+        const targetMY = Math.max(
+          -MOTION_LEAN_MAX_YAW,
+          Math.min(MOTION_LEAN_MAX_YAW, (motion.gamma / 52) * MOTION_LEAN_MAX_YAW),
+        );
+        const targetMP = Math.max(
+          -MOTION_LEAN_MAX_PITCH,
+          Math.min(
+            MOTION_LEAN_MAX_PITCH,
+            ((motion.beta - 48) / 52) * MOTION_LEAN_MAX_PITCH,
+          ),
+        );
+        const targetMR = -targetMY * 0.22;
+        motionLeanYaw += (targetMY - motionLeanYaw) * 0.11;
+        motionLeanPitch += (targetMP - motionLeanPitch) * 0.11;
+        motionLeanRoll += (targetMR - motionLeanRoll) * 0.09;
+        bear.rotation.y = motionLeanYaw;
+        bear.rotation.x = motionLeanPitch;
+        bear.rotation.z = motionLeanRoll;
+      } else {
+        motionLeanYaw *= 0.9;
+        motionLeanPitch *= 0.9;
+        motionLeanRoll *= 0.9;
+        bear.rotation.y = motionLeanYaw;
+        bear.rotation.x = motionLeanPitch;
+        bear.rotation.z = motionLeanRoll;
+      }
 
       // jump physics
       if (!onGround) {
@@ -617,15 +765,17 @@ export default function Bear3DScene({
         }
       }
 
-      // glance: follow cursor when active, else idle look
-      const pointerActive = now - lastMove < 2500;
+      // glance: follow pointer or phone tilt, else idle look
+      const motionTracking =
+        canUseMotion && motion.enabled && now - motion.lastEvent < 1400;
+      const pointerActive = motionTracking || now - lastMove < 2500;
       let glY = pointerActive
         ? -ptr.x * 0.32 - pivot.rotation.y
         : idleState === "look"
           ? idleLook * idleEnv
           : 0;
       const glX = pointerActive
-        ? ptr.y * 0.2
+        ? ptr.y * 0.22
         : galleryMode
           ? GALLERY_BASE_HEAD_PITCH + leanAmount * 0.08
           : 0;
@@ -682,6 +832,18 @@ export default function Bear3DScene({
         waving = 1;
         wavePendingRef.current = false;
         lastInteract = performance.now();
+      }
+      if (
+        canUseMotion &&
+        motion.enabled &&
+        !reduced &&
+        now - motion.lastEvent < 1400 &&
+        Math.abs(motion.gamma - motion.prevGamma) > 0.6
+      ) {
+        waving = Math.max(
+          waving,
+          Math.min(1, 0.5 + Math.abs(motion.gamma - motion.prevGamma) * 0.06),
+        );
       }
       if (waving > 0) {
         waving = Math.max(0, waving - dt * 0.5);
@@ -746,6 +908,8 @@ export default function Bear3DScene({
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerup", onUp);
       window.removeEventListener("pointercancel", onUp);
+      window.removeEventListener("deviceorientation", onOrientation);
+      window.removeEventListener("devicemotion", onDeviceMotion);
       window.removeEventListener("resize", resize);
       ro.disconnect();
       BALL.dispose();
@@ -761,7 +925,7 @@ export default function Bear3DScene({
     <canvas
       ref={canvasRef}
       className={`block h-full w-full cursor-grab touch-none active:cursor-grabbing ${className}`}
-      aria-label="Urso Parvo 3D. Drag to rotate, tap to jump."
+      aria-label="Urso Parvo 3D. Drag to rotate. On mobile, tilt or move your phone to wave."
     />
   );
 }
