@@ -1,14 +1,14 @@
 import Link from "next/link";
-import { SITE } from "@/content/site";
+import { SITE, WORK_EMPTY } from "@/content/site";
 
 const INSTAGRAM_URL =
   process.env.NEXT_PUBLIC_INSTAGRAM_URL ?? "https://instagram.com/ursoparvo.studio";
 
 const legalLinks = [
-  { href: "/privacy", label: "Privacy Policy" },
-  { href: "/terms", label: "Terms of Service" },
-  { href: "/legal", label: "Legal Notice" },
-  { href: "/cookies", label: "Cookie Policy" },
+  { href: "/privacy", label: "Privacidade" },
+  { href: "/terms", label: "Termos" },
+  { href: "/legal", label: "Aviso legal" },
+  { href: "/cookies", label: "Cookies" },
 ] as const;
 
 type FooterProps = {
@@ -22,16 +22,12 @@ export default function Footer({ className = "" }: FooterProps) {
     <footer
       className={`bg-transparent px-6 py-10 md:px-10 md:py-12 ${className}`}
     >
-      <div className="mx-auto flex max-w-[1400px] flex-col items-center gap-5 text-center">
-        <p className="text-small text-ink/35">
-          Desenhado e construído em Coimbra, Portugal
-        </p>
-
+      <div className="mx-auto flex max-w-[1400px] flex-col items-center gap-4 text-center">
         <p className="text-small text-ink/60">
-          © {year} {SITE.name}. Todos os direitos reservados.
+          © {year} {SITE.name}
         </p>
 
-        <nav aria-label="Footer links">
+        <nav aria-label="Links do rodapé">
           <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2">
             <li>
               <Link

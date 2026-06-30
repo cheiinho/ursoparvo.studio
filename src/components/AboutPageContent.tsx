@@ -1,37 +1,27 @@
 import ContactCTA from "@/components/ContactCTA";
 import Nav from "@/components/Nav";
-import NumberMoment from "@/components/NumberMoment";
-import SectionReveal from "@/components/SectionReveal";
 import { ABOUT_CLIENTS_LINE, BIO_LONG, SITE, TAGLINE } from "@/content/site";
 
 export default function AboutPageContent() {
   return (
     <>
       <Nav />
-      <main className="page-enter min-h-dvh bg-background">
+      <main className="min-h-dvh bg-background">
         <article className="grid-editorial pb-[var(--space-xl)] pt-20 md:pb-[var(--space-2xl)] md:pt-32">
-          <SectionReveal className="col-full mb-4">
-            <p className="text-small text-ink/40">Sobre</p>
-          </SectionReveal>
-          <SectionReveal variant="mask" className="col-full">
-            <h1 className="text-title text-ink">{SITE.operator}</h1>
-          </SectionReveal>
-          <SectionReveal className="col-right mt-6 md:mt-8" delay={0.08}>
-            <p className="text-body measure text-ink-muted">{TAGLINE}</p>
-          </SectionReveal>
-          <SectionReveal className="col-right mt-10 md:mt-14" delay={0.12}>
-            <div className="text-body measure space-y-6 text-ink">
-              {BIO_LONG.map((paragraph) => (
-                <p key={paragraph.slice(0, 40)}>{paragraph}</p>
-              ))}
-            </div>
-          </SectionReveal>
-          <SectionReveal className="col-right mt-10 md:mt-12" delay={0.16}>
-            <p className="text-small text-ink/40">{ABOUT_CLIENTS_LINE}</p>
-          </SectionReveal>
+          <p className="col-full text-small text-ink/40">Sobre</p>
+          <h1 className="col-full text-title text-ink">{SITE.operator}</h1>
+          <p className="col-right text-body measure mt-6 text-ink-muted md:mt-8">
+            {TAGLINE}
+          </p>
+          <div className="col-right text-body measure mt-10 space-y-6 text-ink md:mt-14">
+            {BIO_LONG.map((paragraph) => (
+              <p key={paragraph.slice(0, 40)}>{paragraph}</p>
+            ))}
+          </div>
+          <p className="col-right text-small mt-10 text-ink/40 md:mt-12">
+            {ABOUT_CLIENTS_LINE}
+          </p>
         </article>
-
-        <NumberMoment />
 
         <ContactCTA />
       </main>

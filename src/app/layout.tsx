@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Intro from "@/components/Intro";
 import { SiteBackground } from "@/components/ui/site-background";
 import { BIO_SHORT, SITE } from "@/content/site";
 import { inter } from "@/lib/fonts";
@@ -31,11 +30,10 @@ export default function RootLayout({
   return (
     <html lang="pt" className={`h-full scroll-smooth ${inter.variable}`}>
       <body
-        className={`${inter.className} relative min-h-full text-foreground antialiased`}
+        className={`${inter.className} relative min-h-full bg-background text-foreground antialiased`}
       >
         <SiteBackground />
         {children}
-        <Intro />
       </body>
     </html>
   );
