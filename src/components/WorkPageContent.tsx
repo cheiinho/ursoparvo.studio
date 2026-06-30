@@ -11,9 +11,7 @@ export default function WorkPageContent() {
           aria-label="All work"
         >
           <div className="mx-auto max-w-[1400px]">
-            <h1 className="display mb-10 text-hero leading-[0.92] text-ink md:mb-16">
-              Trabalho
-            </h1>
+            <h1 className="text-title mb-10 text-ink md:mb-16">Trabalho</h1>
             <WorkList />
           </div>
         </section>

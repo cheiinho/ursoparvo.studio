@@ -59,12 +59,12 @@ export default function NumberMoment({
     >
       <div className="grid-editorial">
         <SectionReveal variant="mask" className="col-full mb-10 md:mb-16">
-          <p className="tech text-ink/40">{eyebrow}</p>
+          <p className="text-small text-ink/40">{eyebrow}</p>
         </SectionReveal>
         <ul className="col-full grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-8">
-          {stats.map((s, i) => (
-            <SectionReveal as="li" key={s.label} delay={i * 0.08}>
-              <p className="display text-[clamp(3.5rem,18vw,11rem)] leading-[0.82] text-ink">
+          {stats.map((s) => (
+            <SectionReveal as="li" key={s.label} delay={0}>
+              <p className="text-title text-ink">
                 {typeof s.value === "number" ? (
                   <CountUp target={s.value} />
                 ) : (
@@ -72,9 +72,7 @@ export default function NumberMoment({
                 )}
                 {s.suffix}
               </p>
-              <p className="measure mt-5 text-body leading-[1.5] text-ink-muted">
-                {s.label}
-              </p>
+              <p className="text-body measure mt-5 text-ink-muted">{s.label}</p>
             </SectionReveal>
           ))}
         </ul>

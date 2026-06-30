@@ -19,7 +19,7 @@ export default function CaseStudyTemplate({ project }: CaseStudyTemplateProps) {
         <div className="col-full">
           <Link
             href="/work"
-            className="tech inline-block text-ink/40 transition-colors hover:text-ink"
+            className="text-small inline-block text-ink/40 transition-colors hover:text-ink"
           >
             Voltar ao trabalho
           </Link>
@@ -38,8 +38,8 @@ export default function CaseStudyTemplate({ project }: CaseStudyTemplateProps) {
         </div>
 
         <div className="col-full mt-10 md:mt-14">
-          <h1 className="display text-hero text-ink">{project.name}</h1>
-          <p className="tech mt-4 normal-case text-ink/45">
+          <h1 className="text-title text-ink">{project.name}</h1>
+          <p className="text-small mt-4 text-ink/45">
             {project.disciplines.join(", ")}. {project.year}
           </p>
         </div>
@@ -50,14 +50,9 @@ export default function CaseStudyTemplate({ project }: CaseStudyTemplateProps) {
         className="grid-editorial py-[var(--space-lg)] md:py-[var(--space-xl)]"
       >
         <div className="col-narrow measure space-y-6">
-          <p className="text-body leading-[1.65] text-ink md:text-lg">
-            {project.summary}
-          </p>
+          <p className="text-body text-ink">{project.summary}</p>
           {project.body.map((paragraph) => (
-            <p
-              key={paragraph}
-              className="text-body leading-[1.65] text-ink-muted"
-            >
+            <p key={paragraph} className="text-body text-ink-muted">
               {paragraph}
             </p>
           ))}
@@ -68,14 +63,14 @@ export default function CaseStudyTemplate({ project }: CaseStudyTemplateProps) {
         <div className="col-full flex flex-wrap items-center justify-between gap-6">
           <Link
             href="/work"
-            className="tech text-ink/50 transition-colors hover:text-ink"
+            className="text-small text-ink/50 transition-colors hover:text-ink"
           >
             Voltar ao trabalho
           </Link>
           {next && (
             <Link
               href={projectHref(next.id)}
-              className="display text-h2 text-ink transition-opacity hover:opacity-70"
+              className="text-title text-ink transition-opacity hover:opacity-70"
             >
               Seguinte: {next.name}
             </Link>

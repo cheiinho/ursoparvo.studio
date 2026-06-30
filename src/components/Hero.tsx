@@ -13,25 +13,23 @@ export default function Hero({ galleryOverlap = false }: HeroProps) {
         galleryOverlap ? "min-h-[60svh] pb-8 md:pb-12" : "min-h-[calc(100svh-3.5rem)]"
       }`}
     >
-      <h1 className="display max-w-[14ch] text-hero leading-[0.92] text-ink">
-        {HERO.tagline}
-      </h1>
+      <h1 className="text-title max-w-[18ch] text-ink">{HERO.tagline}</h1>
       <p className="sr-only">
         {SITE.name}. {HERO.subtitle}
       </p>
-      <p className="measure mt-6 max-w-xl text-body leading-[1.65] text-ink/60 md:mt-8 md:text-lg">
+      <p className="text-body measure mt-6 max-w-xl text-ink/60 md:mt-8">
         {HERO.subtitle}
       </p>
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center md:mt-10">
         <Link
           href={HERO.ctaPrimary.href}
-          className="press inline-flex min-h-10 items-center justify-center rounded-full bg-primary px-5 py-2 text-sm text-primary-foreground md:px-6 md:text-base"
+          className="press text-body inline-flex min-h-10 items-center justify-center rounded-full bg-primary px-5 py-2 text-primary-foreground md:px-6"
         >
           {HERO.ctaPrimary.label}
         </Link>
         <a
           href={HERO.ctaSecondary.href}
-          className="press inline-flex min-h-10 items-center justify-center px-2 py-2 text-sm text-ink/70 transition-colors hover:text-ink md:text-base"
+          className="press text-body inline-flex min-h-10 items-center justify-center px-2 py-2 text-ink/70 transition-colors hover:text-ink"
         >
           {HERO.ctaSecondary.label}
         </a>

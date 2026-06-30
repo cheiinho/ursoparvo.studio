@@ -64,9 +64,9 @@ export default function ThinkingPageContent() {
         <article className="pb-[var(--space-xl)] pt-24 md:pb-[var(--space-2xl)] md:pt-32">
           <section aria-label="On permanence" className="grid-editorial">
             <SectionReveal className="col-narrow">
-              <p className="tech mb-8 text-ink/40">Point of view</p>
-              <h1 className="display text-hero leading-[0.92] text-ink">On permanence.</h1>
-              <div className="measure mt-10 space-y-6 text-body leading-[1.65] text-ink md:text-lg">
+              <p className="text-small mb-8 text-ink/40">Point of view</p>
+              <h1 className="text-title text-ink">On permanence.</h1>
+              <div className="text-body measure mt-10 space-y-6 text-ink">
                 <p>
                   I design brands that do not need to be redesigned. Not because
                   I follow a checklist. Because I work with principles that were
@@ -90,12 +90,10 @@ export default function ThinkingPageContent() {
             className="grid-editorial mt-[var(--space-xl)] md:mt-[var(--space-2xl)]"
           >
             <SectionReveal variant="mask" className="col-full">
-              <p className="display text-hero leading-[0.92] text-ink">
-                Um parvo é sempre um parvo.
-              </p>
+              <p className="text-title text-ink">Um parvo é sempre um parvo.</p>
             </SectionReveal>
             <SectionReveal className="col-right mt-8" delay={0.12}>
-              <p className="measure text-body leading-[1.65] text-ink-muted md:text-lg">
+              <p className="text-body measure text-ink-muted">
                 A fool is always a fool. The name is the point. No pretending to
                 be a fifty-person agency. No slick pitch before we have spoken. I
                 say what I think. The work has to carry the rest.
@@ -110,10 +108,10 @@ export default function ThinkingPageContent() {
             <div className="col-full space-y-12 md:space-y-16">
               {POSITIONS.map((item, i) => (
                 <SectionReveal key={item.title} className="col-narrow" delay={i * 0.04}>
-                  <h2 className="display mb-4 text-h2 text-ink">
+                  <h2 className="text-title mb-4 text-ink">
                     {item.title}
                   </h2>
-                  <p className="measure text-body leading-[1.65] text-ink-muted">
+                  <p className="text-body measure text-ink-muted">
                     {item.body}
                   </p>
                 </SectionReveal>
@@ -127,10 +125,8 @@ export default function ThinkingPageContent() {
           >
             <div className="grid-editorial">
               <SectionReveal variant="mask" className="col-full mb-10 md:mb-16">
-                <h2 className="display text-hero leading-[0.9] text-ink">
-                  Seven laws
-                </h2>
-                <p className="measure mt-6 text-body text-ink-muted">
+                <h2 className="text-title text-ink">Seven laws</h2>
+                <p className="text-body measure mt-6 text-ink-muted">
                   The filter for every decision on this site and in client work.
                 </p>
               </SectionReveal>

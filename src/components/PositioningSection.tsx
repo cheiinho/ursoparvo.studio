@@ -9,7 +9,7 @@ export default function PositioningSection() {
     >
       <div className="grid-editorial">
         <SectionReveal className="col-narrow">
-          <div className="measure space-y-6 text-body leading-[1.65] text-ink md:text-lg">
+          <div className="text-body measure space-y-6 text-ink">
             {POSITIONING_BODY.map((paragraph) => (
               <p key={paragraph.slice(0, 32)}>{paragraph}</p>
             ))}

@@ -113,51 +113,51 @@
   --color-ground: var(--ground);
 }
 
-/* ---- Design system: type scale ----
-   Emitted as both `text-*` utilities and `var(--text-*)` custom properties.
-   `static` so the tokens are always emitted as CSS variables, not tree-shaken. */
+/* ---- Type scale: title, body, small — no other sizes ---- */
 @theme static {
-  --text-hero: clamp(4.25rem, 13vw, 10rem);
-  --text-hero--line-height: 0.92;
-  --text-hero--letter-spacing: -0.035em;
-
-  --text-h1: clamp(2.5rem, 6vw, 4.75rem);
-  --text-h1--line-height: 0.98;
-  --text-h1--letter-spacing: -0.03em;
-
-  --text-h2: clamp(2rem, 4.5vw, 3.25rem);
-  --text-h2--line-height: 1.02;
-  --text-h2--letter-spacing: -0.025em;
-
-  --text-project: clamp(2.25rem, 6vw, 4.5rem);
-  --text-project--line-height: 0.98;
-  --text-project--letter-spacing: -0.03em;
+  --text-title: clamp(1.75rem, 4vw, 2.25rem);
+  --text-title--line-height: 1.15;
+  --text-title--letter-spacing: -0.02em;
 
   --text-body: 1rem;
   --text-body--line-height: 1.65;
 
-  --text-label: 0.6875rem;
-  --text-label--line-height: 1.4;
-  --text-label--letter-spacing: 0.14em;
+  --text-small: 0.8125rem;
+  --text-small--line-height: 1.5;
 }
 
-@media (max-width: 767px) {
-  .text-hero {
-    font-size: clamp(2.75rem, 11vw, 4rem);
-    line-height: 0.94;
-  }
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+  font-weight: 400;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-  .text-h1 {
-    font-size: clamp(2rem, 8vw, 2.75rem);
-  }
+:where(h1, h2, h3, h4, h5, h6, b, strong) {
+  font-weight: 400;
+}
 
-  .text-h2 {
-    font-size: clamp(1.65rem, 6.5vw, 2.25rem);
-  }
+.text-title {
+  font-size: var(--text-title);
+  line-height: var(--text-title--line-height);
+  letter-spacing: var(--text-title--letter-spacing);
+}
 
-  .text-project {
-    font-size: clamp(1.75rem, 7vw, 2.5rem);
-  }
+.text-body {
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+}
+
+.text-small {
+  font-size: var(--text-small);
+  line-height: var(--text-small--line-height);
 }
 
 * {
@@ -172,22 +172,6 @@ html {
   html {
     overflow-x: clip;
   }
-}
-
-body {
-  margin: 0;
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
-  font-weight: 400;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-:where(h1, h2, h3, h4, h5, h6, b, strong) {
-  font-weight: 400;
 }
 
 ::selection {
@@ -269,10 +253,9 @@ a {
   padding-block: clamp(2rem, 5vw, 4.5rem);
 }
 .law-row__num {
-  font-family: var(--font-display);
-  font-size: clamp(4rem, 12vw, 11rem);
-  line-height: 0.82;
-  letter-spacing: -0.04em;
+  font-size: var(--text-title);
+  line-height: var(--text-title--line-height);
+  letter-spacing: var(--text-title--letter-spacing);
   color: rgba(26, 26, 26, 0.1);
   align-self: center;
 }
@@ -285,10 +268,9 @@ a {
   text-align: right;
 }
 .law-row__text {
-  font-family: var(--font-display);
-  font-size: var(--text-h2);
-  line-height: 1.02;
-  letter-spacing: -0.025em;
+  font-size: var(--text-title);
+  line-height: var(--text-title--line-height);
+  letter-spacing: var(--text-title--letter-spacing);
   color: var(--ink);
 }
 .law-row__text--right {
@@ -304,7 +286,7 @@ a {
     grid-column: 1 / -1;
     order: 0;
     text-align: left;
-    font-size: clamp(3rem, 18vw, 6rem);
+    font-size: var(--text-title);
   }
   .law-row__text--left,
   .law-row__text--right {
@@ -322,38 +304,6 @@ a {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-}
-
-.display {
-  font-family: var(--font-display);
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  line-height: 0.98;
-}
-
-.accent {
-  font-family: var(--font-sans);
-  font-style: italic;
-  font-weight: 400;
-}
-
-.meta {
-  font-family: var(--font-sans);
-  font-size: 0.8125rem;
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--ink-muted);
-}
-
-.tech {
-  font-family: var(--font-sans);
-  font-size: 0.6875rem;
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-muted);
-  font-variant-numeric: tabular-nums;
 }
 
 .reveal-root {
@@ -451,9 +401,9 @@ html.intro-lock body {
   overflow: hidden;
 }
 .intro__word {
-  font-family: var(--font-display);
-  font-size: clamp(3rem, 12vw, 9rem);
-  line-height: 1;
+  font-size: var(--text-title);
+  line-height: var(--text-title--line-height);
+  letter-spacing: var(--text-title--letter-spacing);
   color: var(--ink);
   clip-path: inset(0 0 110% 0);
   animation: intro-word 720ms cubic-bezier(0.16, 1, 0.3, 1) 120ms forwards;
