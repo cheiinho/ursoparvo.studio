@@ -1,21 +1,23 @@
 import Link from "next/link";
 import { hasPublishedWork, projectHref, projects } from "@/data/projects";
+import { SITE } from "@/content/site";
 
 export default function WorkList() {
   if (!hasPublishedWork()) {
     return (
       <div className="measure max-w-xl space-y-4">
         <p className="text-body leading-[1.65] text-ink md:text-lg">
-          Nothing published yet. When a project is ready to show, it goes here.
+          Ainda não há projectos publicados. Quando um trabalho estiver pronto
+          para mostrar, aparece aqui.
         </p>
         <p className="text-body leading-[1.65] text-ink-muted">
           <a
-            href="mailto:hello@ursoparvo.studio"
+            href={`mailto:${SITE.email}`}
             className="link-underline text-ink/70 transition-colors hover:text-ink"
           >
-            Email me
+            Escreva-nos
           </a>{" "}
-          if you want to talk about yours.
+          se quiser falar sobre o seu.
         </p>
       </div>
     );

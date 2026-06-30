@@ -12,7 +12,7 @@ export default function WorkPageContent() {
         >
           <div className="mx-auto max-w-[1400px]">
             <h1 className="display mb-10 text-hero leading-[0.92] text-ink md:mb-16">
-              Selected work
+              Trabalho
             </h1>
             <WorkList />
           </div>

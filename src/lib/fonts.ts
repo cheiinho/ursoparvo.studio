@@ -16,3 +16,20 @@ export const inter = localFont({
   variable: "--font-inter",
   display: "swap",
 });
+
+export const instrumentSerif = localFont({
+  src: [
+    {
+      path: "../../public/fonts/instrument-serif/InstrumentSerif-Regular.ttf",
+      style: "normal",
+      weight: "400",
+    },
+    {
+      path: "../../public/fonts/instrument-serif/InstrumentSerif-Italic.ttf",
+      style: "italic",
+      weight: "400",
+    },
+  ],
+  variable: "--font-instrument-serif",
+  display: "swap",
+});

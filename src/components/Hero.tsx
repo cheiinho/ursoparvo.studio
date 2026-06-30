@@ -2,7 +2,9 @@
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, type RefObject } from "react";
+import { HERO, SITE } from "@/content/site";
 
 const Bear3DScene = dynamic(() => import("@/components/bear/Bear3DScene"), {
   ssr: false,
@@ -79,8 +81,7 @@ export default function Hero({
       }`}
     >
       <h1 className="sr-only">
-        UrsoParvo — independent design studio. Brand identity, art direction and
-        digital experience.
+        {SITE.name}. {HERO.tagline} {HERO.subtitle}
       </h1>
 
       <div
@@ -104,17 +105,36 @@ export default function Hero({
       </div>
 
       <div
-        className={`pointer-events-none relative z-30 shrink-0 px-6 pt-3 pb-2 text-center md:absolute md:inset-x-0 md:max-w-none md:px-6 md:pt-0 md:pb-0 ${
+        className={`relative z-30 shrink-0 px-6 pt-3 pb-2 text-center md:absolute md:inset-x-0 md:max-w-none md:px-6 md:pt-0 md:pb-0 ${
           galleryOverlap
             ? "md:bottom-[calc(16vh+3.5rem)]"
             : "md:bottom-6"
         }`}
       >
-        <p className="mx-auto max-w-[22ch] text-[1.05rem] leading-snug tracking-[-0.02em] text-ink/55 md:max-w-[36ch] md:text-[clamp(1.1rem,2.8vw,1.75rem)]">
-          Brands built to outlast trends.
+        <p className="display mx-auto max-w-[28ch] text-[clamp(1rem,2.8vw,1.75rem)] leading-snug tracking-[-0.02em] text-ink md:max-w-[32ch]">
+          {HERO.tagline}
         </p>
+        <p className="mx-auto mt-3 max-w-[38ch] text-[0.9rem] leading-snug text-ink/55 md:max-w-[44ch] md:text-base">
+          {HERO.subtitle}
+        </p>
+        <div className="pointer-events-auto mt-5 flex flex-col items-center justify-center gap-3 sm:flex-row md:mt-6">
+          <Link
+            href={HERO.ctaPrimary.href}
+            className="press inline-flex min-h-10 items-center justify-center rounded-full bg-primary px-5 py-2 text-sm text-primary-foreground md:px-6 md:text-base"
+            data-cursor-hover
+          >
+            {HERO.ctaPrimary.label}
+          </Link>
+          <a
+            href={HERO.ctaSecondary.href}
+            className="press link-underline inline-flex min-h-10 items-center justify-center px-2 py-2 text-sm text-ink/70 transition-colors hover:text-ink md:text-base"
+            data-cursor-hover
+          >
+            {HERO.ctaSecondary.label}
+          </a>
+        </div>
         <span
-          className="hero-scroll-line hidden h-8 w-px bg-ink/25 md:block"
+          className="hero-scroll-line mx-auto mt-4 hidden h-8 w-px bg-ink/25 md:block"
           aria-hidden="true"
         />
       </div>

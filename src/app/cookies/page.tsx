@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
+import { SITE } from "@/content/site";
 
 export const metadata: Metadata = {
-  title: "Cookie Policy · UrsoParvo Studio",
+  title: `Política de Cookies · ${SITE.name}`,
 };
 
 export default function CookiesPage() {
   return (
-    <LegalPage title="Cookie Policy">
+    <LegalPage title="Política de Cookies">
       <p>
-        This site uses essential cookies and local storage only where required
-        for basic functionality. We do not use third-party advertising cookies.
-        Full cookie details will be published here.
+        Este site utiliza apenas cookies essenciais e armazenamento local quando
+        necessário para funcionalidade básica. Não utilizamos cookies de
+        publicidade de terceiros. Os detalhes completos serão publicados aqui.
       </p>
     </LegalPage>
   );

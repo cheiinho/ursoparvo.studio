@@ -8,6 +8,7 @@ import { useEffect, useId, useState } from "react";
 import { NavHeader } from "@/components/ui/nav-header";
 import NavMobileMenu from "@/components/NavMobileMenu";
 import { BEAR_ICON_PX_MD } from "@/constants/bear";
+import { NAV, SITE } from "@/content/site";
 
 type NavProps = {
   visible: boolean;
@@ -79,13 +80,13 @@ export default function Nav({ visible }: NavProps) {
           className={`press col-start-1 justify-self-start text-sm text-ink sm:text-base md:text-lg ${
             menuOpen ? "invisible" : ""
           }`}
-          aria-label="UrsoParvo Studio home"
+          aria-label={`${SITE.name}, início`}
           data-cursor-hover
           tabIndex={interactive ? 0 : -1}
         >
           <span translate="no" className="font-normal">
-            <span className="sm:hidden">UrsoParvo</span>
-            <span className="hidden sm:inline">UrsoParvo Studio</span>
+            <span className="sm:hidden">{SITE.nameShort}</span>
+            <span className="hidden sm:inline">{SITE.name}</span>
           </span>
         </Link>
 
@@ -96,7 +97,7 @@ export default function Nav({ visible }: NavProps) {
               ? "visible opacity-100"
               : "pointer-events-none invisible opacity-0"
           }`}
-          aria-label="UrsoParvo Studio home"
+          aria-label={`${SITE.name}, início`}
           aria-hidden={!showNavBear}
           data-cursor-hover
           tabIndex={showNavBear && interactive ? 0 : -1}
@@ -114,12 +115,12 @@ export default function Nav({ visible }: NavProps) {
         <div className="col-start-3 hidden items-center justify-end gap-5 xl:flex md:gap-7">
           <NavHeader tabIndex={interactive ? 0 : -1} />
           <a
-            href="mailto:hello@ursoparvo.studio"
+            href={`mailto:${SITE.email}`}
             data-cursor-hover
             tabIndex={interactive ? 0 : -1}
             className="press link-underline text-sm font-normal text-ink/70 transition-colors duration-200 hover:text-ink md:text-base"
           >
-            Get in touch
+            {NAV.contact}
           </a>
         </div>
 

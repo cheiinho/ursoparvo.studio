@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CaseStudyTemplate from "@/components/CaseStudyTemplate";
 import Nav from "@/components/Nav";
+import { SITE } from "@/content/site";
 import { getProject } from "@/data/projects";
 
 type ProjectPageProps = {
@@ -18,13 +19,13 @@ export async function generateMetadata({
 }: ProjectPageProps): Promise<Metadata> {
   const { slug } = await params;
   const project = getProject(slug);
-  if (!project) return { title: "Project · UrsoParvo Studio" };
+  if (!project) return { title: `Projecto · ${SITE.name}` };
 
   return {
-    title: `${project.name} · UrsoParvo Studio`,
+    title: `${project.name} · ${SITE.name}`,
     description: project.summary,
     openGraph: {
-      title: `${project.name} · UrsoParvo Studio`,
+      title: `${project.name} · ${SITE.name}`,
       description: project.summary,
       images: [{ url: "/hero-poster.jpg", alt: project.name }],
     },
@@ -39,9 +40,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   return (
     <>
       <Nav visible />
-      <main className="page-enter min-h-dvh bg-background">
-        <CaseStudyTemplate project={project} />
-      </main>
+      <CaseStudyTemplate project={project} />
     </>
   );
 }

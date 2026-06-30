@@ -13,6 +13,8 @@ import {
   type Ref,
 } from "react";
 
+import { NAV } from "@/content/site";
+
 const INSTAGRAM_URL =
   process.env.NEXT_PUBLIC_INSTAGRAM_URL ??
   "https://instagram.com/ursoparvo.studio";
@@ -95,7 +97,7 @@ function NavHeader({ tabIndex = 0 }: NavHeaderProps) {
           reduceMotion={!!reduceMotion}
           tabIndex={tabIndex}
         >
-          Work
+          {NAV.work}
         </NavTab>
         <NavTab
           ref={aboutTabRef}
@@ -105,7 +107,7 @@ function NavHeader({ tabIndex = 0 }: NavHeaderProps) {
           reduceMotion={!!reduceMotion}
           tabIndex={tabIndex}
         >
-          About
+          {NAV.about}
         </NavTab>
         <NavTab
           href={INSTAGRAM_URL}
