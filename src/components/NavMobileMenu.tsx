@@ -47,7 +47,7 @@ export default function NavMobileMenu({
   return createPortal(
     <div
       id={id}
-      className={`fixed inset-0 z-[200] flex h-dvh max-h-dvh w-full flex-col overflow-hidden overscroll-none bg-electric-blue transition-[opacity,visibility] duration-[560ms] ease-[cubic-bezier(0.77,0,0.175,1)] xl:hidden ${
+      className={`fixed inset-0 z-[200] flex h-dvh max-h-dvh w-full flex-col overflow-hidden overscroll-none bg-black transition-[opacity,visibility] duration-[560ms] ease-[cubic-bezier(0.77,0,0.175,1)] xl:hidden ${
         open
           ? "visible opacity-100"
           : "pointer-events-none invisible opacity-0"
