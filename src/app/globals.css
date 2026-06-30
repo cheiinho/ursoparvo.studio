@@ -2,7 +2,7 @@
 
 :root {
   --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
-  --font-display: var(--font-dm-serif), "DM Serif Display", Georgia, serif;
+  --font-display: var(--font-instrument-serif), "Instrument Serif", Georgia, serif;
   --paper: #ffffff;
   --ink: #1a1a1a;
   --ink-muted: #666666;
@@ -107,7 +107,7 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
-  --font-display: var(--font-dm-serif), "DM Serif Display", Georgia, serif;
+  --font-display: var(--font-instrument-serif), "Instrument Serif", Georgia, serif;
   --ease-out-emil: var(--ease-out);
   --ease-in-out-emil: var(--ease-in-out);
   --color-ground: var(--ground);
