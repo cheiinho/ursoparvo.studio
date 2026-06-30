@@ -2,14 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import SectionReveal from "@/components/SectionReveal";
+import { NUMBER_MOMENT } from "@/content/site";
 
 type Stat = { value: number | string; suffix?: string; label: string };
-
-const DEFAULT_STATS: Stat[] = [
-  { value: 1, label: "person. The one you actually talk to." },
-  { value: 0, label: "employees. No account managers, no hand-offs." },
-  { value: "∞", label: "revisions until it is right. Then it stops." },
-];
 
 function CountUp({ target }: { target: number }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -54,12 +49,12 @@ type NumberMomentProps = {
 };
 
 export default function NumberMoment({
-  eyebrow = "The studio, in three numbers",
-  stats = DEFAULT_STATS,
+  eyebrow = NUMBER_MOMENT.eyebrow,
+  stats = NUMBER_MOMENT.stats.map((stat) => ({ ...stat })),
 }: NumberMomentProps) {
   return (
     <section
-      aria-label="By the numbers"
+      aria-label={NUMBER_MOMENT.eyebrow}
       className="bg-background py-[var(--space-xl)] md:py-[var(--space-2xl)]"
     >
       <div className="grid-editorial">
@@ -68,7 +63,7 @@ export default function NumberMoment({
         </SectionReveal>
         <ul className="col-full grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-8">
           {stats.map((s, i) => (
-            <SectionReveal as="li" key={i} delay={i * 0.08}>
+            <SectionReveal as="li" key={s.label} delay={i * 0.08}>
               <p className="display text-[clamp(3.5rem,18vw,11rem)] leading-[0.82] text-ink">
                 {typeof s.value === "number" ? (
                   <CountUp target={s.value} />

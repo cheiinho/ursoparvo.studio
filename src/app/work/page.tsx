@@ -3,7 +3,7 @@ import WorkPageContent from "@/components/WorkPageContent";
 import { SITE } from "@/content/site";
 
 export const metadata: Metadata = {
-  title: `Trabalho · ${SITE.name}`,
+  title: `Trabalho, ${SITE.name}`,
   description:
     "Identidade visual corporativa. Projectos do Urso Parvo Studio, Coimbra.",
 };

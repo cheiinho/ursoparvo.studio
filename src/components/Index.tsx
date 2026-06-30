@@ -1,6 +1,5 @@
 "use client";
 
-import { ArrowUpRight } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -23,11 +22,7 @@ const CircularGallery = dynamic(
   },
 );
 
-type IndexProps = {
-  onCarouselVelocity?: (velocity: number) => void;
-};
-
-export default function Index({ onCarouselVelocity }: IndexProps) {
+export default function Index() {
   const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
   const galleryItems = useMemo<GalleryItem[]>(
@@ -45,8 +40,8 @@ export default function Index({ onCarouselVelocity }: IndexProps) {
   return (
     <section
       id="work"
-      className="relative z-[1] -mt-[8vh] flex w-full flex-col scroll-mt-20 md:-mt-[16vh]"
-      aria-label="Selected work"
+      className="relative z-[1] flex w-full flex-col scroll-mt-20 px-6 md:px-10"
+      aria-label="Trabalho seleccionado"
     >
       <div className="h-[36dvh] min-h-[240px] w-full touch-pan-x md:h-[44dvh] md:min-h-[320px]">
         <CircularGallery
@@ -56,15 +51,14 @@ export default function Index({ onCarouselVelocity }: IndexProps) {
           scrollEase={0.02}
           fontClassName="display"
           className="h-full w-full"
-          aria-label="Project gallery"
-          onScrollVelocity={onCarouselVelocity}
+          aria-label="Galeria de projectos"
           onNavigate={(href) => router.push(href)}
           onActiveIndex={setActiveIndex}
         />
       </div>
 
-      <div className="px-5 pb-12 pt-6 md:px-10 md:pb-16 md:pt-10">
-        <div className="mx-auto flex max-w-[1400px] flex-col items-center gap-4">
+      <div className="pb-12 pt-6 md:pb-16 md:pt-10">
+        <div className="mx-auto flex max-w-[1400px] flex-col items-start gap-4">
           <p
             key={activeIndex}
             className="display text-project text-ink transition-opacity duration-300"
@@ -73,22 +67,9 @@ export default function Index({ onCarouselVelocity }: IndexProps) {
           </p>
           <Link
             href="/work"
-            className="pointer-events-auto press nav-cta-split group inline-flex h-auto items-stretch gap-0.5 rounded-full border-0 bg-transparent p-0 text-sm font-normal shadow-none md:text-base"
-            data-cursor-hover
+            className="press inline-flex min-h-10 items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm text-primary-foreground md:px-6 md:py-3 md:text-base"
           >
-            <span className="nav-cta-split__label rounded-full bg-primary px-5 py-2.5 text-primary-foreground md:px-6 md:py-3">
-              View all work
-            </span>
-            <span className="nav-cta-split__arrow relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary text-primary-foreground">
-              <ArrowUpRight
-                className="nav-cta-split__icon nav-cta-split__icon--out size-4 md:size-[18px]"
-                aria-hidden
-              />
-              <ArrowUpRight
-                className="nav-cta-split__icon nav-cta-split__icon--in absolute size-4 md:size-[18px]"
-                aria-hidden
-              />
-            </span>
+            Ver todo o trabalho
           </Link>
         </div>
       </div>

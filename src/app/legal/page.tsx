@@ -3,7 +3,7 @@ import LegalPage from "@/components/LegalPage";
 import { SITE } from "@/content/site";
 
 export const metadata: Metadata = {
-  title: `Aviso Legal · ${SITE.name}`,
+  title: `Aviso Legal, ${SITE.name}`,
 };
 
 export default function LegalNoticePage() {

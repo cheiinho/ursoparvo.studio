@@ -3,7 +3,7 @@ import LegalPage from "@/components/LegalPage";
 import { SITE } from "@/content/site";
 
 export const metadata: Metadata = {
-  title: `Política de Privacidade · ${SITE.name}`,
+  title: `Política de Privacidade, ${SITE.name}`,
 };
 
 export default function PrivacyPage() {

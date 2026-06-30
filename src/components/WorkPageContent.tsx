@@ -4,7 +4,7 @@ import WorkList from "@/components/WorkList";
 export default function WorkPageContent() {
   return (
     <>
-      <Nav visible />
+      <Nav />
       <main className="page-enter min-h-dvh bg-background">
         <section
           className="scroll-mt-20 px-5 py-16 md:px-10 md:py-28"
