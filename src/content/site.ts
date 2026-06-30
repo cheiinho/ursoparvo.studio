@@ -8,7 +8,7 @@ export const SITE = {
   url: "https://ursoparvo.studio",
 } as const;
 
-export const TAGLINE = "A identidade. À prova de tendências." as const;
+export const TAGLINE = "Identidade à prova de tendências." as const;
 
 export const BIO_SHORT =
   "Designer com nove anos de experiência em produto, identidade e comunicação visual. Trabalhou para BMW, Mercedes-Benz e Talkdesk. Hoje dirige o Urso Parvo Studio, em Coimbra, focado em identidade visual corporativa que não segue tendências." as const;
