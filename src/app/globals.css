@@ -23,8 +23,8 @@
   --background: var(--paper);
   --foreground: var(--ink);
 
-  --primary: var(--yellow);
-  --primary-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
   --secondary: var(--ink);
   --secondary-foreground: var(--yellow);
   --ring: var(--ink);
@@ -58,8 +58,7 @@
   --measure: 62ch;
   /* Warm off-white "ground" surface (use for sections that aren't pure paper) */
   --ground: #fdfcf9;
-  /* Yellow is the single accent — buttons, hover, cursor, key bullets only.
-     Never as a background, never as text on white. */
+  /* Yellow: manifesto block only — not buttons or UI chrome. */
 
   /* Dark-mode token values (defined for future use; dark mode is not wired yet) */
   --ink-dk: #f3f2ee;
@@ -115,8 +114,8 @@
 
 /* ---- Type scale: title, body, small — no other sizes ---- */
 @theme static {
-  --text-title: clamp(1.75rem, 4vw, 2.25rem);
-  --text-title--line-height: 1.15;
+  --text-title: 1.5rem;
+  --text-title--line-height: 1.2;
   --text-title--letter-spacing: -0.02em;
 
   --text-body: 1rem;
@@ -140,6 +139,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+:where(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--text-title);
+  line-height: var(--text-title--line-height);
+  letter-spacing: var(--text-title--letter-spacing);
+  font-weight: 400;
+}
+
 :where(h1, h2, h3, h4, h5, h6, b, strong) {
   font-weight: 400;
 }
@@ -158,6 +164,37 @@ body {
 .text-small {
   font-size: var(--text-small);
   line-height: var(--text-small--line-height);
+}
+
+.btn {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 1.25rem;
+  border: 1px solid var(--ink);
+  border-radius: 9999px;
+  background: transparent;
+  color: var(--ink);
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+  transition: opacity 160ms var(--ease-out);
+}
+
+.btn:hover {
+  opacity: 0.65;
+}
+
+.btn-plain {
+  min-height: auto;
+  padding-inline: 0.25rem;
+  border-color: transparent;
+  color: var(--ink-muted);
+}
+
+.btn-plain:hover {
+  color: var(--ink);
+  opacity: 1;
 }
 
 * {

@@ -169,7 +169,7 @@ const NavTab = forwardRef(function NavTab(
     active || reduceMotion
       ? "text-ink"
       : "text-ink/60 hover:text-ink",
-    active && reduceMotion ? "rounded-full bg-yellow/30" : "",
+    active && reduceMotion ? "rounded-full bg-ink/8" : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -206,7 +206,7 @@ function SlidingCursor({ position }: { position: CursorPosition }) {
   return (
     <motion.div
       aria-hidden
-      className="pointer-events-none absolute inset-y-0.5 z-0 rounded-full bg-yellow"
+      className="pointer-events-none absolute inset-y-0.5 z-0 rounded-full bg-ink/8"
       animate={{
         left: position.left,
         width: position.width,
