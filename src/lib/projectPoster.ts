@@ -32,7 +32,6 @@ const THEMES: Record<string, PosterTheme> = {
   mossline: { base: "#d6e2d2", ink: INK, accent: "#4a6b4a" },
 };
 
-const SERIF = "Georgia, 'Times New Roman', serif";
 const SANS = "Inter, system-ui, sans-serif";
 
 /** Editorial label: name bottom-left, year top-right, hairline frame. */
@@ -42,7 +41,7 @@ function chrome(name: string, year: string, t: PosterTheme) {
       <text x="80" y="120" font-size="26" letter-spacing="6" opacity="0.55">URSOPARVO STUDIO</text>
       <text x="${W - 80}" y="120" font-size="26" letter-spacing="6" text-anchor="end" opacity="0.55">${year}</text>
     </g>
-    <text x="80" y="${H - 80}" font-family="${SERIF}" font-size="120" fill="${t.ink}">${name}</text>
+    <text x="80" y="${H - 80}" font-family="${SANS}" font-size="120" fill="${t.ink}">${name}</text>
   `;
 }
 
@@ -64,7 +63,7 @@ function forma(t: PosterTheme, name: string, year: string) {
       <line x1="0" y1="${H * 0.62}" x2="${W}" y2="${H * 0.62}"/>
       <line x1="${W * 0.5}" y1="0" x2="${W * 0.5}" y2="${H}"/>
     </g>
-    <text x="${W * 0.5}" y="${H * 0.66}" font-family="${SERIF}" font-size="560" fill="${t.ink}" text-anchor="middle">F</text>
+    <text x="${W * 0.5}" y="${H * 0.66}" font-family="${SANS}" font-size="560" fill="${t.ink}" text-anchor="middle">F</text>
     <rect x="${W * 0.5 - 30}" y="${H * 0.34 - 30}" width="60" height="60" fill="${t.accent}"/>
     <circle cx="${W * 0.78}" cy="${H * 0.3}" r="42" fill="${YELLOW}"/>
     ${chrome(name, year, t)}
@@ -125,7 +124,7 @@ function mossline(t: PosterTheme, name: string, year: string) {
       <line x1="${W * 0.5}" y1="${H * 0.2}" x2="${W * 0.5}" y2="${H * 0.78}"/>
       <line x1="${W * 0.66}" y1="${H * 0.2}" x2="${W * 0.66}" y2="${H * 0.78}"/>
     </g>
-    <text x="80" y="${H * 0.52}" font-family="${SERIF}" font-size="300" fill="${t.accent}">04</text>
+    <text x="80" y="${H * 0.52}" font-family="${SANS}" font-size="300" fill="${t.accent}">04</text>
     <rect x="${W * 0.66}" y="${H * 0.28}" width="${W * 0.18}" height="${H * 0.18}" fill="${YELLOW}"/>
     ${chrome(name, year, t)}
   `;
@@ -202,7 +201,7 @@ function appSignage(t: PosterTheme, name: string) {
   return `
     <rect width="${W}" height="${H}" fill="${t.base}"/>
     <rect x="${W * 0.12}" y="${H * 0.14}" width="${W * 0.76}" height="${H * 0.72}" fill="${t.ink}"/>
-    <text x="${W * 0.5}" y="${H * 0.66}" font-family="${SERIF}" font-size="420" fill="${t.base}" text-anchor="middle">${name.charAt(0)}</text>
+    <text x="${W * 0.5}" y="${H * 0.66}" font-family="${SANS}" font-size="420" fill="${t.base}" text-anchor="middle">${name.charAt(0)}</text>
     <circle cx="${W * 0.8}" cy="${H * 0.28}" r="40" fill="${YELLOW}"/>`;
 }
 

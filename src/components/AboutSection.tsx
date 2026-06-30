@@ -5,7 +5,7 @@ export default function AboutSection() {
   return (
     <section
       aria-label={ABOUT_HOME.title}
-      className="border-t border-border bg-background py-[var(--space-lg)] md:py-[var(--space-xl)]"
+      className="bg-background py-[var(--space-lg)] md:py-[var(--space-xl)]"
     >
       <div className="grid-editorial">
         <SectionReveal variant="mask" className="col-wide">

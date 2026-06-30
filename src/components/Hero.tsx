@@ -127,16 +127,12 @@ export default function Hero({
           </Link>
           <a
             href={HERO.ctaSecondary.href}
-            className="press link-underline inline-flex min-h-10 items-center justify-center px-2 py-2 text-sm text-ink/70 transition-colors hover:text-ink md:text-base"
+            className="press inline-flex min-h-10 items-center justify-center px-2 py-2 text-sm text-ink/70 transition-colors hover:text-ink md:text-base"
             data-cursor-hover
           >
             {HERO.ctaSecondary.label}
           </a>
         </div>
-        <span
-          className="hero-scroll-line mx-auto mt-4 hidden h-8 w-px bg-ink/25 md:block"
-          aria-hidden="true"
-        />
       </div>
     </section>
   );

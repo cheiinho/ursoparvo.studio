@@ -4,7 +4,7 @@ import CursorDot from "@/components/CursorDot";
 import Intro from "@/components/Intro";
 import { SiteBackground } from "@/components/ui/site-background";
 import { BIO_SHORT, SITE } from "@/content/site";
-import { instrumentSerif, inter } from "@/lib/fonts";
+import { inter } from "@/lib/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -42,7 +42,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt"
-      className={`h-full scroll-smooth ${inter.variable} ${instrumentSerif.variable}`}
+      className={`h-full scroll-smooth ${inter.variable}`}
     >
       <body
         className={`${inter.className} relative min-h-full text-foreground antialiased`}

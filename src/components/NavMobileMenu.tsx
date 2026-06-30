@@ -94,7 +94,7 @@ export default function NavMobileMenu({
           {NAV_MOBILE_LINKS.map((link, index) => (
             <li
               key={link.href}
-              className="border-t border-white/15 first:border-t-0 transition-[transform,opacity] duration-[560ms] ease-[cubic-bezier(0.77,0,0.175,1)]"
+              className="transition-[transform,opacity] duration-[560ms] ease-[cubic-bezier(0.77,0,0.175,1)]"
               style={{
                 transitionDelay: open ? `${80 + index * 55}ms` : "0ms",
                 transform: open ? "translateY(0)" : "translateY(1.25rem)",

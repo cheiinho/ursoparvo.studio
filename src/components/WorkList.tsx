@@ -13,7 +13,7 @@ export default function WorkList() {
         <p className="text-body leading-[1.65] text-ink-muted">
           <a
             href={`mailto:${SITE.email}`}
-            className="link-underline text-ink/70 transition-colors hover:text-ink"
+            className="text-ink/70 transition-colors hover:text-ink"
           >
             Escreva-nos
           </a>{" "}
@@ -24,7 +24,7 @@ export default function WorkList() {
   }
 
   return (
-    <ul className="divide-y divide-border">
+    <ul className="flex flex-col gap-6 md:gap-7">
       {projects.map((project) => (
         <li key={project.id}>
           <Link

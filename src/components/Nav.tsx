@@ -59,7 +59,7 @@ export default function Nav({ visible }: NavProps) {
     ? "border-transparent bg-transparent"
     : onHero
       ? "border-transparent bg-transparent"
-      : "border-b border-border bg-background";
+      : "bg-background";
   const interactive = visible && !menuOpen;
 
   return (
@@ -118,7 +118,7 @@ export default function Nav({ visible }: NavProps) {
             href={`mailto:${SITE.email}`}
             data-cursor-hover
             tabIndex={interactive ? 0 : -1}
-            className="press link-underline text-sm font-normal text-ink/70 transition-colors duration-200 hover:text-ink md:text-base"
+            className="press text-sm font-normal text-ink/70 transition-colors duration-200 hover:text-ink md:text-base"
           >
             {NAV.contact}
           </a>
