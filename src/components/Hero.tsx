@@ -28,27 +28,14 @@ export default function Hero({
       </p>
       <div className="hero-rise hero-rise--3 mt-8 flex flex-col gap-3 sm:flex-row sm:items-center md:mt-10">
         {hasPublishedWork ? (
-          <Link
-            href={HERO.ctaWork.href}
-            className="press text-body inline-flex min-h-10 items-center justify-center rounded-full bg-primary px-5 py-2 text-primary-foreground md:px-6"
-          >
+          <Link href={HERO.ctaWork.href} className="press btn">
             {HERO.ctaWork.label}
           </Link>
         ) : null}
-        <a
-          href={HERO.ctaContact.href}
-          className={`press text-body inline-flex min-h-10 items-center justify-center rounded-full px-5 py-2 md:px-6 ${
-            hasPublishedWork
-              ? "text-ink/70 transition-colors hover:text-ink"
-              : "bg-primary text-primary-foreground"
-          }`}
-        >
+        <a href={HERO.ctaContact.href} className="press btn">
           {HERO.ctaContact.label}
         </a>
-        <Link
-          href={HERO.ctaAbout.href}
-          className="press text-body inline-flex min-h-10 items-center justify-center px-2 py-2 text-ink/70 transition-colors hover:text-ink"
-        >
+        <Link href={HERO.ctaAbout.href} className="press btn btn-plain">
           {HERO.ctaAbout.label}
         </Link>
       </div>

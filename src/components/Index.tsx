@@ -65,10 +65,7 @@ export default function Index() {
           >
             {galleryItems[activeIndex]?.text ?? ""}
           </p>
-          <Link
-            href="/work"
-            className="press text-body inline-flex min-h-10 items-center justify-center rounded-full bg-primary px-5 py-2.5 text-primary-foreground md:px-6 md:py-3"
-          >
+          <Link href="/work" className="press btn">
             Ver todo o trabalho
           </Link>
         </div>

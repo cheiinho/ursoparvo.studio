@@ -1,8 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { BEAR_LOGO } from "@/constants/bear";
 import { NAV, SITE } from "@/content/site";
 
 const INSTAGRAM_URL =
@@ -21,7 +23,7 @@ export const NAV_MOBILE_LINKS = [
 ] as const;
 
 const linkClass =
-  "press text-title text-white transition-colors duration-200 hover:text-yellow";
+  "press text-body text-white transition-colors duration-200 hover:text-white/70";
 
 type NavMobileMenuProps = {
   id: string;
@@ -68,12 +70,20 @@ export default function NavMobileMenu({
       >
         <Link
           href="/"
-          className="press text-body text-white"
+          className="press inline-flex items-center gap-3"
           onClick={onClose}
           aria-label={`${SITE.name}, início`}
           tabIndex={open ? 0 : -1}
         >
-          {SITE.name}
+          <Image
+            src={BEAR_LOGO.src}
+            alt=""
+            width={BEAR_LOGO.width}
+            height={BEAR_LOGO.height}
+            className="block h-9 w-9 object-contain"
+            priority
+          />
+          <span className="text-body text-white">{SITE.name}</span>
         </Link>
       </div>
 
@@ -132,10 +142,10 @@ export default function NavMobileMenu({
           opacity: open ? 1 : 0,
         }}
       >
-        <p className="text-small !text-yellow">{SITE.location}</p>
+        <p className="text-small text-white/70">{SITE.location}</p>
         <a
           href={`mailto:${SITE.email}`}
-          className="press text-body mt-2 inline-block !text-white transition-colors duration-200 hover:text-yellow"
+          className="press text-body mt-2 inline-block text-white transition-colors duration-200 hover:text-white/70"
           onClick={onClose}
           tabIndex={open ? 0 : -1}
         >
