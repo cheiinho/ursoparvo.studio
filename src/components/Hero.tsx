@@ -26,7 +26,7 @@ export default function Hero({
       <p className="hero-rise hero-rise--2 text-body measure mt-6 max-w-xl text-ink/60 md:mt-8">
         {HERO.subtitle}
       </p>
-      <div className="hero-rise hero-rise--3 mt-8 flex flex-col gap-3 sm:flex-row sm:items-center md:mt-10">
+      <div className="hero-rise hero-rise--3 mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center md:mt-10">
         {hasPublishedWork ? (
           <Link href={HERO.ctaWork.href} className="press btn">
             {HERO.ctaWork.label}

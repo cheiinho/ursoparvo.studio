@@ -168,6 +168,9 @@ body {
 
 .btn {
   display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  flex-shrink: 0;
   min-height: 2.5rem;
   align-items: center;
   justify-content: center;
@@ -178,6 +181,7 @@ body {
   color: var(--ink);
   font-size: var(--text-body);
   line-height: var(--text-body--line-height);
+  white-space: nowrap;
   transition: opacity 160ms var(--ease-out);
 }
 
