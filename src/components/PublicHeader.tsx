@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import NavMobileMenu from "@/components/NavMobileMenu";
 import ThemeToggle from "@/components/ThemeToggle";
 import { NAV, SITE } from "@/content/site";
@@ -15,9 +15,7 @@ const navLinks = [
 
 export default function PublicHeader() {
   const pathname = usePathname();
-  const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const lastScrollY = useRef(0);
   const menuId = useId();
 
   useEffect(() => {
@@ -25,26 +23,10 @@ export default function PublicHeader() {
   }, [pathname]);
 
   useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = "hidden";
-      return () => {
-        document.body.style.overflow = "";
-      };
-    }
-  }, [menuOpen]);
-
-  useEffect(() => {
-    const onScroll = () => {
-      if (menuOpen) return;
-      const y = window.scrollY;
-      const scrollingDown = y > lastScrollY.current;
-      const pastThreshold = y > 80;
-      setHidden(scrollingDown && pastThreshold && window.innerWidth < 768);
-      lastScrollY.current = y;
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
     };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
   }, [menuOpen]);
 
   useEffect(() => {
@@ -63,13 +45,13 @@ export default function PublicHeader() {
 
   return (
     <header
-      className={`public-header${hidden ? " public-header--hidden" : ""}${menuOpen ? " public-header--menu-open" : ""}`}
+      className={`public-header${menuOpen ? " public-header--menu-open" : ""}`}
     >
       <div className="public-header__nav">
         <div className="site-container public-header__inner">
           <Link
             href="/"
-            className="public-header__brand text-display public-nav-link"
+            className="public-header__brand"
             aria-label={`${SITE.name}, início`}
             tabIndex={menuOpen ? -1 : 0}
           >
@@ -83,11 +65,7 @@ export default function PublicHeader() {
           >
             {navLinks.map(({ href, label, ...rest }) =>
               "external" in rest && rest.external ? (
-                <a
-                  key={href}
-                  href={href}
-                  className="public-nav-link text-nav"
-                >
+                <a key={href} href={href} className="public-nav-link text-nav">
                   {label}
                 </a>
               ) : (
@@ -101,14 +79,12 @@ export default function PublicHeader() {
                 </Link>
               ),
             )}
-            <span className="public-header__theme">
-              <ThemeToggle />
-            </span>
+            <ThemeToggle />
           </nav>
 
           <button
             type="button"
-            className="public-header__menu-btn public-control-link text-nav"
+            className="public-header__menu-btn text-nav"
             aria-expanded={menuOpen}
             aria-controls={menuId}
             onClick={() => setMenuOpen((open) => !open)}
