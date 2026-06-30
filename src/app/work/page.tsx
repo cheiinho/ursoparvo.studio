@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import WorkPageContent from "@/components/WorkPageContent";
+import { SITE } from "@/content/site";
 
 export const metadata: Metadata = {
-  title: "Work · UrsoParvo Studio",
-  description: "Solo design studio in Coimbra. Brand identity, art direction, digital.",
+  title: `Trabalho · ${SITE.name}`,
+  description:
+    "Identidade visual, grafismo e fotografia — projectos do Urso Parvo Studio.",
 };
 
 export default function WorkPage() {

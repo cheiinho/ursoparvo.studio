@@ -1,21 +1,22 @@
 import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
+import { SITE } from "@/content/site";
 
 export const metadata: Metadata = {
-  title: "Terms of Service · UrsoParvo Studio",
+  title: `Termos de Serviço · ${SITE.name}`,
 };
 
 export default function TermsPage() {
   return (
-    <LegalPage title="Terms of Service">
+    <LegalPage title="Termos de Serviço">
       <p>
-        These terms govern use of the UrsoParvo Studio website and services.
-        Full terms will be published here. For enquiries, contact{" "}
+        Estes termos regem a utilização do site e serviços do {SITE.name}. Os
+        termos completos serão publicados aqui. Para questões, contacte{" "}
         <a
-          href="mailto:hello@ursoparvo.studio"
+          href={`mailto:${SITE.email}`}
           className="text-ink underline-offset-4 hover:underline"
         >
-          hello@ursoparvo.studio
+          {SITE.email}
         </a>
         .
       </p>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SITE } from "@/content/site";
 
 const INSTAGRAM_URL =
   process.env.NEXT_PUBLIC_INSTAGRAM_URL ?? "https://instagram.com/ursoparvo.studio";
@@ -27,7 +28,7 @@ export default function Footer({ className = "" }: FooterProps) {
         </p>
 
         <p className="text-sm text-ink/60">
-          © {year} UrsoParvo Studio. All rights reserved.
+          © {year} {SITE.name}. Todos os direitos reservados.
         </p>
 
         <nav aria-label="Footer links">

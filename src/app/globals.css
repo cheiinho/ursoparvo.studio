@@ -4,10 +4,10 @@
   --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
   --font-display: var(--font-sans);
   --paper: #ffffff;
-  --ink: #111111;
+  --ink: #1a1a1a;
   --ink-muted: #666666;
-  --border: rgba(0, 0, 0, 0.1);
-  --yellow: #f5e642;
+  --border: rgba(26, 26, 26, 0.1);
+  --yellow: #ffff50;
   --electric-blue: #5757ff;
   --white: #ffffff;
   --black: #000000;
@@ -275,7 +275,7 @@ a {
   font-size: clamp(4rem, 12vw, 11rem);
   line-height: 0.82;
   letter-spacing: -0.04em;
-  color: rgba(17, 17, 17, 0.1);
+  color: rgba(26, 26, 26, 0.1);
   align-self: center;
 }
 .law-row__num--left {

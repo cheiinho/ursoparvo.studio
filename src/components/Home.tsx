@@ -1,10 +1,13 @@
 "use client";
 
 import { useRef, useState } from "react";
+import AboutSection from "@/components/AboutSection";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 import Index from "@/components/Index";
 import PositioningSection from "@/components/PositioningSection";
+import ProcessSection from "@/components/ProcessSection";
+import ServicesSection from "@/components/ServicesSection";
 import Nav from "@/components/Nav";
 import ContactCTA from "@/components/ContactCTA";
 import { hasPublishedWork } from "@/data/projects";
@@ -38,6 +41,9 @@ export default function Home() {
           )}
         </section>
         <PositioningSection />
+        <ServicesSection />
+        <AboutSection />
+        <ProcessSection />
         <ContactCTA />
         <section id="end" aria-label="Site footer">
           <Footer />

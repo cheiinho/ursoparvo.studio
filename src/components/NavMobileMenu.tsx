@@ -5,18 +5,19 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { BEAR_ICON_PX_MD } from "@/constants/bear";
+import { NAV, SITE } from "@/content/site";
 
 const INSTAGRAM_URL =
   process.env.NEXT_PUBLIC_INSTAGRAM_URL ??
   "https://instagram.com/ursoparvo.studio";
 
 export const NAV_MOBILE_LINKS = [
-  { href: "/work", label: "Work" },
-  { href: "/about", label: "About" },
+  { href: "/work", label: NAV.work },
+  { href: "/about", label: NAV.about },
   { href: INSTAGRAM_URL, label: "Instagram", external: true },
   {
-    href: "mailto:hello@ursoparvo.studio",
-    label: "Get in touch",
+    href: `mailto:${SITE.email}`,
+    label: NAV.contact,
     external: true,
   },
 ] as const;
@@ -71,7 +72,7 @@ export default function NavMobileMenu({
           href="/"
           className="press inline-flex items-center"
           onClick={onClose}
-          aria-label="UrsoParvo Studio home"
+          aria-label={`${SITE.name} — início`}
           tabIndex={open ? 0 : -1}
         >
           <Image
@@ -140,14 +141,14 @@ export default function NavMobileMenu({
           opacity: open ? 1 : 0,
         }}
       >
-        <p className="tech !text-yellow">Solo design practice</p>
+        <p className="tech !text-yellow">{SITE.location}</p>
         <a
-          href="mailto:hello@ursoparvo.studio"
+          href={`mailto:${SITE.email}`}
           className="press mt-2 inline-block text-sm !text-white transition-colors duration-200 hover:text-yellow md:text-base"
           onClick={onClose}
           tabIndex={open ? 0 : -1}
         >
-          hello@ursoparvo.studio
+          {SITE.email}
         </a>
       </div>
     </div>,

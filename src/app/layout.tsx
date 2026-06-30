@@ -3,28 +3,33 @@ import BearCompanion from "@/components/BearCompanion";
 import CursorDot from "@/components/CursorDot";
 import Intro from "@/components/Intro";
 import { SiteBackground } from "@/components/ui/site-background";
+import { BIO_SHORT, SITE } from "@/content/site";
 import { inter } from "@/lib/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://ursoparvo.studio",
+    process.env.NEXT_PUBLIC_SITE_URL ?? SITE.url,
   ),
-  title: "UrsoParvo Studio · Design & Branding",
-  description:
-    "Brands built to outlast trends. Solo designer in Coimbra.",
+  title: `${SITE.name} · Design & Fotografia`,
+  description: BIO_SHORT,
   openGraph: {
-    title: "UrsoParvo Studio",
-    description:
-      "Brands built to outlast trends. One person, no expiry date on the work.",
+    title: SITE.name,
+    description: BIO_SHORT,
     type: "website",
-    images: [{ url: "/assets/bear-yellow.png", width: 147, height: 150, alt: "UrsoParvo Studio" }],
+    images: [
+      {
+        url: "/assets/bear-yellow.png",
+        width: 147,
+        height: 150,
+        alt: SITE.name,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "UrsoParvo Studio",
-    description:
-      "Brands built to outlast trends. One person, no expiry date on the work.",
+    title: SITE.name,
+    description: BIO_SHORT,
     images: ["/assets/bear-yellow.png"],
   },
 };
@@ -35,10 +40,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`h-full scroll-smooth ${inter.variable}`}
-    >
+    <html lang="pt" className={`h-full scroll-smooth ${inter.variable}`}>
       <body
         className={`${inter.className} relative min-h-full text-foreground antialiased`}
       >
