@@ -65,9 +65,7 @@ export default function Nav() {
       >
         <Link
           href="/"
-          className={`press text-sm text-ink sm:text-base md:text-lg ${
-            menuOpen ? "invisible" : ""
-          }`}
+          className={`press text-body text-ink ${menuOpen ? "invisible" : ""}`}
           aria-label={`${SITE.name}, início`}
           tabIndex={interactive ? 0 : -1}
         >
@@ -82,7 +80,7 @@ export default function Nav() {
           <a
             href={`mailto:${SITE.email}`}
             tabIndex={interactive ? 0 : -1}
-            className="press text-sm font-normal text-ink/70 transition-colors duration-200 hover:text-ink md:text-base"
+            className="press text-body text-ink/70 transition-colors duration-200 hover:text-ink"
           >
             {NAV.contact}
           </a>
@@ -90,7 +88,7 @@ export default function Nav() {
 
         <button
           type="button"
-          className={`press relative z-[220] text-sm text-ink transition-colors duration-200 hover:text-ink/70 xl:hidden ${
+          className={`press text-body relative z-[220] text-ink transition-colors duration-200 hover:text-ink/70 xl:hidden ${
             menuOpen ? "pointer-events-auto" : ""
           }`}
           aria-expanded={menuOpen}

@@ -21,7 +21,7 @@ export const NAV_MOBILE_LINKS = [
 ] as const;
 
 const linkClass =
-  "press display text-[clamp(2.35rem,10.5vw,6.5rem)] leading-[0.92] tracking-[-0.04em] text-white transition-colors duration-200 hover:text-yellow";
+  "press text-title text-white transition-colors duration-200 hover:text-yellow";
 
 type NavMobileMenuProps = {
   id: string;
@@ -68,7 +68,7 @@ export default function NavMobileMenu({
       >
         <Link
           href="/"
-          className="press text-sm text-white md:text-base"
+          className="press text-body text-white"
           onClick={onClose}
           aria-label={`${SITE.name}, início`}
           tabIndex={open ? 0 : -1}
@@ -132,10 +132,10 @@ export default function NavMobileMenu({
           opacity: open ? 1 : 0,
         }}
       >
-        <p className="tech normal-case !text-yellow">{SITE.location}</p>
+        <p className="text-small !text-yellow">{SITE.location}</p>
         <a
           href={`mailto:${SITE.email}`}
-          className="press mt-2 inline-block text-sm !text-white transition-colors duration-200 hover:text-yellow md:text-base"
+          className="press text-body mt-2 inline-block !text-white transition-colors duration-200 hover:text-yellow"
           onClick={onClose}
           tabIndex={open ? 0 : -1}
         >

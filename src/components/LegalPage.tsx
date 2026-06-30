@@ -12,12 +12,12 @@ export default function LegalPage({ title, children }: LegalPageProps) {
       <div className="mx-auto max-w-[1400px]">
         <Link
           href="/"
-          className="press text-sm text-ink/60 transition-colors duration-200 hover:text-ink"
+          className="press text-small text-ink/60 transition-colors duration-200 hover:text-ink"
         >
-          ← Back home
+          Voltar ao início
         </Link>
-        <h1 className="display mt-8 text-[clamp(2rem,5vw,3rem)]">{title}</h1>
-        <div className="mt-8 max-w-2xl space-y-4 text-base leading-relaxed text-ink-muted md:text-lg">
+        <h1 className="text-title mt-8 text-ink">{title}</h1>
+        <div className="text-body mt-8 max-w-2xl space-y-4 text-ink-muted">
           {children}
         </div>
       </div>

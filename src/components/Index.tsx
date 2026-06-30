@@ -49,7 +49,7 @@ export default function Index() {
           bend={3}
           borderRadius={0.05}
           scrollEase={0.02}
-          fontClassName="display"
+          fontClassName="text-title"
           className="h-full w-full"
           aria-label="Galeria de projectos"
           onNavigate={(href) => router.push(href)}
@@ -61,13 +61,13 @@ export default function Index() {
         <div className="mx-auto flex max-w-[1400px] flex-col items-start gap-4">
           <p
             key={activeIndex}
-            className="display text-project text-ink transition-opacity duration-300"
+            className="text-title text-ink transition-opacity duration-300"
           >
             {galleryItems[activeIndex]?.text ?? ""}
           </p>
           <Link
             href="/work"
-            className="press inline-flex min-h-10 items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm text-primary-foreground md:px-6 md:py-3 md:text-base"
+            className="press text-body inline-flex min-h-10 items-center justify-center rounded-full bg-primary px-5 py-2.5 text-primary-foreground md:px-6 md:py-3"
           >
             Ver todo o trabalho
           </Link>

@@ -661,7 +661,7 @@ const CircularGallery = ({
       ref={containerRef}
       className={cn(
         "h-full w-full cursor-grab overflow-hidden active:cursor-grabbing",
-        "font-sans text-[24px] font-normal text-[#1a1a1a]",
+        "text-body font-normal text-[#1a1a1a]",
         fontClassName,
         className,
       )}

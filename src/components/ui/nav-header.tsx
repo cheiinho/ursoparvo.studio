@@ -165,7 +165,7 @@ const NavTab = forwardRef(function NavTab(
   };
 
   const linkClass = [
-    "press relative z-10 block px-3 py-1.5 text-sm font-normal transition-colors md:px-4 md:py-2 md:text-base",
+    "press text-body relative z-10 block px-3 py-1.5 font-normal transition-colors md:px-4 md:py-2",
     active || reduceMotion
       ? "text-ink"
       : "text-ink/60 hover:text-ink",

@@ -16,11 +16,14 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="pt" className={inter.variable}>
       <body className={inter.className}>
-        <button type="button" onClick={() => reset()}>
-          Try again
-        </button>
+        <div className="flex min-h-dvh flex-col items-center justify-center gap-4 px-6">
+          <p className="text-title text-ink">Algo correu mal</p>
+          <button type="button" className="text-body text-ink/70" onClick={() => reset()}>
+            Tentar de novo
+          </button>
+        </div>
       </body>
     </html>
   );
