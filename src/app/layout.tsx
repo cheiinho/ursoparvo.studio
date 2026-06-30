@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ThemeScript } from "@/components/ThemeScript";
 import { BIO_SHORT, SITE } from "@/content/site";
-import { pangaia, sohne } from "@/lib/fonts";
+import { sohne } from "@/lib/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt"
-      className={`h-full scroll-smooth ${sohne.variable} ${pangaia.variable}`}
+      className={`h-full scroll-smooth ${sohne.variable}`}
       suppressHydrationWarning
     >
       <body
