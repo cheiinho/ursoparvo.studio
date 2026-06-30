@@ -1,31 +1,54 @@
-"use client";
-
-import ContactCTA from "@/components/ContactCTA";
-import Footer from "@/components/Footer";
-import Hero from "@/components/Hero";
-import Index from "@/components/Index";
-import ManifestoSection from "@/components/ManifestoSection";
-import Nav from "@/components/Nav";
+import Link from "next/link";
+import PublicShell from "@/components/PublicShell";
+import IndexCarousel from "@/components/IndexCarousel";
+import {
+  CONTACT,
+  HERO,
+  POSITIONING_BODY,
+  SITE,
+  TAGLINE,
+} from "@/content/site";
 import { hasPublishedWork } from "@/data/projects";
 
 export default function Home() {
-  const showWorkGallery = hasPublishedWork();
+  const showCarousel = hasPublishedWork();
+
+  if (showCarousel) {
+    return (
+      <PublicShell home>
+        <IndexCarousel />
+      </PublicShell>
+    );
+  }
 
   return (
-    <>
-      <Nav />
-      <main>
-        <section
-          id="landing"
-          className={showWorkGallery ? "pb-12 md:pb-20" : ""}
-        >
-          <Hero hasPublishedWork={showWorkGallery} galleryOverlap={showWorkGallery} />
-          {showWorkGallery && <Index />}
-        </section>
-        <ManifestoSection />
-        <ContactCTA />
-        <Footer />
-      </main>
-    </>
+    <PublicShell>
+      <div className="site-container home-editorial">
+        <div className="page-top-spacer" style={{ paddingBottom: 24 }} />
+        <div className="about-layout">
+          <div className="about-layout__main">
+            <p className="about-lede home-editorial__lede">{TAGLINE}</p>
+            <div className="mt-10 space-y-6">
+              {POSITIONING_BODY.map((paragraph) => (
+                <p key={paragraph.slice(0, 32)} className="text-body">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+            <aside className="about-processo">
+              <p className="about-processo__text">{HERO.subtitle}</p>
+            </aside>
+            <div className="mt-12 flex flex-wrap gap-4">
+              <Link href="/about" className="about-aside__cta">
+                Sobre
+              </Link>
+              <a href={`mailto:${SITE.email}`} className="about-aside__cta">
+                {CONTACT.title}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </PublicShell>
   );
 }

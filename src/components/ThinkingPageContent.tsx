@@ -1,166 +1,64 @@
-import ContactCTA from "@/components/ContactCTA";
-import Nav from "@/components/Nav";
-import SectionReveal from "@/components/SectionReveal";
-
-const LAWS = [
-  {
-    n: "I",
-    text: "A mark should work in any decade. You should not be able to guess when it was made.",
-  },
-  {
-    n: "II",
-    text: "Trend-led work has an expiry date. Timeless work does not.",
-  },
-  {
-    n: "III",
-    text: "Removing things is harder than adding them. That is where the real work is.",
-  },
-  {
-    n: "IV",
-    text: "Process beats a single clever moment. Good process gives you good work again.",
-  },
-  {
-    n: "V",
-    text: "Type is structure, not decoration.",
-  },
-  {
-    n: "VI",
-    text: "Consistency over years beats brilliance for one launch.",
-  },
-  {
-    n: "VII",
-    text: "The right client hires you for what you will not do.",
-  },
-] as const;
+import Link from "next/link";
+import PublicShell from "@/components/PublicShell";
+import { CONTACT, SITE } from "@/content/site";
 
 const POSITIONS = [
   {
-    title: "On type",
-    body: "Serifs and sans-serifs with history behind them. Not the font everyone used on Dribbble this quarter.",
+    title: "Sobre tipografia",
+    body: "Serifas e sans-serifs com história. Não a fonte que toda a gente usou no Dribbble este trimestre.",
   },
   {
-    title: "On colour",
-    body: "Black, white, one accent. Used the same way every time. Like Penguin's orange band. Not a mood board.",
+    title: "Sobre cor",
+    body: "Preto, branco, um acento. Usados da mesma forma sempre. Não um mood board.",
   },
   {
-    title: "On process",
-    body: "Question before you draw. What is the idea? What can go? What has to survive?",
+    title: "Sobre processo",
+    body: "Questionar antes de desenhar. Qual é a ideia? O que pode sair? O que tem de ficar?",
   },
   {
-    title: "On a good brand",
-    body: "You could have launched it in another decade and nobody would blink.",
-  },
-  {
-    title: "On a bad brief",
-    body: "Make it feel modern. No further detail. That usually means follow the trend and redo in three years.",
+    title: "Sobre uma boa marca",
+    body: "Podia ter sido lançada noutra década e ninguém pestanejava.",
   },
 ] as const;
 
 export default function ThinkingPageContent() {
   return (
-    <>
-      <Nav />
-      <main className="min-h-dvh bg-background">
-        <article className="pb-[var(--space-xl)] pt-24 md:pb-[var(--space-2xl)] md:pt-32">
-          <section aria-label="On permanence" className="grid-editorial">
-            <SectionReveal className="col-narrow">
-              <p className="text-small mb-8 text-ink/40">Point of view</p>
-              <h1 className="text-title text-ink">On permanence.</h1>
-              <div className="text-body measure mt-10 space-y-6 text-ink">
-                <p>
-                  I design brands that do not need to be redesigned. Not because
-                  I follow a checklist. Because I work with principles that were
-                  already old when Helvetica was new.
-                </p>
-                <p>
-                  Proportion. Contrast. Reduction. Clarity.
-                </p>
-                <p>
-                  In a market that sells the look of the year, I sell work that
-                  still reads after the look of the year is embarrassing. If that
-                  is not what you want, you will find plenty of studios that will
-                  give you the trend. That is fine. We are probably not a match.
-                </p>
-              </div>
-            </SectionReveal>
-          </section>
+    <PublicShell>
+      <div className="site-container project-detail-shell">
+        <p className="text-nav opacity-40">Ponto de vista</p>
+        <h1 className="project-headline mt-6 not-italic">Sobre permanência.</h1>
 
-          <section
-            aria-label="Motto"
-            className="grid-editorial mt-[var(--space-xl)] md:mt-[var(--space-2xl)]"
-          >
-            <SectionReveal variant="mask" className="col-full">
-              <p className="text-title text-ink">Um parvo é sempre um parvo.</p>
-            </SectionReveal>
-            <SectionReveal className="col-right mt-8" delay={0.12}>
-              <p className="text-body measure text-ink-muted">
-                A fool is always a fool. The name is the point. No pretending to
-                be a fifty-person agency. No slick pitch before we have spoken. I
-                say what I think. The work has to carry the rest.
-              </p>
-            </SectionReveal>
-          </section>
+        <div className="mx-auto mt-10 max-w-[40rem] space-y-6 text-body opacity-80">
+          <p>
+            Desenho marcas que não precisam de ser redesenhadas. Não porque sigo
+            uma checklist. Porque trabalho com princípios que já eram velhos
+            quando a Helvetica era nova.
+          </p>
+          <p>Proporção. Contraste. Redução. Clareza.</p>
+        </div>
 
-          <section
-            aria-label="Positions"
-            className="grid-editorial mt-[var(--space-xl)] md:mt-[var(--space-2xl)]"
-          >
-            <div className="col-full space-y-12 md:space-y-16">
-              {POSITIONS.map((item, i) => (
-                <SectionReveal key={item.title} className="col-narrow" delay={i * 0.04}>
-                  <h2 className="text-title mb-4 text-ink">
-                    {item.title}
-                  </h2>
-                  <p className="text-body measure text-ink-muted">
-                    {item.body}
-                  </p>
-                </SectionReveal>
-              ))}
+        <aside className="about-processo mx-auto mt-16 max-w-[40rem]">
+          <p className="about-processo__text">
+            Um parvo é sempre um parvo. O nome é o ponto. Sem fingir ser uma
+            agência de cinquenta pessoas.
+          </p>
+        </aside>
+
+        <section className="mx-auto mt-20 max-w-[40rem] space-y-12">
+          {POSITIONS.map((item) => (
+            <div key={item.title}>
+              <h2 className="text-display">{item.title}</h2>
+              <p className="text-body mt-4 opacity-70">{item.body}</p>
             </div>
-          </section>
+          ))}
+        </section>
 
-          <section
-            aria-label="Seven laws"
-            className="mt-[var(--space-xl)] bg-ground py-[var(--space-xl)] md:mt-[var(--space-2xl)] md:py-[var(--space-2xl)]"
-          >
-            <div className="grid-editorial">
-              <SectionReveal variant="mask" className="col-full mb-10 md:mb-16">
-                <h2 className="text-title text-ink">Seven laws</h2>
-                <p className="text-body measure mt-6 text-ink-muted">
-                  The filter for every decision on this site and in client work.
-                </p>
-              </SectionReveal>
-            </div>
-            <ol>
-              {LAWS.map((law, i) => {
-                const numLeft = i % 2 === 0;
-                return (
-                  <SectionReveal
-                    key={law.n}
-                    as="li"
-                    variant="mask"
-                    className="law-row grid-editorial"
-                  >
-                    <span
-                      className={`law-row__num law-row__num--${numLeft ? "left" : "right"}`}
-                      aria-hidden
-                    >
-                      {law.n}
-                    </span>
-                    <p
-                      className={`law-row__text law-row__text--${numLeft ? "right" : "left"}`}
-                    >
-                      {law.text}
-                    </p>
-                  </SectionReveal>
-                );
-              })}
-            </ol>
-          </section>
-        </article>
-
-        <ContactCTA />
-      </main>
-    </>
+        <div className="mt-20 text-center">
+          <a href={`mailto:${SITE.email}`} className="about-aside__cta">
+            {CONTACT.title}
+          </a>
+        </div>
+      </div>
+    </PublicShell>
   );
 }

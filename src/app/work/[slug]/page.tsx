@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CaseStudyTemplate from "@/components/CaseStudyTemplate";
-import Nav from "@/components/Nav";
 import { SITE } from "@/content/site";
 import { getProject } from "@/data/projects";
 
@@ -37,10 +36,5 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const project = getProject(slug);
   if (!project) notFound();
 
-  return (
-    <>
-      <Nav />
-      <CaseStudyTemplate project={project} />
-    </>
-  );
+  return <CaseStudyTemplate project={project} />;
 }

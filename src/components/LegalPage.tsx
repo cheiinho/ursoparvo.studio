@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import PublicShell from "@/components/PublicShell";
 
 type LegalPageProps = {
   title: string;
@@ -8,19 +9,16 @@ type LegalPageProps = {
 
 export default function LegalPage({ title, children }: LegalPageProps) {
   return (
-    <div className="min-h-dvh px-6 py-28 md:px-10 md:py-40">
-      <div className="mx-auto max-w-[1400px]">
-        <Link
-          href="/"
-          className="press text-small text-ink/60 transition-colors duration-200 hover:text-ink"
-        >
+    <PublicShell>
+      <div className="site-container project-detail-shell">
+        <Link href="/" className="text-nav opacity-50 hover:opacity-80">
           Voltar ao início
         </Link>
-        <h1 className="text-title mt-8 text-ink">{title}</h1>
-        <div className="text-body mt-8 max-w-2xl space-y-4 text-ink-muted">
+        <h1 className="project-headline mt-10 not-italic">{title}</h1>
+        <div className="text-body mt-8 max-w-2xl space-y-4 opacity-70">
           {children}
         </div>
       </div>
-    </div>
+    </PublicShell>
   );
 }

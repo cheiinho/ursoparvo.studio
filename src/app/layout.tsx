@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { SiteBackground } from "@/components/ui/site-background";
+import { ThemeScript } from "@/components/ThemeScript";
 import { BIO_SHORT, SITE } from "@/content/site";
-import { inter } from "@/lib/fonts";
+import { pangaia, sohne } from "@/lib/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -28,11 +28,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt" className={`h-full scroll-smooth ${inter.variable}`}>
+    <html
+      lang="pt"
+      className={`h-full scroll-smooth ${sohne.variable} ${pangaia.variable}`}
+      suppressHydrationWarning
+    >
       <body
-        className={`${inter.className} relative min-h-full bg-background text-foreground antialiased`}
+        className={`${sohne.className} relative min-h-full bg-background text-foreground antialiased`}
       >
-        <SiteBackground />
+        <ThemeScript />
         {children}
       </body>
     </html>

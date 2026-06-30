@@ -1,30 +1,68 @@
-import ContactCTA from "@/components/ContactCTA";
-import Nav from "@/components/Nav";
-import { ABOUT_CLIENTS_LINE, BIO_LONG, SITE, TAGLINE } from "@/content/site";
+import PublicShell from "@/components/PublicShell";
+import {
+  ABOUT_CLIENTS_LINE,
+  BIO_LONG,
+  CONTACT,
+  SERVICE_PRIMARY,
+  SERVICES_SECONDARY,
+  SITE,
+  TAGLINE,
+} from "@/content/site";
 
 export default function AboutPageContent() {
-  return (
-    <>
-      <Nav />
-      <main className="min-h-dvh bg-background">
-        <article className="grid-editorial pb-[var(--space-xl)] pt-20 md:pb-[var(--space-2xl)] md:pt-32">
-          <p className="col-full text-small text-ink/40">Sobre</p>
-          <h1 className="col-full text-title text-ink">{SITE.operator}</h1>
-          <p className="col-right text-body measure mt-6 text-ink-muted md:mt-8">
-            {TAGLINE}
-          </p>
-          <div className="col-right text-body measure mt-10 space-y-6 text-ink md:mt-14">
-            {BIO_LONG.map((paragraph) => (
-              <p key={paragraph.slice(0, 40)}>{paragraph}</p>
-            ))}
-          </div>
-          <p className="col-right text-small mt-10 text-ink/40 md:mt-12">
-            {ABOUT_CLIENTS_LINE}
-          </p>
-        </article>
+  const services = [
+    { label: "Principal", value: SERVICE_PRIMARY.title },
+    ...SERVICES_SECONDARY.map((service) => ({
+      label: service.title,
+      value: service.description,
+    })),
+  ];
 
-        <ContactCTA />
-      </main>
-    </>
+  return (
+    <PublicShell>
+      <div className="site-container">
+        <h1 className="sr-only">Sobre</h1>
+        <div className="page-top-spacer" style={{ paddingBottom: 24 }} />
+
+        <div className="about-layout">
+          <div className="about-layout__main">
+            <p className="about-lede">{BIO_LONG[0]}</p>
+            <div className="mt-10 space-y-6">
+              {BIO_LONG.slice(1).map((paragraph) => (
+                <p key={paragraph.slice(0, 40)} className="text-body">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+            <aside className="about-processo">
+              <p className="about-processo__text">{TAGLINE}</p>
+            </aside>
+            <p className="text-nav mt-12 opacity-40">{ABOUT_CLIENTS_LINE}</p>
+          </div>
+
+          <aside className="about-layout__aside">
+            <div className="about-aside">
+              <p className="about-aside__heading">Serviços</p>
+              <dl className="about-aside__specs">
+                {services.map((item) => (
+                  <div key={item.label} className="about-aside__spec">
+                    <dt className="about-aside__label">{item.label}</dt>
+                    <dd className="about-aside__value">{item.value}</dd>
+                  </div>
+                ))}
+              </dl>
+              <p className="about-aside__note">{SERVICE_PRIMARY.description}</p>
+              <a
+                href={`mailto:${SITE.email}`}
+                className="about-aside__cta"
+                aria-label={`Enviar email — ${SITE.email}`}
+              >
+                {CONTACT.ctaLabel}
+              </a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </PublicShell>
   );
 }
