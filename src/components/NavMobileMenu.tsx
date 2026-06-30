@@ -23,7 +23,7 @@ export const NAV_MOBILE_LINKS = [
 ] as const;
 
 const linkClass =
-  "press text-body text-white transition-colors duration-200 hover:text-white/70";
+  "press menu-link text-white transition-colors duration-200 hover:text-yellow";
 
 type NavMobileMenuProps = {
   id: string;
