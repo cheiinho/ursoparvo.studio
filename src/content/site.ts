@@ -11,22 +11,22 @@ export const SITE = {
 export const TAGLINE = "Design que não envelhece." as const;
 
 export const TAGLINE_EXPANDED =
-  "Identidade visual, grafismo e fotografia — sem atalhos." as const;
+  "Identidade visual, grafismo e fotografia. Sem atalhos." as const;
 
 export const BIO_SHORT =
-  "Designer com nove anos de experiência em produto, identidade e comunicação visual. Trabalhei para BMW, Mercedes-Benz e Talkdesk. Hoje dirijo o Urso Parvo Studio, em Coimbra — design e fotografia para quem quer trabalho com duração." as const;
+  "Nove anos entre produto, identidade e comunicação visual. Passei por BMW, Mercedes-Benz e Talkdesk. Hoje tenho o estúdio em Coimbra. Faço design e fotografia para quem quer trabalho que dura." as const;
 
 export const BIO_LONG = [
-  "Comecei em design de comunicação e passei os últimos nove anos a trabalhar em produto digital — ferramentas internas do BMW Group, plataformas da Mercedes-Benz, sistemas de contact centre na Talkdesk, serviços públicos da Segurança Social. Projectos grandes, com utilizadores reais, onde o detalhe importa.",
-  "Esse percurso mudou a forma como abordo qualquer trabalho visual: começo pelo problema, não pela estética. O resultado é trabalho que funciona antes de ser bonito — e que é bonito porque funciona.",
-  "O Urso Parvo Studio é onde junto tudo: identidade visual, grafismo, fotografia. Para empresas, instituições e pessoas que querem comunicação que não envelhece.",
+  "Comecei em comunicação visual e fui parar ao produto digital. Nove anos em ferramentas para o BMW Group, plataformas da Mercedes-Benz, sistemas na Talkdesk, serviços públicos na Segurança Social. Projectos grandes, gente real, pormenores que importam.",
+  "Isso mudou como vejo qualquer trabalho visual. Começo pelo problema, não pelo look. O resultado funciona antes de ser bonito. E é bonito porque funciona.",
+  "No Urso Parvo Studio junto identidade, grafismo e fotografia. Para empresas, instituições e pessoas que querem comunicação que não envelhece.",
 ] as const;
 
 export const HERO = {
   tagline: TAGLINE,
   subtitle: [
     "Identidade visual, grafismo e fotografia.",
-    `${SITE.name} — Coimbra.`,
+    `${SITE.name}, Coimbra.`,
   ],
   ctaPrimary: { label: "Ver trabalho", href: "/work" },
   ctaSecondary: {
@@ -37,47 +37,47 @@ export const HERO = {
 
 export const SERVICES = [
   {
-    title: "Identidade Visual",
+    title: "Identidade visual",
     description:
-      "Logótipo, sistema cromático, tipografia, guidelines. Uma marca que sobrevive a modas e funciona em qualquer suporte.",
+      "Logótipo, cor, tipografia, guidelines. Uma marca que aguenta modas e funciona em qualquer sítio.",
   },
   {
-    title: "Grafismo e Comunicação",
+    title: "Grafismo",
     description:
-      "Cartazes, publicações, materiais de evento, redes sociais. Peças que comunicam antes de serem lidas.",
+      "Cartazes, publicações, eventos, redes. Peças que se percebem antes de serem lidas.",
   },
   {
     title: "Fotografia",
     description:
-      "Cobertura de eventos, retrato, produto. Imagens feitas para durar, não para o story de amanhã.",
+      "Eventos, retrato, produto. Imagens para ficar, não para o story de amanhã.",
   },
 ] as const;
 
 export const ABOUT_HOME = {
   title: "O estúdio",
   paragraphs: [
-    `O ${SITE.name} é dirigido por ${SITE.operator} — designer com nove anos de experiência em produto digital e comunicação visual. BMW, Mercedes-Benz, Talkdesk, Segurança Social.`,
-    "Esse percurso deixou uma marca: trabalhamos a partir do problema, não da tendência. O resultado é trabalho que funciona hoje e não precisa de ser refeito daqui a três anos.",
+    `O ${SITE.name} é o ${SITE.operator}. Coimbra. Nove anos em produto digital e comunicação visual. BMW, Mercedes-Benz, Talkdesk, Segurança Social.`,
+    "Trabalhamos a partir do problema, não da tendência. Queremos trabalho que funciona hoje e não precisa de ser refeito daqui a três anos.",
   ],
 } as const;
 
 export const PROCESS = {
   title: "Como trabalhamos",
   intro:
-    "Cada projecto começa com uma conversa. Percebemos o contexto, definimos o âmbito, acordamos um prazo. Só depois começamos a produzir.",
-  body: "O processo é simples: descoberta, proposta, produção, revisão, entrega. Sem surpresas, sem ruído. Tudo documentado por escrito.",
+    "Cada projecto começa com uma conversa. Percebemos o contexto, definimos o âmbito, acordamos um prazo. Só depois é que produzimos.",
+  body: "Descoberta, proposta, produção, revisão, entrega. Sem surpresas. Tudo por escrito.",
   phases: [
-    "Descoberta",
-    "Proposta",
-    "Produção",
-    "Revisão",
-    "Entrega",
+    "descoberta",
+    "proposta",
+    "produção",
+    "revisão",
+    "entrega",
   ] as const,
 } as const;
 
 export const CONTACT = {
-  title: "Tem um projecto?",
-  body: "Conte-nos o contexto — o que precisa, para quando, e que tipo de trabalho é. Respondemos em 48 horas.",
+  title: "Tens um projecto?",
+  body: "Diz-nos o que precisas, para quando, e que tipo de trabalho é. Respondemos em 48 horas.",
   ctaLabel: `${SITE.email} · ${SITE.domain}`,
   mailto: `mailto:${SITE.email}`,
 } as const;
@@ -87,3 +87,6 @@ export const NAV = {
   about: "Sobre",
   contact: "Contacto",
 } as const;
+
+export const POSITIONING_BODY =
+  "Minimal, intemporal, à prova de tendências. Vim do produto digital, onde errar custa caro e o utilizador é real. Isso marca tudo o que fazemos. Não é estética por estética. É decisão visual com motivo." as const;

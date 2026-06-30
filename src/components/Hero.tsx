@@ -81,7 +81,7 @@ export default function Hero({
       }`}
     >
       <h1 className="sr-only">
-        {SITE.name} — {TAGLINE} {HERO.subtitle.join(" ")}
+        {SITE.name}. {TAGLINE} {HERO.subtitle.join(" ")}
       </h1>
 
       <div

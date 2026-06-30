@@ -80,7 +80,7 @@ export default function Nav({ visible }: NavProps) {
           className={`press col-start-1 justify-self-start text-sm text-ink sm:text-base md:text-lg ${
             menuOpen ? "invisible" : ""
           }`}
-          aria-label={`${SITE.name} — início`}
+          aria-label={`${SITE.name}, início`}
           data-cursor-hover
           tabIndex={interactive ? 0 : -1}
         >
@@ -97,7 +97,7 @@ export default function Nav({ visible }: NavProps) {
               ? "visible opacity-100"
               : "pointer-events-none invisible opacity-0"
           }`}
-          aria-label={`${SITE.name} — início`}
+          aria-label={`${SITE.name}, início`}
           aria-hidden={!showNavBear}
           data-cursor-hover
           tabIndex={showNavBear && interactive ? 0 : -1}

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ?? SITE.url,
   ),
-  title: `${SITE.name} · Design & Fotografia`,
+  title: `${SITE.name} · design e fotografia`,
   description: BIO_SHORT,
   openGraph: {
     title: SITE.name,

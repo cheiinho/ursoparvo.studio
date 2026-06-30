@@ -72,7 +72,7 @@ export default function NavMobileMenu({
           href="/"
           className="press inline-flex items-center"
           onClick={onClose}
-          aria-label={`${SITE.name} — início`}
+          aria-label={`${SITE.name}, início`}
           tabIndex={open ? 0 : -1}
         >
           <Image

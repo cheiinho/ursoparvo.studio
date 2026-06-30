@@ -1,6 +1,6 @@
 import SectionReveal from "@/components/SectionReveal";
 import { BEAR_SCRIBBLES } from "@/constants/bear";
-import { TAGLINE_EXPANDED } from "@/content/site";
+import { POSITIONING_BODY, TAGLINE_EXPANDED } from "@/content/site";
 import type { CSSProperties } from "react";
 
 export default function PositioningSection() {
@@ -17,10 +17,7 @@ export default function PositioningSection() {
         </SectionReveal>
         <SectionReveal className="col-narrow mt-8 md:mt-14" delay={0.08}>
           <p className="measure text-body leading-[1.65] text-ink md:text-lg">
-            Minimal, intemporal, à prova de tendências. A experiência em produto
-            — onde o erro custa caro e o utilizador é real — molda a forma como
-            abordamos qualquer peça visual. Não é estética pela estética. É
-            decisão visual com fundamento.
+            {POSITIONING_BODY}
           </p>
           <div className="positioning-scribbles" aria-hidden>
             {BEAR_SCRIBBLES.map((bear) => (
