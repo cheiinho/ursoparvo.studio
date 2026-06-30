@@ -5,7 +5,7 @@ import { CONTACT, SITE } from "@/content/site";
 const POSITIONS = [
   {
     title: "Sobre tipografia",
-    body: "Serifas e sans-serifs com história. Não a fonte que toda a gente usou no Dribbble este trimestre.",
+    body: "Sans-serifs com história e peso. Não a fonte que toda a gente usou no Dribbble este trimestre.",
   },
   {
     title: "Sobre cor",

@@ -21,25 +21,3 @@ export const sohne = localFont({
   variable: "--font-sohne",
   display: "swap",
 });
-
-export const pangaia = localFont({
-  src: [
-    {
-      path: "../../public/fonts/pangaia/PPPangaia-Ultralight.woff2",
-      weight: "200",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/pangaia/PPPangaia-Medium.woff2",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/pangaia/PPPangaia-MediumItalic.woff2",
-      weight: "500",
-      style: "italic",
-    },
-  ],
-  variable: "--font-pangaia",
-  display: "swap",
-});

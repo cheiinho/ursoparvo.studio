@@ -38,7 +38,7 @@ export default function Home() {
             <aside className="about-processo">
               <p className="about-processo__text">{HERO.subtitle}</p>
             </aside>
-            <div className="mt-12 flex flex-wrap gap-4">
+            <div className="home-editorial__actions">
               <Link href="/about" className="about-aside__cta">
                 Sobre
               </Link>
