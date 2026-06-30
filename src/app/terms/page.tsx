@@ -3,7 +3,7 @@ import LegalPage from "@/components/LegalPage";
 import { SITE } from "@/content/site";
 
 export const metadata: Metadata = {
-  title: `Termos de Serviço · ${SITE.name}`,
+  title: `Termos de Serviço, ${SITE.name}`,
 };
 
 export default function TermsPage() {

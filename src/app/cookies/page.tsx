@@ -3,7 +3,7 @@ import LegalPage from "@/components/LegalPage";
 import { SITE } from "@/content/site";
 
 export const metadata: Metadata = {
-  title: `Política de Cookies · ${SITE.name}`,
+  title: `Política de Cookies, ${SITE.name}`,
 };
 
 export default function CookiesPage() {

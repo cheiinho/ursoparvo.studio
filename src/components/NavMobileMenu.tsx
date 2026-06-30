@@ -1,10 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { BEAR_ICON_PX_MD } from "@/constants/bear";
 import { NAV, SITE } from "@/content/site";
 
 const INSTAGRAM_URL =
@@ -70,19 +68,12 @@ export default function NavMobileMenu({
       >
         <Link
           href="/"
-          className="press inline-flex items-center"
+          className="press text-sm text-white md:text-base"
           onClick={onClose}
           aria-label={`${SITE.name}, início`}
           tabIndex={open ? 0 : -1}
         >
-          <Image
-            src="/assets/bear-yellow.png"
-            alt=""
-            width={BEAR_ICON_PX_MD}
-            height={BEAR_ICON_PX_MD}
-            className="block h-11 w-11 object-contain md:h-14 md:w-14"
-            priority
-          />
+          {SITE.name}
         </Link>
       </div>
 
@@ -141,7 +132,7 @@ export default function NavMobileMenu({
           opacity: open ? 1 : 0,
         }}
       >
-        <p className="tech !text-yellow">{SITE.location}</p>
+        <p className="tech normal-case !text-yellow">{SITE.location}</p>
         <a
           href={`mailto:${SITE.email}`}
           className="press mt-2 inline-block text-sm !text-white transition-colors duration-200 hover:text-yellow md:text-base"

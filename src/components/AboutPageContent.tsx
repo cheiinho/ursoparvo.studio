@@ -2,12 +2,12 @@ import ContactCTA from "@/components/ContactCTA";
 import Nav from "@/components/Nav";
 import NumberMoment from "@/components/NumberMoment";
 import SectionReveal from "@/components/SectionReveal";
-import { ABOUT_CLIENTS, BIO_LONG, SITE, TAGLINE } from "@/content/site";
+import { ABOUT_CLIENTS_LINE, BIO_LONG, SITE, TAGLINE } from "@/content/site";
 
 export default function AboutPageContent() {
   return (
     <>
-      <Nav visible />
+      <Nav />
       <main className="page-enter min-h-dvh bg-background">
         <article className="grid-editorial pb-[var(--space-xl)] pt-20 md:pb-[var(--space-2xl)] md:pt-32">
           <SectionReveal className="col-full mb-4">
@@ -32,7 +32,7 @@ export default function AboutPageContent() {
           </SectionReveal>
           <SectionReveal className="col-right mt-10 md:mt-12" delay={0.16}>
             <p className="tech normal-case text-ink/40">
-              {ABOUT_CLIENTS.join(" · ")}
+              {ABOUT_CLIENTS_LINE}
             </p>
           </SectionReveal>
         </article>

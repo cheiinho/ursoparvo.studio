@@ -59,7 +59,7 @@ const POSITIONS = [
 export default function ThinkingPageContent() {
   return (
     <>
-      <Nav visible />
+      <Nav />
       <main className="page-enter min-h-dvh bg-background">
         <article className="pb-[var(--space-xl)] pt-24 md:pb-[var(--space-2xl)] md:pt-32">
           <section aria-label="On permanence" className="grid-editorial">

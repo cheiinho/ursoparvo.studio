@@ -1,4 +1,3 @@
-import { ArrowUpRight } from "lucide-react";
 import SectionReveal from "@/components/SectionReveal";
 import { CONTACT } from "@/content/site";
 
@@ -21,22 +20,9 @@ export default function ContactCTA() {
         >
           <a
             href={CONTACT.mailto}
-            className="press nav-cta-split group inline-flex h-auto w-full max-w-full items-stretch gap-0.5 rounded-full border-0 bg-transparent p-0 text-sm font-normal shadow-none sm:w-auto md:text-base"
-            data-cursor-hover
+            className="press inline-flex min-h-10 items-center justify-center rounded-full bg-primary px-5 py-3 text-sm text-primary-foreground sm:py-2.5 md:px-6 md:text-base"
           >
-            <span className="nav-cta-split__label rounded-full bg-primary px-5 py-3 text-primary-foreground sm:py-2.5 md:px-6 md:py-3">
-              {CONTACT.ctaLabel}
-            </span>
-            <span className="nav-cta-split__arrow relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary text-primary-foreground">
-              <ArrowUpRight
-                className="nav-cta-split__icon nav-cta-split__icon--out size-4 md:size-[18px]"
-                aria-hidden
-              />
-              <ArrowUpRight
-                className="nav-cta-split__icon nav-cta-split__icon--in absolute size-4 md:size-[18px]"
-                aria-hidden
-              />
-            </span>
+            {CONTACT.ctaLabel}
           </a>
         </SectionReveal>
       </div>

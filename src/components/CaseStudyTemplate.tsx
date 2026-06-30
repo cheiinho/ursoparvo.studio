@@ -21,7 +21,7 @@ export default function CaseStudyTemplate({ project }: CaseStudyTemplateProps) {
             href="/work"
             className="tech inline-block text-ink/40 transition-colors hover:text-ink"
           >
-            ← All work
+            Voltar ao trabalho
           </Link>
         </div>
 
@@ -39,14 +39,14 @@ export default function CaseStudyTemplate({ project }: CaseStudyTemplateProps) {
 
         <div className="col-full mt-10 md:mt-14">
           <h1 className="display text-hero text-ink">{project.name}</h1>
-          <p className="tech mt-4 text-ink/45">
-            {project.disciplines.join(" · ")} · {project.year}
+          <p className="tech mt-4 normal-case text-ink/45">
+            {project.disciplines.join(", ")}. {project.year}
           </p>
         </div>
       </header>
 
       <section
-        aria-label="Project overview"
+        aria-label="Resumo do projecto"
         className="grid-editorial py-[var(--space-lg)] md:py-[var(--space-xl)]"
       >
         <div className="col-narrow measure space-y-6">
@@ -70,14 +70,14 @@ export default function CaseStudyTemplate({ project }: CaseStudyTemplateProps) {
             href="/work"
             className="tech text-ink/50 transition-colors hover:text-ink"
           >
-            ← All work
+            Voltar ao trabalho
           </Link>
           {next && (
             <Link
               href={projectHref(next.id)}
               className="display text-h2 text-ink transition-opacity hover:opacity-70"
             >
-              Next: {next.name} →
+              Seguinte: {next.name}
             </Link>
           )}
         </div>

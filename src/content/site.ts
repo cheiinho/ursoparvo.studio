@@ -95,3 +95,17 @@ export const ABOUT_CLIENTS = [
   "Talkdesk",
   "Segurança Social",
 ] as const;
+
+export const ABOUT_CLIENTS_LINE = ABOUT_CLIENTS.join(", ");
+
+export const NUMBER_MOMENT = {
+  eyebrow: "O estúdio em três números",
+  stats: [
+    { value: 1, label: "pessoa. A que fala consigo." },
+    { value: 0, label: "funcionários. Sem intermediários." },
+    {
+      value: "Ilimitadas",
+      label: "revisões até ficar certo. Depois para.",
+    },
+  ],
+} as const;

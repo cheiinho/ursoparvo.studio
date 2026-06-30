@@ -36,7 +36,7 @@ export default function WorkList() {
             </span>
             <span className="flex flex-wrap items-baseline gap-x-4 gap-y-1 md:justify-end">
               <span className="tech normal-case text-ink/40">
-                {project.disciplines.join(" · ")}
+                {project.disciplines.join(", ")}. {project.year}
               </span>
               <span className="tech tabular-nums text-ink/40">
                 {project.year}

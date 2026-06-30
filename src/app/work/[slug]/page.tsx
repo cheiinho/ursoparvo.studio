@@ -19,13 +19,13 @@ export async function generateMetadata({
 }: ProjectPageProps): Promise<Metadata> {
   const { slug } = await params;
   const project = getProject(slug);
-  if (!project) return { title: `Projecto · ${SITE.name}` };
+  if (!project) return { title: `Projecto, ${SITE.name}` };
 
   return {
-    title: `${project.name} · ${SITE.name}`,
+    title: `${project.name}, ${SITE.name}`,
     description: project.summary,
     openGraph: {
-      title: `${project.name} · ${SITE.name}`,
+      title: `${project.name}, ${SITE.name}`,
       description: project.summary,
       images: [{ url: "/hero-poster.jpg", alt: project.name }],
     },
@@ -39,7 +39,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   return (
     <>
-      <Nav visible />
+      <Nav />
       <CaseStudyTemplate project={project} />
     </>
   );

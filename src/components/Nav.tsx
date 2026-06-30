@@ -1,20 +1,13 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 import { NavHeader } from "@/components/ui/nav-header";
 import NavMobileMenu from "@/components/NavMobileMenu";
-import { BEAR_ICON_PX_MD } from "@/constants/bear";
 import { NAV, SITE } from "@/content/site";
 
-type NavProps = {
-  visible: boolean;
-};
-
-export default function Nav({ visible }: NavProps) {
+export default function Nav() {
   const [pastHero, setPastHero] = useState(false);
   const [hasLanding, setHasLanding] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -52,36 +45,30 @@ export default function Nav({ visible }: NavProps) {
   }, [menuOpen]);
 
   const isHome = pathname === "/";
-  const onHero =
-    isHome && visible && hasLanding && !pastHero && !menuOpen;
-  const showNavBear = visible && !onHero && !menuOpen;
+  const onHero = isHome && hasLanding && !pastHero && !menuOpen;
   const headerBg = menuOpen
-    ? "border-transparent bg-transparent"
+    ? "bg-transparent"
     : onHero
-      ? "border-transparent bg-transparent"
+      ? "bg-transparent"
       : "bg-background";
-  const interactive = visible && !menuOpen;
+  const interactive = !menuOpen;
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-[210] transition-[opacity,transform,background-color,border-color] duration-[560ms] ease-[cubic-bezier(0.77,0,0.175,1)] ${headerBg} ${
-        visible
-          ? "translate-y-0 opacity-100"
-          : "pointer-events-none -translate-y-2 opacity-0"
-      } ${menuOpen ? "pointer-events-none" : ""}`}
-      aria-hidden={!visible}
+      className={`fixed inset-x-0 top-0 z-[210] transition-[background-color] duration-[560ms] ease-[cubic-bezier(0.77,0,0.175,1)] ${headerBg} ${
+        menuOpen ? "pointer-events-none" : ""
+      }`}
     >
       <nav
         aria-label="Main"
-        className="relative mx-auto grid h-14 max-w-[1400px] grid-cols-[1fr_auto_1fr] items-center px-5 md:h-20 md:px-10"
+        className="relative mx-auto flex h-14 max-w-[1400px] items-center justify-between px-5 md:h-20 md:px-10"
       >
         <Link
           href="/"
-          className={`press col-start-1 justify-self-start text-sm text-ink sm:text-base md:text-lg ${
+          className={`press text-sm text-ink sm:text-base md:text-lg ${
             menuOpen ? "invisible" : ""
           }`}
           aria-label={`${SITE.name}, início`}
-          data-cursor-hover
           tabIndex={interactive ? 0 : -1}
         >
           <span translate="no" className="font-normal">
@@ -90,33 +77,10 @@ export default function Nav({ visible }: NavProps) {
           </span>
         </Link>
 
-        <Link
-          href="/"
-          className={`press col-start-2 row-start-1 justify-self-center transition-[opacity,visibility] duration-[560ms] ease-[cubic-bezier(0.77,0,0.175,1)] ${
-            showNavBear
-              ? "visible opacity-100"
-              : "pointer-events-none invisible opacity-0"
-          }`}
-          aria-label={`${SITE.name}, início`}
-          aria-hidden={!showNavBear}
-          data-cursor-hover
-          tabIndex={showNavBear && interactive ? 0 : -1}
-        >
-          <Image
-            src="/assets/bear-yellow.png"
-            alt=""
-            width={BEAR_ICON_PX_MD}
-            height={BEAR_ICON_PX_MD}
-            className="block h-9 w-9 object-contain md:h-11 md:w-11"
-            priority
-          />
-        </Link>
-
-        <div className="col-start-3 hidden items-center justify-end gap-5 xl:flex md:gap-7">
+        <div className="hidden items-center gap-5 xl:flex md:gap-7">
           <NavHeader tabIndex={interactive ? 0 : -1} />
           <a
             href={`mailto:${SITE.email}`}
-            data-cursor-hover
             tabIndex={interactive ? 0 : -1}
             className="press text-sm font-normal text-ink/70 transition-colors duration-200 hover:text-ink md:text-base"
           >
@@ -126,26 +90,21 @@ export default function Nav({ visible }: NavProps) {
 
         <button
           type="button"
-          className={`press relative z-[220] col-start-3 flex size-11 items-center justify-center justify-self-end rounded-full border border-ink/15 text-ink transition-colors duration-200 xl:hidden ${
-            onHero ? "bg-transparent" : "bg-white"
-          } ${menuOpen ? "pointer-events-auto" : ""}`}
+          className={`press relative z-[220] text-sm text-ink transition-colors duration-200 hover:text-ink/70 xl:hidden ${
+            menuOpen ? "pointer-events-auto" : ""
+          }`}
           aria-expanded={menuOpen}
           aria-controls={menuId}
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
           onClick={() => setMenuOpen((open) => !open)}
-          tabIndex={visible ? 0 : -1}
+          tabIndex={0}
         >
-          {menuOpen ? (
-            <X className="size-5" aria-hidden />
-          ) : (
-            <Menu className="size-5" aria-hidden />
-          )}
+          {menuOpen ? "Fechar" : "Menu"}
         </button>
       </nav>
 
       <NavMobileMenu
         id={menuId}
-        open={menuOpen && visible}
+        open={menuOpen}
         onClose={() => setMenuOpen(false)}
       />
     </header>
