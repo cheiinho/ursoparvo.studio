@@ -201,6 +201,14 @@ body {
   opacity: 1;
 }
 
+/* Mobile menu only — the one expressive type moment on the site */
+.menu-link {
+  font-size: clamp(2.35rem, 10.5vw, 6.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+}
+
 * {
   box-sizing: border-box;
 }
