@@ -14,12 +14,14 @@ export const TAGLINE_EXPANDED =
   "Identidade visual, grafismo e fotografia. Sem atalhos." as const;
 
 export const BIO_SHORT =
-  "Nove anos entre produto, identidade e comunicação visual. Passei por BMW, Mercedes-Benz e Talkdesk. Hoje tenho o estúdio em Coimbra. Faço design e fotografia para quem quer trabalho que dura." as const;
+  "João Pedro Leite dirige o Urso Parvo Studio em Coimbra. Nove anos em produto e comunicação visual. BMW, Mercedes-Benz, Talkdesk, Segurança Social. Design e fotografia feitos para durar." as const;
 
 export const BIO_LONG = [
-  "Comecei em comunicação visual e fui parar ao produto digital. Nove anos em ferramentas para o BMW Group, plataformas da Mercedes-Benz, sistemas na Talkdesk, serviços públicos na Segurança Social. Projectos grandes, gente real, pormenores que importam.",
-  "Isso mudou como vejo qualquer trabalho visual. Começo pelo problema, não pelo look. O resultado funciona antes de ser bonito. E é bonito porque funciona.",
-  "No Urso Parvo Studio junto identidade, grafismo e fotografia. Para empresas, instituições e pessoas que querem comunicação que não envelhece.",
+  "João Pedro Leite dirige o Urso Parvo Studio a partir de Coimbra. É designer de produto há nove anos. O percurso passou por ferramentas enterprise, serviços públicos e produto digital com utilizadores reais, formulários complexos e prazos apertados.",
+  "Formou-se em design de comunicação no ISMT e completou o programa de UX/UI na EDIT, no Porto. Antes das grandes contas, passou cinco anos na Spotside, uma agência onde conduziu projectos de websites, aplicações móveis e realidade aumentada do brief à entrega, na maioria das vezes sozinho.",
+  "Na Talkdesk desenhou funcionalidades entre as mais pedidas pelos clientes de contact centers. No BMW Group, através da Critical Techworks, conduziu research, design e testes de usabilidade para aplicações internas: reserva de postos de trabalho, cacifos e viaturas de empresa. Na Mercedes-Benz.io construiu componentes reutilizáveis para plataformas de conteúdo. Na Segurança Social reestruturou o serviço online do Fundo de Garantia Salarial, cortando passos que faziam desistir quem precisava do apoio.",
+  "É fundador da Elo, plataforma de marcações para pequenos negócios em Portugal. Conduziu research, decisões de produto, design system e front-end até produção. O produto está no ar.",
+  "No Urso Parvo Studio aplica o mesmo rigor à identidade visual, ao grafismo e à fotografia. Começa sempre pelo problema, não pela estética. O resultado é trabalho que funciona antes de ser bonito, e que é bonito porque funciona.",
 ] as const;
 
 export const HERO = {
@@ -56,7 +58,7 @@ export const SERVICES = [
 export const ABOUT_HOME = {
   title: "O estúdio",
   paragraphs: [
-    `O ${SITE.name} é o ${SITE.operator}. Coimbra. Nove anos em produto digital e comunicação visual. BMW, Mercedes-Benz, Talkdesk, Segurança Social.`,
+    `${SITE.operator} dirige o ${SITE.name} em Coimbra. Nove anos em produto digital e comunicação visual. BMW, Mercedes-Benz, Talkdesk, Segurança Social.`,
     "Trabalhamos a partir do problema, não da tendência. Queremos trabalho que funciona hoje e não precisa de ser refeito daqui a três anos.",
   ],
 } as const;
@@ -90,3 +92,10 @@ export const NAV = {
 
 export const POSITIONING_BODY =
   "Minimal, intemporal, à prova de tendências. Vim do produto digital, onde errar custa caro e o utilizador é real. Isso marca tudo o que fazemos. Não é estética por estética. É decisão visual com motivo." as const;
+
+export const ABOUT_CLIENTS = [
+  "BMW Group",
+  "Mercedes-Benz",
+  "Talkdesk",
+  "Segurança Social",
+] as const;
