@@ -87,7 +87,7 @@ export default function ThinkingPageContent() {
 
           <section
             aria-label="Motto"
-            className="grid-editorial mt-[var(--space-xl)] border-t border-border pt-[var(--space-xl)] md:mt-[var(--space-2xl)] md:pt-[var(--space-2xl)]"
+            className="grid-editorial mt-[var(--space-xl)] md:mt-[var(--space-2xl)]"
           >
             <SectionReveal variant="mask" className="col-full">
               <p className="display text-hero leading-[0.92] text-ink">
@@ -105,7 +105,7 @@ export default function ThinkingPageContent() {
 
           <section
             aria-label="Positions"
-            className="grid-editorial mt-[var(--space-xl)] border-t border-border pt-[var(--space-xl)] md:mt-[var(--space-2xl)] md:pt-[var(--space-2xl)]"
+            className="grid-editorial mt-[var(--space-xl)] md:mt-[var(--space-2xl)]"
           >
             <div className="col-full space-y-12 md:space-y-16">
               {POSITIONS.map((item, i) => (
@@ -123,7 +123,7 @@ export default function ThinkingPageContent() {
 
           <section
             aria-label="Seven laws"
-            className="mt-[var(--space-xl)] border-t border-border bg-ground py-[var(--space-xl)] md:mt-[var(--space-2xl)] md:py-[var(--space-2xl)]"
+            className="mt-[var(--space-xl)] bg-ground py-[var(--space-xl)] md:mt-[var(--space-2xl)] md:py-[var(--space-2xl)]"
           >
             <div className="grid-editorial">
               <SectionReveal variant="mask" className="col-full mb-10 md:mb-16">

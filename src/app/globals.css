@@ -2,7 +2,7 @@
 
 :root {
   --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
-  --font-display: var(--font-instrument-serif), "Instrument Serif", Georgia, serif;
+  --font-display: var(--font-sans);
   --paper: #ffffff;
   --ink: #1a1a1a;
   --ink-muted: #666666;
@@ -107,7 +107,7 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
-  --font-display: var(--font-instrument-serif), "Instrument Serif", Georgia, serif;
+  --font-display: var(--font-sans);
   --ease-out-emil: var(--ease-out);
   --ease-in-out-emil: var(--ease-in-out);
   --color-ground: var(--ground);
@@ -115,7 +115,6 @@
 
 /* ---- Design system: type scale ----
    Emitted as both `text-*` utilities and `var(--text-*)` custom properties.
-   Display roles are weight 400 by intent — the elegance lives in the regular.
    `static` so the tokens are always emitted as CSS variables, not tree-shaken. */
 @theme static {
   --text-hero: clamp(4.25rem, 13vw, 10rem);
@@ -267,7 +266,6 @@ a {
 /* Seven-laws spectacle: giant faint numeral + large statement, alternating sides */
 .law-row {
   align-items: center;
-  border-top: 1px solid var(--border);
   padding-block: clamp(2rem, 5vw, 4.5rem);
 }
 .law-row__num {
@@ -333,12 +331,6 @@ a {
   line-height: 0.98;
 }
 
-.studio-ruler {
-  height: 2px;
-  width: 100%;
-  background: var(--ink);
-}
-
 .accent {
   font-family: var(--font-sans);
   font-style: italic;
@@ -362,27 +354,6 @@ a {
   text-transform: uppercase;
   color: var(--ink-muted);
   font-variant-numeric: tabular-nums;
-}
-
-.link-underline {
-  position: relative;
-}
-
-.link-underline::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -2px;
-  height: 1px;
-  width: 0;
-  background: currentColor;
-  transition: width 200ms var(--ease-out);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .link-underline:hover::after {
-    width: 100%;
-  }
 }
 
 .nav-cta-split__label,
@@ -661,32 +632,6 @@ html.intro-lock body {
 @media (prefers-reduced-motion: reduce) {
   .hero-parallax-words {
     transform: none;
-  }
-}
-
-.hero-scroll-line {
-  transform-origin: top;
-  animation: hero-scroll-pulse 1.8s ease-in-out infinite;
-}
-
-@keyframes hero-scroll-pulse {
-  0% {
-    transform: scaleY(0.3);
-    opacity: 0.2;
-  }
-  50% {
-    transform: scaleY(1);
-    opacity: 0.7;
-  }
-  100% {
-    transform: scaleY(0.3);
-    opacity: 0.2;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-scroll-line {
-    animation: none;
   }
 }
 

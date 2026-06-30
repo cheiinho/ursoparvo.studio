@@ -7,10 +7,9 @@ export default function PositioningSection() {
   return (
     <section
       aria-label="Posicionamento"
-      className="border-t border-border bg-yellow py-[var(--space-lg)] md:py-[var(--space-2xl)]"
+      className="bg-yellow py-[var(--space-lg)] md:py-[var(--space-2xl)]"
     >
-      <div className="studio-ruler" aria-hidden />
-      <div className="grid-editorial pt-[var(--space-lg)] md:pt-[var(--space-xl)]">
+      <div className="grid-editorial">
         <SectionReveal className="col-narrow">
           <div className="measure space-y-6 text-body leading-[1.65] text-ink md:text-lg">
             {POSITIONING_BODY.map((paragraph) => (

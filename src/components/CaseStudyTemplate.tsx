@@ -47,7 +47,7 @@ export default function CaseStudyTemplate({ project }: CaseStudyTemplateProps) {
 
       <section
         aria-label="Project overview"
-        className="grid-editorial border-t border-border py-[var(--space-lg)] md:py-[var(--space-xl)]"
+        className="grid-editorial py-[var(--space-lg)] md:py-[var(--space-xl)]"
       >
         <div className="col-narrow measure space-y-6">
           <p className="text-body leading-[1.65] text-ink md:text-lg">
@@ -64,18 +64,18 @@ export default function CaseStudyTemplate({ project }: CaseStudyTemplateProps) {
         </div>
       </section>
 
-      <footer className="grid-editorial border-t border-border py-[var(--space-lg)] md:py-[var(--space-xl)]">
+      <footer className="grid-editorial py-[var(--space-lg)] md:py-[var(--space-xl)]">
         <div className="col-full flex flex-wrap items-center justify-between gap-6">
           <Link
             href="/work"
-            className="link-underline tech text-ink/50 transition-colors hover:text-ink"
+            className="tech text-ink/50 transition-colors hover:text-ink"
           >
             ← All work
           </Link>
           {next && (
             <Link
               href={projectHref(next.id)}
-              className="link-underline display text-h2 text-ink"
+              className="display text-h2 text-ink transition-opacity hover:opacity-70"
             >
               Next: {next.name} →
             </Link>

@@ -7,7 +7,7 @@ export default function WorkPageContent() {
       <Nav visible />
       <main className="page-enter min-h-dvh bg-background">
         <section
-          className="scroll-mt-20 border-t border-border px-5 py-16 md:px-10 md:py-28"
+          className="scroll-mt-20 px-5 py-16 md:px-10 md:py-28"
           aria-label="All work"
         >
           <div className="mx-auto max-w-[1400px]">

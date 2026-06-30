@@ -6,7 +6,7 @@ export default function ContactCTA() {
   return (
     <section
       aria-label="Contacto"
-      className="border-t border-border bg-white py-[var(--space-lg)] md:py-[var(--space-xl)]"
+      className="bg-white py-[var(--space-lg)] md:py-[var(--space-xl)]"
     >
       <div className="grid-editorial items-end">
         <SectionReveal className="col-wide max-w-xl">

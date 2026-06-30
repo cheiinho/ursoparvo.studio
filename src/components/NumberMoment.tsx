@@ -60,7 +60,7 @@ export default function NumberMoment({
   return (
     <section
       aria-label="By the numbers"
-      className="border-t border-border bg-background py-[var(--space-xl)] md:py-[var(--space-2xl)]"
+      className="bg-background py-[var(--space-xl)] md:py-[var(--space-2xl)]"
     >
       <div className="grid-editorial">
         <SectionReveal variant="mask" className="col-full mb-10 md:mb-16">
