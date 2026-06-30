@@ -1,23 +1,20 @@
 import Link from "next/link";
 import { hasPublishedWork, projectHref, projects } from "@/data/projects";
-import { SITE } from "@/content/site";
+import { SITE, WORK_EMPTY } from "@/content/site";
 
 export default function WorkList() {
   if (!hasPublishedWork()) {
     return (
       <div className="measure max-w-xl space-y-4">
-        <p className="text-body text-ink">
-          Ainda não há projectos publicados. Quando um trabalho estiver pronto
-          para mostrar, aparece aqui.
-        </p>
+        <p className="text-body text-ink">{WORK_EMPTY.body}</p>
         <p className="text-body text-ink-muted">
+          {WORK_EMPTY.contact}{" "}
           <a
             href={`mailto:${SITE.email}`}
             className="text-ink/70 transition-colors hover:text-ink"
           >
-            Escreva-nos
-          </a>{" "}
-          se quiser falar sobre o seu.
+            {SITE.email}
+          </a>
         </p>
       </div>
     );

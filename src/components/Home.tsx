@@ -1,14 +1,11 @@
 "use client";
 
-import AboutSection from "@/components/AboutSection";
+import ContactCTA from "@/components/ContactCTA";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 import Index from "@/components/Index";
-import PositioningSection from "@/components/PositioningSection";
-import ProcessSection from "@/components/ProcessSection";
-import ServicesSection from "@/components/ServicesSection";
+import ManifestoSection from "@/components/ManifestoSection";
 import Nav from "@/components/Nav";
-import ContactCTA from "@/components/ContactCTA";
 import { hasPublishedWork } from "@/data/projects";
 
 export default function Home() {
@@ -17,24 +14,17 @@ export default function Home() {
   return (
     <>
       <Nav />
-      <main className="page-enter">
+      <main>
         <section
           id="landing"
-          className={`relative isolate overflow-visible ${
-            showWorkGallery ? "pb-12 md:pb-24" : ""
-          }`}
+          className={showWorkGallery ? "pb-12 md:pb-20" : ""}
         >
-          <Hero galleryOverlap={showWorkGallery} />
+          <Hero hasPublishedWork={showWorkGallery} galleryOverlap={showWorkGallery} />
           {showWorkGallery && <Index />}
         </section>
-        <PositioningSection />
-        <ServicesSection />
-        <AboutSection />
-        <ProcessSection />
+        <ManifestoSection />
         <ContactCTA />
-        <section id="end" aria-label="Site footer">
-          <Footer />
-        </section>
+        <Footer />
       </main>
     </>
   );

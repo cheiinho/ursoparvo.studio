@@ -3,13 +3,13 @@
 :root {
   --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
   --font-display: var(--font-sans);
-  --paper: #ffffff;
+  --paper: #fdfcf9;
   --ink: #1a1a1a;
   --ink-muted: #666666;
-  --border: rgba(26, 26, 26, 0.1);
+  --border: rgba(26, 26, 26, 0.08);
   --yellow: #ffff50;
   --electric-blue: #5757ff;
-  --white: #ffffff;
+  --white: #fdfcf9;
   --black: #000000;
 
   --color-terracotta: #ede0d8;
@@ -57,7 +57,7 @@
   /* Golden reading measure for body copy */
   --measure: 62ch;
   /* Warm off-white "ground" surface (use for sections that aren't pure paper) */
-  --ground: #ffffff;
+  --ground: #fdfcf9;
   /* Yellow is the single accent — buttons, hover, cursor, key bullets only.
      Never as a background, never as text on white. */
 
@@ -383,60 +383,44 @@ a {
   }
 }
 
-/* Branded intro curtain (first visit per session) */
-.intro {
-  position: fixed;
-  inset: 0;
-  z-index: 9000;
-  background: var(--paper);
-  display: grid;
-  place-items: center;
-  transition: transform 820ms cubic-bezier(0.76, 0, 0.24, 1);
-}
-html.intro-lift .intro {
-  transform: translateY(-100%);
-}
-html.intro-lock,
-html.intro-lock body {
-  overflow: hidden;
-}
-.intro__word {
-  font-size: var(--text-title);
-  line-height: var(--text-title--line-height);
-  letter-spacing: var(--text-title--letter-spacing);
-  color: var(--ink);
-  clip-path: inset(0 0 110% 0);
-  animation: intro-word 720ms cubic-bezier(0.16, 1, 0.3, 1) 120ms forwards;
-}
-@keyframes intro-word {
-  to {
-    clip-path: inset(0 0 -10% 0);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .intro {
-    display: none;
-  }
+/* ---- Hero micro-motion (top of page only) ---- */
+.hero-rise {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: hero-rise 640ms var(--ease-emphasized) forwards;
 }
 
-/* ---- Page enter ---- */
-.page-enter {
-  animation: page-fade-in 300ms var(--ease-emphasized) both;
+.hero-rise--2 {
+  animation-delay: 100ms;
 }
 
-@keyframes page-fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
+.hero-rise--3 {
+  animation-delay: 180ms;
+}
+
+@keyframes hero-rise {
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
+.nav-rise {
+  opacity: 0;
+  animation: nav-rise 520ms var(--ease-emphasized) 60ms forwards;
+}
+
+@keyframes nav-rise {
+  to {
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .page-enter {
+  .hero-rise,
+  .nav-rise {
+    opacity: 1;
+    transform: none;
     animation: none;
   }
 }

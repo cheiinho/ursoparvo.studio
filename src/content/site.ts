@@ -21,18 +21,18 @@ export const BIO_LONG = [
 
 export const HERO = {
   tagline: TAGLINE,
-  subtitle: "Identidade visual corporativa. Urso Parvo Studio, Coimbra.",
-  ctaPrimary: { label: "Ver trabalho", href: "/work" },
-  ctaSecondary: {
+  subtitle: "Identidade visual corporativa. Coimbra.",
+  ctaWork: { label: "Ver trabalho", href: "/work" },
+  ctaContact: {
     label: "Falar sobre um projecto",
     href: `mailto:${SITE.email}`,
   },
+  ctaAbout: { label: "Sobre", href: "/about" },
 } as const;
 
 export const POSITIONING_BODY = [
   "João Pedro Leite passou nove anos a desenhar para produto digital, em projectos onde o erro tinha custo real e o utilizador era sempre alguém concreto.",
-  "Essa experiência não lhe ensinou um processo, ensinou-lhe a distinguir entre o que parece bem numa apresentação e o que aguenta quando é usado de verdade.",
-  "É essa maturidade que está em cada identidade desenhada pelo estúdio.",
+  "Essa experiência ensinou a distinguir entre o que parece bem numa apresentação e o que aguenta quando é usado de verdade.",
 ] as const;
 
 export const SERVICE_PRIMARY = {
@@ -45,42 +45,24 @@ export const SERVICES_SECONDARY = [
   {
     title: "Grafismo",
     description:
-      "Cartazes, publicações, materiais de evento, redes sociais. Peças que comunicam antes de serem lidas.",
+      "Cartazes, publicações, materiais de evento, redes sociais.",
   },
   {
     title: "Fotografia",
-    description:
-      "Cobertura de eventos, retrato, produto. Imagens feitas para durar, não para o story de amanhã.",
+    description: "Eventos, retrato, produto.",
   },
 ] as const;
 
-export const ABOUT_HOME = {
-  title: "O estúdio",
-  paragraphs: [
-    `O ${SITE.name} é dirigido por ${SITE.operator}, designer com nove anos de experiência em produto digital. BMW, Mercedes-Benz, Talkdesk, Segurança Social.`,
-    "Essa experiência ensinou a distinguir entre o que parece bem e o que aguenta o tempo. É essa maturidade que está em cada identidade desenhada pelo estúdio.",
-  ],
-} as const;
-
-export const PROCESS = {
-  title: "Como trabalhamos",
-  intro:
-    "Cada projecto começa com uma conversa para perceber o contexto real. Define-se o âmbito, acorda-se um prazo. A produção segue depois, com revisões claras e comunicação por escrito em cada etapa.",
-  body: "Sem surpresas a meio do caminho. O processo existe para proteger o resultado final, não para parecer profissional no papel.",
-  phases: [
-    "descoberta",
-    "proposta",
-    "produção",
-    "revisão",
-    "entrega",
-  ] as const,
-} as const;
-
 export const CONTACT = {
   title: "Tem um projecto?",
-  body: "Conte o contexto. O que precisa, para quando, que tipo de marca está a tentar construir. A resposta chega em até 48 horas.",
-  ctaLabel: `${SITE.email}, ${SITE.domain}`,
+  body: "Conte o contexto. Resposta em até 48 horas.",
+  ctaLabel: SITE.email,
   mailto: `mailto:${SITE.email}`,
+} as const;
+
+export const WORK_EMPTY = {
+  body: "Referências seleccionadas em preparação.",
+  contact: "Para discutir um projecto ou pedir referências, escreva-nos.",
 } as const;
 
 export const NAV = {
@@ -97,15 +79,3 @@ export const ABOUT_CLIENTS = [
 ] as const;
 
 export const ABOUT_CLIENTS_LINE = ABOUT_CLIENTS.join(", ");
-
-export const NUMBER_MOMENT = {
-  eyebrow: "O estúdio em três números",
-  stats: [
-    { value: 1, label: "pessoa. A que fala consigo." },
-    { value: 0, label: "funcionários. Sem intermediários." },
-    {
-      value: "Ilimitadas",
-      label: "revisões até ficar certo. Depois para.",
-    },
-  ],
-} as const;

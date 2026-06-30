@@ -55,7 +55,7 @@ export default function Nav() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-[210] transition-[background-color] duration-[560ms] ease-[cubic-bezier(0.77,0,0.175,1)] ${headerBg} ${
+      className={`nav-rise fixed inset-x-0 top-0 z-[210] transition-[background-color] duration-[560ms] ease-[cubic-bezier(0.77,0,0.175,1)] ${headerBg} ${
         menuOpen ? "pointer-events-none" : ""
       }`}
     >
