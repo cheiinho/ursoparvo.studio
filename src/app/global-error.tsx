@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { inter } from "@/lib/fonts";
+import { sohne } from "@/lib/fonts";
 import "./globals.css";
 
 export default function GlobalError({
@@ -16,11 +16,11 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html lang="pt" className={inter.variable}>
-      <body className={inter.className}>
+    <html lang="pt" className={sohne.variable}>
+      <body className={sohne.className}>
         <div className="flex min-h-dvh flex-col items-center justify-center gap-4 px-6">
-          <p className="text-title text-ink">Algo correu mal</p>
-          <button type="button" className="text-body text-ink/70" onClick={() => reset()}>
+          <p className="text-display">Algo correu mal</p>
+          <button type="button" className="text-body opacity-70" onClick={() => reset()}>
             Tentar de novo
           </button>
         </div>

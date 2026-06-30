@@ -1,43 +1,49 @@
 import Link from "next/link";
+import PublicShell from "@/components/PublicShell";
 import { hasPublishedWork, projectHref, projects } from "@/data/projects";
 import { SITE, WORK_EMPTY } from "@/content/site";
 
 export default function WorkList() {
   if (!hasPublishedWork()) {
     return (
-      <div className="measure max-w-xl space-y-4">
-        <p className="text-body text-ink">{WORK_EMPTY.body}</p>
-        <p className="text-body text-ink-muted">
-          {WORK_EMPTY.contact}{" "}
-          <a
-            href={`mailto:${SITE.email}`}
-            className="text-ink/70 transition-colors hover:text-ink"
-          >
-            {SITE.email}
-          </a>
-        </p>
-      </div>
+      <p
+        className="text-body"
+        style={{ opacity: 0.4, textAlign: "center", paddingTop: 40 }}
+      >
+        {WORK_EMPTY.body}{" "}
+        <a href={`mailto:${SITE.email}`} className="underline-offset-4 hover:underline">
+          {SITE.email}
+        </a>
+      </p>
     );
   }
 
   return (
-    <ul className="flex flex-col gap-6 md:gap-7">
-      {projects.map((project) => (
-        <li key={project.id}>
-          <Link
-            href={projectHref(project.id)}
-            className="flex flex-col gap-2 py-2 md:flex-row md:items-baseline md:justify-between md:gap-8"
-          >
-            <span className="text-title text-ink">{project.name}</span>
-            <span className="flex flex-wrap items-baseline gap-x-4 gap-y-1 md:justify-end">
-              <span className="text-small text-ink/40">
-                {project.disciplines.join(", ")}
+    <nav aria-label="Índice de projectos">
+      <ul className="flex flex-col">
+        {projects.map((project, index) => (
+          <li key={project.id}>
+            <Link
+              href={projectHref(project.id)}
+              className="project-row project-row--breakout project-row--reveal"
+              style={{ "--row-index": Math.min(index, 6) } as React.CSSProperties}
+            >
+              <span className="project-row__title min-w-0">{project.name}</span>
+              <span className="project-row__meta ml-6 md:ml-8">
+                {project.disciplines[0] && (
+                  <span className="project-row__meta-item">
+                    {project.disciplines.join(", ")}
+                  </span>
+                )}
+                {project.year && (
+                  <span className="project-row__meta-item">{project.year}</span>
+                )}
               </span>
-              <span className="text-small text-ink/40">{project.year}</span>
-            </span>
-          </Link>
-        </li>
-      ))}
-    </ul>
+            </Link>
+            <div className="project-row-separator" />
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 }
