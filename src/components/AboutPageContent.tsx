@@ -2,12 +2,7 @@ import ContactCTA from "@/components/ContactCTA";
 import Nav from "@/components/Nav";
 import NumberMoment from "@/components/NumberMoment";
 import SectionReveal from "@/components/SectionReveal";
-import {
-  ABOUT_CLIENTS,
-  BIO_LONG,
-  SITE,
-  TAGLINE,
-} from "@/content/site";
+import { ABOUT_CLIENTS, BIO_LONG, SITE, TAGLINE } from "@/content/site";
 
 export default function AboutPageContent() {
   return (
@@ -25,7 +20,7 @@ export default function AboutPageContent() {
           </SectionReveal>
           <SectionReveal className="col-right mt-6 md:mt-8" delay={0.08}>
             <p className="measure text-body leading-[1.65] text-ink-muted md:text-lg">
-              {TAGLINE} {SITE.name}, {SITE.location.split(",")[0]}.
+              {TAGLINE}
             </p>
           </SectionReveal>
           <SectionReveal className="col-right mt-10 md:mt-14" delay={0.12}>

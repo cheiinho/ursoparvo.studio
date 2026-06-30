@@ -1,3 +1,4 @@
+import { DM_Serif_Display } from "next/font/google";
 import localFont from "next/font/local";
 
 export const inter = localFont({
@@ -14,5 +15,12 @@ export const inter = localFont({
     },
   ],
   variable: "--font-inter",
+  display: "swap",
+});
+
+export const dmSerifDisplay = DM_Serif_Display({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-dm-serif",
   display: "swap",
 });

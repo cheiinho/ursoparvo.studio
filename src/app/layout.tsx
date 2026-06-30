@@ -4,14 +4,14 @@ import CursorDot from "@/components/CursorDot";
 import Intro from "@/components/Intro";
 import { SiteBackground } from "@/components/ui/site-background";
 import { BIO_SHORT, SITE } from "@/content/site";
-import { inter } from "@/lib/fonts";
+import { dmSerifDisplay, inter } from "@/lib/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ?? SITE.url,
   ),
-  title: `${SITE.name} · design e fotografia`,
+  title: `${SITE.name} · identidade visual`,
   description: BIO_SHORT,
   openGraph: {
     title: SITE.name,
@@ -40,7 +40,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt" className={`h-full scroll-smooth ${inter.variable}`}>
+    <html
+      lang="pt"
+      className={`h-full scroll-smooth ${inter.variable} ${dmSerifDisplay.variable}`}
+    >
       <body
         className={`${inter.className} relative min-h-full text-foreground antialiased`}
       >

@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, type RefObject } from "react";
-import { HERO, SITE, TAGLINE } from "@/content/site";
+import { HERO, SITE } from "@/content/site";
 
 const Bear3DScene = dynamic(() => import("@/components/bear/Bear3DScene"), {
   ssr: false,
@@ -81,7 +81,7 @@ export default function Hero({
       }`}
     >
       <h1 className="sr-only">
-        {SITE.name}. {TAGLINE} {HERO.subtitle.join(" ")}
+        {SITE.name}. {HERO.tagline} {HERO.subtitle}
       </h1>
 
       <div
@@ -111,13 +111,11 @@ export default function Hero({
             : "md:bottom-6"
         }`}
       >
-        <p className="display mx-auto max-w-[24ch] text-[clamp(1.15rem,3vw,1.85rem)] leading-snug tracking-[-0.02em] text-ink md:max-w-[28ch]">
+        <p className="display mx-auto max-w-[28ch] text-[clamp(1rem,2.8vw,1.75rem)] leading-snug tracking-[-0.02em] text-ink md:max-w-[32ch]">
           {HERO.tagline}
         </p>
-        <p className="mx-auto mt-3 max-w-[34ch] text-[0.9rem] leading-snug text-ink/55 md:max-w-[42ch] md:text-base">
-          {HERO.subtitle[0]}
-          <br />
-          {HERO.subtitle[1]}
+        <p className="mx-auto mt-3 max-w-[38ch] text-[0.9rem] leading-snug text-ink/55 md:max-w-[44ch] md:text-base">
+          {HERO.subtitle}
         </p>
         <div className="pointer-events-auto mt-5 flex flex-col items-center justify-center gap-3 sm:flex-row md:mt-6">
           <Link

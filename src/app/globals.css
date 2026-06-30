@@ -2,7 +2,7 @@
 
 :root {
   --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
-  --font-display: var(--font-sans);
+  --font-display: var(--font-dm-serif), "DM Serif Display", Georgia, serif;
   --paper: #ffffff;
   --ink: #1a1a1a;
   --ink-muted: #666666;
@@ -107,7 +107,7 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
-  --font-display: var(--font-sans);
+  --font-display: var(--font-dm-serif), "DM Serif Display", Georgia, serif;
   --ease-out-emil: var(--ease-out);
   --ease-in-out-emil: var(--ease-in-out);
   --color-ground: var(--ground);
@@ -329,8 +329,14 @@ a {
 .display {
   font-family: var(--font-display);
   font-weight: 400;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   line-height: 0.98;
+}
+
+.studio-ruler {
+  height: 2px;
+  width: 100%;
+  background: var(--ink);
 }
 
 .accent {
