@@ -1,10 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 import NavMobileMenu from "@/components/NavMobileMenu";
 import ThemeToggle from "@/components/ThemeToggle";
+import { BEAR_LOGO } from "@/constants/bear";
 import { NAV, SITE } from "@/content/site";
 import { UI } from "@/content/ui";
 
@@ -49,11 +51,18 @@ export default function PublicHeader() {
       <div className="site-container public-header__inner">
         <Link
           href="/"
-          className="public-header__brand type-corpo"
+          className="public-header__logo"
           aria-label={`${SITE.name}, ${UI.nav.home}`}
           tabIndex={menuOpen ? -1 : 0}
         >
-          {SITE.nameShort}
+          <Image
+            src={BEAR_LOGO.src}
+            alt=""
+            width={BEAR_LOGO.width}
+            height={BEAR_LOGO.height}
+            className="public-header__logo-img"
+            priority
+          />
         </Link>
 
         <nav aria-label={UI.nav.ariaMain} className="public-header__nav">
