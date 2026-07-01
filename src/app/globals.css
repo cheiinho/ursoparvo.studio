@@ -38,7 +38,7 @@
   --container-gutter: clamp(1.5rem, 5vw, 6rem);
   --section-gap: clamp(6rem, 12vh, 10rem);
 
-  --radius-ui: 8px;
+  --radius-ui: 4px;
 
   color-scheme: light;
 }
