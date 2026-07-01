@@ -12,14 +12,6 @@ export const BIO_SHORT = "Identidade visual corporativa. Coimbra." as const;
 export const BIO =
   "9 anos em produto e identidade visual. BMW, Mercedes-Benz, Talkdesk." as const;
 
-export const HERO = {
-  ctaWork: { label: "Ver trabalho", href: "/work" },
-  ctaContact: {
-    label: "Contactar",
-    href: `mailto:${SITE.email}`,
-  },
-} as const;
-
 export const WORK_EMPTY = {
   lead: "Trabalho a chegar. Para começar um projecto, contacte",
 } as const;

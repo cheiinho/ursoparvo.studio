@@ -405,13 +405,6 @@ button {
   padding-block: clamp(4rem, 14vh, 10rem);
 }
 
-.hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-4);
-  margin-top: var(--space-4);
-}
-
 .about-grid {
   display: grid;
   gap: var(--space-16);
