@@ -10,13 +10,7 @@ export const metadata: Metadata = {
 export default function TermsPage() {
   return (
     <LegalPage title={UI.legal.termsTitle}>
-      <p>
-        {UI.legal.termsLead}{" "}
-        <a href={`mailto:${SITE.email}`} className="text-link">
-          {SITE.email}
-        </a>
-        .
-      </p>
+      <p>{UI.legal.termsBody}</p>
     </LegalPage>
   );
 }

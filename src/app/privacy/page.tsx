@@ -10,13 +10,7 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <LegalPage title={UI.legal.privacyTitle}>
-      <p>
-        {UI.legal.privacyLead}{" "}
-        <a href={`mailto:${SITE.email}`} className="text-link">
-          {SITE.email}
-        </a>
-        .
-      </p>
+      <p>{UI.legal.privacyBody}</p>
     </LegalPage>
   );
 }

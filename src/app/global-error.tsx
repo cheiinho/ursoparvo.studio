@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Button from "@/components/Button";
 import { UI } from "@/content/ui";
-import { sohne } from "@/lib/fonts";
+import { inter } from "@/lib/fonts";
 import "./globals.css";
 
 export default function GlobalError({
@@ -18,8 +18,8 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html lang="pt-PT" className={sohne.variable}>
-      <body className={sohne.className}>
+    <html lang="pt-PT" className={inter.variable}>
+      <body className={inter.className}>
         <div
           className="flex min-h-dvh flex-col items-center justify-center gap-6"
           style={{ padding: "var(--space-6)" }}

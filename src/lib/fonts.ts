@@ -1,18 +1,18 @@
 import localFont from "next/font/local";
 
-export const sohne = localFont({
+export const inter = localFont({
   src: [
     {
-      path: "../../public/fonts/sohne/sohne-buch.woff",
+      path: "../../public/fonts/inter/Inter-Regular.ttf",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../../public/fonts/sohne/sohne-halbfett.woff",
+      path: "../../public/fonts/inter/Inter-Medium.ttf",
       weight: "500",
       style: "normal",
     },
   ],
-  variable: "--font-sohne",
+  variable: "--font-inter",
   display: "swap",
 });

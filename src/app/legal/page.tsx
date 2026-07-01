@@ -10,19 +10,7 @@ export const metadata: Metadata = {
 export default function LegalNoticePage() {
   return (
     <LegalPage title={UI.legal.noticeTitle}>
-      <p>
-        <strong>{SITE.name}</strong>
-        <br />
-        {UI.legal.noticeStudio}
-        <br />
-        {SITE.location}
-        <br />
-        Email:{" "}
-        <a href={`mailto:${SITE.email}`} className="text-link">
-          {SITE.email}
-        </a>
-      </p>
-      <p>{UI.legal.noticeResponsibility}</p>
+      <p>{UI.legal.noticeBody}</p>
     </LegalPage>
   );
 }

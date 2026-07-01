@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { ThemeScript } from "@/components/ThemeScript";
 import { BIO_SHORT, SITE } from "@/content/site";
-import { sohne } from "@/lib/fonts";
+import { inter } from "@/lib/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ?? SITE.url,
   ),
-  title: `${SITE.name}, identidade visual`,
+  title: SITE.name,
   description: BIO_SHORT,
   openGraph: {
     title: SITE.name,
@@ -30,10 +30,10 @@ export default function RootLayout({
   return (
     <html
       lang="pt-PT"
-      className={`h-full scroll-smooth ${sohne.variable}`}
+      className={`h-full scroll-smooth ${inter.variable}`}
       suppressHydrationWarning
     >
-      <body className={`${sohne.className} relative min-h-full antialiased`}>
+      <body className={`${inter.className} relative min-h-full antialiased`}>
         <ThemeScript />
         {children}
       </body>

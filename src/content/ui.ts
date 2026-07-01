@@ -1,13 +1,11 @@
 import { SITE } from "@/content/site";
 
-/** Interface copy. One term per concept. Sentence case. No graded outcomes. */
 export const UI = {
   skipLink: "Saltar para o conteúdo",
 
   nav: {
     ariaMain: "Principal",
     ariaMobile: "Menu móvel",
-    ariaLegal: "Legal",
     ariaProjects: "Índice de projectos",
     ariaFeatured: "Projectos em destaque",
     home: "Início",
@@ -26,16 +24,10 @@ export const UI = {
   },
 
   actions: {
-    viewWork: "Ver trabalho",
-    contact: "Contactar",
-    sendMessage: "Enviar mensagem",
     tryAgain: "Tentar de novo",
     backToStart: "Voltar ao início",
     backToWork: "Voltar ao trabalho",
     nextProject: (name: string) => `Seguinte: ${name}`,
-    copyEmail: "Copiar email",
-    copied: "Copiado",
-    about: "Sobre",
   },
 
   states: {
@@ -46,13 +38,6 @@ export const UI = {
   errors: {
     genericHeading: "Isto falhou.",
     genericBody: "Tente de novo.",
-    sendFailed: `Não enviou. Tente de novo, ou escreva para ${SITE.email}.`,
-    invalidEmail: "Esse endereço de email está incompleto.",
-    emptyMessage: "Escreva uma mensagem antes de enviar.",
-  },
-
-  confirmations: {
-    messageSent: "Mensagem enviada. Respondo em 2 dias úteis.",
   },
 
   notFound: {
@@ -61,36 +46,22 @@ export const UI = {
   },
 
   work: {
-    emptyLead: "Trabalho a chegar. Para começar um projecto, contacte",
     pageTitle: "Trabalho",
   },
 
   about: {
     pageTitle: "Sobre",
-    servicesLabel: "Serviços",
-    servicePrimaryLabel: "Principal",
     emailAria: (email: string) => `Enviar email para ${email}`,
   },
 
   legal: {
-    privacyTitle: "Política de privacidade",
-    termsTitle: "Termos de serviço",
+    privacyTitle: "Privacidade",
+    termsTitle: "Termos",
     noticeTitle: "Aviso legal",
-    cookiesTitle: "Política de cookies",
-    privacyLead: "Política em preparação. Questões:",
-    termsLead: "Termos em preparação. Questões:",
-    cookiesBody:
-      "Este site usa cookies essenciais e armazenamento local quando necessário. Sem cookies de publicidade de terceiros.",
-    noticeStudio: "Estúdio de design",
-    noticeResponsibility:
-      "Responsável pelo conteúdo deste site nos termos da lei aplicável.",
-  },
-
-  thinking: {
-    label: "Ponto de vista",
-    title: "Sobre permanência.",
-    metadataTitle: "Ponto de vista",
-    metadataDescription:
-      "Sobre permanência, tipografia e cor. O filtro do estúdio.",
+    cookiesTitle: "Cookies",
+    privacyBody: `Questões: ${SITE.email}.`,
+    termsBody: `Questões: ${SITE.email}.`,
+    cookiesBody: "Cookies essenciais e armazenamento local apenas.",
+    noticeBody: `${SITE.name}. Coimbra. ${SITE.email}.`,
   },
 } as const;

@@ -1,13 +1,4 @@
-import Link from "next/link";
 import { SITE } from "@/content/site";
-import { UI } from "@/content/ui";
-
-const legalLinks = [
-  { href: "/privacy", label: UI.legal.privacyTitle },
-  { href: "/terms", label: UI.legal.termsTitle },
-  { href: "/legal", label: UI.legal.noticeTitle },
-  { href: "/cookies", label: UI.legal.cookiesTitle },
-] as const;
 
 export default function PublicFooter() {
   const year = new Date().getFullYear();
@@ -18,14 +9,9 @@ export default function PublicFooter() {
         <p className="type-nota text-secondary">
           © {year} {SITE.nameShort}
         </p>
-
-        <nav aria-label={UI.nav.ariaLegal} className="public-footer__legal">
-          {legalLinks.map(({ href, label }) => (
-            <Link key={href} href={href} className="text-link type-nota text-secondary">
-              {label}
-            </Link>
-          ))}
-        </nav>
+        <a href={`mailto:${SITE.email}`} className="text-link type-nota text-secondary">
+          {SITE.email}
+        </a>
       </div>
     </footer>
   );
