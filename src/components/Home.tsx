@@ -1,15 +1,20 @@
-import Button from "@/components/Button";
+import HomeCarousel from "@/components/HomeCarousel";
 import PublicShell from "@/components/PublicShell";
 import Reveal from "@/components/Reveal";
 import Section from "@/components/Section";
 import WorkIndex from "@/components/WorkIndex";
-import { HERO, TAGLINE } from "@/content/site";
+import { TAGLINE } from "@/content/site";
 import { hasPublishedWork } from "@/data/projects";
 
 export default function Home() {
   if (hasPublishedWork()) {
     return (
       <PublicShell>
+        <Section>
+          <Reveal>
+            <HomeCarousel />
+          </Reveal>
+        </Section>
         <WorkIndex />
       </PublicShell>
     );
@@ -24,12 +29,7 @@ export default function Home() {
           </Reveal>
 
           <Reveal delay={0.08}>
-            <div className="hero__actions">
-              <Button href={HERO.ctaContact.href}>{HERO.ctaContact.label}</Button>
-              <Button href={HERO.ctaWork.href} variant="secondary">
-                {HERO.ctaWork.label}
-              </Button>
-            </div>
+            <HomeCarousel />
           </Reveal>
         </div>
       </Section>
