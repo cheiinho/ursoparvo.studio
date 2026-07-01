@@ -1,3 +1,4 @@
+import ThemeToggle from "@/components/ThemeToggle";
 import { SITE } from "@/content/site";
 
 export default function PublicFooter() {
@@ -9,9 +10,12 @@ export default function PublicFooter() {
         <p className="type-nota text-secondary">
           © {year} {SITE.nameShort}
         </p>
-        <a href={`mailto:${SITE.email}`} className="text-link type-nota text-secondary">
-          {SITE.email}
-        </a>
+        <div className="public-footer__links">
+          <ThemeToggle />
+          <a href={`mailto:${SITE.email}`} className="text-link type-nota text-secondary">
+            {SITE.email}
+          </a>
+        </div>
       </div>
     </footer>
   );
