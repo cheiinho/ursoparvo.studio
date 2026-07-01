@@ -1,6 +1,8 @@
-import Link from "next/link";
 import PublicShell from "@/components/PublicShell";
-import { CONTACT, SITE } from "@/content/site";
+import Reveal from "@/components/Reveal";
+import Section from "@/components/Section";
+import { SITE } from "@/content/site";
+import { UI } from "@/content/ui";
 
 const POSITIONS = [
   {
@@ -24,41 +26,59 @@ const POSITIONS = [
 export default function ThinkingPageContent() {
   return (
     <PublicShell>
-      <div className="site-container project-detail-shell">
-        <p className="text-nav opacity-40">Ponto de vista</p>
-        <h1 className="project-headline mt-6 not-italic">Sobre permanência.</h1>
+      <Section>
+        <Reveal>
+          <p className="type-nota text-secondary">{UI.thinking.label}</p>
+          <h1 className="type-display measure" style={{ marginTop: "var(--space-4)" }}>
+            {UI.thinking.title}
+          </h1>
+        </Reveal>
 
-        <div className="mx-auto mt-10 max-w-[40rem] space-y-6 text-body opacity-80">
-          <p>
-            Desenho marcas que não precisam de ser redesenhadas. Não porque sigo
-            uma checklist. Porque trabalho com princípios que já eram velhos
-            quando a Helvetica era nova.
-          </p>
-          <p>Proporção. Contraste. Redução. Clareza.</p>
-        </div>
+        <Reveal delay={0.08}>
+          <div className="measure space-y-6" style={{ marginTop: "var(--space-8)" }}>
+            <p className="type-corpo text-secondary">
+              Desenho marcas que não precisam de ser redesenhadas. Não por checklist,
+              mas por princípios que já eram velhos quando a Helvetica era nova.
+            </p>
+            <p className="type-corpo text-secondary">
+              Proporção. Contraste. Redução. Clareza.
+            </p>
+          </div>
+        </Reveal>
 
-        <aside className="about-processo mx-auto mt-16 max-w-[40rem]">
-          <p className="about-processo__text">
+        <Reveal delay={0.16}>
+          <p
+            className="type-corpo measure text-secondary"
+            style={{ marginTop: "var(--space-16)" }}
+          >
             Um parvo é sempre um parvo. O nome é o ponto. Sem fingir ser uma
             agência de cinquenta pessoas.
           </p>
-        </aside>
+        </Reveal>
 
-        <section className="mx-auto mt-20 max-w-[40rem] space-y-12">
-          {POSITIONS.map((item) => (
-            <div key={item.title}>
-              <h2 className="text-display">{item.title}</h2>
-              <p className="text-body mt-4 opacity-70">{item.body}</p>
-            </div>
+        <div className="measure space-y-12" style={{ marginTop: "var(--space-24)" }}>
+          {POSITIONS.map((item, index) => (
+            <Reveal key={item.title} delay={0.08 * (index + 1)}>
+              <div>
+                <h2 className="type-display">{item.title}</h2>
+                <p className="type-corpo text-secondary" style={{ marginTop: "var(--space-4)" }}>
+                  {item.body}
+                </p>
+              </div>
+            </Reveal>
           ))}
-        </section>
-
-        <div className="mt-20 text-center">
-          <a href={`mailto:${SITE.email}`} className="about-aside__cta">
-            {CONTACT.title}
-          </a>
         </div>
-      </div>
+
+        <Reveal delay={0.4}>
+          <a
+            href={`mailto:${SITE.email}`}
+            className="text-link type-corpo"
+            style={{ display: "inline-block", marginTop: "var(--space-24)" }}
+          >
+            {UI.actions.contact}
+          </a>
+        </Reveal>
+      </Section>
     </PublicShell>
   );
 }

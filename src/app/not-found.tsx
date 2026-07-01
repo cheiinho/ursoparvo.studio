@@ -1,15 +1,22 @@
 import Link from "next/link";
 import PublicShell from "@/components/PublicShell";
+import Section from "@/components/Section";
+import { UI } from "@/content/ui";
 
 export default function NotFound() {
   return (
     <PublicShell>
-      <div className="site-container flex min-h-[50svh] flex-col items-center justify-center gap-4 text-center">
-        <p className="text-display">Página não encontrada</p>
-        <Link href="/" className="text-nav opacity-55 hover:opacity-80">
-          Voltar ao início
-        </Link>
-      </div>
+      <Section>
+        <div
+          className="flex flex-col items-start gap-6"
+          style={{ minHeight: "50svh", justifyContent: "center" }}
+        >
+          <p className="type-display">{UI.notFound.heading}</p>
+          <Link href="/" className="text-link type-corpo">
+            {UI.notFound.action}
+          </Link>
+        </div>
+      </Section>
     </PublicShell>
   );
 }

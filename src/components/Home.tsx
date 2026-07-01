@@ -1,54 +1,55 @@
-import Link from "next/link";
+import Button from "@/components/Button";
 import PublicShell from "@/components/PublicShell";
-import IndexCarousel from "@/components/IndexCarousel";
-import {
-  CONTACT,
-  HERO,
-  POSITIONING_BODY,
-  SITE,
-  TAGLINE,
-} from "@/content/site";
+import Reveal from "@/components/Reveal";
+import Section from "@/components/Section";
+import WorkIndex from "@/components/WorkIndex";
+import { HERO, POSITIONING_BODY } from "@/content/site";
 import { hasPublishedWork } from "@/data/projects";
 
 export default function Home() {
-  const showCarousel = hasPublishedWork();
-
-  if (showCarousel) {
+  if (hasPublishedWork()) {
     return (
-      <PublicShell home>
-        <IndexCarousel />
+      <PublicShell>
+        <WorkIndex />
       </PublicShell>
     );
   }
 
   return (
     <PublicShell>
-      <div className="site-container home-editorial">
-        <div className="page-top-spacer" style={{ paddingBottom: 24 }} />
-        <div className="about-layout">
-          <div className="about-layout__main">
-            <p className="about-lede home-editorial__lede">{TAGLINE}</p>
-            <div className="mt-10 space-y-6">
+      <Section>
+        <div className="hero">
+          <Reveal>
+            <h1 className="type-display measure">
+              <span className="hero__accent-word">Identidade</span> à prova de
+              tendências.
+            </h1>
+          </Reveal>
+
+          <Reveal delay={0.08}>
+            <div className="measure space-y-6">
               {POSITIONING_BODY.map((paragraph) => (
-                <p key={paragraph.slice(0, 32)} className="text-body">
+                <p key={paragraph.slice(0, 32)} className="type-corpo text-primary">
                   {paragraph}
                 </p>
               ))}
             </div>
-            <aside className="about-processo">
-              <p className="about-processo__text">{HERO.subtitle}</p>
-            </aside>
-            <div className="home-editorial__actions">
-              <Link href="/about" className="about-aside__cta">
-                Sobre
-              </Link>
-              <a href={`mailto:${SITE.email}`} className="about-aside__cta">
-                {CONTACT.title}
-              </a>
+          </Reveal>
+
+          <Reveal delay={0.16}>
+            <div className="hero__actions">
+              <Button href={HERO.ctaContact.href}>{HERO.ctaContact.label}</Button>
+              <Button href={HERO.ctaWork.href} variant="secondary">
+                {HERO.ctaWork.label}
+              </Button>
             </div>
-          </div>
+          </Reveal>
+
+          <Reveal delay={0.24}>
+            <p className="type-nota text-secondary">{HERO.signature}</p>
+          </Reveal>
         </div>
-      </div>
+      </Section>
     </PublicShell>
   );
 }

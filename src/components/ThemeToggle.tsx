@@ -1,50 +1,95 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { THEME_STORAGE_KEY } from "@/lib/theme";
+import { UI } from "@/content/ui";
+import {
+  applyTheme,
+  readStoredTheme,
+  storeTheme,
+  type ThemeMode,
+} from "@/lib/theme";
 
 type ThemeToggleProps = {
   className?: string;
 };
 
+const options: { value: ThemeMode; label: string; ariaLabel: string }[] = [
+  { value: "light", label: UI.theme.light, ariaLabel: UI.theme.toLight },
+  { value: "dark", label: UI.theme.dark, ariaLabel: UI.theme.toDark },
+  { value: "system", label: UI.theme.system, ariaLabel: UI.theme.toSystem },
+];
+
 export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
-  const [dark, setDark] = useState(false);
+  const [mode, setMode] = useState<ThemeMode>("system");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    setDark(document.documentElement.classList.contains("dark"));
+    setMode(readStoredTheme());
   }, []);
 
-  const toggle = () => {
-    const next = !document.documentElement.classList.contains("dark");
-    document.documentElement.classList.toggle("dark", next);
-    localStorage.setItem(THEME_STORAGE_KEY, next ? "dark" : "light");
-    setDark(next);
+  useEffect(() => {
+    if (!mounted) return;
+
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const onChange = () => {
+      if (readStoredTheme() === "system") {
+        applyTheme("system");
+      }
+    };
+
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, [mounted]);
+
+  const select = (next: ThemeMode) => {
+    storeTheme(next);
+    applyTheme(next);
+    setMode(next);
   };
 
   if (!mounted) {
     return (
-      <button
-        type="button"
-        className={`public-control-link text-nav ${className}`}
-        aria-label="Alternar tema"
-        disabled
+      <div
+        className={`theme-toggle ${className}`.trim()}
+        role="radiogroup"
+        aria-label={UI.theme.group}
       >
-        Tema
-      </button>
+        {options.map(({ value, label }) => (
+          <button
+            key={value}
+            type="button"
+            className="theme-toggle__option type-nota"
+            role="radio"
+            aria-checked={value === "system"}
+            disabled
+          >
+            {label}
+          </button>
+        ))}
+      </div>
     );
   }
 
   return (
-    <button
-      type="button"
-      className={`public-control-link text-nav ${className}`}
-      onClick={toggle}
-      aria-label={dark ? "Activar modo claro" : "Activar modo escuro"}
-      aria-pressed={dark}
+    <div
+      className={`theme-toggle ${className}`.trim()}
+      role="radiogroup"
+      aria-label={UI.theme.group}
     >
-      {dark ? "Claro" : "Escuro"}
-    </button>
+      {options.map(({ value, label, ariaLabel }) => (
+        <button
+          key={value}
+          type="button"
+          className={`theme-toggle__option type-nota${mode === value ? " is-active" : ""}`}
+          role="radio"
+          aria-checked={mode === value}
+          aria-label={ariaLabel}
+          onClick={() => select(value)}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
   );
 }

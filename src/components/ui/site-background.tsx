@@ -1,5 +1,5 @@
 /**
- * Warm off-white site backdrop — slightly lighter than typical paper tones.
+ * Warm off-white site backdrop, slightly lighter than typical paper tones.
  */
 export function SiteBackground() {
   return (

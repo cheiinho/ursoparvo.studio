@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import ThemeToggle from "@/components/ThemeToggle";
 import { NAV, SITE } from "@/content/site";
+import { UI } from "@/content/ui";
 
 const navLinks = [
   { href: "/work", label: NAV.work },
@@ -14,13 +15,6 @@ const navLinks = [
     label: NAV.contact,
     external: true,
   },
-] as const;
-
-const legalLinks = [
-  { href: "/privacy", label: "Privacidade" },
-  { href: "/terms", label: "Termos" },
-  { href: "/legal", label: "Aviso legal" },
-  { href: "/cookies", label: "Cookies" },
 ] as const;
 
 type NavMobileMenuProps = {
@@ -47,17 +41,17 @@ export default function NavMobileMenu({
   return createPortal(
     <div
       id={id}
-      className={`mobile-menu${open ? " mobile-menu--open" : ""}`}
+      className={`mobile-menu${open ? " is-open" : ""}`}
       aria-hidden={!open}
     >
-      <nav aria-label="Mobile" className="mobile-menu__nav">
+      <nav aria-label={UI.nav.ariaMobile} className="mobile-menu__nav">
         <ul className="mobile-menu__list">
           {navLinks.map(({ href, label, ...rest }) => (
             <li key={href}>
               {"external" in rest && rest.external ? (
                 <a
                   href={href}
-                  className="mobile-menu__link text-display"
+                  className="mobile-menu__link type-display"
                   onClick={onClose}
                   tabIndex={open ? 0 : -1}
                 >
@@ -66,7 +60,7 @@ export default function NavMobileMenu({
               ) : (
                 <Link
                   href={href}
-                  className={`mobile-menu__link text-display${isActive(href) ? " is-active" : ""}`}
+                  className={`mobile-menu__link type-display${isActive(href) ? " is-active" : ""}`}
                   onClick={onClose}
                   tabIndex={open ? 0 : -1}
                   aria-current={isActive(href) ? "page" : undefined}
@@ -78,32 +72,17 @@ export default function NavMobileMenu({
           ))}
         </ul>
 
-        <div className="mobile-menu__actions">
-          <ThemeToggle className="mobile-menu__theme" />
+        <div className="mobile-menu__footer">
+          <ThemeToggle />
           <a
             href={`mailto:${SITE.email}`}
-            className="about-aside__cta mobile-menu__cta"
+            className="text-link type-corpo"
             onClick={onClose}
             tabIndex={open ? 0 : -1}
           >
             {SITE.email}
           </a>
         </div>
-
-        <ul className="mobile-menu__legal">
-          {legalLinks.map(({ href, label }) => (
-            <li key={href}>
-              <Link
-                href={href}
-                className="mobile-menu__legal-link text-nav"
-                onClick={onClose}
-                tabIndex={open ? 0 : -1}
-              >
-                {label}
-              </Link>
-            </li>
-          ))}
-        </ul>
       </nav>
     </div>,
     document.body,

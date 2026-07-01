@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 /**
  * Scroll-scrub progress for an element, written to a CSS custom property
  * (`--p`, 0→1) on the element itself. Driving motion from a CSS variable keeps
- * it off the React render path — no re-renders per scroll frame.
+ * it off the React render path, with no re-renders per scroll frame.
  *
  * `--p` is 0 as the element enters from the bottom of the viewport and 1 as it
  * leaves the top. Bind CSS to it, e.g. `transform: translateY(calc(var(--p) * -40px))`.

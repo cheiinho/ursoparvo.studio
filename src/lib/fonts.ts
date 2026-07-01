@@ -9,12 +9,7 @@ export const sohne = localFont({
     },
     {
       path: "../../public/fonts/sohne/sohne-halbfett.woff",
-      weight: "600",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/sohne/sohne-dreiviertelfett.woff",
-      weight: "800",
+      weight: "500",
       style: "normal",
     },
   ],

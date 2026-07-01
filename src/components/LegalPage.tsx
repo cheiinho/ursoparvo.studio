@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import PublicShell from "@/components/PublicShell";
+import Reveal from "@/components/Reveal";
+import { UI } from "@/content/ui";
 
 type LegalPageProps = {
   title: string;
@@ -10,14 +12,14 @@ type LegalPageProps = {
 export default function LegalPage({ title, children }: LegalPageProps) {
   return (
     <PublicShell>
-      <div className="site-container project-detail-shell">
-        <Link href="/" className="text-nav opacity-50 hover:opacity-80">
-          Voltar ao início
-        </Link>
-        <h1 className="project-headline mt-10 not-italic">{title}</h1>
-        <div className="text-body mt-8 max-w-2xl space-y-4 opacity-70">
-          {children}
-        </div>
+      <div className="site-container legal-shell">
+        <Reveal>
+          <Link href="/" className="text-link type-nota text-secondary">
+            {UI.actions.backToStart}
+          </Link>
+          <h1 className="type-display">{title}</h1>
+          <div className="type-corpo text-secondary">{children}</div>
+        </Reveal>
       </div>
     </PublicShell>
   );
