@@ -412,6 +412,42 @@ button {
   margin-top: var(--space-4);
 }
 
+.home-carousel {
+  width: 100%;
+  margin-top: var(--space-8);
+  overflow: hidden;
+}
+
+.home-carousel__inner {
+  width: 100%;
+  max-width: none;
+}
+
+.home-carousel .swiper-slide {
+  border-color: var(--line);
+  background: var(--surface-alt);
+}
+
+.home-carousel .swiper-slide img {
+  object-fit: contain;
+  padding: var(--space-8);
+}
+
+.home-carousel .swiper-pagination-bullet {
+  background: var(--text-secondary);
+  opacity: 0.35;
+}
+
+.home-carousel .swiper-pagination-bullet-active {
+  background: var(--text);
+  opacity: 1;
+}
+
+.home-carousel .swiper-button-next,
+.home-carousel .swiper-button-prev {
+  color: var(--text);
+}
+
 .about-grid {
   display: grid;
   gap: var(--space-16);
