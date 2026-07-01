@@ -7,6 +7,10 @@ export const SITE = {
 
 export const TAGLINE = "Identidade à prova de tendências." as const;
 
+export const HOME_TEMP = {
+  line: "O estagiário atrasou-se.",
+} as const;
+
 export const BIO_SHORT = "Identidade visual corporativa. Coimbra." as const;
 
 export const BIO =
