@@ -17,10 +17,10 @@ export const UI = {
     group: "Tema",
     light: "Claro",
     dark: "Escuro",
-    system: "Sistema",
+    toggleToLight: "Light",
+    toggleToDark: "Dark",
     toLight: "Mudar para tema claro",
     toDark: "Mudar para tema escuro",
-    toSystem: "Usar tema do sistema",
   },
 
   actions: {

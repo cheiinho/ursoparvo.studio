@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { UI } from "@/content/ui";
 import {
   applyTheme,
-  nextThemeMode,
   readStoredTheme,
   storeTheme,
   type ThemeMode,
@@ -14,57 +13,63 @@ type ThemeToggleProps = {
   className?: string;
 };
 
-const labelByMode: Record<ThemeMode, string> = {
-  light: UI.theme.light,
-  dark: UI.theme.dark,
-  system: UI.theme.system,
-};
-
-const nextAriaByMode: Record<ThemeMode, string> = {
-  light: UI.theme.toDark,
-  dark: UI.theme.toSystem,
-  system: UI.theme.toLight,
-};
+function isDarkApplied(): boolean {
+  return document.documentElement.classList.contains("dark");
+}
 
 export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
-  const [mode, setMode] = useState<ThemeMode>("system");
+  const [dark, setDark] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    setMode(readStoredTheme());
+    setDark(isDarkApplied());
   }, []);
 
   useEffect(() => {
     if (!mounted) return;
 
+    const sync = () => setDark(isDarkApplied());
     const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const onChange = () => {
+    const observer = new MutationObserver(sync);
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    media.addEventListener("change", () => {
       if (readStoredTheme() === "system") {
         applyTheme("system");
+        sync();
       }
-    };
+    });
 
-    media.addEventListener("change", onChange);
-    return () => media.removeEventListener("change", onChange);
+    return () => {
+      observer.disconnect();
+    };
   }, [mounted]);
 
-  const cycle = () => {
-    const next = nextThemeMode(mode);
+  const toggle = () => {
+    const nextDark = !isDarkApplied();
+    const next: ThemeMode = nextDark ? "dark" : "light";
     storeTheme(next);
     applyTheme(next);
-    setMode(next);
+    setDark(nextDark);
   };
+
+  const label = dark ? UI.theme.toggleToLight : UI.theme.toggleToDark;
+  const ariaLabel = dark ? UI.theme.toLight : UI.theme.toDark;
 
   return (
     <button
       type="button"
-      className={`btn btn-secondary type-corpo ${className}`.trim()}
-      onClick={cycle}
-      aria-label={mounted ? nextAriaByMode[mode] : UI.theme.group}
+      className={`text-link type-corpo text-secondary theme-link ${className}`.trim()}
+      onClick={toggle}
+      aria-label={mounted ? ariaLabel : UI.theme.group}
       disabled={!mounted}
     >
-      {mounted ? labelByMode[mode] : UI.theme.system}
+      {mounted ? label : UI.theme.toggleToDark}
     </button>
   );
 }
