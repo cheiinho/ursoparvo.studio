@@ -8,13 +8,15 @@ export default function WorkList() {
   if (!hasPublishedWork()) {
     return (
       <Reveal>
-        <p className="type-corpo text-secondary measure">
-          {WORK_EMPTY.lead}{" "}
-          <a href={`mailto:${SITE.email}`} className="text-link">
-            {SITE.email}
-          </a>
-          .
-        </p>
+        <div className="section__content section__content--center">
+          <p className="type-corpo text-secondary measure">
+            {WORK_EMPTY.lead}{" "}
+            <a href={`mailto:${SITE.email}`} className="text-link">
+              {SITE.email}
+            </a>
+            .
+          </p>
+        </div>
       </Reveal>
     );
   }

@@ -64,7 +64,7 @@ export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
   return (
     <button
       type="button"
-      className={`text-link type-corpo text-secondary theme-link ${className}`.trim()}
+      className={`theme-link ${className}`.trim()}
       onClick={toggle}
       aria-label={mounted ? ariaLabel : UI.theme.group}
       disabled={!mounted}
