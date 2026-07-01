@@ -1,8 +1,6 @@
+import HomeLanding from "@/components/HomeLanding";
 import PublicShell from "@/components/PublicShell";
-import Reveal from "@/components/Reveal";
-import Section from "@/components/Section";
 import WorkIndex from "@/components/WorkIndex";
-import { TAGLINE } from "@/content/site";
 import { hasPublishedWork } from "@/data/projects";
 
 export default function Home() {
@@ -16,13 +14,7 @@ export default function Home() {
 
   return (
     <PublicShell>
-      <Section>
-        <div className="hero">
-          <Reveal>
-            <h1 className="type-display measure">{TAGLINE}</h1>
-          </Reveal>
-        </div>
-      </Section>
+      <HomeLanding />
     </PublicShell>
   );
 }
