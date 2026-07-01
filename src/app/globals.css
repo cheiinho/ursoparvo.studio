@@ -190,18 +190,10 @@ button {
 
 .public-header__bar {
   pointer-events: auto;
-  background: color-mix(
-    in srgb,
-    var(--surface) calc(88% + var(--header-p) * 12%),
-    transparent
-  );
-  border: 1px solid color-mix(in srgb, var(--line) calc(var(--header-p) * 100%), transparent);
+  background: var(--surface);
+  border: calc(var(--header-p) * 1px) solid var(--line);
   border-bottom: 1px solid var(--line);
   border-radius: calc(var(--header-p) * 999px);
-  box-shadow: 0 calc(var(--header-p) * 12px) calc(var(--header-p) * 40px)
-    color-mix(in srgb, var(--text) calc(var(--header-p) * 10%), transparent);
-  backdrop-filter: blur(calc(var(--header-p) * 20px));
-  -webkit-backdrop-filter: blur(calc(var(--header-p) * 20px));
   transition: background-color var(--dur-theme) var(--ease-standard);
 }
 
@@ -559,7 +551,6 @@ button {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  background: color-mix(in srgb, var(--text) 12%, transparent);
 }
 
 .mobile-menu__panel {
