@@ -59,7 +59,7 @@ export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
   return (
     <button
       type="button"
-      className={`theme-cycle nav-link type-corpo ${className}`.trim()}
+      className={`btn btn-secondary type-corpo ${className}`.trim()}
       onClick={cycle}
       aria-label={mounted ? nextAriaByMode[mode] : UI.theme.group}
       disabled={!mounted}

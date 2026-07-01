@@ -38,6 +38,8 @@
   --container-gutter: clamp(1.5rem, 5vw, 6rem);
   --section-gap: clamp(6rem, 12vh, 10rem);
 
+  --radius-ui: 8px;
+
   color-scheme: light;
 }
 
@@ -146,7 +148,7 @@ button {
   background: var(--text);
   color: var(--surface);
   text-decoration: underline;
-  border-radius: 12px;
+  border-radius: var(--radius-ui);
   transform: translateY(-200%);
   transition: transform var(--dur-micro) var(--ease-standard);
 }
@@ -284,7 +286,7 @@ button {
   justify-content: center;
   min-height: 44px;
   padding: var(--space-3) var(--space-6);
-  border-radius: 12px;
+  border-radius: var(--radius-ui);
   border: 0;
   font: inherit;
   text-decoration: none;
@@ -339,13 +341,6 @@ button {
 
 .btn-tertiary:hover:not(:disabled) {
   text-decoration-color: var(--accent);
-}
-
-.theme-cycle {
-  border: 0;
-  background: none;
-  font: inherit;
-  cursor: pointer;
 }
 
 .public-main {
@@ -415,7 +410,7 @@ button {
 .about-aside-block {
   padding: var(--space-6);
   background: var(--surface-alt);
-  border-radius: 12px;
+  border-radius: var(--radius-ui);
 }
 
 .about-aside-block__label {
