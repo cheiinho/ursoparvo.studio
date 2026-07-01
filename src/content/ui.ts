@@ -54,6 +54,20 @@ export const UI = {
     emailAria: (email: string) => `Enviar email para ${email}`,
   },
 
+  contacto: {
+    pageTitle: "Contacto",
+    emailLabel: "Email ou telefone",
+    servicesLabel: "Serviços",
+    descLabel: "Descrição breve",
+    descPlaceholder: "Conta o contexto do projecto…",
+    prazLabel: "Prazo desejado",
+    comoLabel: "Como conheceu o estúdio",
+    comoPlaceholder: "Opcional",
+    submitLabel: "Enviar pedido",
+    estimatorHeading: "Estimativa de investimento",
+    subjectPrefix: "Pedido de orçamento",
+  },
+
   legal: {
     privacyTitle: "Privacidade",
     termsTitle: "Termos",
