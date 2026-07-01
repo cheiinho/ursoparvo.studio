@@ -44,54 +44,46 @@ export default function PublicHeader() {
       : pathname === href;
 
   return (
-    <header
-      className={`public-header${menuOpen ? " public-header--menu-open" : ""}`}
-    >
-      <div className="public-header__nav">
-        <div className="site-container public-header__inner">
-          <Link
-            href="/"
-            className="public-header__brand"
-            aria-label={`${SITE.name}, início`}
-            tabIndex={menuOpen ? -1 : 0}
-          >
-            <span className="public-header__brand-full">{SITE.name}</span>
-            <span className="public-header__brand-short">{SITE.nameShort}</span>
-          </Link>
+    <header className="public-header">
+      <div className="site-container public-header__inner">
+        <Link
+          href="/"
+          className="public-header__brand type-corpo"
+          aria-label={`${SITE.name}, início`}
+          tabIndex={menuOpen ? -1 : 0}
+        >
+          {SITE.nameShort}
+        </Link>
 
-          <nav
-            aria-label="Principal"
-            className="public-header__links public-header__links--desktop"
-          >
-            {navLinks.map(({ href, label, ...rest }) =>
-              "external" in rest && rest.external ? (
-                <a key={href} href={href} className="public-nav-link text-nav">
-                  {label}
-                </a>
-              ) : (
-                <Link
-                  key={href}
-                  href={href}
-                  className={`public-nav-link text-nav${isActive(href) ? " is-active" : ""}`}
-                  aria-current={isActive(href) ? "page" : undefined}
-                >
-                  {label}
-                </Link>
-              ),
-            )}
-            <ThemeToggle />
-          </nav>
+        <nav aria-label="Principal" className="public-header__nav">
+          {navLinks.map(({ href, label, ...rest }) =>
+            "external" in rest && rest.external ? (
+              <a key={href} href={href} className="nav-link type-corpo">
+                {label}
+              </a>
+            ) : (
+              <Link
+                key={href}
+                href={href}
+                className={`nav-link type-corpo${isActive(href) ? " is-active" : ""}`}
+                aria-current={isActive(href) ? "page" : undefined}
+              >
+                {label}
+              </Link>
+            ),
+          )}
+          <ThemeToggle />
+        </nav>
 
-          <button
-            type="button"
-            className="public-header__menu-btn text-nav"
-            aria-expanded={menuOpen}
-            aria-controls={menuId}
-            onClick={() => setMenuOpen((open) => !open)}
-          >
-            {menuOpen ? "Fechar" : "Menu"}
-          </button>
-        </div>
+        <button
+          type="button"
+          className="public-header__menu-btn type-corpo"
+          aria-expanded={menuOpen}
+          aria-controls={menuId}
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          {menuOpen ? "Fechar" : "Menu"}
+        </button>
       </div>
 
       <NavMobileMenu

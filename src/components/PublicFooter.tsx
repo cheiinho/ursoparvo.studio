@@ -1,6 +1,5 @@
 import Link from "next/link";
-import ThemeToggle from "@/components/ThemeToggle";
-import { NAV, SITE } from "@/content/site";
+import { SITE } from "@/content/site";
 
 const legalLinks = [
   { href: "/privacy", label: "Privacidade" },
@@ -15,34 +14,17 @@ export default function PublicFooter() {
   return (
     <footer className="public-footer">
       <div className="site-container public-footer__inner">
-        <p className="public-footer__copyright text-nav">
+        <p className="type-nota text-secondary">
           © {year} {SITE.nameShort}
         </p>
 
-        <div className="public-footer__right">
-          <span className="public-footer__theme">
-            <ThemeToggle />
-          </span>
-          <a
-            href={`mailto:${SITE.email}`}
-            className="public-footer__email text-nav"
-          >
-            {SITE.email}
-          </a>
-          <nav aria-label="Legal" className="public-footer__socials">
-            {legalLinks.map(({ href, label }) => (
-              <Link key={href} href={href} className="text-nav public-nav-link">
-                {label}
-              </Link>
-            ))}
-          </nav>
-        </div>
-
-        <div className="public-footer__mobile">
-          <a href={`mailto:${SITE.email}`} className="public-footer__mobile-email text-nav">
-            {NAV.contact}
-          </a>
-        </div>
+        <nav aria-label="Legal" className="public-footer__legal">
+          {legalLinks.map(({ href, label }) => (
+            <Link key={href} href={href} className="text-link type-nota text-secondary">
+              {label}
+            </Link>
+          ))}
+        </nav>
       </div>
     </footer>
   );

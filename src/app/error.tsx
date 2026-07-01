@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Button from "@/components/Button";
 
 export default function Error({
   error,
@@ -14,11 +15,14 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="flex min-h-dvh flex-col items-center justify-center gap-4 px-6">
-      <p className="text-title text-ink">Algo correu mal</p>
-      <button type="button" className="text-body text-ink/70" onClick={() => reset()}>
+    <div
+      className="flex min-h-dvh flex-col items-center justify-center gap-6"
+      style={{ padding: "var(--space-6)" }}
+    >
+      <p className="type-display">Algo correu mal</p>
+      <Button variant="secondary" onClick={() => reset()}>
         Tentar de novo
-      </button>
+      </Button>
     </div>
   );
 }

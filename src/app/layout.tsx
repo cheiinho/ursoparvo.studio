@@ -29,13 +29,11 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="pt"
+      lang="pt-PT"
       className={`h-full scroll-smooth ${sohne.variable}`}
       suppressHydrationWarning
     >
-      <body
-        className={`${sohne.className} relative min-h-full bg-background text-foreground antialiased`}
-      >
+      <body className={`${sohne.className} relative min-h-full antialiased`}>
         <ThemeScript />
         {children}
       </body>

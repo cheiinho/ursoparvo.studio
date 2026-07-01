@@ -21,13 +21,12 @@ export const BIO_LONG = [
 
 export const HERO = {
   tagline: TAGLINE,
-  subtitle: "Identidade visual corporativa. Coimbra.",
+  signature: "Identidade visual corporativa. Coimbra.",
   ctaWork: { label: "Ver trabalho", href: "/work" },
   ctaContact: {
-    label: "Falar sobre um projecto",
+    label: "Falar do projecto",
     href: `mailto:${SITE.email}`,
   },
-  ctaAbout: { label: "Sobre", href: "/about" },
 } as const;
 
 export const POSITIONING_BODY = [
