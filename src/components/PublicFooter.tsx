@@ -5,14 +5,14 @@ export default function PublicFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="public-footer">
+    <footer className="public-footer type-nota">
       <div className="site-container public-footer__inner">
-        <p className="type-nota text-secondary">
+        <p className="text-secondary">
           © {year} {SITE.nameShort}
         </p>
         <div className="public-footer__links">
           <ThemeToggle />
-          <a href={`mailto:${SITE.email}`} className="text-link type-nota text-secondary">
+          <a href={`mailto:${SITE.email}`} className="text-link text-secondary">
             {SITE.email}
           </a>
         </div>
