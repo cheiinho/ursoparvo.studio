@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { UI } from "@/content/ui";
 import {
   applyTheme,
+  nextThemeMode,
   readStoredTheme,
   storeTheme,
   type ThemeMode,
@@ -13,11 +14,17 @@ type ThemeToggleProps = {
   className?: string;
 };
 
-const options: { value: ThemeMode; label: string; ariaLabel: string }[] = [
-  { value: "light", label: UI.theme.light, ariaLabel: UI.theme.toLight },
-  { value: "dark", label: UI.theme.dark, ariaLabel: UI.theme.toDark },
-  { value: "system", label: UI.theme.system, ariaLabel: UI.theme.toSystem },
-];
+const labelByMode: Record<ThemeMode, string> = {
+  light: UI.theme.light,
+  dark: UI.theme.dark,
+  system: UI.theme.system,
+};
+
+const nextAriaByMode: Record<ThemeMode, string> = {
+  light: UI.theme.toDark,
+  dark: UI.theme.toSystem,
+  system: UI.theme.toLight,
+};
 
 export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
   const [mode, setMode] = useState<ThemeMode>("system");
@@ -42,54 +49,22 @@ export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
     return () => media.removeEventListener("change", onChange);
   }, [mounted]);
 
-  const select = (next: ThemeMode) => {
+  const cycle = () => {
+    const next = nextThemeMode(mode);
     storeTheme(next);
     applyTheme(next);
     setMode(next);
   };
 
-  if (!mounted) {
-    return (
-      <div
-        className={`theme-toggle ${className}`.trim()}
-        role="radiogroup"
-        aria-label={UI.theme.group}
-      >
-        {options.map(({ value, label }) => (
-          <button
-            key={value}
-            type="button"
-            className="theme-toggle__option type-nota"
-            role="radio"
-            aria-checked={value === "system"}
-            disabled
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-    );
-  }
-
   return (
-    <div
-      className={`theme-toggle ${className}`.trim()}
-      role="radiogroup"
-      aria-label={UI.theme.group}
+    <button
+      type="button"
+      className={`theme-cycle nav-link type-corpo ${className}`.trim()}
+      onClick={cycle}
+      aria-label={mounted ? nextAriaByMode[mode] : UI.theme.group}
+      disabled={!mounted}
     >
-      {options.map(({ value, label, ariaLabel }) => (
-        <button
-          key={value}
-          type="button"
-          className={`theme-toggle__option type-nota${mode === value ? " is-active" : ""}`}
-          role="radio"
-          aria-checked={mode === value}
-          aria-label={ariaLabel}
-          onClick={() => select(value)}
-        >
-          {label}
-        </button>
-      ))}
-    </div>
+      {mounted ? labelByMode[mode] : UI.theme.system}
+    </button>
   );
 }

@@ -2,6 +2,13 @@ export const THEME_STORAGE_KEY = "up-theme";
 
 export type ThemeMode = "light" | "dark" | "system";
 
+const THEME_CYCLE: ThemeMode[] = ["light", "dark", "system"];
+
+export function nextThemeMode(current: ThemeMode): ThemeMode {
+  const index = THEME_CYCLE.indexOf(current);
+  return THEME_CYCLE[(index + 1) % THEME_CYCLE.length];
+}
+
 export function resolveDark(mode: ThemeMode): boolean {
   if (mode === "dark") return true;
   if (mode === "light") return false;

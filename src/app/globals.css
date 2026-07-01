@@ -341,45 +341,11 @@ button {
   text-decoration-color: var(--accent);
 }
 
-.theme-toggle {
-  display: inline-flex;
-  align-items: center;
-  width: fit-content;
-  max-width: 100%;
-  flex-shrink: 0;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 2px;
-  gap: 2px;
-}
-
-.theme-toggle__option {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 auto;
-  width: auto;
-  min-height: 40px;
-  min-width: 44px;
-  padding: 0 var(--space-3);
+.theme-cycle {
   border: 0;
-  border-radius: 10px;
-  background: transparent;
-  color: var(--text-secondary);
+  background: none;
   font: inherit;
-  white-space: nowrap;
-  transition:
-    background-color var(--dur-micro) var(--ease-standard),
-    color var(--dur-micro) var(--ease-standard);
-}
-
-.theme-toggle__option:hover {
-  color: var(--text);
-}
-
-.theme-toggle__option.is-active {
-  background: var(--surface-alt);
-  color: var(--text);
+  cursor: pointer;
 }
 
 .public-main {
