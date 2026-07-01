@@ -55,6 +55,21 @@ const Skiper47 = () => {
 
 export { Skiper47 };
 
+export type CarouselImage = {
+  src: string;
+  alt: string;
+};
+
+export type Carousel_001Props = {
+  images: CarouselImage[];
+  className?: string;
+  showPagination?: boolean;
+  showNavigation?: boolean;
+  loop?: boolean;
+  autoplay?: boolean;
+  spaceBetween?: number;
+};
+
 const Carousel_001 = ({
   images,
   className,
@@ -63,15 +78,7 @@ const Carousel_001 = ({
   loop = true,
   autoplay = false,
   spaceBetween = 40,
-}: {
-  images: { src: string; alt: string }[];
-  className?: string;
-  showPagination?: boolean;
-  showNavigation?: boolean;
-  loop?: boolean;
-  autoplay?: boolean;
-  spaceBetween?: number;
-}) => {
+}: Carousel_001Props) => {
   const css = `
   .Carousal_001 {
     padding-bottom: 50px !important;
