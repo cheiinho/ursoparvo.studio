@@ -1,23 +1,15 @@
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
-import { SITE, WORK_EMPTY } from "@/content/site";
+import WorkEmptyState from "@/components/WorkEmptyState";
 import { UI } from "@/content/ui";
 import { hasPublishedWork, projectHref, projects } from "@/data/projects";
 
 export default function WorkList() {
   if (!hasPublishedWork()) {
     return (
-      <Reveal>
-        <div className="section__content section__content--center">
-          <p className="type-corpo text-secondary measure">
-            {WORK_EMPTY.lead}{" "}
-            <a href={`mailto:${SITE.email}`} className="text-link">
-              {SITE.email}
-            </a>
-            .
-          </p>
-        </div>
-      </Reveal>
+      <div className="section__content section__content--center">
+        <WorkEmptyState />
+      </div>
     );
   }
 

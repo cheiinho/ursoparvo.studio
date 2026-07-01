@@ -13,7 +13,9 @@ export const BIO =
   "9 anos em produto e identidade visual. BMW, Mercedes-Benz, Talkdesk." as const;
 
 export const WORK_EMPTY = {
-  lead: "Trabalho a chegar. Para começar um projecto, contacte",
+  lead: "Novos projectos, brevemente.",
+  cta: "Iniciar um projecto",
+  supportPrefix: "Ou escreva para",
 } as const;
 
 export const NAV = {
