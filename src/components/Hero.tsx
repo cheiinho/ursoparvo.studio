@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Button from "@/components/Button";
 import { HERO, SITE } from "@/content/site";
+import { UI } from "@/content/ui";
 
 type HeroProps = {
   galleryOverlap?: boolean;
@@ -36,7 +37,7 @@ export default function Hero({
         ) : null}
         <Button href={HERO.ctaContact.href}>{HERO.ctaContact.label}</Button>
         <Button href="/about" variant="secondary">
-          Sobre
+          {UI.actions.about}
         </Button>
       </div>
     </section>

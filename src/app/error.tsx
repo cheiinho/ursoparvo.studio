@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Button from "@/components/Button";
+import { UI } from "@/content/ui";
 
 export default function Error({
   error,
@@ -19,9 +20,10 @@ export default function Error({
       className="flex min-h-dvh flex-col items-center justify-center gap-6"
       style={{ padding: "var(--space-6)" }}
     >
-      <p className="type-display">Algo correu mal</p>
+      <p className="type-display">{UI.errors.genericHeading}</p>
+      <p className="type-corpo text-secondary">{UI.errors.genericBody}</p>
       <Button variant="secondary" onClick={() => reset()}>
-        Tentar de novo
+        {UI.actions.tryAgain}
       </Button>
     </div>
   );

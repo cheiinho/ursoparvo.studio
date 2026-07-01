@@ -2,6 +2,7 @@ import Link from "next/link";
 import PublicShell from "@/components/PublicShell";
 import Reveal from "@/components/Reveal";
 import Section from "@/components/Section";
+import { UI } from "@/content/ui";
 import {
   getNextProject,
   projectHref,
@@ -60,11 +61,11 @@ export default function CaseStudyTemplate({ project }: CaseStudyTemplateProps) {
             }}
           >
             <Link href="/work" className="text-link type-corpo">
-              Voltar ao trabalho
+              {UI.actions.backToWork}
             </Link>
             {next && (
               <Link href={projectHref(next.id)} className="text-link type-corpo">
-                Seguinte: {next.name}
+                {UI.actions.nextProject(next.name)}
               </Link>
             )}
           </footer>

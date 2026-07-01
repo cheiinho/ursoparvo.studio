@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import ThemeToggle from "@/components/ThemeToggle";
 import { NAV, SITE } from "@/content/site";
+import { UI } from "@/content/ui";
 
 const navLinks = [
   { href: "/work", label: NAV.work },
@@ -43,7 +44,7 @@ export default function NavMobileMenu({
       className={`mobile-menu${open ? " is-open" : ""}`}
       aria-hidden={!open}
     >
-      <nav aria-label="Mobile" className="mobile-menu__nav">
+      <nav aria-label={UI.nav.ariaMobile} className="mobile-menu__nav">
         <ul className="mobile-menu__list">
           {navLinks.map(({ href, label, ...rest }) => (
             <li key={href}>

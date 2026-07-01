@@ -6,6 +6,7 @@ import { useEffect, useId, useState } from "react";
 import NavMobileMenu from "@/components/NavMobileMenu";
 import ThemeToggle from "@/components/ThemeToggle";
 import { NAV, SITE } from "@/content/site";
+import { UI } from "@/content/ui";
 
 const navLinks = [
   { href: "/work", label: NAV.work },
@@ -49,13 +50,13 @@ export default function PublicHeader() {
         <Link
           href="/"
           className="public-header__brand type-corpo"
-          aria-label={`${SITE.name}, início`}
+          aria-label={`${SITE.name}, ${UI.nav.home}`}
           tabIndex={menuOpen ? -1 : 0}
         >
           {SITE.nameShort}
         </Link>
 
-        <nav aria-label="Principal" className="public-header__nav">
+        <nav aria-label={UI.nav.ariaMain} className="public-header__nav">
           {navLinks.map(({ href, label, ...rest }) =>
             "external" in rest && rest.external ? (
               <a key={href} href={href} className="nav-link type-corpo">
@@ -82,7 +83,7 @@ export default function PublicHeader() {
           aria-controls={menuId}
           onClick={() => setMenuOpen((open) => !open)}
         >
-          {menuOpen ? "Fechar" : "Menu"}
+          {menuOpen ? UI.nav.menuClose : UI.nav.menuOpen}
         </button>
       </div>
 

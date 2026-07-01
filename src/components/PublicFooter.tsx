@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { SITE } from "@/content/site";
+import { UI } from "@/content/ui";
 
 const legalLinks = [
-  { href: "/privacy", label: "Privacidade" },
-  { href: "/terms", label: "Termos" },
-  { href: "/legal", label: "Aviso legal" },
-  { href: "/cookies", label: "Cookies" },
+  { href: "/privacy", label: UI.legal.privacyTitle },
+  { href: "/terms", label: UI.legal.termsTitle },
+  { href: "/legal", label: UI.legal.noticeTitle },
+  { href: "/cookies", label: UI.legal.cookiesTitle },
 ] as const;
 
 export default function PublicFooter() {
@@ -18,7 +19,7 @@ export default function PublicFooter() {
           © {year} {SITE.nameShort}
         </p>
 
-        <nav aria-label="Legal" className="public-footer__legal">
+        <nav aria-label={UI.nav.ariaLegal} className="public-footer__legal">
           {legalLinks.map(({ href, label }) => (
             <Link key={href} href={href} className="text-link type-nota text-secondary">
               {label}

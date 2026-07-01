@@ -1,6 +1,7 @@
 import Link from "next/link";
 import PublicShell from "@/components/PublicShell";
 import Section from "@/components/Section";
+import { UI } from "@/content/ui";
 
 export default function NotFound() {
   return (
@@ -10,9 +11,9 @@ export default function NotFound() {
           className="flex flex-col items-start gap-6"
           style={{ minHeight: "50svh", justifyContent: "center" }}
         >
-          <p className="type-display">Página não encontrada</p>
+          <p className="type-display">{UI.notFound.heading}</p>
           <Link href="/" className="text-link type-corpo">
-            Voltar ao início
+            {UI.notFound.action}
           </Link>
         </div>
       </Section>

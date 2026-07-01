@@ -1,21 +1,18 @@
 import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
 import { SITE } from "@/content/site";
+import { UI } from "@/content/ui";
 
 export const metadata: Metadata = {
-  title: `Política de Privacidade, ${SITE.name}`,
+  title: `${UI.legal.privacyTitle}, ${SITE.name}`,
 };
 
 export default function PrivacyPage() {
   return (
-    <LegalPage title="Política de Privacidade">
+    <LegalPage title={UI.legal.privacyTitle}>
       <p>
-        O {SITE.name} respeita a sua privacidade. Esta página será actualizada
-        com a política de privacidade completa. Para questões, contacte{" "}
-        <a
-          href={`mailto:${SITE.email}`}
-          className="text-ink underline-offset-4 hover:underline"
-        >
+        {UI.legal.privacyLead}{" "}
+        <a href={`mailto:${SITE.email}`} className="text-link">
           {SITE.email}
         </a>
         .

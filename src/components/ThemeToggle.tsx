@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { UI } from "@/content/ui";
 import {
   applyTheme,
   readStoredTheme,
@@ -12,10 +13,10 @@ type ThemeToggleProps = {
   className?: string;
 };
 
-const options: { value: ThemeMode; label: string }[] = [
-  { value: "light", label: "Claro" },
-  { value: "dark", label: "Escuro" },
-  { value: "system", label: "Sistema" },
+const options: { value: ThemeMode; label: string; ariaLabel: string }[] = [
+  { value: "light", label: UI.theme.light, ariaLabel: UI.theme.toLight },
+  { value: "dark", label: UI.theme.dark, ariaLabel: UI.theme.toDark },
+  { value: "system", label: UI.theme.system, ariaLabel: UI.theme.toSystem },
 ];
 
 export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
@@ -52,7 +53,7 @@ export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
       <div
         className={`theme-toggle ${className}`.trim()}
         role="radiogroup"
-        aria-label="Tema"
+        aria-label={UI.theme.group}
       >
         {options.map(({ value, label }) => (
           <button
@@ -74,22 +75,16 @@ export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
     <div
       className={`theme-toggle ${className}`.trim()}
       role="radiogroup"
-      aria-label="Tema"
+      aria-label={UI.theme.group}
     >
-      {options.map(({ value, label }) => (
+      {options.map(({ value, label, ariaLabel }) => (
         <button
           key={value}
           type="button"
           className={`theme-toggle__option type-nota${mode === value ? " is-active" : ""}`}
           role="radio"
           aria-checked={mode === value}
-          aria-label={
-            value === "light"
-              ? "Tema claro"
-              : value === "dark"
-                ? "Tema escuro"
-                : "Tema do sistema"
-          }
+          aria-label={ariaLabel}
           onClick={() => select(value)}
         >
           {label}

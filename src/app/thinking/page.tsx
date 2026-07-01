@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import ThinkingPageContent from "@/components/ThinkingPageContent";
+import { SITE } from "@/content/site";
+import { UI } from "@/content/ui";
 
 export const metadata: Metadata = {
-  title: "Point of view · UrsoParvo Studio",
-  description:
-    "On permanence, type, and why a fool is always a fool. The studio filter.",
+  title: `${UI.thinking.metadataTitle}, ${SITE.name}`,
+  description: UI.thinking.metadataDescription,
 };
 
 export default function ThinkingPage() {

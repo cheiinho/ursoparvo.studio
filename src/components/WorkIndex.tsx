@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import Section from "@/components/Section";
+import { UI } from "@/content/ui";
 import { hasPublishedWork, projectHref, projects } from "@/data/projects";
 
 export default function WorkIndex() {
@@ -8,8 +9,8 @@ export default function WorkIndex() {
 
   return (
     <Section>
-      <h1 className="sr-only">Trabalho</h1>
-      <nav aria-label="Projectos em destaque">
+      <h1 className="sr-only">{UI.work.pageTitle}</h1>
+      <nav aria-label={UI.nav.ariaFeatured}>
         <ul className="work-list">
           {projects.map((project, index) => (
             <li key={project.id} className="work-item">

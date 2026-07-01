@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
+import { UI } from "@/content/ui";
 
 type ButtonVariant = "primary" | "secondary" | "tertiary";
 
@@ -40,7 +41,7 @@ export default function Button({
   ...props
 }: ButtonProps) {
   const classes = `btn type-corpo ${variantClass(variant)} ${className}`.trim();
-  const label = loading ? "A enviar…" : children;
+  const label = loading ? UI.states.sending : children;
 
   if ("href" in props && props.href !== undefined) {
     const { href, ...linkProps } = props;

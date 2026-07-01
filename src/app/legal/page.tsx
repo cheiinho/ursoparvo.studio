@@ -1,33 +1,28 @@
 import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
 import { SITE } from "@/content/site";
+import { UI } from "@/content/ui";
 
 export const metadata: Metadata = {
-  title: `Aviso Legal, ${SITE.name}`,
+  title: `${UI.legal.noticeTitle}, ${SITE.name}`,
 };
 
 export default function LegalNoticePage() {
   return (
-    <LegalPage title="Aviso Legal">
+    <LegalPage title={UI.legal.noticeTitle}>
       <p>
         <strong>{SITE.name}</strong>
         <br />
-        Estúdio de design
+        {UI.legal.noticeStudio}
         <br />
         {SITE.location}
         <br />
         Email:{" "}
-        <a
-          href={`mailto:${SITE.email}`}
-          className="text-ink underline-offset-4 hover:underline"
-        >
+        <a href={`mailto:${SITE.email}`} className="text-link">
           {SITE.email}
         </a>
       </p>
-      <p>
-        Responsável pelo conteúdo deste site nos termos da lei aplicável. Os
-        dados legais completos serão publicados aqui.
-      </p>
+      <p>{UI.legal.noticeResponsibility}</p>
     </LegalPage>
   );
 }

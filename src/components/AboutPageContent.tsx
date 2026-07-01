@@ -10,10 +10,11 @@ import {
   SITE,
   TAGLINE,
 } from "@/content/site";
+import { UI } from "@/content/ui";
 
 export default function AboutPageContent() {
   const services = [
-    { label: "Principal", value: SERVICE_PRIMARY.title },
+    { label: UI.about.servicePrimaryLabel, value: SERVICE_PRIMARY.title },
     ...SERVICES_SECONDARY.map((service) => ({
       label: service.title,
       value: service.description,
@@ -23,7 +24,7 @@ export default function AboutPageContent() {
   return (
     <PublicShell>
       <Section>
-        <h1 className="sr-only">Sobre</h1>
+        <h1 className="sr-only">{UI.about.pageTitle}</h1>
 
         <div className="about-grid">
           <div>
@@ -61,7 +62,7 @@ export default function AboutPageContent() {
             <Reveal delay={0.12}>
               <div className="about-aside-block">
                 <p className="about-aside-block__label type-nota text-secondary">
-                  Serviços
+                  {UI.about.servicesLabel}
                 </p>
                 <dl>
                   {services.map((item) => (
@@ -81,7 +82,7 @@ export default function AboutPageContent() {
                   href={`mailto:${SITE.email}`}
                   className="text-link type-corpo"
                   style={{ display: "inline-block", marginTop: "var(--space-6)" }}
-                  aria-label={`Enviar email para ${SITE.email}`}
+                  aria-label={UI.about.emailAria(SITE.email)}
                 >
                   {CONTACT.ctaLabel}
                 </a>

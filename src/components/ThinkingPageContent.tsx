@@ -1,7 +1,8 @@
 import PublicShell from "@/components/PublicShell";
 import Reveal from "@/components/Reveal";
 import Section from "@/components/Section";
-import { CONTACT, SITE } from "@/content/site";
+import { SITE } from "@/content/site";
+import { UI } from "@/content/ui";
 
 const POSITIONS = [
   {
@@ -27,18 +28,17 @@ export default function ThinkingPageContent() {
     <PublicShell>
       <Section>
         <Reveal>
-          <p className="type-nota text-secondary">Ponto de vista</p>
+          <p className="type-nota text-secondary">{UI.thinking.label}</p>
           <h1 className="type-display measure" style={{ marginTop: "var(--space-4)" }}>
-            Sobre permanência.
+            {UI.thinking.title}
           </h1>
         </Reveal>
 
         <Reveal delay={0.08}>
           <div className="measure space-y-6" style={{ marginTop: "var(--space-8)" }}>
             <p className="type-corpo text-secondary">
-              Desenho marcas que não precisam de ser redesenhadas. Não porque sigo
-              uma checklist. Porque trabalho com princípios que já eram velhos
-              quando a Helvetica era nova.
+              Desenho marcas que não precisam de ser redesenhadas. Não por checklist,
+              mas por princípios que já eram velhos quando a Helvetica era nova.
             </p>
             <p className="type-corpo text-secondary">
               Proporção. Contraste. Redução. Clareza.
@@ -75,7 +75,7 @@ export default function ThinkingPageContent() {
             className="text-link type-corpo"
             style={{ display: "inline-block", marginTop: "var(--space-24)" }}
           >
-            {CONTACT.title}
+            {UI.actions.contact}
           </a>
         </Reveal>
       </Section>
