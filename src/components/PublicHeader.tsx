@@ -8,25 +8,28 @@ import { NAV, SITE } from "@/content/site";
 import { UI } from "@/content/ui";
 import { useHeaderScrollProgress } from "@/lib/useHeaderScrolled";
 
-const navLinks = [
-  { href: "/work", label: NAV.work },
-  { href: `mailto:${SITE.email}`, label: NAV.contact, external: true },
-] as const;
-
 export default function PublicHeader() {
   const pathname = usePathname();
   const { ref: headerRef } = useHeaderScrollProgress();
 
-  const isActive = (href: string) =>
-    href === "/work"
-      ? pathname === "/work" || pathname.startsWith("/work/")
-      : pathname === href;
+  const workActive =
+    pathname === "/work" || pathname.startsWith("/work/");
 
   return (
     <header ref={headerRef} className="public-header">
       <div className="public-header__wrap">
         <div className="public-header__bar">
           <div className="public-header__inner">
+            <nav aria-label={UI.nav.ariaMain} className="public-header__side public-header__side--left">
+              <Link
+                href="/work"
+                className={`nav-link type-corpo${workActive ? " is-active" : ""}`}
+                aria-current={workActive ? "page" : undefined}
+              >
+                {NAV.work}
+              </Link>
+            </nav>
+
             <Link
               href="/"
               className="public-header__logo"
@@ -42,23 +45,10 @@ export default function PublicHeader() {
               />
             </Link>
 
-            <nav aria-label={UI.nav.ariaMain} className="public-header__nav">
-              {navLinks.map(({ href, label, ...rest }) =>
-                "external" in rest && rest.external ? (
-                  <a key={href} href={href} className="nav-link type-corpo">
-                    {label}
-                  </a>
-                ) : (
-                  <Link
-                    key={href}
-                    href={href}
-                    className={`nav-link type-corpo${isActive(href) ? " is-active" : ""}`}
-                    aria-current={isActive(href) ? "page" : undefined}
-                  >
-                    {label}
-                  </Link>
-                ),
-              )}
+            <nav aria-label={UI.nav.ariaContact} className="public-header__side public-header__side--right">
+              <a href={`mailto:${SITE.email}`} className="nav-link type-corpo">
+                {NAV.contact}
+              </a>
             </nav>
           </div>
         </div>

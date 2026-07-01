@@ -5,7 +5,7 @@ export const UI = {
 
   nav: {
     ariaMain: "Principal",
-    ariaMobile: "Menu móvel",
+    ariaContact: "Contacto",
     ariaProjects: "Índice de projectos",
     ariaFeatured: "Projectos em destaque",
     home: "Início",
