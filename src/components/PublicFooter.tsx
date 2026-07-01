@@ -7,12 +7,10 @@ export default function PublicFooter() {
   return (
     <footer className="public-footer">
       <div className="site-container public-footer__inner">
-        <p className="type-nota text-secondary">
-          © {year} {SITE.nameShort}
-        </p>
+        <p className="public-footer__item">© {year} {SITE.nameShort}</p>
         <div className="public-footer__links">
-          <ThemeToggle />
-          <a href={`mailto:${SITE.email}`} className="text-link type-nota text-secondary">
+          <ThemeToggle className="public-footer__item" />
+          <a href={`mailto:${SITE.email}`} className="public-footer__item">
             {SITE.email}
           </a>
         </div>

@@ -7,10 +7,7 @@ export default function NotFound() {
   return (
     <PublicShell>
       <Section>
-        <div
-          className="flex flex-col items-start gap-6"
-          style={{ minHeight: "50svh", justifyContent: "center" }}
-        >
+        <div className="section__content section__content--center">
           <p className="type-display">{UI.notFound.heading}</p>
           <Link href="/" className="text-link type-corpo">
             {UI.notFound.action}
