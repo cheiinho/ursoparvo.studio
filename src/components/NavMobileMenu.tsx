@@ -22,6 +22,7 @@ type NavMobileMenuProps = {
   open: boolean;
   onClose: () => void;
   isActive: (href: string) => boolean;
+  headerScrolled?: boolean;
 };
 
 export default function NavMobileMenu({
@@ -29,6 +30,7 @@ export default function NavMobileMenu({
   open,
   onClose,
   isActive,
+  headerScrolled = false,
 }: NavMobileMenuProps) {
   const [mounted, setMounted] = useState(false);
 
@@ -40,7 +42,7 @@ export default function NavMobileMenu({
 
   return createPortal(
     <div
-      className={`mobile-menu${open ? " is-open" : ""}`}
+      className={`mobile-menu${open ? " is-open" : ""}${headerScrolled ? " is-header-scrolled" : ""}`}
       aria-hidden={!open}
     >
       <div

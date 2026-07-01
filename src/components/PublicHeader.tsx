@@ -9,6 +9,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import { BEAR_LOGO } from "@/constants/bear";
 import { NAV, SITE } from "@/content/site";
 import { UI } from "@/content/ui";
+import { useHeaderScrolled } from "@/lib/useHeaderScrolled";
 
 const navLinks = [
   { href: "/work", label: NAV.work },
@@ -19,6 +20,7 @@ const navLinks = [
 export default function PublicHeader() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const scrolled = useHeaderScrolled();
   const menuId = useId();
 
   useEffect(() => {
@@ -47,53 +49,57 @@ export default function PublicHeader() {
       : pathname === href;
 
   return (
-    <header className="public-header">
-      <div className="site-container public-header__inner">
-        <Link
-          href="/"
-          className="public-header__logo"
-          aria-label={`${SITE.name}, ${UI.nav.home}`}
-          tabIndex={menuOpen ? -1 : 0}
-        >
-          <Image
-            src={BEAR_LOGO.src}
-            alt=""
-            width={BEAR_LOGO.width}
-            height={BEAR_LOGO.height}
-            className="public-header__logo-img"
-            priority
-          />
-        </Link>
+    <header
+      className={`public-header${scrolled ? " is-scrolled" : ""}${menuOpen ? " is-menu-open" : ""}`}
+    >
+      <div className="public-header__bar">
+        <div className="site-container public-header__inner">
+          <Link
+            href="/"
+            className="public-header__logo"
+            aria-label={`${SITE.name}, ${UI.nav.home}`}
+            tabIndex={menuOpen ? -1 : 0}
+          >
+            <Image
+              src={BEAR_LOGO.src}
+              alt=""
+              width={BEAR_LOGO.width}
+              height={BEAR_LOGO.height}
+              className="public-header__logo-img"
+              priority
+            />
+          </Link>
 
-        <nav aria-label={UI.nav.ariaMain} className="public-header__nav">
-          {navLinks.map(({ href, label, ...rest }) =>
-            "external" in rest && rest.external ? (
-              <a key={href} href={href} className="nav-link type-corpo">
-                {label}
-              </a>
-            ) : (
-              <Link
-                key={href}
-                href={href}
-                className={`nav-link type-corpo${isActive(href) ? " is-active" : ""}`}
-                aria-current={isActive(href) ? "page" : undefined}
-              >
-                {label}
-              </Link>
-            ),
-          )}
-          <ThemeToggle />
-        </nav>
+          <nav aria-label={UI.nav.ariaMain} className="public-header__nav">
+            {navLinks.map(({ href, label, ...rest }) =>
+              "external" in rest && rest.external ? (
+                <a key={href} href={href} className="nav-link type-corpo">
+                  {label}
+                </a>
+              ) : (
+                <Link
+                  key={href}
+                  href={href}
+                  className={`nav-link type-corpo${isActive(href) ? " is-active" : ""}`}
+                  aria-current={isActive(href) ? "page" : undefined}
+                >
+                  {label}
+                </Link>
+              ),
+            )}
+            <ThemeToggle />
+          </nav>
 
-        <button
-          type="button"
-          className="public-header__menu-btn type-corpo"
-          aria-expanded={menuOpen}
-          aria-controls={menuId}
-          onClick={() => setMenuOpen((open) => !open)}
-        >
-          {menuOpen ? UI.nav.menuClose : UI.nav.menuOpen}
-        </button>
+          <button
+            type="button"
+            className="public-header__menu-btn type-corpo"
+            aria-expanded={menuOpen}
+            aria-controls={menuId}
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            {menuOpen ? UI.nav.menuClose : UI.nav.menuOpen}
+          </button>
+        </div>
       </div>
 
       <NavMobileMenu
@@ -101,6 +107,7 @@ export default function PublicHeader() {
         open={menuOpen}
         onClose={() => setMenuOpen(false)}
         isActive={isActive}
+        headerScrolled={scrolled}
       />
     </header>
   );
