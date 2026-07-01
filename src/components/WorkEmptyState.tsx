@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Button from "@/components/Button";
 import Reveal from "@/components/Reveal";
 import { SITE, WORK_EMPTY } from "@/content/site";
@@ -7,24 +6,14 @@ export default function WorkEmptyState() {
   return (
     <Reveal>
       <div className="work-empty">
-        <div className="work-empty__content">
-          <p className="work-empty__lead type-corpo text-primary">{WORK_EMPTY.lead}</p>
-          <Button href={`mailto:${SITE.email}`}>{WORK_EMPTY.cta}</Button>
-          <p className="work-empty__support">
-            {WORK_EMPTY.supportPrefix}{" "}
-            <a href={`mailto:${SITE.email}`} className="work-empty__email">
-              {SITE.email}
-            </a>
-          </p>
-        </div>
-        <Image
-          src="/assets/bears/bear-calm.svg"
-          alt=""
-          width={205}
-          height={200}
-          className="work-empty__bear"
-          aria-hidden="true"
-        />
+        <p className="work-empty__lead type-corpo text-primary">{WORK_EMPTY.lead}</p>
+        <Button href={`mailto:${SITE.email}`}>{WORK_EMPTY.cta}</Button>
+        <p className="work-empty__support">
+          {WORK_EMPTY.supportPrefix}{" "}
+          <a href={`mailto:${SITE.email}`} className="work-empty__email">
+            {SITE.email}
+          </a>
+        </p>
       </div>
     </Reveal>
   );

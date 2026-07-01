@@ -542,35 +542,12 @@ button {
 }
 
 .work-empty {
-  position: relative;
-  width: 100%;
-  max-width: 66ch;
-  isolation: isolate;
-}
-
-.work-empty__content {
-  position: relative;
-  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-6);
-}
-
-.work-empty__bear {
-  position: absolute;
-  z-index: 2;
-  top: -18%;
-  right: -8%;
-  width: min(62%, 18rem);
-  height: auto;
-  pointer-events: none;
-  opacity: 0.22;
-}
-
-.dark .work-empty__bear {
-  opacity: 0.14;
-  filter: invert(1);
+  width: 100%;
+  max-width: 66ch;
 }
 
 .work-empty__lead {
