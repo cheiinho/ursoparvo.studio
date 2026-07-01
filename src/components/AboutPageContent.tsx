@@ -1,7 +1,7 @@
 import PublicShell from "@/components/PublicShell";
 import Reveal from "@/components/Reveal";
 import Section from "@/components/Section";
-import { BIO, SITE } from "@/content/site";
+import { BIO_PARAGRAPHS, SITE } from "@/content/site";
 import { UI } from "@/content/ui";
 
 export default function AboutPageContent() {
@@ -12,7 +12,16 @@ export default function AboutPageContent() {
 
         <Reveal>
           <div className="section__content section__content--center">
-            <p className="type-corpo measure text-primary">{BIO}</p>
+            <div
+              className="type-corpo measure text-primary"
+              style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}
+            >
+              {BIO_PARAGRAPHS.map((paragraph, i) => (
+                <p key={i} style={{ margin: 0 }}>
+                  {paragraph}
+                </p>
+              ))}
+            </div>
             <a
               href={`mailto:${SITE.email}`}
               className="text-link type-corpo"
