@@ -17,19 +17,3 @@ export const inter = localFont({
   display: "swap",
 });
 
-export const dmSerifDisplay = localFont({
-  src: [
-    {
-      path: "../../public/fonts/dm-serif-display/DMSerifDisplay-Regular.ttf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/dm-serif-display/DMSerifDisplay-Italic.ttf",
-      weight: "400",
-      style: "italic",
-    },
-  ],
-  variable: "--font-dm-serif-display",
-  display: "swap",
-});

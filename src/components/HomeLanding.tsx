@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import Button from "@/components/Button";
+import HomeCarousel from "@/components/HomeCarousel";
 import Reveal from "@/components/Reveal";
 import {
   HOME_ABOUT,
@@ -53,6 +54,11 @@ export default function HomeLanding() {
           />
         </div>
       </div>
+
+      {/* Carrossel dos ursos */}
+      <section aria-label="Os ursos" className="home-section home-section--carousel">
+        <HomeCarousel />
+      </section>
 
       {/* O estúdio */}
       <section id="o-estudio" className="home-section site-container">

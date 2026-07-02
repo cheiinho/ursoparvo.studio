@@ -61,7 +61,6 @@
   --color-line: var(--line);
   --color-accent: var(--accent);
   --font-sans: var(--font-inter), system-ui, sans-serif;
-  --font-display: var(--font-dm-serif-display), Georgia, serif;
 }
 
 *,
@@ -110,11 +109,10 @@ button {
 }
 
 .type-display {
-  font-family: var(--font-dm-serif-display), Georgia, serif;
   font-size: var(--fs-display);
-  font-weight: 400;
+  font-weight: var(--fw-medium);
   line-height: 1.05;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.022em;
   text-wrap: balance;
 }
 
@@ -127,11 +125,10 @@ button {
 }
 
 .type-title {
-  font-family: var(--font-dm-serif-display), Georgia, serif;
   font-size: var(--fs-title);
-  font-weight: 400;
+  font-weight: var(--fw-medium);
   line-height: 1.15;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.018em;
   text-wrap: balance;
 }
 
@@ -502,8 +499,8 @@ button {
 }
 
 .home-landing__stage {
-  width: min(100%, 18rem);
-  height: min(30dvh, 15rem);
+  width: min(100%, 20rem);
+  height: min(38dvh, 18rem);
   flex-shrink: 0;
   align-self: center;
   opacity: 0;
@@ -531,8 +528,8 @@ button {
   }
 
   .home-landing__stage {
-    width: min(34%, 20rem);
-    height: min(52dvh, 24rem);
+    width: min(42%, 24rem);
+    height: min(60dvh, 28rem);
     align-self: auto;
   }
 }
@@ -547,6 +544,47 @@ button {
 
 .home-section--final {
   padding-bottom: var(--space-16);
+}
+
+.home-section--carousel {
+  padding-inline: 0;
+  overflow: hidden;
+}
+
+.home-carousel {
+  width: 100%;
+  overflow: hidden;
+}
+
+.home-carousel__inner {
+  width: 100%;
+  max-width: none;
+}
+
+.home-carousel .swiper-slide {
+  height: clamp(16rem, 48dvh, 30rem) !important;
+  border-color: var(--line);
+  background: var(--surface-alt);
+}
+
+.home-carousel .swiper-slide img {
+  object-fit: contain;
+  padding: var(--space-6);
+}
+
+.home-carousel .swiper-pagination-bullet {
+  background: var(--text-secondary);
+  opacity: 0.35;
+}
+
+.home-carousel .swiper-pagination-bullet-active {
+  background: var(--text);
+  opacity: 1;
+}
+
+.home-carousel .swiper-button-next,
+.home-carousel .swiper-button-prev {
+  color: var(--text);
 }
 
 .home-section__label {

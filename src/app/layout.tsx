@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ThemeScript } from "@/components/ThemeScript";
 import { BIO_SHORT, SITE } from "@/content/site";
-import { dmSerifDisplay, inter } from "@/lib/fonts";
+import { inter } from "@/lib/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt-PT"
-      className={`h-full scroll-smooth ${inter.variable} ${dmSerifDisplay.variable}`}
+      className={`h-full scroll-smooth ${inter.variable}`}
       suppressHydrationWarning
     >
       <body className={`${inter.className} relative min-h-full antialiased`}>
