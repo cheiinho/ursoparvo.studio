@@ -1,6 +1,7 @@
 "use client";
 
-import Bear3DScene from "@/components/bear/Bear3DScene";
+import dynamic from "next/dynamic";
+import { useState } from "react";
 import Button from "@/components/Button";
 import Reveal from "@/components/Reveal";
 import {
@@ -11,7 +12,16 @@ import {
   HOME_SERVICES,
 } from "@/content/site";
 
+const Bear3DScene = dynamic(() => import("@/components/bear/Bear3DScene"), {
+  ssr: false,
+});
+
 export default function HomeLanding() {
+  const [bearReady, setBearReady] = useState(false);
+
+  const primary = HOME_SERVICES.items.find((s) => s.primary);
+  const secondary = HOME_SERVICES.items.filter((s) => !s.primary);
+
   return (
     <div className="home-landing">
       {/* Hero */}
@@ -20,12 +30,12 @@ export default function HomeLanding() {
           <Reveal>
             <h1 className="type-display home-landing__title">{HOME_HERO.title}</h1>
           </Reveal>
-          <Reveal delay={0.06}>
-            <p className="type-corpo text-secondary" style={{ margin: 0 }}>
+          <Reveal delay={0.08}>
+            <p className="type-corpo text-secondary home-landing__subtitle">
               {HOME_HERO.subtitle}
             </p>
           </Reveal>
-          <Reveal delay={0.12}>
+          <Reveal delay={0.16}>
             <div className="hero__actions">
               <Button href="/work" variant="primary">
                 {HOME_HERO.ctaPrimary}
@@ -36,8 +46,11 @@ export default function HomeLanding() {
             </div>
           </Reveal>
         </div>
-        <div className="home-landing__stage">
-          <Bear3DScene className="home-landing__bear" />
+        <div className={`home-landing__stage${bearReady ? " is-ready" : ""}`}>
+          <Bear3DScene
+            className="home-landing__bear"
+            onReady={() => setBearReady(true)}
+          />
         </div>
       </div>
 
@@ -47,14 +60,9 @@ export default function HomeLanding() {
           <p className="type-nota text-secondary home-section__label">{HOME_ABOUT.label}</p>
         </Reveal>
         <Reveal delay={0.05}>
-          <div
-            className="type-corpo measure text-primary"
-            style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}
-          >
+          <div className="type-corpo measure text-primary stack">
             {HOME_ABOUT.body.map((p, i) => (
-              <p key={i} style={{ margin: 0 }}>
-                {p}
-              </p>
+              <p key={i}>{p}</p>
             ))}
           </div>
         </Reveal>
@@ -70,17 +78,25 @@ export default function HomeLanding() {
         <Reveal>
           <p className="type-nota text-secondary home-section__label">{HOME_SERVICES.label}</p>
         </Reveal>
-        <div className="services-grid">
-          {HOME_SERVICES.items.map((service, i) => (
-            <Reveal key={service.key} delay={i * 0.08}>
-              <div
-                className={`service-card${service.primary ? " service-card--primary" : ""}`}
-              >
-                <h2 className="type-corpo service-card__title">{service.title}</h2>
-                <p className="type-corpo text-secondary service-card__body">{service.body}</p>
+        <div className="services">
+          {primary ? (
+            <Reveal>
+              <div className="service--primary">
+                <h2 className="type-title service-card__title">{primary.title}</h2>
+                <p className="type-corpo text-secondary service-card__body">{primary.body}</p>
               </div>
             </Reveal>
-          ))}
+          ) : null}
+          <div className="services__secondary">
+            {secondary.map((service, i) => (
+              <Reveal key={service.key} delay={0.08 + i * 0.08}>
+                <div className="service-card">
+                  <h2 className="type-corpo service-card__title">{service.title}</h2>
+                  <p className="type-corpo text-secondary service-card__body">{service.body}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -90,28 +106,23 @@ export default function HomeLanding() {
           <p className="type-nota text-secondary home-section__label">{HOME_PROCESS.label}</p>
         </Reveal>
         <Reveal delay={0.05}>
-          <div
-            className="type-corpo measure text-primary"
-            style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}
-          >
+          <div className="type-corpo measure text-primary stack">
             {HOME_PROCESS.body.map((p, i) => (
-              <p key={i} style={{ margin: 0 }}>
-                {p}
-              </p>
+              <p key={i}>{p}</p>
             ))}
           </div>
         </Reveal>
       </section>
 
       {/* Tem um projecto? */}
-      <section id="contacto" className="home-section site-container" style={{ paddingBottom: "var(--space-16)" }}>
+      <section id="contacto" className="home-section home-section--final site-container">
         <Reveal>
           <p className="type-nota text-secondary home-section__label">{HOME_CONTACT.label}</p>
         </Reveal>
         <Reveal delay={0.05}>
-          <p className="type-corpo measure text-primary" style={{ margin: 0 }}>
-            {HOME_CONTACT.body}
-          </p>
+          <div className="stack">
+            <p className="type-corpo measure text-primary">{HOME_CONTACT.body}</p>
+          </div>
         </Reveal>
         <Reveal delay={0.1}>
           <Button href="/contacto" variant="primary">

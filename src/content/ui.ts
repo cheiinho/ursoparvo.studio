@@ -59,7 +59,7 @@ export const UI = {
     emailLabel: "Email ou telefone",
     servicesLabel: "Serviços",
     descLabel: "Descrição breve",
-    descPlaceholder: "Conta o contexto do projecto…",
+    descPlaceholder: "Conte o contexto do projecto.",
     prazLabel: "Prazo desejado",
     comoLabel: "Como conheceu o estúdio",
     comoPlaceholder: "Opcional",

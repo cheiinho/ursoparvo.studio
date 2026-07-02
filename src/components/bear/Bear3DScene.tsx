@@ -937,9 +937,29 @@ export default function Bear3DScene({
         onReadyRef.current?.();
       }
     };
-    animate();
+
+    // Pause the render loop while the canvas is offscreen.
+    let running = false;
+    const start = () => {
+      if (running) return;
+      running = true;
+      clock.getDelta();
+      frameId = requestAnimationFrame(animate);
+    };
+    const stop = () => {
+      if (!running) return;
+      running = false;
+      cancelAnimationFrame(frameId);
+    };
+    const io = new IntersectionObserver(
+      ([entry]) => (entry.isIntersecting ? start() : stop()),
+      { rootMargin: "96px" },
+    );
+    io.observe(canvas);
+    start();
 
     return () => {
+      io.disconnect();
       cancelAnimationFrame(frameId);
       canvas.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointermove", onMove);

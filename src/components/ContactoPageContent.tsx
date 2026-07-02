@@ -19,8 +19,6 @@ type FormState = {
   como: string;
 };
 
-const BILLABLE_KEYS: ServiceKey[] = ["identity", "grafismo", "fotografia"];
-
 function computeEstimate(selected: ServiceKey[]): { min: number; max: number } | null {
   const billable = CONTACTO.services.filter(
     (s) => s.key !== "multiple" && selected.includes(s.key as ServiceKey),
@@ -106,9 +104,9 @@ export default function ContactoPageContent() {
 
   return (
     <PublicShell>
-      <div className="site-container contacto-shell">
+      <div className="site-container page-shell">
         <Reveal>
-          <h1 className="type-display contacto-heading">{UI.contacto.pageTitle}</h1>
+          <h1 className="type-display page-heading">{UI.contacto.pageTitle}</h1>
         </Reveal>
 
         <form onSubmit={handleSubmit} className="contacto-form" noValidate>
@@ -246,7 +244,7 @@ export default function ContactoPageContent() {
               <p className="type-nota text-secondary estimator-label">
                 {UI.contacto.estimatorHeading}
               </p>
-              <p className="estimator-range">
+              <p className="type-display estimator-range">
                 {formatEur(estimate.min)}–{formatEur(estimate.max)}
               </p>
               <p className="type-corpo text-secondary estimator-note">
