@@ -171,23 +171,30 @@ class Media {
         }
         
         void main() {
+          // Contain-fit: the artwork sits inside the card with paper margins.
           vec2 ratio = vec2(
-            min((uPlaneSizes.x / uPlaneSizes.y) / (uImageSizes.x / uImageSizes.y), 1.0),
-            min((uPlaneSizes.y / uPlaneSizes.x) / (uImageSizes.y / uImageSizes.x), 1.0)
+            max((uPlaneSizes.x / uPlaneSizes.y) / (uImageSizes.x / uImageSizes.y), 1.0),
+            max((uPlaneSizes.y / uPlaneSizes.x) / (uImageSizes.y / uImageSizes.x), 1.0)
           );
           vec2 uv = vec2(
             vUv.x * ratio.x + (1.0 - ratio.x) * 0.5,
             vUv.y * ratio.y + (1.0 - ratio.y) * 0.5
           );
           vec4 color = texture2D(tMap, uv);
-          
+
+          // Composite transparent artwork over a paper card so line-art
+          // SVGs read as printed cards instead of black rectangles.
+          vec3 paper = vec3(0.961, 0.957, 0.949);
+          float inside = step(0.0, uv.x) * step(uv.x, 1.0) * step(0.0, uv.y) * step(uv.y, 1.0);
+          vec3 rgb = mix(paper, color.rgb, color.a * inside);
+
           float d = roundedBoxSDF(vUv - 0.5, vec2(0.5 - uBorderRadius), uBorderRadius);
-          
+
           float edgeSmooth = 0.002;
           float alpha = 1.0 - smoothstep(-edgeSmooth, edgeSmooth, d);
           if (alpha < 0.01) discard;
-          
-          gl_FragColor = vec4(color.rgb * alpha, alpha);
+
+          gl_FragColor = vec4(rgb * alpha, alpha);
         }
       `,
       uniforms: {

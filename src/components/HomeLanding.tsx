@@ -1,9 +1,9 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Button from "@/components/Button";
-import HomeCarousel from "@/components/HomeCarousel";
+import HomeGallery from "@/components/HomeGallery";
 import Reveal from "@/components/Reveal";
 import {
   HOME_ABOUT,
@@ -19,6 +19,7 @@ const Bear3DScene = dynamic(() => import("@/components/bear/Bear3DScene"), {
 
 export default function HomeLanding() {
   const [bearReady, setBearReady] = useState(false);
+  const galleryVelocityRef = useRef(0);
 
   const primary = HOME_SERVICES.items.find((s) => s.primary);
   const secondary = HOME_SERVICES.items.filter((s) => !s.primary);
@@ -51,13 +52,18 @@ export default function HomeLanding() {
           <Bear3DScene
             className="home-landing__bear"
             onReady={() => setBearReady(true)}
+            carouselVelocityRef={galleryVelocityRef}
           />
         </div>
       </div>
 
-      {/* Carrossel dos ursos */}
-      <section aria-label="Os ursos" className="home-section home-section--carousel">
-        <HomeCarousel />
+      {/* Galeria dos ursos */}
+      <section aria-label="Os ursos" className="home-section home-section--gallery">
+        <HomeGallery
+          onScrollVelocity={(velocity) => {
+            galleryVelocityRef.current = velocity;
+          }}
+        />
       </section>
 
       {/* O estúdio */}
