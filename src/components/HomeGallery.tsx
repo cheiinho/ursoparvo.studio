@@ -28,6 +28,7 @@ export default function HomeGallery({ onScrollVelocity }: HomeGalleryProps) {
           bend={3}
           borderRadius={0.05}
           scrollEase={0.02}
+          driftSpeed={0.015}
           className="home-gallery__canvas"
           onScrollVelocity={onScrollVelocity}
           onActiveIndex={setActiveIndex}

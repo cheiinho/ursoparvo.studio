@@ -19,6 +19,7 @@ export const BIO_PARAGRAPHS = [
 export const HOME_HERO = {
   title: "A identidade. À prova de tendências.",
   subtitle: "Identidade visual corporativa. Urso Parvo Studio, Coimbra.",
+  wordmark: ["hello", "there"],
   ctaPrimary: "Ver trabalho",
   ctaSecondary: "Falar sobre um projecto",
 } as const;
