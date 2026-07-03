@@ -16,3 +16,4 @@ export const inter = localFont({
   variable: "--font-inter",
   display: "swap",
 });
+

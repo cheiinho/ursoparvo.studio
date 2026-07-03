@@ -12,8 +12,9 @@ export default function PublicHeader() {
   const pathname = usePathname();
   const { ref: headerRef } = useHeaderScrollProgress();
 
-  const workActive =
-    pathname === "/work" || pathname.startsWith("/work/");
+  const workActive = pathname === "/work" || pathname.startsWith("/work/");
+  const aboutActive = pathname === "/about";
+  const contactoActive = pathname === "/contacto";
 
   return (
     <header ref={headerRef} className="public-header">
@@ -27,6 +28,13 @@ export default function PublicHeader() {
                 aria-current={workActive ? "page" : undefined}
               >
                 {NAV.work}
+              </Link>
+              <Link
+                href="/about"
+                className={`nav-link type-corpo${aboutActive ? " is-active" : ""}`}
+                aria-current={aboutActive ? "page" : undefined}
+              >
+                {NAV.about}
               </Link>
             </nav>
 
@@ -46,9 +54,13 @@ export default function PublicHeader() {
             </Link>
 
             <nav aria-label={UI.nav.ariaContact} className="public-header__side public-header__side--right">
-              <a href={`mailto:${SITE.email}`} className="nav-link type-corpo">
+              <Link
+                href="/contacto"
+                className={`nav-link type-corpo${contactoActive ? " is-active" : ""}`}
+                aria-current={contactoActive ? "page" : undefined}
+              >
                 {NAV.contact}
-              </a>
+              </Link>
             </nav>
           </div>
         </div>

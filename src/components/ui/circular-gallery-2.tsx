@@ -25,6 +25,7 @@ interface CircularGalleryProps extends React.HTMLAttributes<HTMLDivElement> {
   borderRadius?: number;
   scrollSpeed?: number;
   scrollEase?: number;
+  driftSpeed?: number;
   fontClassName?: string;
   onScrollVelocity?: (velocity: number) => void;
   onNavigate?: (href: string) => void;
@@ -153,7 +154,7 @@ class Media {
         void main() {
           vUv = uv;
           vec3 p = position;
-          p.z = (sin(p.x * 4.0 + uTime) * 1.5 + cos(p.y * 2.0 + uTime) * 1.5) * (0.1 + uSpeed * 0.5);
+          p.z = (sin(p.x * 4.0 + uTime) * 1.5 + cos(p.y * 2.0 + uTime) * 1.5) * (0.15 + uSpeed * 1.1);
           gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
         }
       `,
@@ -171,23 +172,30 @@ class Media {
         }
         
         void main() {
+          // Contain-fit: the artwork sits inside the card with paper margins.
           vec2 ratio = vec2(
-            min((uPlaneSizes.x / uPlaneSizes.y) / (uImageSizes.x / uImageSizes.y), 1.0),
-            min((uPlaneSizes.y / uPlaneSizes.x) / (uImageSizes.y / uImageSizes.x), 1.0)
+            max((uPlaneSizes.x / uPlaneSizes.y) / (uImageSizes.x / uImageSizes.y), 1.0),
+            max((uPlaneSizes.y / uPlaneSizes.x) / (uImageSizes.y / uImageSizes.x), 1.0)
           );
           vec2 uv = vec2(
             vUv.x * ratio.x + (1.0 - ratio.x) * 0.5,
             vUv.y * ratio.y + (1.0 - ratio.y) * 0.5
           );
           vec4 color = texture2D(tMap, uv);
-          
+
+          // Composite transparent artwork over a paper card so line-art
+          // SVGs read as printed cards instead of black rectangles.
+          vec3 paper = vec3(0.961, 0.957, 0.949);
+          float inside = step(0.0, uv.x) * step(uv.x, 1.0) * step(0.0, uv.y) * step(uv.y, 1.0);
+          vec3 rgb = mix(paper, color.rgb, color.a * inside);
+
           float d = roundedBoxSDF(vUv - 0.5, vec2(0.5 - uBorderRadius), uBorderRadius);
-          
+
           float edgeSmooth = 0.002;
           float alpha = 1.0 - smoothstep(-edgeSmooth, edgeSmooth, d);
           if (alpha < 0.01) discard;
-          
-          gl_FragColor = vec4(color.rgb * alpha, alpha);
+
+          gl_FragColor = vec4(rgb * alpha, alpha);
         }
       `,
       uniforms: {
@@ -281,7 +289,7 @@ class Media {
   ) {
     if (screen) this.screen = screen;
     if (viewport) this.viewport = viewport;
-    this.scale = this.screen.height / 1500;
+    this.scale = this.screen.height / 1200;
     this.plane.scale.y =
       (this.viewport.height * (900 * this.scale)) / this.screen.height;
     this.plane.scale.x =
@@ -303,6 +311,7 @@ class App {
   scroll: ScrollState;
   reducedMotion: boolean;
   scrollEase: number;
+  driftSpeed: number;
   onCheckDebounce: () => void;
   renderer!: Renderer;
   gl!: OGLRenderingContext;
@@ -337,6 +346,7 @@ class App {
       borderRadius,
       scrollSpeed,
       scrollEase,
+      driftSpeed,
       reducedMotion,
       onScrollVelocity,
       onNavigate,
@@ -347,6 +357,7 @@ class App {
       borderRadius: number;
       scrollSpeed: number;
       scrollEase: number;
+      driftSpeed: number;
       reducedMotion: boolean;
       onScrollVelocity?: (velocity: number) => void;
       onNavigate?: (href: string) => void;
@@ -360,6 +371,7 @@ class App {
     this.scrollSpeed = scrollSpeed;
     this.reducedMotion = reducedMotion;
     this.scrollEase = scrollEase;
+    this.driftSpeed = driftSpeed;
     this.scroll = {
       ease: reducedMotion ? 1 : scrollEase,
       current: 0,
@@ -525,6 +537,9 @@ class App {
 
   update() {
     if (this.isVisible) {
+      if (this.driftSpeed > 0 && !this.isDown && !this.reducedMotion) {
+        this.scroll.target += this.driftSpeed;
+      }
       this.scroll.current = lerp(
         this.scroll.current,
         this.scroll.target,
@@ -601,6 +616,7 @@ const CircularGallery = ({
   borderRadius = 0.05,
   scrollSpeed = 2,
   scrollEase = 0.05,
+  driftSpeed = 0,
   className,
   fontClassName,
   onScrollVelocity,
@@ -630,6 +646,7 @@ const CircularGallery = ({
       borderRadius,
       scrollSpeed,
       scrollEase: reducedMotion ? 1 : scrollEase,
+      driftSpeed,
       reducedMotion,
       onScrollVelocity: (velocity) => onScrollVelocityRef.current?.(velocity),
       onNavigate: (href) => onNavigateRef.current?.(href),
@@ -654,7 +671,7 @@ const CircularGallery = ({
       document.removeEventListener("visibilitychange", onVisibility);
       app.destroy();
     };
-  }, [items, bend, borderRadius, scrollSpeed, scrollEase]);
+  }, [items, bend, borderRadius, scrollSpeed, scrollEase, driftSpeed]);
 
   return (
     <div
