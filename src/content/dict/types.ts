@@ -8,8 +8,6 @@ export type HeaderDict = {
 };
 
 export type ThemeDict = {
-  toggleToLight: string;
-  toggleToDark: string;
   toLight: string;
   toDark: string;
 };
