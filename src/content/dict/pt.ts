@@ -26,8 +26,7 @@ export const pt: Dict = {
 
   studio: {
     title: "Como trabalhamos.",
-    intro:
-      "Fazemos identidade visual para empresas. O processo está todo aqui em baixo.",
+    intro: "Fazemos identidade visual para empresas.",
     metaTitle: "Estúdio · Urso Parvo Studio",
     metaDescription:
       "Como trabalhamos, o que enviar no primeiro contacto e como pedir um orçamento.",
@@ -65,7 +64,7 @@ export const pt: Dict = {
 
   checklist: {
     title: "Primeiro contacto",
-    intro: "Mande o que tiver. Quanto mais completo, mais rápido o orçamento.",
+    intro: "Quanto mais completo, mais rápido o orçamento.",
     items: [
       {
         title: "Materiais de marca",
@@ -114,7 +113,6 @@ export const pt: Dict = {
     emptyDeadline: "por definir",
     sentNote:
       "O seu cliente de email deve ter aberto. Se não abriu, escreva directamente:",
-    directPrefix: "Prefere escrever à mão?",
   },
 
   theme: {

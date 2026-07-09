@@ -26,8 +26,7 @@ export const en: Dict = {
 
   studio: {
     title: "How we work.",
-    intro:
-      "We design visual identities for companies. The whole process is laid out below.",
+    intro: "We design visual identities for companies.",
     metaTitle: "Studio · Urso Parvo Studio",
     metaDescription:
       "How we work, what to send at first contact and how to ask for a quote.",
@@ -65,7 +64,7 @@ export const en: Dict = {
 
   checklist: {
     title: "First contact",
-    intro: "Send what you have. The more complete it is, the faster the quote.",
+    intro: "The more complete it is, the faster the quote.",
     items: [
       {
         title: "Brand materials",
@@ -114,7 +113,6 @@ export const en: Dict = {
     emptyDeadline: "to be defined",
     sentNote:
       "Your email client should have opened. If it did not, write directly:",
-    directPrefix: "Prefer to write it yourself?",
   },
 
   theme: {

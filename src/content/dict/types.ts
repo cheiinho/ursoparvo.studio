@@ -35,7 +35,6 @@ export type ContactDict = {
   subjectPrefix: string;
   emptyDeadline: string;
   sentNote: string;
-  directPrefix: string;
 };
 
 export type Dict = {
