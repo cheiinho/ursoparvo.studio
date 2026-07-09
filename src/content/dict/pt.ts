@@ -3,7 +3,7 @@ import type { Dict } from "./types";
 export const pt: Dict = {
   site: {
     title: "Urso Parvo Studio",
-    description: "Identidade visual corporativa. Coimbra.",
+    description: "Identidade visual para empresas.",
   },
 
   header: {
@@ -18,17 +18,16 @@ export const pt: Dict = {
   skipLink: "Saltar para o conteúdo",
 
   home: {
-    srTitle: "Urso Parvo. Identidade visual corporativa.",
+    srTitle: "Urso Parvo. Identidade visual para empresas.",
     gridLabel: "Projectos",
     metaTitle: "Urso Parvo Studio",
-    metaDescription: "Identidade visual corporativa. Coimbra.",
+    metaDescription: "Identidade visual para empresas.",
   },
 
   studio: {
-    title: "Estúdio",
-    tagline: "Identidade à prova de tendências.",
+    title: "Como trabalhamos.",
     intro:
-      "Fazemos marcas em Coimbra. Não andamos atrás de modas. O que sai daqui é para durar.",
+      "Fazemos identidade visual para empresas. O processo está todo aqui em baixo.",
     metaTitle: "Estúdio · Urso Parvo Studio",
     metaDescription:
       "Como trabalhamos, o que enviar no primeiro contacto e como pedir um orçamento.",

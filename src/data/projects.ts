@@ -21,8 +21,8 @@ export const PROJECTS: readonly Project[] = [
     slug: "cavea",
     title: { pt: "Cávea", en: "Cávea" },
     meta: {
-      pt: "Identidade para uma sala de concertos em Coimbra.",
-      en: "Identity for a concert hall in Coimbra.",
+      pt: "Identidade para uma sala de concertos.",
+      en: "Identity for a concert hall.",
     },
     tone: "accent",
     ratio: "4 / 5",

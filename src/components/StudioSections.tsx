@@ -15,7 +15,7 @@ export default function StudioSections({ dict }: StudioSectionsProps) {
         aria-labelledby="estudio-h"
       >
         <h1 id="estudio-h" className="type-display">
-          {dict.studio.tagline}
+          {dict.studio.title}
         </h1>
         <p className="type-corpo text-secondary measure studio-open__intro">
           {dict.studio.intro}

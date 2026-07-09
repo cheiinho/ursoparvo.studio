@@ -50,7 +50,6 @@ export type Dict = {
   };
   studio: {
     title: string;
-    tagline: string;
     intro: string;
     metaTitle: string;
     metaDescription: string;
