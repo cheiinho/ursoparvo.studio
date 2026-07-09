@@ -5,19 +5,37 @@ const nextConfig: NextConfig = {
     root: process.cwd(),
   },
   async redirects() {
+    const removedRoutes = [
+      "/work",
+      "/work/:slug",
+      "/about",
+      "/legal",
+      "/privacy",
+      "/terms",
+      "/cookies",
+    ];
+
     return [
       {
         source: "/:path*",
-        has: [{ type: "host", value: "ursoparvo.com" }],
+        has: [{ type: "host" as const, value: "ursoparvo.com" }],
         destination: "https://ursoparvo.studio/:path*",
         permanent: true,
       },
       {
         source: "/:path*",
-        has: [{ type: "host", value: "www.ursoparvo.com" }],
+        has: [{ type: "host" as const, value: "www.ursoparvo.com" }],
         destination: "https://ursoparvo.studio/:path*",
         permanent: true,
       },
+      ...removedRoutes.map((source) => ({
+        source,
+        destination: "/pt",
+        permanent: true,
+      })),
+      { source: "/", destination: "/pt", permanent: true },
+      { source: "/pt/studio", destination: "/pt/estudio", permanent: true },
+      { source: "/en/estudio", destination: "/en/studio", permanent: true },
     ];
   },
 };

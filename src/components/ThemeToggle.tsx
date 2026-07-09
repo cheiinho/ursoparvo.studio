@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { UI } from "@/content/ui";
+import { motion } from "framer-motion";
+import { useSyncExternalStore } from "react";
+import type { ThemeDict } from "@/content/dict/types";
 import {
   applyTheme,
   readStoredTheme,
@@ -10,6 +11,7 @@ import {
 } from "@/lib/theme";
 
 type ThemeToggleProps = {
+  labels: ThemeDict;
   className?: string;
 };
 
@@ -17,59 +19,48 @@ function isDarkApplied(): boolean {
   return document.documentElement.classList.contains("dark");
 }
 
-export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
-  const [dark, setDark] = useState(false);
-  const [mounted, setMounted] = useState(false);
+function subscribe(onChange: () => void): () => void {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class"],
+  });
 
-  useEffect(() => {
-    setMounted(true);
-    setDark(isDarkApplied());
-  }, []);
+  const media = window.matchMedia("(prefers-color-scheme: dark)");
+  const onMediaChange = () => {
+    if (readStoredTheme() === "system") {
+      applyTheme("system");
+    }
+    onChange();
+  };
+  media.addEventListener("change", onMediaChange);
 
-  useEffect(() => {
-    if (!mounted) return;
+  return () => {
+    observer.disconnect();
+    media.removeEventListener("change", onMediaChange);
+  };
+}
 
-    const sync = () => setDark(isDarkApplied());
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const observer = new MutationObserver(sync);
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-
-    media.addEventListener("change", () => {
-      if (readStoredTheme() === "system") {
-        applyTheme("system");
-        sync();
-      }
-    });
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [mounted]);
+export default function ThemeToggle({ labels, className = "" }: ThemeToggleProps) {
+  const dark = useSyncExternalStore(subscribe, isDarkApplied, () => false);
 
   const toggle = () => {
-    const nextDark = !isDarkApplied();
-    const next: ThemeMode = nextDark ? "dark" : "light";
+    const next: ThemeMode = isDarkApplied() ? "light" : "dark";
     storeTheme(next);
     applyTheme(next);
-    setDark(nextDark);
   };
 
-  const label = dark ? UI.theme.toggleToLight : UI.theme.toggleToDark;
-  const ariaLabel = dark ? UI.theme.toLight : UI.theme.toDark;
-
   return (
-    <button
+    <motion.button
       type="button"
       className={`theme-link ${className}`.trim()}
       onClick={toggle}
-      aria-label={mounted ? ariaLabel : UI.theme.group}
-      disabled={!mounted}
+      aria-label={dark ? labels.toLight : labels.toDark}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.97 }}
+      transition={{ type: "spring", stiffness: 500, damping: 30 }}
     >
-      {mounted ? label : UI.theme.toggleToDark}
-    </button>
+      {dark ? labels.toggleToLight : labels.toggleToDark}
+    </motion.button>
   );
 }

@@ -1,18 +1,28 @@
 import ThemeToggle from "@/components/ThemeToggle";
+import { MotionA, press } from "@/components/ui-motion";
+import type { ThemeDict } from "@/content/dict/types";
 import { SITE } from "@/content/site";
 
-export default function PublicFooter() {
+type PublicFooterProps = {
+  theme: ThemeDict;
+};
+
+export default function PublicFooter({ theme }: PublicFooterProps) {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="public-footer">
-      <div className="site-container public-footer__inner">
-        <p className="public-footer__item">© {year} {SITE.nameShort}</p>
-        <div className="public-footer__links">
-          <ThemeToggle className="public-footer__item" />
-          <a href={`mailto:${SITE.email}`} className="public-footer__item">
+    <footer className="site-footer type-nota">
+      <div className="site-container site-footer__inner">
+        <p className="site-footer__item">© {year} {SITE.nameShort}</p>
+        <div className="site-footer__links">
+          <ThemeToggle labels={theme} className="site-footer__item" />
+          <MotionA
+            href={`mailto:${SITE.email}`}
+            className="site-footer__item"
+            {...press}
+          >
             {SITE.email}
-          </a>
+          </MotionA>
         </div>
       </div>
     </footer>
