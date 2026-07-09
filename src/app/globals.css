@@ -410,12 +410,12 @@ button.site-footer__item:hover {
 
 .masonry-bleed {
   width: 100%;
-  padding-inline: var(--space-2);
+  padding-inline: 2px;
 }
 
 .masonry {
   columns: 2;
-  column-gap: var(--space-2);
+  column-gap: 2px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -435,7 +435,7 @@ button.site-footer__item:hover {
 
 .masonry-item {
   break-inside: avoid;
-  margin: 0 0 var(--space-2);
+  margin: 0 0 2px;
 }
 
 .tile {
