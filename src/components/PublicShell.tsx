@@ -1,6 +1,8 @@
+import Image from "next/image";
 import PublicFooter from "@/components/PublicFooter";
-import PublicHeader from "@/components/PublicHeader";
 import SkipLink from "@/components/SkipLink";
+import { BEAR_LOGO } from "@/constants/bear";
+import { SITE } from "@/content/site";
 
 type PublicShellProps = {
   children: React.ReactNode;
@@ -8,10 +10,21 @@ type PublicShellProps = {
 
 export default function PublicShell({ children }: PublicShellProps) {
   return (
-    <div className="public-shell">
+    <div className="shell">
       <SkipLink />
-      <PublicHeader />
-      <main id="conteudo-principal" className="public-main">
+      <header className="site-header">
+        <div className="site-container">
+          <Image
+            src={BEAR_LOGO.src}
+            alt={SITE.nameShort}
+            width={BEAR_LOGO.width}
+            height={BEAR_LOGO.height}
+            className="site-header__logo"
+            priority
+          />
+        </div>
+      </header>
+      <main id="conteudo-principal" className="shell-main">
         {children}
       </main>
       <PublicFooter />

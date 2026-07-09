@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { ThemeScript } from "@/components/ThemeScript";
 import { BIO_SHORT, SITE } from "@/content/site";
 import { inter } from "@/lib/fonts";
@@ -20,6 +20,13 @@ export const metadata: Metadata = {
     title: SITE.name,
     description: BIO_SHORT,
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#faf9f6" },
+    { media: "(prefers-color-scheme: dark)", color: "#151311" },
+  ],
 };
 
 export default function RootLayout({

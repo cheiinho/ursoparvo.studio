@@ -7,11 +7,6 @@ export const inter = localFont({
       weight: "400",
       style: "normal",
     },
-    {
-      path: "../../public/fonts/inter/Inter-Medium.ttf",
-      weight: "500",
-      style: "normal",
-    },
   ],
   variable: "--font-inter",
   display: "swap",

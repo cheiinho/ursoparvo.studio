@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import Button from "@/components/Button";
 import { UI } from "@/content/ui";
 import { inter } from "@/lib/fonts";
 import "./globals.css";
@@ -26,9 +25,9 @@ export default function GlobalError({
         >
           <p className="type-display">{UI.errors.genericHeading}</p>
           <p className="type-corpo text-secondary">{UI.errors.genericBody}</p>
-          <Button variant="secondary" onClick={() => reset()}>
+          <button type="button" className="form-submit" onClick={() => reset()}>
             {UI.actions.tryAgain}
-          </Button>
+          </button>
         </div>
       </body>
     </html>
