@@ -268,7 +268,25 @@ button.site-footer__item:hover {
   cursor: pointer;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   min-height: 44px;
+  min-width: 44px;
+}
+
+/* Crescent moon in light mode; the accent disc plays sun in dark mode */
+.theme-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  box-shadow: inset 6px -6px 0 0 var(--text);
+  transition:
+    box-shadow var(--dur-theme) var(--ease-standard),
+    background-color var(--dur-theme) var(--ease-standard);
+}
+
+.dark .theme-dot {
+  box-shadow: inset 18px -18px 0 0 var(--accent);
+  background: var(--accent);
 }
 
 .theme-link:disabled {

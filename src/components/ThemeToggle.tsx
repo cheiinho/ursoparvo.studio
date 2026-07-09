@@ -56,11 +56,11 @@ export default function ThemeToggle({ labels, className = "" }: ThemeToggleProps
       className={`theme-link ${className}`.trim()}
       onClick={toggle}
       aria-label={dark ? labels.toLight : labels.toDark}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.97 }}
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.9, rotate: -30 }}
       transition={{ type: "spring", stiffness: 500, damping: 30 }}
     >
-      {dark ? labels.toggleToLight : labels.toggleToDark}
+      <span className="theme-dot" aria-hidden="true" />
     </motion.button>
   );
 }

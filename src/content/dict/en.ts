@@ -116,8 +116,6 @@ export const en: Dict = {
   },
 
   theme: {
-    toggleToLight: "Light",
-    toggleToDark: "Dark",
     toLight: "Switch to the light theme",
     toDark: "Switch to the dark theme",
   },
