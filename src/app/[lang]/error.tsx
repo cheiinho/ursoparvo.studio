@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 
@@ -37,9 +38,16 @@ export default function Error({
     >
       <p className="type-display">{strings.heading}</p>
       <p className="type-corpo text-secondary">{strings.body}</p>
-      <button type="button" className="form-submit" onClick={() => reset()}>
+      <motion.button
+        type="button"
+        className="form-submit"
+        onClick={() => reset()}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.97 }}
+        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+      >
         {strings.tryAgain}
-      </button>
+      </motion.button>
     </div>
   );
 }

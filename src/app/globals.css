@@ -409,17 +409,11 @@ button.site-footer__item:hover {
 }
 
 .masonry {
-  columns: 1;
-  column-gap: var(--space-6);
+  columns: 2;
+  column-gap: var(--space-2);
   margin: 0;
   padding: 0;
   list-style: none;
-}
-
-@media (min-width: 640px) {
-  .masonry {
-    columns: 2;
-  }
 }
 
 @media (min-width: 1024px) {
@@ -430,15 +424,32 @@ button.site-footer__item:hover {
 
 .masonry-item {
   break-inside: avoid;
-  margin: 0 0 var(--space-8);
+  margin: 0 0 var(--space-2);
 }
 
 .tile {
+  position: relative;
   display: block;
   width: 100%;
-  border-radius: var(--radius-ui);
+  overflow: hidden;
   background: var(--field);
   transition: background-color var(--dur-theme) var(--ease-standard);
+}
+
+.tile-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  background: var(--accent);
+  color: #1a1a1a;
+  text-align: center;
+}
+
+.tile-overlay__name {
+  display: block;
 }
 
 .tile--accent {
@@ -463,15 +474,6 @@ button.site-footer__item:hover {
 
 .tile--sand {
   background: var(--tone-sand);
-}
-
-.tile-caption {
-  margin-top: var(--space-3);
-}
-
-.tile-caption h2,
-.tile-caption p {
-  margin: 0;
 }
 
 .text-link {

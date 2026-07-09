@@ -1,4 +1,5 @@
 import ThemeToggle from "@/components/ThemeToggle";
+import { MotionA, press } from "@/components/ui-motion";
 import type { ThemeDict } from "@/content/dict/types";
 import { SITE } from "@/content/site";
 
@@ -15,9 +16,13 @@ export default function PublicFooter({ theme }: PublicFooterProps) {
         <p className="site-footer__item">© {year} {SITE.nameShort}</p>
         <div className="site-footer__links">
           <ThemeToggle labels={theme} className="site-footer__item" />
-          <a href={`mailto:${SITE.email}`} className="site-footer__item">
+          <MotionA
+            href={`mailto:${SITE.email}`}
+            className="site-footer__item"
+            {...press}
+          >
             {SITE.email}
-          </a>
+          </MotionA>
         </div>
       </div>
     </footer>

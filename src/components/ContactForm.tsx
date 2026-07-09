@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useState } from "react";
 import type { ContactDict } from "@/content/dict/types";
 
@@ -86,9 +87,15 @@ export default function ContactForm({ dict, email }: ContactFormProps) {
         <textarea id="orc-descricao" name="descricao" required maxLength={800} />
       </div>
 
-      <button type="submit" className="form-submit">
+      <motion.button
+        type="submit"
+        className="form-submit"
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.97 }}
+        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+      >
         {dict.submit}
-      </button>
+      </motion.button>
 
       <p className="form-note type-nota text-secondary" aria-live="polite">
         {sent ? (

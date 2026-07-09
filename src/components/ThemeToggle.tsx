@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useSyncExternalStore } from "react";
 import type { ThemeDict } from "@/content/dict/types";
 import {
@@ -50,13 +51,16 @@ export default function ThemeToggle({ labels, className = "" }: ThemeToggleProps
   };
 
   return (
-    <button
+    <motion.button
       type="button"
       className={`theme-link ${className}`.trim()}
       onClick={toggle}
       aria-label={dark ? labels.toLight : labels.toDark}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.97 }}
+      transition={{ type: "spring", stiffness: 500, damping: 30 }}
     >
       {dark ? labels.toggleToLight : labels.toggleToDark}
-    </button>
+    </motion.button>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { inter } from "@/lib/fonts";
 import "./globals.css";
@@ -26,9 +27,16 @@ export default function GlobalError({
           <p className="type-corpo text-secondary">
             Tente de novo. <span lang="en">Something broke, please try again.</span>
           </p>
-          <button type="button" className="form-submit" onClick={() => reset()}>
+          <motion.button
+            type="button"
+            className="form-submit"
+            onClick={() => reset()}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 500, damping: 30 }}
+          >
             Tentar de novo
-          </button>
+          </motion.button>
         </div>
       </body>
     </html>
