@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { UI } from "@/content/ui";
+import type { ThemeDict } from "@/content/dict/types";
 import {
   applyTheme,
   readStoredTheme,
@@ -10,6 +10,7 @@ import {
 } from "@/lib/theme";
 
 type ThemeToggleProps = {
+  labels: ThemeDict;
   className?: string;
 };
 
@@ -39,7 +40,7 @@ function subscribe(onChange: () => void): () => void {
   };
 }
 
-export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
+export default function ThemeToggle({ labels, className = "" }: ThemeToggleProps) {
   const dark = useSyncExternalStore(subscribe, isDarkApplied, () => false);
 
   const toggle = () => {
@@ -53,9 +54,9 @@ export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
       type="button"
       className={`theme-link ${className}`.trim()}
       onClick={toggle}
-      aria-label={dark ? UI.theme.toLight : UI.theme.toDark}
+      aria-label={dark ? labels.toLight : labels.toDark}
     >
-      {dark ? UI.theme.toggleToLight : UI.theme.toggleToDark}
+      {dark ? labels.toggleToLight : labels.toggleToDark}
     </button>
   );
 }

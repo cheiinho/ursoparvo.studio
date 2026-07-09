@@ -1,20 +1,23 @@
 import ContactForm from "@/components/ContactForm";
-import PublicShell from "@/components/PublicShell";
-import { CHECKLIST, CONTACT, PROCESS } from "@/content/home";
-import { SITE, TAGLINE } from "@/content/site";
+import type { Dict } from "@/content/dict/types";
+import { SITE } from "@/content/site";
 
-export default function HomePage() {
+type StudioSectionsProps = {
+  dict: Dict;
+};
+
+export default function StudioSections({ dict }: StudioSectionsProps) {
   return (
-    <PublicShell>
+    <>
       <section
         className="site-container hero-block rise"
         style={{ "--stagger": 0 } as React.CSSProperties}
-        aria-labelledby="hero-h"
+        aria-labelledby="estudio-h"
       >
-        <h1 id="hero-h" className="type-display">
-          {SITE.nameShort}
+        <h1 id="estudio-h" className="type-display">
+          {dict.studio.tagline}
         </h1>
-        <p className="type-corpo text-secondary measure">{TAGLINE}</p>
+        <p className="type-corpo text-secondary measure">{dict.studio.intro}</p>
       </section>
 
       <section
@@ -23,10 +26,10 @@ export default function HomePage() {
         aria-labelledby="processo-h"
       >
         <h2 id="processo-h" className="type-corpo section-block__title">
-          {PROCESS.title}
+          {dict.process.title}
         </h2>
         <ol className="process-list type-corpo">
-          {PROCESS.steps.map((step) => (
+          {dict.process.steps.map((step) => (
             <li key={step.title}>
               <div>
                 <h3 className="type-corpo">{step.title}</h3>
@@ -43,11 +46,11 @@ export default function HomePage() {
         aria-labelledby="checklist-h"
       >
         <h2 id="checklist-h" className="type-corpo section-block__title">
-          {CHECKLIST.title}
+          {dict.checklist.title}
         </h2>
-        <p className="type-corpo measure">{CHECKLIST.intro}</p>
+        <p className="type-corpo measure">{dict.checklist.intro}</p>
         <ul className="check-list type-corpo">
-          {CHECKLIST.items.map((item) => (
+          {dict.checklist.items.map((item) => (
             <li key={item}>{item}</li>
           ))}
         </ul>
@@ -59,17 +62,17 @@ export default function HomePage() {
         aria-labelledby="contacto-h"
       >
         <h2 id="contacto-h" className="type-corpo section-block__title">
-          {CONTACT.title}
+          {dict.contact.title}
         </h2>
-        <p className="type-corpo measure">{CONTACT.intro}</p>
-        <ContactForm />
+        <p className="type-corpo measure">{dict.contact.intro}</p>
+        <ContactForm dict={dict.contact} email={SITE.email} />
         <p className="type-nota text-secondary">
-          {CONTACT.directPrefix}{" "}
+          {dict.contact.directPrefix}{" "}
           <a href={`mailto:${SITE.email}`} className="text-link">
             {SITE.email}
           </a>
         </p>
       </section>
-    </PublicShell>
+    </>
   );
 }

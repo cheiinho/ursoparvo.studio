@@ -1,10 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { CONTACT } from "@/content/home";
-import { SITE } from "@/content/site";
+import type { ContactDict } from "@/content/dict/types";
 
-export default function ContactForm() {
+type ContactFormProps = {
+  dict: ContactDict;
+  email: string;
+};
+
+export default function ContactForm({ dict, email }: ContactFormProps) {
   const [sent, setSent] = useState(false);
 
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -12,27 +16,27 @@ export default function ContactForm() {
     const data = new FormData(event.currentTarget);
     const get = (key: string) => String(data.get(key) ?? "").trim();
 
-    const subject = `${CONTACT.subjectPrefix} — ${get("tipo")} — ${get("nome")}`;
+    const subject = `${dict.subjectPrefix}: ${get("tipo")} (${get("nome")})`;
     const body = [
-      `${CONTACT.fields.name}: ${get("nome")}`,
-      `${CONTACT.fields.type}: ${get("tipo")}`,
-      `${CONTACT.fields.budget}: ${get("orcamento")}`,
-      `${CONTACT.fields.deadline}: ${get("prazo") || "—"}`,
+      `${dict.fields.name}: ${get("nome")}`,
+      `${dict.fields.type}: ${get("tipo")}`,
+      `${dict.fields.budget}: ${get("orcamento")}`,
+      `${dict.fields.deadline}: ${get("prazo") || dict.emptyDeadline}`,
       "",
-      `${CONTACT.fields.description}:`,
+      `${dict.fields.description}:`,
       get("descricao"),
     ].join("\r\n");
 
-    window.location.href = `mailto:${SITE.email}?subject=${encodeURIComponent(
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent(
       subject,
     )}&body=${encodeURIComponent(body)}`;
     setSent(true);
   }
 
   return (
-    <form className="contact-form" onSubmit={onSubmit} noValidate={false}>
+    <form className="contact-form" onSubmit={onSubmit}>
       <div className="field">
-        <label htmlFor="orc-nome">{CONTACT.fields.name}</label>
+        <label htmlFor="orc-nome">{dict.fields.name}</label>
         <input
           id="orc-nome"
           name="nome"
@@ -43,9 +47,9 @@ export default function ContactForm() {
       </div>
 
       <div className="field">
-        <label htmlFor="orc-tipo">{CONTACT.fields.type}</label>
-        <select id="orc-tipo" name="tipo" required defaultValue={CONTACT.typeOptions[0]}>
-          {CONTACT.typeOptions.map((option) => (
+        <label htmlFor="orc-tipo">{dict.fields.type}</label>
+        <select id="orc-tipo" name="tipo" required defaultValue={dict.typeOptions[0]}>
+          {dict.typeOptions.map((option) => (
             <option key={option} value={option}>
               {option}
             </option>
@@ -54,14 +58,14 @@ export default function ContactForm() {
       </div>
 
       <div className="field">
-        <label htmlFor="orc-orcamento">{CONTACT.fields.budget}</label>
+        <label htmlFor="orc-orcamento">{dict.fields.budget}</label>
         <select
           id="orc-orcamento"
           name="orcamento"
           required
-          defaultValue={CONTACT.budgetOptions[CONTACT.budgetOptions.length - 1]}
+          defaultValue={dict.budgetOptions[dict.budgetOptions.length - 1]}
         >
-          {CONTACT.budgetOptions.map((option) => (
+          {dict.budgetOptions.map((option) => (
             <option key={option} value={option}>
               {option}
             </option>
@@ -71,27 +75,27 @@ export default function ContactForm() {
 
       <div className="field">
         <label htmlFor="orc-prazo">
-          {CONTACT.fields.deadline}{" "}
-          <span className="text-secondary">({CONTACT.fields.deadlineHint})</span>
+          {dict.fields.deadline}{" "}
+          <span className="text-secondary">({dict.fields.deadlineHint})</span>
         </label>
         <input id="orc-prazo" name="prazo" type="text" />
       </div>
 
       <div className="field">
-        <label htmlFor="orc-descricao">{CONTACT.fields.description}</label>
+        <label htmlFor="orc-descricao">{dict.fields.description}</label>
         <textarea id="orc-descricao" name="descricao" required maxLength={800} />
       </div>
 
       <button type="submit" className="form-submit">
-        {CONTACT.submit}
+        {dict.submit}
       </button>
 
       <p className="form-note type-nota text-secondary" aria-live="polite">
         {sent ? (
           <>
-            {CONTACT.sentNote}{" "}
-            <a href={`mailto:${SITE.email}`} className="text-link">
-              {SITE.email}
+            {dict.sentNote}{" "}
+            <a href={`mailto:${email}`} className="text-link">
+              {email}
             </a>
           </>
         ) : null}

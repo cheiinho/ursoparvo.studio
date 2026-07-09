@@ -30,9 +30,12 @@ const nextConfig: NextConfig = {
       },
       ...removedRoutes.map((source) => ({
         source,
-        destination: "/",
+        destination: "/pt",
         permanent: true,
       })),
+      { source: "/", destination: "/pt", permanent: true },
+      { source: "/pt/studio", destination: "/pt/estudio", permanent: true },
+      { source: "/en/estudio", destination: "/en/studio", permanent: true },
     ];
   },
 };

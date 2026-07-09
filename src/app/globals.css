@@ -11,8 +11,14 @@
   --text: #1a1a1a;
   --text-secondary: #63605a;
   --accent: #ffff50;
-  /* Accent yellow is 1.01:1 against the light surface — never use it as the focus ring there */
+  /* Accent yellow is 1.01:1 against the light surface, so never use it as the focus ring here */
   --focus-ring: #1a1a1a;
+
+  /* Project tile tones; every pair keeps AA against the opposing text color */
+  --tone-clay: #d9b8a5;
+  --tone-moss: #b8c0a2;
+  --tone-slate: #b6bcc6;
+  --tone-sand: #e6dcc3;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
@@ -43,6 +49,11 @@
   --text: #f2f0ec;
   --text-secondary: #a6a099;
   --focus-ring: #ffff50;
+
+  --tone-clay: #6b5546;
+  --tone-moss: #565f4b;
+  --tone-slate: #4b515c;
+  --tone-sand: #6d6450;
 
   color-scheme: dark;
 }
@@ -131,6 +142,10 @@ button {
   padding-inline: var(--container-gutter);
 }
 
+.site-container--wide {
+  max-width: 1080px;
+}
+
 .skip-link {
   position: absolute;
   top: var(--space-4);
@@ -160,6 +175,19 @@ button {
   padding-bottom: var(--space-12);
 }
 
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+
+.site-header__home {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
 .site-header__logo {
   display: block;
   width: auto;
@@ -170,6 +198,25 @@ button {
   .site-header__logo {
     height: 56px;
   }
+}
+
+.site-header__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color var(--dur-micro) var(--ease-standard);
+}
+
+.nav-link:hover {
+  color: var(--text);
 }
 
 .shell-main {
@@ -300,6 +347,72 @@ button.site-footer__item:hover {
 
 .check-list li {
   max-width: 66ch;
+}
+
+.masonry {
+  columns: 1;
+  column-gap: var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 640px) {
+  .masonry {
+    columns: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .masonry {
+    columns: 3;
+  }
+}
+
+.masonry-item {
+  break-inside: avoid;
+  margin: 0 0 var(--space-8);
+}
+
+.tile {
+  display: block;
+  width: 100%;
+  border-radius: var(--radius-ui);
+  background: var(--field);
+  transition: background-color var(--dur-theme) var(--ease-standard);
+}
+
+.tile--accent {
+  background: var(--accent);
+}
+
+.tile--field {
+  background: var(--field);
+}
+
+.tile--clay {
+  background: var(--tone-clay);
+}
+
+.tile--moss {
+  background: var(--tone-moss);
+}
+
+.tile--slate {
+  background: var(--tone-slate);
+}
+
+.tile--sand {
+  background: var(--tone-sand);
+}
+
+.tile-caption {
+  margin-top: var(--space-3);
+}
+
+.tile-caption h2,
+.tile-caption p {
+  margin: 0;
 }
 
 .text-link {
