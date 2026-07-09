@@ -2,13 +2,13 @@ import type { Dict } from "./types";
 
 export const en: Dict = {
   site: {
-    title: "Urso Parvo Studio",
+    title: "UrsoParvo Studio",
     description: "Visual identity for companies.",
   },
 
   header: {
-    logoAlt: "Urso Parvo",
-    homeAria: "Urso Parvo, back to the start",
+    logoAlt: "UrsoParvo Studio",
+    homeAria: "UrsoParvo Studio, back to the start",
     studioLabel: "Studio",
     langLabel: "PT",
     langAria: "Ver esta página em português",
@@ -18,16 +18,16 @@ export const en: Dict = {
   skipLink: "Skip to content",
 
   home: {
-    srTitle: "Urso Parvo. Visual identity for companies.",
+    srTitle: "UrsoParvo Studio. Visual identity for companies.",
     gridLabel: "Projects",
-    metaTitle: "Urso Parvo Studio",
+    metaTitle: "UrsoParvo Studio",
     metaDescription: "Visual identity for companies.",
   },
 
   studio: {
     title: "How we work.",
     intro: "We design visual identities for companies.",
-    metaTitle: "Studio · Urso Parvo Studio",
+    metaTitle: "Studio · UrsoParvo Studio",
     metaDescription:
       "How we work, what to send at first contact and how to ask for a quote.",
   },

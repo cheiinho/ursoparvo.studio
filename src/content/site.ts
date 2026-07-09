@@ -1,6 +1,5 @@
 export const SITE = {
-  name: "Urso Parvo Studio",
-  nameShort: "Urso Parvo",
+  name: "UrsoParvo Studio",
   email: "olilei@proton.me",
   url: "https://ursoparvo.studio",
 } as const;

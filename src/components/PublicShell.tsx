@@ -1,6 +1,7 @@
 import Image from "next/image";
 import PublicFooter from "@/components/PublicFooter";
 import SkipLink from "@/components/SkipLink";
+import ThemeToggle from "@/components/ThemeToggle";
 import { MotionLink, press } from "@/components/ui-motion";
 import { BEAR_LOGO } from "@/constants/bear";
 import type { HeaderDict, ThemeDict } from "@/content/dict/types";
@@ -62,13 +63,14 @@ export default function PublicShell({
             >
               {header.langLabel}
             </MotionLink>
+            <ThemeToggle labels={theme} className="nav-link type-corpo" />
           </nav>
         </div>
       </header>
       <main id="conteudo-principal" className="shell-main">
         {children}
       </main>
-      <PublicFooter theme={theme} />
+      <PublicFooter />
     </div>
   );
 }
