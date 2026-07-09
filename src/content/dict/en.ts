@@ -27,9 +27,17 @@ export const en: Dict = {
   studio: {
     title: "How we work.",
     intro: "We design visual identities for companies.",
+    about: {
+      title: "The studio",
+      paragraphs: [
+        "João Pedro Leite built his career designing for digital product. Internal tools for the BMW Group, platforms for Mercedes-Benz, contact centre systems at Talkdesk, public services for Portugal's Social Security. Projects with real users, where detail mattered and mistakes had a cost.",
+        "That experience changed how he approaches any visual decision. He learned to tell the difference between what looks good in a presentation and what holds up when actually used.",
+        "UrsoParvo Studio grew out of that maturity, applied to corporate visual identity. For companies and institutions who want a brand with presence, not a brand chasing the trend of the moment.",
+      ],
+    },
     metaTitle: "Studio · UrsoParvo Studio",
     metaDescription:
-      "How we work, what to send at first contact and how to ask for a quote.",
+      "Designer with deep experience across product, identity and visual communication. Past clients include BMW, Mercedes-Benz and Talkdesk. Now running UrsoParvo Studio in Coimbra, focused on corporate visual identity built to last.",
   },
 
   process: {
@@ -92,25 +100,34 @@ export const en: Dict = {
   contact: {
     title: "Quote",
     intro: "Fill this in and your email client does the rest.",
+    minDeliveryNote:
+      "The minimum delivery time is two weeks, counted from the start date set in the first meeting. This means every project gets full attention, with no overlap with other work in progress.",
     fields: {
       name: "Name",
-      type: "Project type",
-      budget: "Estimated budget",
-      deadline: "Deadline",
-      deadlineHint: "for example, by September",
-      description: "Description",
+      contact: "Email or phone",
+      services: "What you need",
+      description: "Brief description of the project or company",
+      descriptionHint: "optional, but it helps",
+      deadline: "Desired timeline",
+      referral: "How you found the studio",
+      referralHint: "optional",
     },
-    typeOptions: ["Visual identity", "Rebranding", "Website", "Other"],
-    budgetOptions: [
-      "Up to €2,500",
-      "€2,500 to €5,000",
-      "€5,000 to €10,000",
-      "More than €10,000",
-      "Not sure yet",
+    serviceOptions: [
+      { id: "identidade", label: "Corporate visual identity" },
+      { id: "grafismo", label: "Graphic design" },
+      { id: "fotografia", label: "Photography" },
     ],
+    deadlineOptions: ["No rush", "One to three months", "It would need to be urgent"],
+    referralOptions: ["Social media", "A recommendation", "Online search", "Other"],
+    servicesError: "Choose at least one service.",
+    estimate: {
+      locale: "en-GB",
+      intro:
+        "Based on what you described, the estimated investment for this project sits between {min} and {max}. This figure is an initial reference and will be refined in the first conversation.",
+      mailtoLabel: "Estimate shown",
+    },
     submit: "Compose email",
     subjectPrefix: "Quote",
-    emptyDeadline: "to be defined",
     sentNote:
       "Your email client should have opened. If it did not, write directly:",
   },

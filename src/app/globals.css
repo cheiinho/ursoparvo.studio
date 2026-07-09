@@ -550,6 +550,54 @@ button.site-footer__item:hover {
   resize: vertical;
 }
 
+.field fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.field legend {
+  padding: 0;
+  margin-bottom: var(--space-2);
+  font-size: var(--fs-nota);
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.choice-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.choice-list label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 32px;
+  font-size: var(--fs-corpo);
+  color: var(--text);
+}
+
+.field .choice-list input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  min-height: 0;
+  padding: 0;
+  accent-color: var(--accent);
+}
+
+.form-error {
+  margin: 0;
+  color: var(--text);
+}
+
+.form-result {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
 .form-submit {
   display: inline-flex;
   align-items: center;

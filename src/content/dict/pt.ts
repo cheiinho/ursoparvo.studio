@@ -27,9 +27,17 @@ export const pt: Dict = {
   studio: {
     title: "Como trabalhamos.",
     intro: "Fazemos identidade visual para empresas.",
+    about: {
+      title: "O estúdio",
+      paragraphs: [
+        "João Pedro Leite construiu o seu percurso a desenhar para produto digital. Ferramentas internas do BMW Group, plataformas da Mercedes-Benz, sistemas de contact centre na Talkdesk, serviços públicos da Segurança Social. Projectos com utilizadores reais, onde o detalhe importava e o erro tinha custo.",
+        "Essa experiência mudou a forma como aborda qualquer decisão visual. Aprendeu a reconhecer a diferença entre o que parece bem numa apresentação e o que aguenta quando é usado de verdade.",
+        "O UrsoParvo Studio nasce dessa maturidade aplicada a identidade visual corporativa. Para empresas e instituições que querem uma marca com presença, não uma marca a seguir a tendência do momento.",
+      ],
+    },
     metaTitle: "Estúdio · UrsoParvo Studio",
     metaDescription:
-      "Como trabalhamos, o que enviar no primeiro contacto e como pedir um orçamento.",
+      "Designer com longa experiência em produto, identidade e comunicação visual. Trabalhou para BMW, Mercedes-Benz e Talkdesk. Hoje dirige o UrsoParvo Studio, em Coimbra, focado em identidade visual corporativa que não segue tendências.",
   },
 
   process: {
@@ -92,25 +100,34 @@ export const pt: Dict = {
   contact: {
     title: "Orçamento",
     intro: "Preencha e o seu cliente de email faz o resto.",
+    minDeliveryNote:
+      "O prazo mínimo de entrega é de duas semanas, a contar da data de início definida na primeira reunião. Isto garante que cada projecto recebe atenção total, sem sobreposição com outros trabalhos em curso.",
     fields: {
       name: "Nome",
-      type: "Tipo de projecto",
-      budget: "Orçamento estimado",
-      deadline: "Prazo",
-      deadlineHint: "por exemplo, até Setembro",
-      description: "Descrição",
+      contact: "Email ou telefone",
+      services: "O que precisa",
+      description: "Descrição breve do projecto ou empresa",
+      descriptionHint: "opcional, mas ajuda",
+      deadline: "Prazo desejado",
+      referral: "Como conheceu o estúdio",
+      referralHint: "opcional",
     },
-    typeOptions: ["Identidade visual", "Rebranding", "Website", "Outro"],
-    budgetOptions: [
-      "Até 2.500 €",
-      "De 2.500 € a 5.000 €",
-      "De 5.000 € a 10.000 €",
-      "Mais de 10.000 €",
-      "Ainda não sei",
+    serviceOptions: [
+      { id: "identidade", label: "Identidade visual corporativa" },
+      { id: "grafismo", label: "Grafismo" },
+      { id: "fotografia", label: "Fotografia" },
     ],
+    deadlineOptions: ["Sem pressa", "Um a três meses", "Teria de ser urgente"],
+    referralOptions: ["Redes sociais", "Recomendação", "Pesquisa online", "Outro"],
+    servicesError: "Escolha pelo menos um serviço.",
+    estimate: {
+      locale: "pt-PT",
+      intro:
+        "Com base no que descreveu, o investimento estimado para este projecto situa-se entre {min} e {max}. Este valor é uma referência inicial e será afinado na primeira conversa.",
+      mailtoLabel: "Estimativa apresentada",
+    },
     submit: "Compor email",
     subjectPrefix: "Orçamento",
-    emptyDeadline: "por definir",
     sentNote:
       "O seu cliente de email deve ter aberto. Se não abriu, escreva directamente:",
   },

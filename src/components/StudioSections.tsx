@@ -25,6 +25,23 @@ export default function StudioSections({ dict }: StudioSectionsProps) {
       <section
         className="site-container site-container--wide studio-section rise"
         style={{ "--stagger": 1 } as React.CSSProperties}
+        aria-labelledby="sobre-h"
+      >
+        <h2 id="sobre-h" className="studio-section__title">
+          {dict.studio.about.title}
+        </h2>
+        <div className="studio-section__body">
+          {dict.studio.about.paragraphs.map((paragraph) => (
+            <p key={paragraph} className="type-corpo measure">
+              {paragraph}
+            </p>
+          ))}
+        </div>
+      </section>
+
+      <section
+        className="site-container site-container--wide studio-section rise"
+        style={{ "--stagger": 2 } as React.CSSProperties}
         aria-labelledby="processo-h"
       >
         <h2 id="processo-h" className="studio-section__title">
@@ -46,7 +63,7 @@ export default function StudioSections({ dict }: StudioSectionsProps) {
 
       <section
         className="site-container site-container--wide studio-section rise"
-        style={{ "--stagger": 2 } as React.CSSProperties}
+        style={{ "--stagger": 3 } as React.CSSProperties}
         aria-labelledby="checklist-h"
       >
         <h2 id="checklist-h" className="studio-section__title">
@@ -67,7 +84,7 @@ export default function StudioSections({ dict }: StudioSectionsProps) {
 
       <section
         className="site-container site-container--wide studio-section rise"
-        style={{ "--stagger": 3 } as React.CSSProperties}
+        style={{ "--stagger": 4 } as React.CSSProperties}
         aria-labelledby="contacto-h"
       >
         <h2 id="contacto-h" className="studio-section__title">
@@ -75,6 +92,9 @@ export default function StudioSections({ dict }: StudioSectionsProps) {
         </h2>
         <div className="studio-section__body">
           <p className="type-corpo measure">{dict.contact.intro}</p>
+          <p className="type-nota text-secondary measure">
+            {dict.contact.minDeliveryNote}
+          </p>
           <ContactForm dict={dict.contact} email={SITE.email} />
         </div>
       </section>
