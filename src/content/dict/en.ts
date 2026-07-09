@@ -65,14 +65,29 @@ export const en: Dict = {
   },
 
   checklist: {
-    title: "What to send at first contact",
-    intro: "The more complete it is, the faster the quote.",
+    title: "First contact",
+    intro: "Send what you have. The more complete it is, the faster the quote.",
     items: [
-      "Any existing brand materials, from logo to guidelines. Whatever there is.",
-      "Goals. What should change with this project.",
-      "References. Things you like and things you avoid.",
-      "Deadlines with real dates, not hopeful ones.",
-      "A budget range. It saves everyone two weeks of email.",
+      {
+        title: "Brand materials",
+        body: "Logo, guidelines, whatever exists.",
+      },
+      {
+        title: "Goals",
+        body: "What should change with this project.",
+      },
+      {
+        title: "References",
+        body: "Things you like and things you avoid.",
+      },
+      {
+        title: "Deadlines",
+        body: "Real dates, not hopeful ones.",
+      },
+      {
+        title: "A budget range",
+        body: "It saves everyone two weeks of email.",
+      },
     ],
   },
 

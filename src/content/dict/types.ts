@@ -62,7 +62,7 @@ export type Dict = {
   checklist: {
     title: string;
     intro: string;
-    items: readonly string[];
+    items: readonly { title: string; body: string }[];
   };
   contact: ContactDict;
   theme: ThemeDict;

@@ -282,15 +282,65 @@ button.site-footer__item:hover {
   cursor: not-allowed;
 }
 
-.section-block {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-8);
+.studio-open {
+  display: grid;
+  gap: var(--space-6);
 }
 
-.section-block__title {
+.studio-open h1 {
   margin: 0;
+}
+
+.studio-open__intro {
+  margin: 0;
+}
+
+.studio-section {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.studio-section__title {
+  margin: 0;
+  font-size: var(--fs-nota);
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--text-secondary);
+}
+
+.studio-section__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  min-width: 0;
+}
+
+@media (min-width: 900px) {
+  .studio-open {
+    grid-template-columns: 220px minmax(0, 1fr);
+    column-gap: var(--space-12);
+  }
+
+  .studio-open h1 {
+    grid-column: 1 / -1;
+  }
+
+  .studio-open__intro {
+    grid-column: 2;
+  }
+
+  .studio-section {
+    grid-template-columns: 220px minmax(0, 1fr);
+    column-gap: var(--space-12);
+  }
+
+  .studio-section__title {
+    position: sticky;
+    top: var(--space-8);
+    align-self: start;
+  }
 }
 
 .hero-block {
@@ -347,6 +397,15 @@ button.site-footer__item:hover {
 
 .check-list li {
   max-width: 66ch;
+}
+
+.check-list h3,
+.check-list p {
+  margin: 0;
+}
+
+.check-list p {
+  color: var(--text-secondary);
 }
 
 .masonry {

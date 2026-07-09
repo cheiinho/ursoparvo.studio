@@ -65,14 +65,29 @@ export const pt: Dict = {
   },
 
   checklist: {
-    title: "O que enviar no primeiro contacto",
-    intro: "Quanto mais completo, mais rápido o orçamento.",
+    title: "Primeiro contacto",
+    intro: "Mande o que tiver. Quanto mais completo, mais rápido o orçamento.",
     items: [
-      "Materiais de marca existentes, do logótipo ao manual. O que houver.",
-      "Objectivos. O que deve mudar com este projecto.",
-      "Referências. Coisas de que gosta e coisas de que foge.",
-      "Prazos com datas reais, não optimistas.",
-      "Uma faixa de orçamento. Poupa duas semanas de emails a toda a gente.",
+      {
+        title: "Materiais de marca",
+        body: "Logótipo, manual, o que houver.",
+      },
+      {
+        title: "Objectivos",
+        body: "O que deve mudar com este projecto.",
+      },
+      {
+        title: "Referências",
+        body: "Coisas de que gosta e coisas de que foge.",
+      },
+      {
+        title: "Prazos",
+        body: "Datas reais, não optimistas.",
+      },
+      {
+        title: "Faixa de orçamento",
+        body: "Poupa duas semanas de emails a toda a gente.",
+      },
     ],
   },
 
