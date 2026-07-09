@@ -28,7 +28,7 @@ export const en: Dict = {
     title: "Studio",
     tagline: "Identity that outlasts trends.",
     intro:
-      "Corporate visual identity, made in Coimbra. Work built to last longer than the next fashion.",
+      "We make brands in Coimbra. We don't chase trends. What comes out of here is made to last.",
     metaTitle: "Studio · Urso Parvo Studio",
     metaDescription:
       "How we work, what to send at first contact and how to ask for a quote.",

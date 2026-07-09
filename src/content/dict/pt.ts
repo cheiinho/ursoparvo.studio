@@ -28,7 +28,7 @@ export const pt: Dict = {
     title: "Estúdio",
     tagline: "Identidade à prova de tendências.",
     intro:
-      "Identidade visual corporativa, feita em Coimbra. Trabalho pensado para durar mais do que a próxima moda.",
+      "Fazemos marcas em Coimbra. Não andamos atrás de modas. O que sai daqui é para durar.",
     metaTitle: "Estúdio · Urso Parvo Studio",
     metaDescription:
       "Como trabalhamos, o que enviar no primeiro contacto e como pedir um orçamento.",
