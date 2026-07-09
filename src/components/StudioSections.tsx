@@ -76,12 +76,6 @@ export default function StudioSections({ dict }: StudioSectionsProps) {
         <div className="studio-section__body">
           <p className="type-corpo measure">{dict.contact.intro}</p>
           <ContactForm dict={dict.contact} email={SITE.email} />
-          <p className="type-nota text-secondary">
-            {dict.contact.directPrefix}{" "}
-            <a href={`mailto:${SITE.email}`} className="text-link">
-              {SITE.email}
-            </a>
-          </p>
         </div>
       </section>
     </>
