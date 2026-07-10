@@ -123,8 +123,18 @@ export default function ContactForm({ dict, email }: ContactFormProps) {
 
   const estimateText = estimate
     ? dict.estimate.intro
-        .replace("{min}", formatEuro(estimate.min, dict.estimate.locale))
-        .replace("{max}", formatEuro(estimate.max, dict.estimate.locale))
+        .split(/(\{min\}|\{max\})/)
+        .map((part, index) => {
+          if (part === "{min}" || part === "{max}") {
+            const value = part === "{min}" ? estimate.min : estimate.max;
+            return (
+              <strong key={index}>
+                {formatEuro(value, dict.estimate.locale)}
+              </strong>
+            );
+          }
+          return part;
+        })
     : null;
 
   const emailLink = (

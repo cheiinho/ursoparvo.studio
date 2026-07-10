@@ -17,6 +17,11 @@ export const nudica = localFont({
       weight: "500",
       style: "normal",
     },
+    {
+      path: "../../public/fonts/nudica/nudica-bold-webfont.woff2",
+      weight: "700",
+      style: "normal",
+    },
   ],
   variable: "--font-text",
   display: "swap",
