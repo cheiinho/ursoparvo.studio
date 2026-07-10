@@ -57,7 +57,7 @@ export type Dict = {
   header: HeaderDict;
   skipLink: string;
   home: {
-    srTitle: string;
+    statement: string;
     gridLabel: string;
     metaTitle: string;
     metaDescription: string;

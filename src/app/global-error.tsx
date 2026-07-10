@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useEffect } from "react";
-import { inter } from "@/lib/fonts";
+import { nudica } from "@/lib/fonts";
 import "./globals.css";
 
 export default function GlobalError({
@@ -17,8 +17,8 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html lang="pt-PT" className={inter.variable}>
-      <body className={inter.className}>
+    <html lang="pt-PT" className={nudica.variable}>
+      <body className={nudica.className}>
         <div
           className="flex min-h-dvh flex-col items-center justify-center gap-6"
           style={{ padding: "var(--space-6)" }}

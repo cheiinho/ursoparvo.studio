@@ -1,13 +1,23 @@
 import localFont from "next/font/local";
 
-export const inter = localFont({
+export const nudica = localFont({
   src: [
     {
-      path: "../../public/fonts/inter/Inter-Regular.ttf",
+      path: "../../public/fonts/nudica/nudica-regular-webfont.woff2",
       weight: "400",
       style: "normal",
     },
+    {
+      path: "../../public/fonts/nudica/nudica-regularitalic-webfont.woff2",
+      weight: "400",
+      style: "italic",
+    },
+    {
+      path: "../../public/fonts/nudica/nudica-medium-webfont.woff2",
+      weight: "500",
+      style: "normal",
+    },
   ],
-  variable: "--font-inter",
+  variable: "--font-text",
   display: "swap",
 });

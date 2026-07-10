@@ -45,8 +45,10 @@ export default async function HomePage({ params }: PageParams) {
       theme={dict.theme}
       langHref={HOME_PATH[OTHER_LANG[lang]]}
     >
+      <section className="site-container site-container--wide home-statement">
+        <h1 className="type-display">{dict.home.statement}</h1>
+      </section>
       <div className="masonry-bleed">
-        <h1 className="sr-only">{dict.home.srTitle}</h1>
         <ProjectGrid lang={lang} gridLabel={dict.home.gridLabel} />
       </div>
     </PublicShell>

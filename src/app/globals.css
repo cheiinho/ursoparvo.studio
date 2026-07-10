@@ -1,10 +1,31 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Sfizia";
+  src: url("/fonts/sfizia/Sfizia-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sfizia";
+  src: url("/fonts/sfizia/Sfizia-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
 :root {
   /* Exactly three sizes site-wide: display (h1), corpo (everything), nota (labels/footer) */
   --fs-display: clamp(2.25rem, 1.4rem + 3vw, 3.5rem);
   --fs-corpo: clamp(1.0625rem, 1rem + 0.2vw, 1.125rem);
   --fs-nota: 0.875rem;
+
+  /* Display face: Sfizia (licensed, files not in repo). Falls back to Inter
+     until public/fonts/sfizia/Sfizia-Regular.woff2 exists. */
+  --font-display: "Sfizia", var(--font-text), ui-sans-serif, system-ui,
+    sans-serif;
 
   --surface: #faf9f6;
   --field: #f1efe9;
@@ -64,7 +85,7 @@
   --color-text: var(--text);
   --color-text-secondary: var(--text-secondary);
   --color-accent: var(--accent);
-  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-sans: var(--font-text), system-ui, sans-serif;
 }
 
 *,
@@ -82,7 +103,7 @@ body {
   margin: 0;
   background-color: var(--surface);
   color: var(--text);
-  font-family: var(--font-inter), system-ui, sans-serif;
+  font-family: var(--font-text), system-ui, sans-serif;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -105,6 +126,7 @@ button {
 }
 
 .type-display {
+  font-family: var(--font-display);
   font-size: var(--fs-display);
   font-weight: 400;
   line-height: 1.1;
@@ -171,6 +193,7 @@ button {
 }
 
 .site-header {
+  border-top: 2px solid var(--text);
   padding-top: calc(var(--space-8) + env(safe-area-inset-top, 0px));
   padding-bottom: var(--space-12);
 }
@@ -305,6 +328,19 @@ button.site-footer__item:hover {
 .studio-section {
   display: grid;
   gap: var(--space-4);
+  border-top: 2px solid var(--text);
+  padding-top: var(--space-6);
+}
+
+.home-statement {
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-16);
+}
+
+.home-statement h1 {
+  margin: 0;
+  max-width: 22ch;
+  white-space: pre-line;
 }
 
 .studio-section__title {
