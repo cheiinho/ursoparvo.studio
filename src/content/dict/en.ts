@@ -99,7 +99,7 @@ export const en: Dict = {
 
   contact: {
     title: "Quote",
-    intro: "Fill this in and your email client does the rest.",
+    intro: "Tell us the context. We reply soon.",
     minDeliveryNote:
       "The minimum delivery time is two weeks, counted from the start date set in the first meeting. This means every project gets full attention, with no overlap with other work in progress.",
     fields: {
@@ -126,8 +126,16 @@ export const en: Dict = {
         "Based on what you described, the estimated investment for this project sits between {min} and {max}. This figure is an initial reference and will be refined in the first conversation.",
       mailtoLabel: "Estimate shown",
     },
-    submit: "Compose email",
+    submit: "Send request",
+    sending: "Sending…",
     subjectPrefix: "Quote",
+    sentConfirmation:
+      "Message sent. We will reply soon to the contact you provided.",
+    sendError:
+      "The message could not be sent from the site. You can open it in your email or copy it.",
+    openEmail: "Open in email",
+    copy: "Copy message",
+    copied: "Message copied.",
     sentNote:
       "Your email client should have opened. If it did not, write directly:",
   },

@@ -42,7 +42,13 @@ export type ContactDict = {
     mailtoLabel: string;
   };
   submit: string;
+  sending: string;
   subjectPrefix: string;
+  sentConfirmation: string;
+  sendError: string;
+  openEmail: string;
+  copy: string;
+  copied: string;
   sentNote: string;
 };
 

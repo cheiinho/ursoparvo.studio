@@ -15,14 +15,22 @@ type ContactFormProps = {
   email: string;
 };
 
+type Status = "idle" | "sending" | "sent" | "mailto" | "error";
+
+type Message = { subject: string; body: string };
+
 export default function ContactForm({ dict, email }: ContactFormProps) {
+  const [status, setStatus] = useState<Status>("idle");
   const [estimate, setEstimate] = useState<EstimateRange | null>(null);
+  const [message, setMessage] = useState<Message | null>(null);
   const [servicesError, setServicesError] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const serviceIds = dict.serviceOptions.map((option) => option.id);
 
-  function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (status === "sending") return;
     const data = new FormData(event.currentTarget);
     const get = (key: string) => String(data.get(key) ?? "").trim();
 
@@ -38,6 +46,7 @@ export default function ContactForm({ dict, email }: ContactFormProps) {
       return;
     }
     setServicesError(false);
+    setCopied(false);
 
     const serviceLabels = dict.serviceOptions
       .filter((option) => services.includes(option.id))
@@ -64,10 +73,52 @@ export default function ContactForm({ dict, email }: ContactFormProps) {
         : []),
     ].join("\r\n");
 
-    window.location.href = `mailto:${email}?subject=${encodeURIComponent(
-      subject,
-    )}&body=${encodeURIComponent(body)}`;
     setEstimate(range);
+    setMessage({ subject, body });
+    setStatus("sending");
+
+    try {
+      const response = await fetch("/api/contacto", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nome: get("nome"),
+          contacto: get("contacto"),
+          servicos: services,
+          descricao: get("descricao"),
+          prazo: get("prazo"),
+          origem: get("origem"),
+          website: get("website"),
+        }),
+      });
+
+      if (response.ok) {
+        setStatus("sent");
+        return;
+      }
+
+      if (response.status === 503) {
+        window.location.href = mailtoHref(email, subject, body);
+        setStatus("mailto");
+        return;
+      }
+
+      setStatus("error");
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  async function copyMessage() {
+    if (!message) return;
+    try {
+      await navigator.clipboard.writeText(
+        `${message.subject}\n\n${message.body.replaceAll("\r\n", "\n")}`,
+      );
+      setCopied(true);
+    } catch {
+      setCopied(false);
+    }
   }
 
   const estimateText = estimate
@@ -75,6 +126,12 @@ export default function ContactForm({ dict, email }: ContactFormProps) {
         .replace("{min}", formatEuro(estimate.min, dict.estimate.locale))
         .replace("{max}", formatEuro(estimate.max, dict.estimate.locale))
     : null;
+
+  const emailLink = (
+    <a href={`mailto:${email}`} className="text-link">
+      {email}
+    </a>
+  );
 
   return (
     <form className="contact-form" onSubmit={onSubmit}>
@@ -161,29 +218,81 @@ export default function ContactForm({ dict, email }: ContactFormProps) {
         </select>
       </div>
 
+      <div className="hp-field" aria-hidden="true">
+        <label htmlFor="orc-website">Website</label>
+        <input
+          id="orc-website"
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
+
       <motion.button
         type="submit"
         className="form-submit"
+        disabled={status === "sending"}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.97 }}
         transition={{ type: "spring", stiffness: 500, damping: 30 }}
       >
-        {dict.submit}
+        {status === "sending" ? dict.sending : dict.submit}
       </motion.button>
 
       <div className="form-result" aria-live="polite">
-        {estimateText ? (
-          <>
-            <p className="type-corpo measure">{estimateText}</p>
-            <p className="form-note type-nota text-secondary">
-              {dict.sentNote}{" "}
-              <a href={`mailto:${email}`} className="text-link">
-                {email}
-              </a>
-            </p>
-          </>
+        {status !== "idle" && status !== "sending" && estimateText ? (
+          <p className="type-corpo measure">{estimateText}</p>
+        ) : null}
+
+        {status === "sent" ? (
+          <p className="form-note type-nota text-secondary">
+            {dict.sentConfirmation}
+          </p>
+        ) : null}
+
+        {status === "mailto" ? (
+          <p className="form-note type-nota text-secondary">
+            {dict.sentNote} {emailLink}
+            {" · "}
+            <button
+              type="button"
+              className="form-inline-action"
+              onClick={copyMessage}
+            >
+              {copied ? dict.copied : dict.copy}
+            </button>
+          </p>
+        ) : null}
+
+        {status === "error" && message ? (
+          <p className="form-note type-nota text-secondary">
+            {dict.sendError}{" "}
+            <a
+              href={mailtoHref(email, message.subject, message.body)}
+              className="text-link"
+            >
+              {dict.openEmail}
+            </a>
+            {" · "}
+            <button
+              type="button"
+              className="form-inline-action"
+              onClick={copyMessage}
+            >
+              {copied ? dict.copied : dict.copy}
+            </button>
+            {" · "}
+            {emailLink}
+          </p>
         ) : null}
       </div>
     </form>
   );
+}
+
+function mailtoHref(email: string, subject: string, body: string): string {
+  return `mailto:${email}?subject=${encodeURIComponent(
+    subject,
+  )}&body=${encodeURIComponent(body)}`;
 }

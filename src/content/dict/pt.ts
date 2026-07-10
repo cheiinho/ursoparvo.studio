@@ -99,7 +99,7 @@ export const pt: Dict = {
 
   contact: {
     title: "Orçamento",
-    intro: "Preencha e o seu cliente de email faz o resto.",
+    intro: "Conte o contexto. Respondemos em breve.",
     minDeliveryNote:
       "O prazo mínimo de entrega é de duas semanas, a contar da data de início definida na primeira reunião. Isto garante que cada projecto recebe atenção total, sem sobreposição com outros trabalhos em curso.",
     fields: {
@@ -126,8 +126,16 @@ export const pt: Dict = {
         "Com base no que descreveu, o investimento estimado para este projecto situa-se entre {min} e {max}. Este valor é uma referência inicial e será afinado na primeira conversa.",
       mailtoLabel: "Estimativa apresentada",
     },
-    submit: "Compor email",
+    submit: "Enviar pedido",
+    sending: "A enviar…",
     subjectPrefix: "Orçamento",
+    sentConfirmation:
+      "Mensagem enviada. Respondemos em breve para o contacto que indicou.",
+    sendError:
+      "Não foi possível enviar a partir do site. Pode abrir a mensagem no seu email ou copiá-la.",
+    openEmail: "Abrir no email",
+    copy: "Copiar mensagem",
+    copied: "Mensagem copiada.",
     sentNote:
       "O seu cliente de email deve ter aberto. Se não abriu, escreva directamente:",
   },
