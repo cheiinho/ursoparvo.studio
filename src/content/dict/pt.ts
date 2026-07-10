@@ -30,9 +30,9 @@ export const pt: Dict = {
     about: {
       title: "O estúdio",
       paragraphs: [
-        "João Pedro Leite construiu o seu percurso a desenhar para produto digital. Ferramentas internas do BMW Group, plataformas da Mercedes-Benz, sistemas de contact centre na Talkdesk, serviços públicos da Segurança Social. Projectos com utilizadores reais, onde o detalhe importava e o erro tinha custo.",
-        "Essa experiência mudou a forma como aborda qualquer decisão visual. Aprendeu a reconhecer a diferença entre o que parece bem numa apresentação e o que aguenta quando é usado de verdade.",
-        "O UrsoParvo Studio nasce dessa maturidade aplicada a identidade visual corporativa. Para empresas e instituições que querem uma marca com presença, não uma marca a seguir a tendência do momento.",
+        "João Pedro Leite desenha para produto digital em contexto empresarial e institucional. Ferramentas internas na BMW Group, plataformas na Mercedes-Benz, sistemas de contact centre na Talkdesk, serviços públicos na Segurança Social. E, a marcar o percurso, a identidade visual do Politécnico de Coimbra: uma instituição com história própria, muita gente a passar por ela todos os dias, uma marca que tinha de aguentar esse peso.",
+        "São projectos com utilizadores reais, onde o detalhe importava e o erro tinha custo. Essa disciplina define a forma como decide. A diferença entre o que parece bem numa apresentação e o que aguenta no uso real.",
+        "O UrsoParvo Studio aplica essa maturidade a identidade visual corporativa. Para empresas e instituições que querem uma marca com presença, não uma marca a seguir tendências.",
       ],
     },
     metaTitle: "Estúdio · UrsoParvo Studio",

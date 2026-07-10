@@ -30,9 +30,9 @@ export const en: Dict = {
     about: {
       title: "The studio",
       paragraphs: [
-        "João Pedro Leite built his career designing for digital product. Internal tools for the BMW Group, platforms for Mercedes-Benz, contact centre systems at Talkdesk, public services for Portugal's Social Security. Projects with real users, where detail mattered and mistakes had a cost.",
-        "That experience changed how he approaches any visual decision. He learned to tell the difference between what looks good in a presentation and what holds up when actually used.",
-        "UrsoParvo Studio grew out of that maturity, applied to corporate visual identity. For companies and institutions who want a brand with presence, not a brand chasing the trend of the moment.",
+        "João Pedro Leite designs for digital products in enterprise and institutional settings. Internal tools at BMW Group, platforms at Mercedes-Benz, contact centre systems at Talkdesk, public services at Segurança Social. And, marking the path, the visual identity for Politécnico de Coimbra: an institution with its own history, thousands of people moving through it every day, a brand that had to carry that weight.",
+        "Real users, where detail mattered and mistakes had a cost. That discipline shapes every decision he makes. The difference between what looks good in a deck and what holds up in actual use.",
+        "UrsoParvo Studio applies that maturity to corporate visual identity. For companies and institutions that want a brand with presence, not one chasing the trend of the moment.",
       ],
     },
     metaTitle: "Studio · UrsoParvo Studio",
