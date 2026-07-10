@@ -1,4 +1,5 @@
 import ContactForm from "@/components/ContactForm";
+import RevealTitle from "@/components/RevealTitle";
 import type { Dict } from "@/content/dict/types";
 import { SITE } from "@/content/site";
 
@@ -14,9 +15,11 @@ export default function StudioSections({ dict }: StudioSectionsProps) {
         style={{ "--stagger": 0 } as React.CSSProperties}
         aria-labelledby="estudio-h"
       >
-        <h1 id="estudio-h" className="type-display">
-          {dict.studio.title}
-        </h1>
+        <RevealTitle
+          id="estudio-h"
+          text={dict.studio.title}
+          className="type-display"
+        />
       </section>
 
       <section

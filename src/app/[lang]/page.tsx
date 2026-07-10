@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ProjectGrid from "@/components/ProjectGrid";
 import PublicShell from "@/components/PublicShell";
+import RevealTitle from "@/components/RevealTitle";
 import { getDict } from "@/content/dict";
 import { hasLang, HOME_PATH, LANGS, OTHER_LANG } from "@/lib/i18n";
 
@@ -46,7 +47,7 @@ export default async function HomePage({ params }: PageParams) {
       langHref={HOME_PATH[OTHER_LANG[lang]]}
     >
       <section className="site-container site-container--wide home-statement">
-        <h1 className="type-display">{dict.home.statement}</h1>
+        <RevealTitle text={dict.home.statement} className="type-display" />
       </section>
       <div className="masonry-bleed">
         <ProjectGrid lang={lang} gridLabel={dict.home.gridLabel} />
