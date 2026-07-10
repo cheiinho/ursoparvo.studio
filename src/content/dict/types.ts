@@ -64,7 +64,6 @@ export type Dict = {
   };
   studio: {
     title: string;
-    intro: string;
     about: {
       title: string;
       paragraphs: readonly string[];

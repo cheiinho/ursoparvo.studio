@@ -3,7 +3,7 @@ import type { Dict } from "./types";
 export const pt: Dict = {
   site: {
     title: "UrsoParvo Studio",
-    description: "Identidade visual para empresas.",
+    description: "A identidade. À prova de tendências.",
   },
 
   header: {
@@ -18,15 +18,15 @@ export const pt: Dict = {
   skipLink: "Saltar para o conteúdo",
 
   home: {
-    srTitle: "UrsoParvo Studio. Identidade visual para empresas.",
+    srTitle: "UrsoParvo Studio. A identidade. À prova de tendências.",
     gridLabel: "Projectos",
     metaTitle: "UrsoParvo Studio",
-    metaDescription: "Identidade visual para empresas.",
+    metaDescription:
+      "Designer com longa experiência em produto, identidade e comunicação visual. Trabalhou para BMW, Mercedes-Benz e Talkdesk. Hoje dirige o UrsoParvo Studio, em Coimbra, focado em identidade visual corporativa que não segue tendências.",
   },
 
   studio: {
     title: "Como trabalhamos.",
-    intro: "Fazemos identidade visual para empresas.",
     about: {
       title: "O estúdio",
       paragraphs: [

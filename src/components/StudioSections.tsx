@@ -17,9 +17,6 @@ export default function StudioSections({ dict }: StudioSectionsProps) {
         <h1 id="estudio-h" className="type-display">
           {dict.studio.title}
         </h1>
-        <p className="type-corpo text-secondary measure studio-open__intro">
-          {dict.studio.intro}
-        </p>
       </section>
 
       <section

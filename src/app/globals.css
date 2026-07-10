@@ -302,10 +302,6 @@ button.site-footer__item:hover {
   margin: 0;
 }
 
-.studio-open__intro {
-  margin: 0;
-}
-
 .studio-section {
   display: grid;
   gap: var(--space-4);
@@ -336,10 +332,6 @@ button.site-footer__item:hover {
 
   .studio-open h1 {
     grid-column: 1 / -1;
-  }
-
-  .studio-open__intro {
-    grid-column: 2;
   }
 
   .studio-section {
