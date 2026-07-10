@@ -60,12 +60,12 @@ export const en: Dict = {
         body: "A 50% deposit before work begins.",
       },
       {
-        title: "Access and welcome doc",
-        body: "What we need, how we talk, where everything lives.",
+        title: "Access",
+        body: "What we need from you, how we communicate, where the files are kept.",
       },
       {
         title: "Kickoff",
-        body: "A kickoff call, and the work begins.",
+        body: "An opening call and the work begins.",
       },
     ],
   },
@@ -84,30 +84,26 @@ export const en: Dict = {
       },
       {
         title: "References",
-        body: "Things you like and things you avoid.",
+        body: "What you like and what you want to avoid.",
       },
       {
         title: "Deadlines",
-        body: "Real dates, not hopeful ones.",
-      },
-      {
-        title: "A budget range",
-        body: "It saves everyone two weeks of email.",
+        body: "Concrete dates.",
       },
     ],
   },
 
   contact: {
     title: "Quote",
-    intro: "Tell us the context. We reply soon.",
+    intro: "Tell us the context.",
     minDeliveryNote:
-      "The minimum delivery time is two weeks, counted from the start date set in the first meeting. This means every project gets full attention, with no overlap with other work in progress.",
+      "Every project gets its own slot in the schedule, with no overlap with other work. Deadlines count from the start date set in the first meeting, not from this contact.",
     fields: {
       name: "Name",
       contact: "Email or phone",
       services: "What you need",
       description: "Brief description of the project or company",
-      descriptionHint: "optional, but it helps",
+      descriptionHint: "optional",
       deadline: "Desired timeline",
       referral: "How you found the studio",
       referralHint: "optional",
@@ -117,7 +113,7 @@ export const en: Dict = {
       { id: "grafismo", label: "Graphic design" },
       { id: "fotografia", label: "Photography" },
     ],
-    deadlineOptions: ["No rush", "One to three months", "It would need to be urgent"],
+    deadlineOptions: ["No rush", "One to three months", "Urgent"],
     referralOptions: ["Social media", "A recommendation", "Online search", "Other"],
     servicesError: "Choose at least one service.",
     estimate: {

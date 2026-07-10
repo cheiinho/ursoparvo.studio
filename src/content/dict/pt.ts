@@ -60,12 +60,12 @@ export const pt: Dict = {
         body: "Sinal de 50% antes de começar.",
       },
       {
-        title: "Acessos e welcome doc",
-        body: "O que é preciso, como comunicamos, onde vive o quê.",
+        title: "Acessos",
+        body: "O que precisamos do seu lado, como comunicamos, onde ficam os ficheiros.",
       },
       {
-        title: "Kickoff",
-        body: "Chamada de arranque e o trabalho começa.",
+        title: "Arranque",
+        body: "Chamada inicial e o trabalho começa.",
       },
     ],
   },
@@ -84,30 +84,26 @@ export const pt: Dict = {
       },
       {
         title: "Referências",
-        body: "Coisas de que gosta e coisas de que foge.",
+        body: "O que gosta e o que quer evitar.",
       },
       {
         title: "Prazos",
-        body: "Datas reais, não optimistas.",
-      },
-      {
-        title: "Faixa de orçamento",
-        body: "Poupa duas semanas de emails a toda a gente.",
+        body: "Datas concretas.",
       },
     ],
   },
 
   contact: {
     title: "Orçamento",
-    intro: "Conte o contexto. Respondemos em breve.",
+    intro: "Conte o contexto.",
     minDeliveryNote:
-      "O prazo mínimo de entrega é de duas semanas, a contar da data de início definida na primeira reunião. Isto garante que cada projecto recebe atenção total, sem sobreposição com outros trabalhos em curso.",
+      "Cada projecto tem uma janela própria na agenda, sem sobreposição com outros trabalhos. Os prazos contam a partir da data de início definida na primeira reunião, não a partir deste contacto.",
     fields: {
       name: "Nome",
       contact: "Email ou telefone",
       services: "O que precisa",
       description: "Descrição breve do projecto ou empresa",
-      descriptionHint: "opcional, mas ajuda",
+      descriptionHint: "opcional",
       deadline: "Prazo desejado",
       referral: "Como conheceu o estúdio",
       referralHint: "opcional",
