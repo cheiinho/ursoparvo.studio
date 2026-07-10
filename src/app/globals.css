@@ -193,7 +193,6 @@ button {
 }
 
 .site-header {
-  border-top: 2px solid var(--text);
   padding-top: calc(var(--space-8) + env(safe-area-inset-top, 0px));
   padding-bottom: var(--space-12);
 }
@@ -329,7 +328,7 @@ button.site-footer__item:hover {
 .studio-section {
   display: grid;
   gap: var(--space-4);
-  border-top: 2px solid var(--text);
+  border-top: 1px solid var(--text);
   padding-top: var(--space-6);
 }
 
