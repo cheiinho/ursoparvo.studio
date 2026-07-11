@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ProjectGrid from "@/components/ProjectGrid";
 import PublicShell from "@/components/PublicShell";
+import RevealTitle from "@/components/RevealTitle";
+import { MotionLink } from "@/components/ui-motion";
 import { getDict } from "@/content/dict";
-import { hasLang, HOME_PATH, LANGS, OTHER_LANG } from "@/lib/i18n";
+import { hasLang, HOME_PATH, LANGS, OTHER_LANG, STUDIO_PATH } from "@/lib/i18n";
 
 type PageParams = { params: Promise<{ lang: string }> };
 
@@ -45,8 +47,19 @@ export default async function HomePage({ params }: PageParams) {
       theme={dict.theme}
       langHref={HOME_PATH[OTHER_LANG[lang]]}
     >
+      <section className="site-container site-container--wide home-statement">
+        <RevealTitle text={dict.home.statement} className="type-display" />
+        <MotionLink
+          href={`${STUDIO_PATH[lang]}#contacto-h`}
+          className="home-cta"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
+          transition={{ type: "spring", stiffness: 500, damping: 30 }}
+        >
+          {dict.home.ctaLabel}
+        </MotionLink>
+      </section>
       <div className="masonry-bleed">
-        <h1 className="sr-only">{dict.home.srTitle}</h1>
         <ProjectGrid lang={lang} gridLabel={dict.home.gridLabel} />
       </div>
     </PublicShell>

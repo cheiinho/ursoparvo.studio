@@ -1,3 +1,5 @@
+import type { ServiceId } from "@/lib/estimate";
+
 export type HeaderDict = {
   logoAlt: string;
   homeAria: string;
@@ -19,19 +21,34 @@ export type FooterDict = {
 export type ContactDict = {
   title: string;
   intro: string;
+  minDeliveryNote: string;
   fields: {
     name: string;
-    type: string;
-    budget: string;
-    deadline: string;
-    deadlineHint: string;
+    contact: string;
+    services: string;
     description: string;
+    descriptionHint: string;
+    deadline: string;
+    referral: string;
+    referralHint: string;
   };
-  typeOptions: readonly string[];
-  budgetOptions: readonly string[];
+  serviceOptions: readonly { id: ServiceId; label: string }[];
+  deadlineOptions: readonly string[];
+  referralOptions: readonly string[];
+  servicesError: string;
+  estimate: {
+    locale: string;
+    intro: string;
+    mailtoLabel: string;
+  };
   submit: string;
+  sending: string;
   subjectPrefix: string;
-  emptyDeadline: string;
+  sentConfirmation: string;
+  sendError: string;
+  openEmail: string;
+  copy: string;
+  copied: string;
   sentNote: string;
 };
 
@@ -40,14 +57,18 @@ export type Dict = {
   header: HeaderDict;
   skipLink: string;
   home: {
-    srTitle: string;
+    statement: string;
+    ctaLabel: string;
     gridLabel: string;
     metaTitle: string;
     metaDescription: string;
   };
   studio: {
     title: string;
-    intro: string;
+    about: {
+      title: string;
+      paragraphs: readonly string[];
+    };
     metaTitle: string;
     metaDescription: string;
   };

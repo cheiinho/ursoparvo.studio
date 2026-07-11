@@ -3,7 +3,7 @@ import type { Dict } from "./types";
 export const en: Dict = {
   site: {
     title: "UrsoParvo Studio",
-    description: "Visual identity for companies.",
+    description: "Time-proof brands.",
   },
 
   header: {
@@ -18,18 +18,27 @@ export const en: Dict = {
   skipLink: "Skip to content",
 
   home: {
-    srTitle: "UrsoParvo Studio. Visual identity for companies.",
+    statement: "Time-proof brands.",
+    ctaLabel: "Let's talk",
     gridLabel: "Projects",
     metaTitle: "UrsoParvo Studio",
-    metaDescription: "Visual identity for companies.",
+    metaDescription:
+      "Designer with deep experience across product, identity and visual communication. Past clients include BMW, Mercedes-Benz and Talkdesk. Now running UrsoParvo Studio in Coimbra, focused on corporate visual identity built to last.",
   },
 
   studio: {
     title: "How we work.",
-    intro: "We design visual identities for companies.",
+    about: {
+      title: "The studio",
+      paragraphs: [
+        "João Pedro Leite designs for digital products in enterprise and institutional settings. Internal tools at BMW Group, platforms at Mercedes-Benz, contact centre systems at Talkdesk, public services at Segurança Social. And, marking the path, the visual identity for Politécnico de Coimbra: an institution with its own history, thousands of people moving through it every day, a brand that had to carry that weight.",
+        "Real users, where detail mattered and mistakes had a cost. That discipline shapes every decision he makes. The difference between what looks good in a deck and what holds up in actual use.",
+        "UrsoParvo Studio applies that maturity to corporate visual identity. For companies and institutions that want a brand with presence, not one chasing the trend of the moment.",
+      ],
+    },
     metaTitle: "Studio · UrsoParvo Studio",
     metaDescription:
-      "How we work, what to send at first contact and how to ask for a quote.",
+      "Designer with deep experience across product, identity and visual communication. Past clients include BMW, Mercedes-Benz and Talkdesk. Now running UrsoParvo Studio in Coimbra, focused on corporate visual identity built to last.",
   },
 
   process: {
@@ -52,12 +61,12 @@ export const en: Dict = {
         body: "A 50% deposit before work begins.",
       },
       {
-        title: "Access and welcome doc",
-        body: "What we need, how we talk, where everything lives.",
+        title: "Access",
+        body: "What we need from you, how we communicate, where the files are kept.",
       },
       {
         title: "Kickoff",
-        body: "A kickoff call, and the work begins.",
+        body: "An opening call and the work begins.",
       },
     ],
   },
@@ -76,41 +85,54 @@ export const en: Dict = {
       },
       {
         title: "References",
-        body: "Things you like and things you avoid.",
+        body: "What you like and what you want to avoid.",
       },
       {
         title: "Deadlines",
-        body: "Real dates, not hopeful ones.",
-      },
-      {
-        title: "A budget range",
-        body: "It saves everyone two weeks of email.",
+        body: "Concrete dates.",
       },
     ],
   },
 
   contact: {
     title: "Quote",
-    intro: "Fill this in and your email client does the rest.",
+    intro: "Tell us the context.",
+    minDeliveryNote:
+      "Every project gets its own slot in the schedule, with no overlap with other work. Deadlines count from the start date set in the first meeting, not from this contact.",
     fields: {
       name: "Name",
-      type: "Project type",
-      budget: "Estimated budget",
-      deadline: "Deadline",
-      deadlineHint: "for example, by September",
-      description: "Description",
+      contact: "Email or phone",
+      services: "What you need",
+      description: "Brief description of the project or company",
+      descriptionHint: "optional",
+      deadline: "Desired timeline",
+      referral: "How you found the studio",
+      referralHint: "optional",
     },
-    typeOptions: ["Visual identity", "Rebranding", "Website", "Other"],
-    budgetOptions: [
-      "Up to €2,500",
-      "€2,500 to €5,000",
-      "€5,000 to €10,000",
-      "More than €10,000",
-      "Not sure yet",
+    serviceOptions: [
+      { id: "identidade", label: "Corporate visual identity" },
+      { id: "grafismo", label: "Graphic design" },
+      { id: "fotografia", label: "Photography" },
     ],
-    submit: "Compose email",
+    deadlineOptions: ["No rush", "One to three months", "Urgent"],
+    referralOptions: ["Social media", "A recommendation", "Online search", "Other"],
+    servicesError: "Choose at least one service.",
+    estimate: {
+      locale: "en-GB",
+      intro:
+        "Based on what you described, the estimated investment for this project sits between {min} and {max}. This figure is an initial reference and will be refined in the first conversation.",
+      mailtoLabel: "Estimate shown",
+    },
+    submit: "Send request",
+    sending: "Sending…",
     subjectPrefix: "Quote",
-    emptyDeadline: "to be defined",
+    sentConfirmation:
+      "Message sent. We will reply soon to the contact you provided.",
+    sendError:
+      "The message could not be sent from the site. You can open it in your email or copy it.",
+    openEmail: "Open in email",
+    copy: "Copy message",
+    copied: "Message copied.",
     sentNote:
       "Your email client should have opened. If it did not, write directly:",
   },

@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { ThemeScript } from "@/components/ThemeScript";
 import { getDict } from "@/content/dict";
 import { SITE } from "@/content/site";
-import { inter } from "@/lib/fonts";
+import { nudica } from "@/lib/fonts";
 import { hasLang, HTML_LANG, type Lang } from "@/lib/i18n";
 import "../globals.css";
 
@@ -54,10 +54,10 @@ export default async function RootLayout({
   return (
     <html
       lang={HTML_LANG[resolveLang(lang)]}
-      className={`h-full scroll-smooth ${inter.variable}`}
+      className={`h-full scroll-smooth ${nudica.variable}`}
       suppressHydrationWarning
     >
-      <body className={`${inter.className} relative min-h-full antialiased`}>
+      <body className={`${nudica.className} relative min-h-full antialiased`}>
         <ThemeScript />
         {children}
       </body>

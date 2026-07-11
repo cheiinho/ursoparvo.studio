@@ -1,10 +1,39 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Sfizia";
+  src: url("/fonts/sfizia/Sfizia-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sfizia";
+  src: url("/fonts/sfizia/Sfizia-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sfizia";
+  src: url("/fonts/sfizia/Sfizia-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* Exactly three sizes site-wide: display (h1), corpo (everything), nota (labels/footer) */
-  --fs-display: clamp(2.25rem, 1.4rem + 3vw, 3.5rem);
+  --fs-display: clamp(2.75rem, 1.5rem + 5.5vw, 6rem);
   --fs-corpo: clamp(1.0625rem, 1rem + 0.2vw, 1.125rem);
   --fs-nota: 0.875rem;
+
+  /* Display face: Sfizia (licensed, files not in repo). Falls back to Inter
+     until public/fonts/sfizia/Sfizia-Regular.woff2 exists. */
+  --font-display: "Sfizia", var(--font-text), ui-sans-serif, system-ui,
+    sans-serif;
 
   --surface: #faf9f6;
   --field: #f1efe9;
@@ -64,7 +93,7 @@
   --color-text: var(--text);
   --color-text-secondary: var(--text-secondary);
   --color-accent: var(--accent);
-  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-sans: var(--font-text), system-ui, sans-serif;
 }
 
 *,
@@ -82,7 +111,7 @@ body {
   margin: 0;
   background-color: var(--surface);
   color: var(--text);
-  font-family: var(--font-inter), system-ui, sans-serif;
+  font-family: var(--font-text), system-ui, sans-serif;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -105,6 +134,7 @@ button {
 }
 
 .type-display {
+  font-family: var(--font-display);
   font-size: var(--fs-display);
   font-weight: 400;
   line-height: 1.1;
@@ -210,6 +240,7 @@ button {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
+  font-weight: 500;
   color: var(--text-secondary);
   text-decoration: none;
   transition: color var(--dur-micro) var(--ease-standard);
@@ -302,19 +333,96 @@ button.site-footer__item:hover {
   margin: 0;
 }
 
-.studio-open__intro {
-  margin: 0;
-}
-
 .studio-section {
   display: grid;
   gap: var(--space-4);
+  border-top: 1px solid var(--text);
+  padding-top: var(--space-6);
+}
+
+.home-statement {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+  margin-inline: auto;
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-16);
+  text-align: center;
+}
+
+.home-statement h1 {
+  margin: 0;
+}
+
+.home-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: var(--space-3) var(--space-8);
+  border-radius: var(--radius-ui);
+  background: var(--text);
+  color: var(--surface);
+  font-weight: 500;
+  font-size: var(--fs-corpo);
+  text-decoration: none;
+  transition: opacity var(--dur-micro) var(--ease-standard);
+}
+
+.home-cta:hover {
+  opacity: 0.85;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .home-cta {
+    opacity: 0;
+    animation: cta-in var(--dur-reveal) var(--ease-out) forwards;
+    animation-delay: 420ms;
+  }
+
+  .home-cta:hover {
+    opacity: 0.85;
+  }
+
+  @keyframes cta-in {
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/* Masked line reveal for display titles. The mask gets a hair of extra
+   room on both ends so accents and serif descenders survive the clip. */
+.reveal-mask {
+  display: block;
+  overflow: hidden;
+  padding-block: 0.18em;
+  margin-block: -0.18em;
+}
+
+.reveal-line {
+  display: block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-line {
+    transform: translateY(130%);
+    animation: reveal-line-up var(--dur-reveal) var(--ease-out) forwards;
+    animation-delay: calc(90ms + var(--line-index, 0) * 110ms);
+  }
+
+  @keyframes reveal-line-up {
+    to {
+      transform: translateY(0);
+    }
+  }
 }
 
 .studio-section__title {
   margin: 0;
   font-size: var(--fs-nota);
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.45;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -336,10 +444,6 @@ button.site-footer__item:hover {
 
   .studio-open h1 {
     grid-column: 1 / -1;
-  }
-
-  .studio-open__intro {
-    grid-column: 2;
   }
 
   .studio-section {
@@ -391,6 +495,11 @@ button.site-footer__item:hover {
 .process-list h3,
 .process-list p {
   margin: 0;
+}
+
+.process-list h3,
+.check-list h3 {
+  font-weight: 500;
 }
 
 .process-list p {
@@ -472,6 +581,7 @@ button.site-footer__item:hover {
 
 .tile-overlay__name {
   display: block;
+  font-weight: 500;
 }
 
 .tile--accent {
@@ -525,8 +635,13 @@ button.site-footer__item:hover {
 
 .field label {
   font-size: var(--fs-nota);
+  font-weight: 500;
   line-height: 1.45;
   color: var(--text-secondary);
+}
+
+.field label .text-secondary {
+  font-weight: 400;
 }
 
 .field input,
@@ -550,6 +665,84 @@ button.site-footer__item:hover {
   resize: vertical;
 }
 
+.field fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.field legend {
+  padding: 0;
+  margin-bottom: var(--space-2);
+  font-size: var(--fs-nota);
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.choice-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.choice-list label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 44px;
+  font-size: var(--fs-corpo);
+  color: var(--text);
+}
+
+.field .choice-list input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  min-height: 0;
+  padding: 0;
+  accent-color: var(--accent);
+}
+
+.form-error {
+  margin: 0;
+  color: var(--text);
+}
+
+.form-result {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.form-submit:disabled {
+  opacity: 0.6;
+}
+
+.form-inline-action {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.form-inline-action:hover {
+  text-decoration-color: var(--accent);
+}
+
+.hp-field {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
 .form-submit {
   display: inline-flex;
   align-items: center;
@@ -562,6 +755,7 @@ button.site-footer__item:hover {
   background: var(--text);
   color: var(--surface);
   font: inherit;
+  font-weight: 500;
   font-size: var(--fs-corpo);
   transition: opacity var(--dur-micro) var(--ease-standard);
 }
