@@ -18,7 +18,7 @@ export const pt: Dict = {
   skipLink: "Saltar para o conteúdo",
 
   home: {
-    statement: "A identidade.\nÀ prova de tendências.",
+    statement: "À prova de tendências.",
     gridLabel: "Projectos",
     metaTitle: "UrsoParvo Studio",
     metaDescription:
