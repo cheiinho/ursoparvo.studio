@@ -26,7 +26,7 @@
 
 :root {
   /* Exactly three sizes site-wide: display (h1), corpo (everything), nota (labels/footer) */
-  --fs-display: clamp(2.25rem, 1.4rem + 3vw, 3.5rem);
+  --fs-display: clamp(2.75rem, 1.5rem + 5.5vw, 6rem);
   --fs-corpo: clamp(1.0625rem, 1rem + 0.2vw, 1.125rem);
   --fs-nota: 0.875rem;
 
@@ -347,7 +347,6 @@ button.site-footer__item:hover {
 
 .home-statement h1 {
   margin: 0;
-  max-width: 22ch;
 }
 
 /* Masked line reveal for display titles. The mask gets a hair of extra
