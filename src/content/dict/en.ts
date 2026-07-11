@@ -19,6 +19,7 @@ export const en: Dict = {
 
   home: {
     statement: "Time-proof brands.",
+    ctaLabel: "Let's talk",
     gridLabel: "Projects",
     metaTitle: "UrsoParvo Studio",
     metaDescription:

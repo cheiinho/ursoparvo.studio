@@ -341,12 +341,55 @@ button.site-footer__item:hover {
 }
 
 .home-statement {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+  margin-inline: auto;
   padding-top: var(--space-4);
   padding-bottom: var(--space-16);
+  text-align: center;
 }
 
 .home-statement h1 {
   margin: 0;
+}
+
+.home-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: var(--space-3) var(--space-8);
+  border-radius: var(--radius-ui);
+  background: var(--text);
+  color: var(--surface);
+  font-weight: 500;
+  font-size: var(--fs-corpo);
+  text-decoration: none;
+  transition: opacity var(--dur-micro) var(--ease-standard);
+}
+
+.home-cta:hover {
+  opacity: 0.85;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .home-cta {
+    opacity: 0;
+    animation: cta-in var(--dur-reveal) var(--ease-out) forwards;
+    animation-delay: 420ms;
+  }
+
+  .home-cta:hover {
+    opacity: 0.85;
+  }
+
+  @keyframes cta-in {
+    to {
+      opacity: 1;
+    }
+  }
 }
 
 /* Masked line reveal for display titles. The mask gets a hair of extra

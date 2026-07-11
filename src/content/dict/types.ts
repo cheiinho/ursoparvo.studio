@@ -58,6 +58,7 @@ export type Dict = {
   skipLink: string;
   home: {
     statement: string;
+    ctaLabel: string;
     gridLabel: string;
     metaTitle: string;
     metaDescription: string;

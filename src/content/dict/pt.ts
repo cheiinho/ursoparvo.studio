@@ -19,6 +19,7 @@ export const pt: Dict = {
 
   home: {
     statement: "À prova de tendências.",
+    ctaLabel: "Falar sobre um projecto",
     gridLabel: "Projectos",
     metaTitle: "UrsoParvo Studio",
     metaDescription:
