@@ -530,15 +530,27 @@ button.site-footer__item:hover {
 
 .masonry-bleed {
   width: 100%;
-  padding-inline: 2px;
+  padding-inline: 0;
+}
+
+@media (min-width: 640px) {
+  .masonry-bleed {
+    padding-inline: 2px;
+  }
 }
 
 .masonry {
-  columns: 2;
+  columns: 1;
   column-gap: 2px;
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+@media (min-width: 640px) {
+  .masonry {
+    columns: 2;
+  }
 }
 
 @media (min-width: 1024px) {
