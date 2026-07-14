@@ -10,6 +10,7 @@ export const pt: Dict = {
     logoAlt: "UrsoParvo Studio",
     homeAria: "UrsoParvo Studio, voltar ao início",
     studioLabel: "Estúdio",
+    ctaLabel: "Falar connosco",
     langLabel: "EN",
     langAria: "View this page in English",
     langHrefLang: "en",
@@ -19,7 +20,6 @@ export const pt: Dict = {
 
   home: {
     statement: "À prova de tendências.",
-    ctaLabel: "Falar sobre um projecto",
     gridLabel: "Projectos",
     metaTitle: "UrsoParvo Studio",
     metaDescription:
