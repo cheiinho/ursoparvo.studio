@@ -4,6 +4,7 @@ export type HeaderDict = {
   logoAlt: string;
   homeAria: string;
   studioLabel: string;
+  ctaLabel: string;
   langLabel: string;
   langAria: string;
   langHrefLang: string;
@@ -58,7 +59,6 @@ export type Dict = {
   skipLink: string;
   home: {
     statement: string;
-    ctaLabel: string;
     gridLabel: string;
     metaTitle: string;
     metaDescription: string;

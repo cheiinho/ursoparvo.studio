@@ -64,6 +64,13 @@ export default function PublicShell({
               {header.langLabel}
             </MotionLink>
             <ThemeToggle labels={theme} className="nav-link type-corpo" />
+            <MotionLink
+              href={`${STUDIO_PATH[lang]}#contacto-h`}
+              className="header-cta"
+              {...press}
+            >
+              {header.ctaLabel}
+            </MotionLink>
           </nav>
         </div>
       </header>
