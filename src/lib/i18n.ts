@@ -25,3 +25,8 @@ export const STUDIO_PATH: Record<Lang, string> = {
   pt: "/pt/estudio",
   en: "/en/studio",
 };
+
+export const PROJECT_PATH: Record<Lang, string> = {
+  pt: "/pt/projecto",
+  en: "/en/project",
+};

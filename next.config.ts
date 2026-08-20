@@ -36,6 +36,8 @@ const nextConfig: NextConfig = {
       { source: "/", destination: "/pt", permanent: true },
       { source: "/pt/studio", destination: "/pt/estudio", permanent: true },
       { source: "/en/estudio", destination: "/en/studio", permanent: true },
+      { source: "/pt/project", destination: "/pt/projecto", permanent: true },
+      { source: "/en/projecto", destination: "/en/project", permanent: true },
     ];
   },
 };

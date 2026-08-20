@@ -1,13 +1,14 @@
-import ContactForm from "@/components/ContactForm";
 import RevealTitle from "@/components/RevealTitle";
+import { MotionLink, press } from "@/components/ui-motion";
 import type { Dict } from "@/content/dict/types";
-import { SITE } from "@/content/site";
+import { PROJECT_PATH, type Lang } from "@/lib/i18n";
 
 type StudioSectionsProps = {
   dict: Dict;
+  lang: Lang;
 };
 
-export default function StudioSections({ dict }: StudioSectionsProps) {
+export default function StudioSections({ dict, lang }: StudioSectionsProps) {
   return (
     <>
       <section
@@ -95,7 +96,14 @@ export default function StudioSections({ dict }: StudioSectionsProps) {
           <p className="type-nota text-secondary measure">
             {dict.contact.minDeliveryNote}
           </p>
-          <ContactForm dict={dict.contact} email={SITE.email} />
+          <MotionLink
+            href={PROJECT_PATH[lang]}
+            className="form-submit"
+            {...press}
+          >
+            {dict.contact.flowCta}
+          </MotionLink>
+          <p className="type-nota text-secondary measure">{dict.contact.flowNote}</p>
         </div>
       </section>
     </>

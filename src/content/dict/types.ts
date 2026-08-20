@@ -50,6 +50,8 @@ export type ContactDict = {
   copy: string;
   copied: string;
   sentNote: string;
+  flowCta: string;
+  flowNote: string;
 };
 
 export type Dict = {

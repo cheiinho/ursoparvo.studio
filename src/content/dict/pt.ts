@@ -95,8 +95,8 @@ export const pt: Dict = {
   },
 
   contact: {
-    title: "Orçamento",
-    intro: "Conte o contexto.",
+    title: "Projecto",
+    intro: "Conte o que precisa de mudar, criar ou comunicar.",
     minDeliveryNote:
       "Cada projecto tem uma janela própria na agenda, sem sobreposição com outros trabalhos. Os prazos contam a partir da data de início definida na primeira reunião, não a partir deste contacto.",
     fields: {
@@ -135,6 +135,8 @@ export const pt: Dict = {
     copied: "Mensagem copiada.",
     sentNote:
       "O seu cliente de email deve ter aberto. Se não abriu, escreva directamente:",
+    flowCta: "Falar sobre um projecto",
+    flowNote: "Ou escreva directamente para o email no rodapé.",
   },
 
   theme: {
