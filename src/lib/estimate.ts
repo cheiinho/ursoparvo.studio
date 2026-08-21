@@ -1,3 +1,8 @@
+/**
+ * Legacy public service ranges used by the original contact form.
+ * Preserved as-is. The project discovery engine does not overwrite these values;
+ * see `src/lib/project-discovery/pricing-config.ts`.
+ */
 export type ServiceId = "identidade" | "grafismo" | "fotografia";
 
 export type EstimateRange = { min: number; max: number };

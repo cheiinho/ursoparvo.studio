@@ -95,8 +95,8 @@ export const en: Dict = {
   },
 
   contact: {
-    title: "Quote",
-    intro: "Tell us the context.",
+    title: "Project",
+    intro: "Tell us what needs to change, be created or communicated.",
     minDeliveryNote:
       "Every project gets its own slot in the schedule, with no overlap with other work. Deadlines count from the start date set in the first meeting, not from this contact.",
     fields: {
@@ -135,6 +135,8 @@ export const en: Dict = {
     copied: "Message copied.",
     sentNote:
       "Your email client should have opened. If it did not, write directly:",
+    flowCta: "Let's talk",
+    flowNote: "Or write directly to the email in the footer.",
   },
 
   theme: {

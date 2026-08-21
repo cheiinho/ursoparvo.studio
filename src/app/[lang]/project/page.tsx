@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import PublicShell from "@/components/PublicShell";
-import StudioSections from "@/components/StudioSections";
+import ProjectFlow from "@/components/project-flow/ProjectFlow";
+import { getProjectFlowContent } from "@/content/project-flow";
 import { getDict } from "@/content/dict";
-import { STUDIO_PATH } from "@/lib/i18n";
+import { SITE } from "@/content/site";
+import { PROJECT_PATH } from "@/lib/i18n";
 
 type PageParams = { params: Promise<{ lang: string }> };
 
@@ -16,26 +18,27 @@ export async function generateMetadata({
 }: PageParams): Promise<Metadata> {
   const { lang } = await params;
   if (lang !== "en") return {};
-  const dict = getDict("en");
+  const content = getProjectFlowContent("en");
 
   return {
-    title: dict.studio.metaTitle,
-    description: dict.studio.metaDescription,
+    title: content.meta.title,
+    description: content.meta.description,
+    robots: { index: false, follow: false },
     alternates: {
-      canonical: STUDIO_PATH.en,
+      canonical: PROJECT_PATH.en,
       languages: {
-        "pt-PT": STUDIO_PATH.pt,
-        en: STUDIO_PATH.en,
-        "x-default": STUDIO_PATH.pt,
+        "pt-PT": PROJECT_PATH.pt,
+        en: PROJECT_PATH.en,
       },
     },
   };
 }
 
-export default async function StudioPage({ params }: PageParams) {
+export default async function ProjectPage({ params }: PageParams) {
   const { lang } = await params;
   if (lang !== "en") notFound();
   const dict = getDict("en");
+  const content = getProjectFlowContent("en");
 
   return (
     <PublicShell
@@ -43,9 +46,11 @@ export default async function StudioPage({ params }: PageParams) {
       header={dict.header}
       skipLink={dict.skipLink}
       theme={dict.theme}
-      langHref={STUDIO_PATH.pt}
+      langHref={PROJECT_PATH.pt}
     >
-      <StudioSections dict={dict} lang="en" />
+      <section className="site-container project-flow-page">
+        <ProjectFlow lang="en" content={content} email={SITE.email} locale="en-GB" />
+      </section>
     </PublicShell>
   );
 }
