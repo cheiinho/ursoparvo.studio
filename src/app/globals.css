@@ -760,7 +760,7 @@ button.site-footer__item:hover {
   align-items: center;
   justify-content: center;
   align-self: flex-start;
-  min-height: 48px;
+  min-height: 56px;
   padding: var(--space-3) var(--space-8);
   border: 0;
   border-radius: var(--radius-ui);
@@ -797,6 +797,12 @@ a.form-submit {
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
+}
+
+.project-step__progress {
+  margin: 0;
+  color: var(--text-secondary);
+  font-feature-settings: "tnum";
 }
 
 .project-step__kicker {
@@ -857,7 +863,7 @@ a.form-submit {
   align-items: flex-start;
   gap: var(--space-4);
   width: 100%;
-  min-height: 52px;
+  min-height: 56px;
   margin: 0;
   padding: var(--space-4) 0;
   border-bottom: 1px solid color-mix(in srgb, var(--text) 16%, transparent);
@@ -867,10 +873,10 @@ a.form-submit {
 }
 
 .option input {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   min-height: 0;
-  margin: 0.35em 0 0;
+  margin: 0.3em 0 0;
   padding: 0;
   flex: 0 0 auto;
   accent-color: var(--text);
@@ -913,10 +919,11 @@ a.form-submit {
   padding: var(--space-4) var(--container-gutter);
   padding-bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
   background: var(--surface);
+  border-top: 1px solid color-mix(in srgb, var(--text) 16%, transparent);
 }
 
 .step-nav__back {
-  min-height: 48px;
+  min-height: 56px;
   padding: 0;
   border: 0;
   background: none;
@@ -968,6 +975,13 @@ a.form-submit {
   margin: 0;
 }
 
+.estimate-review {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-top: var(--space-6);
+}
+
 .estimate-summary {
   display: flex;
   flex-direction: column;
@@ -993,6 +1007,7 @@ a.form-submit {
     margin-inline: 0;
     padding: var(--space-4) 0 0;
     background: transparent;
+    border-top: 0;
   }
 }
 

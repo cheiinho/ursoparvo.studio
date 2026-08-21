@@ -7,7 +7,7 @@ type ProjectStepProps = {
   question: string;
   description?: string;
   helper?: string;
-  stepStatus: string;
+  stepStatus?: string;
   children: React.ReactNode;
   navigation: React.ReactNode;
 };
@@ -31,6 +31,11 @@ export function ProjectStep({
 
   return (
     <section className="project-step" aria-labelledby="project-step-title">
+      {stepStatus ? (
+        <p className="project-step__progress type-nota" aria-hidden="true">
+          {stepStatus}
+        </p>
+      ) : null}
       <p className="project-step__kicker type-nota">{kicker}</p>
       <h1
         id="project-step-title"
@@ -41,7 +46,8 @@ export function ProjectStep({
         {question}
       </h1>
       <p className="sr-only" aria-live="polite">
-        {stepStatus}. {question}
+        {stepStatus ? `${stepStatus}. ` : ""}
+        {question}
       </p>
       {description ? (
         <p id={descriptionId} className="type-corpo text-secondary measure">
@@ -55,9 +61,11 @@ export function ProjectStep({
       ) : null}
       <div
         className="project-step__body"
-        aria-describedby={[description ? descriptionId : null, helper ? helperId : null]
-          .filter(Boolean)
-          .join(" ") || undefined}
+        aria-describedby={
+          [description ? descriptionId : null, helper ? helperId : null]
+            .filter(Boolean)
+            .join(" ") || undefined
+        }
       >
         {children}
       </div>

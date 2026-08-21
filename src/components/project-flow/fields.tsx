@@ -65,6 +65,7 @@ type TextareaProps = {
   onChange: (value: string) => void;
   placeholder?: string;
   describedBy?: string;
+  labelledBy?: string;
   maxLength?: number;
 };
 
@@ -75,18 +76,23 @@ export function TextareaField({
   onChange,
   placeholder,
   describedBy,
+  labelledBy,
   maxLength = 2000,
 }: TextareaProps) {
   return (
     <div className="field">
-      <label htmlFor={id} className="sr-only">
-        {label}
-      </label>
+      {labelledBy ? null : (
+        <label htmlFor={id} className="sr-only">
+          {label}
+        </label>
+      )}
       <textarea
         id={id}
         value={value}
         placeholder={placeholder}
         maxLength={maxLength}
+        aria-label={labelledBy ? undefined : label}
+        aria-labelledby={labelledBy}
         aria-describedby={describedBy}
         onChange={(event) => onChange(event.target.value)}
       />
@@ -99,9 +105,18 @@ type DateInputProps = {
   label: string;
   value: string;
   onChange: (value: string) => void;
+  min?: string;
+  autoFocus?: boolean;
 };
 
-export function DateInput({ id, label, value, onChange }: DateInputProps) {
+export function todayIsoDate(now = new Date()): string {
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+export function DateInput({ id, label, value, onChange, min, autoFocus }: DateInputProps) {
   return (
     <div className="field">
       <label htmlFor={id}>{label}</label>
@@ -109,6 +124,8 @@ export function DateInput({ id, label, value, onChange }: DateInputProps) {
         id={id}
         type="date"
         value={value}
+        min={min ?? todayIsoDate()}
+        autoFocus={autoFocus}
         onChange={(event) => onChange(event.target.value)}
       />
     </div>

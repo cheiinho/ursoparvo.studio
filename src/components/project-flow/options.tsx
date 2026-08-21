@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import type { OptionCopy } from "@/content/project-flow/types";
 
 type OptionCardProps = {
@@ -8,17 +9,51 @@ type OptionCardProps = {
   multiple?: boolean;
   name: string;
   onChange: (id: string, checked: boolean) => void;
+  onConfirm?: (id: string) => void;
 };
 
-export function OptionCard({ option, selected, multiple = false, name, onChange }: OptionCardProps) {
+export function OptionCard({
+  option,
+  selected,
+  multiple = false,
+  name,
+  onChange,
+  onConfirm,
+}: OptionCardProps) {
+  const pointerIntent = useRef(false);
+
   return (
-    <label className={`option${selected ? " option--selected" : ""}`}>
+    <label
+      className={`option${selected ? " option--selected" : ""}`}
+      onPointerDown={() => {
+        pointerIntent.current = true;
+      }}
+    >
       <input
         type={multiple ? "checkbox" : "radio"}
         name={name}
         value={option.id}
         checked={selected}
-        onChange={(event) => onChange(option.id, event.target.checked)}
+        onChange={(event) => {
+          onChange(option.id, event.target.checked);
+          if (!multiple && pointerIntent.current) {
+            onConfirm?.(option.id);
+          }
+        }}
+        onClick={() => {
+          if (!multiple && selected && pointerIntent.current) {
+            onConfirm?.(option.id);
+          }
+          pointerIntent.current = false;
+        }}
+        onKeyDown={(event) => {
+          if (multiple) return;
+          if (event.key === "Enter") {
+            event.preventDefault();
+            if (!selected) onChange(option.id, true);
+            onConfirm?.(option.id);
+          }
+        }}
       />
       <span className="option__body">
         <span className="option__title type-corpo">{option.label}</span>
@@ -54,6 +89,7 @@ type SingleSelectProps = {
   options: OptionCopy[];
   value: string | null | undefined;
   onChange: (id: string) => void;
+  onConfirm?: (id: string) => void;
 };
 
 export function SingleSelect({
@@ -63,6 +99,7 @@ export function SingleSelect({
   options,
   value,
   onChange,
+  onConfirm,
 }: SingleSelectProps) {
   return (
     <OptionList legend={legend} describedBy={describedBy}>
@@ -73,6 +110,7 @@ export function SingleSelect({
           name={name}
           selected={value === option.id}
           onChange={(id) => onChange(id)}
+          onConfirm={onConfirm}
         />
       ))}
     </OptionList>

@@ -347,7 +347,7 @@ export type ProjectDiscoveryState = {
   currentStep: StepId;
   answers: ProjectInput;
   contact: ProjectContact;
-  returnTo: "review" | "estimate" | null;
+  returnTo: "estimate" | null;
   estimate: ClientEstimate | null;
   validation: {
     contactEmail: string | null;

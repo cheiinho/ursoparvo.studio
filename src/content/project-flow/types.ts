@@ -51,6 +51,7 @@ export type ProjectFlowContent = {
   nav: {
     back: string;
     continue: string;
+    skip: string;
     edit: string;
     talk: string;
     send: string;
@@ -99,6 +100,7 @@ export type ProjectFlowContent = {
     specialists: string;
     talk: string;
     edit: string;
+    preparing: string;
     scale: {
       contained: string;
       medium: string;
@@ -127,6 +129,7 @@ export type ProjectFlowContent = {
   errors: {
     submit: string;
     estimate: string;
+    choose: string;
   };
   classifications: Record<ProjectClassification, string>;
   assumptions: Record<ClientAssumptionId, string>;

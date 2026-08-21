@@ -1,7 +1,7 @@
 import { emptyAnswers } from "./steps";
 import type { ProjectContact, ProjectDiscoveryState, ProjectInput, StepId } from "./types";
 
-export const PROJECT_FLOW_STORAGE_KEY = "ursoparvo.project-discovery.v1";
+export const PROJECT_FLOW_STORAGE_KEY = "ursoparvo.project-discovery.v2";
 
 export function emptyContact(): ProjectContact {
   return { name: "", email: "", company: "", website: "", phone: "" };

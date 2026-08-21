@@ -279,6 +279,17 @@ describe("missing optional data", () => {
     assert.equal(result.classification, "identityRefresh");
     assert.ok(result.clientRange.min);
   });
+
+  it("infers scale and guidelines when those questions were not asked", () => {
+    const explicit = estimate(caseSmallRefresh);
+    const inferred = estimate({
+      ...caseSmallRefresh,
+      applicationScale: null,
+      guidelines: null,
+    });
+    assert.equal(explicit.recommendedFee, inferred.recommendedFee);
+    assert.equal(explicit.classification, inferred.classification);
+  });
 });
 
 describe("mobile-independent calculation", () => {
