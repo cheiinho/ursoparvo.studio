@@ -6,6 +6,7 @@ type StepNavigationProps = {
   onBack?: () => void;
   onContinue?: () => void;
   continueDisabled?: boolean;
+  continueBusy?: boolean;
   continueType?: "button" | "submit";
   sticky?: boolean;
 };
@@ -16,6 +17,7 @@ export function StepNavigation({
   onBack,
   onContinue,
   continueDisabled,
+  continueBusy,
   continueType = "button",
   sticky = true,
 }: StepNavigationProps) {
@@ -34,6 +36,7 @@ export function StepNavigation({
           className="form-submit"
           onClick={continueType === "button" ? onContinue : undefined}
           disabled={continueDisabled}
+          aria-busy={continueBusy || undefined}
         >
           {continueLabel}
         </button>

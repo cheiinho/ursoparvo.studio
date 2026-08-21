@@ -12,18 +12,20 @@ import {
   persistDiscoveryState,
   readPersistedDiscoveryState,
 } from "@/lib/project-discovery/persistence";
-import { getStepSequence, isStepComplete } from "@/lib/project-discovery/steps";
+import {
+  getStepSequence,
+  isQuestionStep,
+  isStepComplete,
+  usesSkipLabel,
+} from "@/lib/project-discovery/steps";
 import type {
   ApplicationContext,
-  ApplicationScale,
   BudgetRange,
   CampaignKind,
   CampaignPlacement,
   ClientEstimate,
   ExistingBrandState,
-  GuidelinesLevel,
   IdentityScopeItem,
-  ImageComplexity,
   PieceCount,
   ProjectContact,
   ProjectDiscoveryState,
@@ -39,7 +41,7 @@ import type {
   TimelineKind,
 } from "@/lib/project-discovery/types";
 import { HOME_PATH, type Lang } from "@/lib/i18n";
-import { DateInput, TextareaField, TextInput } from "./fields";
+import { DateInput, TextareaField, TextInput, todayIsoDate } from "./fields";
 import { EstimateSummary } from "./EstimateSummary";
 import { getReviewSections, ReviewSummary } from "./ReviewSummary";
 import {
@@ -67,13 +69,19 @@ function emptySubscribe() {
   return () => {};
 }
 
+function prefersReducedMotion(): boolean {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 function restoreDiscoveryState(): ProjectDiscoveryState {
   const persisted = readPersistedDiscoveryState();
   const initial = initialDiscoveryState();
   if (!persisted) return initial;
+  const currentStep =
+    persisted.currentStep === "review" ? "estimate" : persisted.currentStep;
   return {
     ...initial,
-    currentStep: persisted.currentStep,
+    currentStep,
     answers: { ...initial.answers, ...persisted.answers },
     contact: { ...initial.contact, ...persisted.contact },
   };
@@ -89,6 +97,7 @@ function ProjectFlowReady({ lang, content, email, locale }: ProjectFlowProps) {
   const [state, setState] = useState<ProjectDiscoveryState>(restoreDiscoveryState);
   const started = useRef(false);
   const viewedEstimate = useRef(false);
+  const advanceTimer = useRef<number | null>(null);
 
   useEffect(() => {
     if (!started.current) {
@@ -111,19 +120,25 @@ function ProjectFlowReady({ lang, content, email, locale }: ProjectFlowProps) {
     return () => window.removeEventListener("pagehide", onLeave);
   }, [state.submissionState]);
 
+  useEffect(() => {
+    return () => {
+      if (advanceTimer.current != null) window.clearTimeout(advanceTimer.current);
+    };
+  }, []);
+
   const sequence = useMemo(() => getStepSequence(state.answers), [state.answers]);
   const stepIndex = Math.max(0, sequence.indexOf(state.currentStep));
   const currentStep = sequence.includes(state.currentStep)
     ? state.currentStep
     : sequence[0];
-  const questionSteps = sequence.filter(
-    (step): boolean =>
-      step !== "review" && step !== "estimate" && step !== "contact" && step !== "complete",
-  );
+  const questionSteps = sequence.filter((step) => isQuestionStep(step));
   const questionIndex = questionSteps.indexOf(currentStep);
-  const stepStatus = content.nav.stepStatus
-    .replace("{current}", String(Math.max(1, questionIndex + 1)))
-    .replace("{total}", String(questionSteps.length));
+  const stepStatus =
+    questionIndex >= 0
+      ? content.nav.stepStatus
+          .replace("{current}", String(questionIndex + 1))
+          .replace("{total}", String(questionSteps.length))
+      : undefined;
 
   const goTo = useCallback((step: StepId, returnTo?: ProjectDiscoveryState["returnTo"]) => {
     setState((current) => ({
@@ -149,23 +164,69 @@ function ProjectFlowReady({ lang, content, email, locale }: ProjectFlowProps) {
     }));
   }, []);
 
+  function clearAdvanceTimer() {
+    if (advanceTimer.current != null) {
+      window.clearTimeout(advanceTimer.current);
+      advanceTimer.current = null;
+    }
+  }
+
   function advanceFrom(step: StepId) {
+    clearAdvanceTimer();
     if (state.returnTo) {
       goTo(state.returnTo, null);
       return;
     }
     const index = sequence.indexOf(step);
-    const next = sequence[index + 1] ?? "review";
+    const next = sequence[index + 1] ?? "estimate";
     goTo(next);
   }
 
+  function scheduleAdvanceFrom(step: StepId) {
+    clearAdvanceTimer();
+    const delay = prefersReducedMotion() ? 0 : 160;
+    advanceTimer.current = window.setTimeout(() => {
+      advanceTimer.current = null;
+      setState((current) => {
+        if (current.returnTo) {
+          return {
+            ...current,
+            currentStep: current.returnTo,
+            returnTo: null,
+            validation: { contactEmail: null, contactName: null, submit: null },
+          };
+        }
+        const nextSequence = getStepSequence(current.answers);
+        const index = nextSequence.indexOf(step);
+        const next = nextSequence[index + 1] ?? "estimate";
+        return {
+          ...current,
+          currentStep: next,
+          validation: { contactEmail: null, contactName: null, submit: null },
+        };
+      });
+    }, delay);
+  }
+
   function goBack() {
+    clearAdvanceTimer();
     if (state.returnTo) {
       goTo(state.returnTo, null);
       return;
     }
     const index = sequence.indexOf(currentStep);
     if (index > 0) goTo(sequence[index - 1]);
+  }
+
+  function continueFromCurrent() {
+    if (currentStep === "projectType" && !isStepComplete("projectType", state.answers)) {
+      setState((current) => ({
+        ...current,
+        validation: { ...current.validation, submit: content.errors.choose },
+      }));
+      return;
+    }
+    advanceFrom(currentStep);
   }
 
   useEffect(() => {
@@ -292,66 +353,61 @@ function ProjectFlowReady({ lang, content, email, locale }: ProjectFlowProps) {
     currentStep in content.questions
       ? content.questions[currentStep as keyof typeof content.questions]
       : undefined;
-  const continueDisabled = currentStep === "projectType" && !isStepComplete("projectType", state.answers);
+  const continueLabel = usesSkipLabel(currentStep, state.answers)
+    ? content.nav.skip
+    : content.nav.continue;
 
   const navigation = question ? (
     <StepNavigation
       backLabel={content.nav.back}
-      continueLabel={content.nav.continue}
+      continueLabel={continueLabel}
       onBack={stepIndex > 0 || state.returnTo ? goBack : undefined}
-      onContinue={() => advanceFrom(currentStep)}
-      continueDisabled={continueDisabled}
+      onContinue={continueFromCurrent}
     />
   ) : null;
 
   return (
     <div className="project-flow">
-      {currentStep === "review" ? (
-        <ProjectStep
-          kicker={content.review.kicker}
-          question={content.review.title}
-          stepStatus={stepStatus}
-          navigation={
-            <StepNavigation
-              backLabel={content.nav.back}
-              continueLabel={content.nav.continue}
-              onBack={goBack}
-              onContinue={() => goTo("estimate")}
-            />
-          }
-        >
-          <ReviewSummary
-            sections={getReviewSections(state.answers, content)}
-            editLabel={content.nav.edit}
-            onEdit={(step) => goTo(step, "review")}
-          />
-        </ProjectStep>
-      ) : null}
-
       {currentStep === "estimate" ? (
         <ProjectStep
           kicker={content.estimate.kicker}
           question={content.estimate.seeing}
-          stepStatus={stepStatus}
           navigation={
             <StepNavigation
-              backLabel={content.estimate.edit}
-              continueLabel={content.estimate.talk}
-              onBack={() => goTo("review")}
+              backLabel={content.nav.back}
+              continueLabel={
+                state.estimate ? content.estimate.talk : content.estimate.preparing
+              }
+              onBack={goBack}
               onContinue={() => goTo("contact")}
               continueDisabled={!state.estimate}
+              continueBusy={!state.estimate}
             />
           }
         >
           {state.estimate ? (
-            <EstimateSummary
-              answers={state.answers}
-              estimate={state.estimate}
-              content={content}
-              locale={locale}
-              lang={lang}
-            />
-          ) : null}
+            <>
+              <EstimateSummary
+                answers={state.answers}
+                estimate={state.estimate}
+                content={content}
+                locale={locale}
+                lang={lang}
+              />
+              <div className="estimate-review">
+                <h2 className="studio-section__title">{content.review.title}</h2>
+                <ReviewSummary
+                  sections={getReviewSections(state.answers, content)}
+                  editLabel={content.nav.edit}
+                  onEdit={(step) => goTo(step, "estimate")}
+                />
+              </div>
+            </>
+          ) : (
+            <p className="type-nota text-secondary" aria-live="polite">
+              {content.estimate.preparing}
+            </p>
+          )}
           {state.validation.submit && !state.estimate ? (
             <p className="form-error type-nota" role="alert">
               {state.validation.submit}
@@ -365,7 +421,6 @@ function ProjectFlowReady({ lang, content, email, locale }: ProjectFlowProps) {
           <ProjectStep
             kicker={content.contact.kicker}
             question={content.contact.question}
-            stepStatus={stepStatus}
             navigation={
               <StepNavigation
                 backLabel={content.nav.back}
@@ -375,6 +430,7 @@ function ProjectFlowReady({ lang, content, email, locale }: ProjectFlowProps) {
                 onBack={goBack}
                 continueType="submit"
                 continueDisabled={state.submissionState === "sending"}
+                continueBusy={state.submissionState === "sending"}
               />
             }
           >
@@ -413,15 +469,6 @@ function ProjectFlowReady({ lang, content, email, locale }: ProjectFlowProps) {
               autoComplete="url"
               optionalLabel={content.contact.optional}
               onChange={(value) => patchContact({ website: value })}
-            />
-            <TextInput
-              id="project-phone"
-              label={content.contact.phone}
-              value={state.contact.phone ?? ""}
-              type="tel"
-              autoComplete="tel"
-              optionalLabel={content.contact.optional}
-              onChange={(value) => patchContact({ phone: value })}
             />
             <div className="hp-field" aria-hidden="true">
               <label htmlFor="project-website">Website</label>
@@ -463,11 +510,7 @@ function ProjectFlowReady({ lang, content, email, locale }: ProjectFlowProps) {
         </section>
       ) : null}
 
-      {question &&
-      currentStep !== "review" &&
-      currentStep !== "estimate" &&
-      currentStep !== "contact" &&
-      currentStep !== "complete" ? (
+      {question && isQuestionStep(currentStep) ? (
         <ProjectStep
           kicker={question.kicker}
           question={question.question}
@@ -481,6 +524,7 @@ function ProjectFlowReady({ lang, content, email, locale }: ProjectFlowProps) {
             answers={state.answers}
             content={content}
             onPatch={patchAnswers}
+            onConfirmSingle={scheduleAdvanceFrom}
             onTypeSelected={(projectType) => {
               trackProjectEvent("project_type_selected", { projectType });
             }}
@@ -488,6 +532,11 @@ function ProjectFlowReady({ lang, content, email, locale }: ProjectFlowProps) {
               trackProjectEvent("specialist_selected", { specialist });
             }}
           />
+          {state.validation.submit && currentStep === "projectType" ? (
+            <p className="form-error type-nota" role="alert">
+              {state.validation.submit}
+            </p>
+          ) : null}
         </ProjectStep>
       ) : null}
     </div>
@@ -499,6 +548,7 @@ type QuestionFieldsProps = {
   answers: ProjectInput;
   content: ProjectFlowContent;
   onPatch: (patch: Partial<ProjectInput>) => void;
+  onConfirmSingle: (step: StepId) => void;
   onTypeSelected: (projectType: string) => void;
   onSpecialistSelected: (specialist: string) => void;
 };
@@ -508,6 +558,7 @@ function QuestionFields({
   answers,
   content,
   onPatch,
+  onConfirmSingle,
   onTypeSelected,
   onSpecialistSelected,
 }: QuestionFieldsProps) {
@@ -525,6 +576,7 @@ function QuestionFields({
             onTypeSelected(id);
             onPatch({ projectType: id as ProjectType });
           }}
+          onConfirm={() => onConfirmSingle("projectType")}
         />
       );
     case "existingBrand":
@@ -545,6 +597,7 @@ function QuestionFields({
           options={q.redesignDepth.options}
           value={answers.redesignDepth}
           onChange={(id) => onPatch({ redesignDepth: id as RedesignDepth })}
+          onConfirm={() => onConfirmSingle("redesignDepth")}
         />
       );
     case "strategyClarity":
@@ -555,6 +608,7 @@ function QuestionFields({
           options={q.strategyClarity.options}
           value={answers.strategyClarity}
           onChange={(id) => onPatch({ strategyClarity: id as StrategyClarity })}
+          onConfirm={() => onConfirmSingle("strategyClarity")}
         />
       );
     case "identityScope":
@@ -575,16 +629,7 @@ function QuestionFields({
           options={q.systemDepth.options}
           value={answers.systemDepth}
           onChange={(id) => onPatch({ systemDepth: id as SystemDepth })}
-        />
-      );
-    case "guidelines":
-      return (
-        <SingleSelect
-          name="guidelines"
-          legend={q.guidelines.question}
-          options={q.guidelines.options}
-          value={answers.guidelines}
-          onChange={(id) => onPatch({ guidelines: id as GuidelinesLevel })}
+          onConfirm={() => onConfirmSingle("systemDepth")}
         />
       );
     case "applications":
@@ -597,16 +642,6 @@ function QuestionFields({
           onChange={(next) => onPatch({ applications: next as ApplicationContext[] })}
         />
       );
-    case "applicationScale":
-      return (
-        <SingleSelect
-          name="applicationScale"
-          legend={q.applicationScale.question}
-          options={q.applicationScale.options}
-          value={answers.applicationScale}
-          onChange={(id) => onPatch({ applicationScale: id as ApplicationScale })}
-        />
-      );
     case "campaignKind":
       return (
         <SingleSelect
@@ -615,6 +650,7 @@ function QuestionFields({
           options={q.campaignKind.options}
           value={answers.campaignKind}
           onChange={(id) => onPatch({ campaignKind: id as CampaignKind })}
+          onConfirm={() => onConfirmSingle("campaignKind")}
         />
       );
     case "campaignPlacements":
@@ -635,16 +671,7 @@ function QuestionFields({
           options={q.specificKind.options}
           value={answers.specificKind}
           onChange={(id) => onPatch({ specificKind: id as SpecificKind })}
-        />
-      );
-    case "imageComplexity":
-      return (
-        <SingleSelect
-          name="imageComplexity"
-          legend={q.imageComplexity.question}
-          options={q.imageComplexity.options}
-          value={answers.imageComplexity}
-          onChange={(id) => onPatch({ imageComplexity: id as ImageComplexity })}
+          onConfirm={() => onConfirmSingle("specificKind")}
         />
       );
     case "pieceCount":
@@ -655,6 +682,7 @@ function QuestionFields({
           options={q.pieceCount.options}
           value={answers.pieceCount}
           onChange={(id) => onPatch({ pieceCount: id as PieceCount })}
+          onConfirm={() => onConfirmSingle("pieceCount")}
         />
       );
     case "specialists":
@@ -665,7 +693,9 @@ function QuestionFields({
           options={q.specialists.options}
           value={answers.specialistServices ?? []}
           onChange={(next) => {
-            const added = next.find((id) => !(answers.specialistServices ?? []).includes(id as SpecialistService));
+            const added = next.find(
+              (id) => !(answers.specialistServices ?? []).includes(id as SpecialistService),
+            );
             if (added) onSpecialistSelected(added);
             onPatch({ specialistServices: next as SpecialistService[] });
           }}
@@ -673,22 +703,34 @@ function QuestionFields({
       );
     case "timeline":
       return (
-        <SingleSelect
-          name="timeline"
-          legend={q.timeline.question}
-          options={q.timeline.options}
-          value={answers.timeline}
-          onChange={(id) => onPatch({ timeline: id as TimelineKind })}
-        />
-      );
-    case "targetDate":
-      return (
-        <DateInput
-          id="project-date"
-          label={q.targetDate.dateLabel}
-          value={answers.targetDate ?? ""}
-          onChange={(value) => onPatch({ targetDate: value })}
-        />
+        <>
+          <SingleSelect
+            name="timeline"
+            legend={q.timeline.question}
+            options={q.timeline.options}
+            value={answers.timeline}
+            onChange={(id) =>
+              onPatch({
+                timeline: id as TimelineKind,
+                targetDate: id === "specificDate" ? answers.targetDate : null,
+              })
+            }
+            onConfirm={(id) => {
+              if (id === "specificDate") return;
+              onConfirmSingle("timeline");
+            }}
+          />
+          {answers.timeline === "specificDate" ? (
+            <DateInput
+              id="project-date"
+              label={q.targetDate.dateLabel}
+              value={answers.targetDate ?? ""}
+              min={todayIsoDate()}
+              autoFocus
+              onChange={(value) => onPatch({ targetDate: value })}
+            />
+          ) : null}
+        </>
       );
     case "stakeholders":
       return (
@@ -698,6 +740,7 @@ function QuestionFields({
           options={q.stakeholders.options}
           value={answers.stakeholderComplexity}
           onChange={(id) => onPatch({ stakeholderComplexity: id as StakeholderComplexity })}
+          onConfirm={() => onConfirmSingle("stakeholders")}
         />
       );
     case "budget":
@@ -708,6 +751,7 @@ function QuestionFields({
           options={q.budget.options}
           value={answers.budgetRange}
           onChange={(id) => onPatch({ budgetRange: id as BudgetRange })}
+          onConfirm={() => onConfirmSingle("budget")}
         />
       );
     case "description":
@@ -717,6 +761,7 @@ function QuestionFields({
           label={q.description.question}
           placeholder={q.description.placeholder}
           value={answers.description ?? ""}
+          labelledBy="project-step-title"
           onChange={(value) => onPatch({ description: value })}
         />
       );

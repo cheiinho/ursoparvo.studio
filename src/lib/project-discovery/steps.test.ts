@@ -1,15 +1,31 @@
 import assert from "node:assert/strict";
 import { describe, it } from "vitest";
-import { getStepSequence } from "./steps";
+import { getStepSequence, usesSkipLabel } from "./steps";
+import { getReviewSections } from "./review";
 import { caseEventCampaign, caseSmallRefresh, caseUndefinedBrand } from "./fixtures";
+import { inferApplicationScale, inferGuidelines } from "./infer";
+import { pt } from "@/content/project-flow/pt";
 
 describe("step sequence", () => {
-  it("keeps identity redesign on the identity path", () => {
+  it("keeps identity redesign on the identity path without repeating what can be inferred", () => {
     const steps = getStepSequence(caseSmallRefresh);
     assert.ok(steps.includes("redesignDepth"));
     assert.ok(steps.includes("identityScope"));
+    assert.ok(steps.includes("systemDepth"));
+    assert.ok(!steps.includes("existingBrand"));
+    assert.ok(!steps.includes("guidelines"));
+    assert.ok(!steps.includes("applicationScale"));
+    assert.ok(!steps.includes("review"));
     assert.ok(!steps.includes("campaignKind"));
-    assert.ok(!steps.includes("specificKind"));
+  });
+
+  it("asks what already exists only when the identity is new", () => {
+    const steps = getStepSequence({
+      ...caseSmallRefresh,
+      projectType: "visualIdentity",
+    });
+    assert.ok(steps.includes("existingBrand"));
+    assert.ok(!steps.includes("redesignDepth"));
   });
 
   it("does not force event projects through the identity questionnaire", () => {
@@ -25,13 +41,46 @@ describe("step sequence", () => {
     const steps = getStepSequence({ ...caseUndefinedBrand, projectType: "unsure" });
     assert.ok(steps.includes("strategyClarity"));
     assert.ok(!steps.includes("identityScope"));
+    assert.ok(!steps.includes("specialists"));
     assert.ok(!steps.includes("campaignKind"));
   });
 
-  it("only asks for a date when a specific date is chosen", () => {
-    const without = getStepSequence({ ...caseSmallRefresh, timeline: "noDate" });
+  it("does not add a second screen for the date", () => {
     const withDate = getStepSequence({ ...caseSmallRefresh, timeline: "specificDate" });
-    assert.ok(!without.includes("targetDate"));
-    assert.ok(withDate.includes("targetDate"));
+    assert.ok(!withDate.includes("targetDate"));
+    assert.ok(withDate.includes("timeline"));
+  });
+});
+
+describe("inferred answers", () => {
+  it("maps a small set of applications to a contained scale", () => {
+    assert.equal(inferApplicationScale(["website", "social"]), "few");
+    assert.equal(inferApplicationScale(["website", "social", "print", "events"]), "smallSet");
+  });
+
+  it("maps system depth to a documentation level", () => {
+    assert.equal(inferGuidelines("foundations"), "essential");
+    assert.equal(inferGuidelines("completeSystem"), "detailed");
+  });
+});
+
+describe("skip label", () => {
+  it("offers a skip label on unanswered optional questions", () => {
+    assert.equal(usesSkipLabel("specialists", caseSmallRefresh), true);
+    assert.equal(usesSkipLabel("projectType", caseSmallRefresh), false);
+    assert.equal(usesSkipLabel("description", caseSmallRefresh), false);
+  });
+});
+
+describe("review summary", () => {
+  it("omits unanswered optional questions and questions that were never asked", () => {
+    const sections = getReviewSections(caseSmallRefresh, pt);
+    const steps = sections.map((section) => section.step);
+    assert.ok(steps.includes("redesignDepth"));
+    assert.ok(!steps.includes("existingBrand"));
+    assert.ok(!steps.includes("guidelines"));
+    assert.ok(!steps.includes("applicationScale"));
+    assert.ok(!steps.includes("specialists"));
+    assert.ok(!sections.some((section) => section.values.includes("Por definir")));
   });
 });

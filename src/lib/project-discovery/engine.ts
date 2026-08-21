@@ -1,3 +1,4 @@
+import { withInferredAnswers } from "./infer";
 import { pricingConfig, type PricingConfig } from "./pricing-config";
 import type {
   ApplicationContext,
@@ -465,6 +466,7 @@ export function estimateProject(
 ): EstimateResult {
   const config = options.config ?? pricingConfig;
   const now = options.now ?? new Date();
+  input = withInferredAnswers(input);
   const classification = classify(input);
   const { fee: coreFee, rushed } = computeCoreFee(input, config, now);
   const specialists = specialistTotal(input, config);
