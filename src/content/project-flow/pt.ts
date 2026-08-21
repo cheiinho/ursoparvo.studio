@@ -115,9 +115,9 @@ export const pt: ProjectFlowContent = {
   nav: {
     back: "Voltar",
     continue: "Continuar",
-    skip: "Continuar sem escolher",
+    skip: "Agora não",
     edit: "Editar",
-    talk: "Falar sobre o projecto",
+    talk: "Falar do projecto",
     send: "Enviar o resumo",
     sending: "A enviar…",
     startAgain: "Começar de novo",
@@ -539,9 +539,9 @@ export const pt: ProjectFlowContent = {
       "Parte do que descreveu acima. Afinamos quando falarmos do projecto com calma.",
     specialists:
       "Pode fazer sentido trazer gente de {list} para o projecto, se for útil.",
-    talk: "Falar sobre o projecto",
+    talk: "Falar do projecto",
     edit: "Editar",
-    preparing: "A preparar a leitura…",
+    preparing: "A preparar…",
     scale: {
       contained: "escala contida",
       medium: "escala média",
