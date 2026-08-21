@@ -3,7 +3,7 @@ import type { Dict } from "./types";
 export const en: Dict = {
   site: {
     title: "UrsoParvo Studio",
-    description: "Time-proof brands.",
+    description: "A visual identity studio. Time-proof brands.",
   },
 
   header: {
@@ -19,84 +19,82 @@ export const en: Dict = {
 
   home: {
     statement: "Time-proof brands.",
-    ctaLabel: "Let's talk",
+    lede: "An independent visual identity studio. The difference between what looks right in a presentation and what holds up in actual use.",
+    ctaLabel: "Let’s talk",
+    studioLabel: "The studio",
     gridLabel: "Projects",
     metaTitle: "UrsoParvo Studio",
     metaDescription:
-      "Designer with deep experience across product, identity and visual communication. Past clients include BMW, Mercedes-Benz and Talkdesk. Now running UrsoParvo Studio in Coimbra, focused on corporate visual identity built to last.",
+      "Independent visual identity studio in Coimbra. Identity designed to work in the real world, not just in a presentation.",
   },
 
   studio: {
-    title: "How we work.",
+    title: "The studio.",
     about: {
-      title: "The studio",
+      title: "Why",
       paragraphs: [
-        "João Pedro Leite designs for digital products in enterprise and institutional settings. Internal tools at BMW Group, platforms at Mercedes-Benz, contact centre systems at Talkdesk, public services at Segurança Social. And, marking the path, the visual identity for Politécnico de Coimbra: an institution with its own history, thousands of people moving through it every day, a brand that had to carry that weight.",
-        "Real users, where detail mattered and mistakes had a cost. That discipline shapes every decision he makes. The difference between what looks good in a deck and what holds up in actual use.",
-        "UrsoParvo Studio applies that maturity to corporate visual identity. For companies and institutions that want a brand with presence, not one chasing the trend of the moment.",
+        "UrsoParvo Studio is an independent visual identity studio. The work sits between what looks right in a presentation and what holds up in actual use — for companies and institutions that want a brand with presence, not one chasing the trend of the moment.",
+        "That discipline was formed with João Pedro Leite designing digital products and systems in demanding settings. Internal tools at BMW Group, platforms at Mercedes-Benz, contact centre systems at Talkdesk, public services at Segurança Social. Real users, where detail mattered and mistakes had a cost.",
+        "The visual identity for Politécnico de Coimbra sits at the centre of that territory: an institution with its own history, thousands of people moving through it every day, a brand that had to carry that weight. Identity has to survive reality. The studio works from Coimbra.",
       ],
+    },
+    method: {
+      title: "Work",
+      steps: [
+        {
+          title: "Understand",
+          body: "The context, the constraints, what has to change.",
+        },
+        {
+          title: "Decide",
+          body: "The direction, and the choices that make it possible.",
+        },
+        {
+          title: "Build",
+          body: "The identity, the system, the applications where it will live.",
+        },
+        {
+          title: "Deliver",
+          body: "Guidance, files, and what is needed for the work to continue in use.",
+        },
+      ],
+    },
+    engagement: {
+      title: "Working together",
+      intro:
+        "The work moves with clear rules, so both sides know what is happening, what it costs, and what comes next.",
+      steps: [
+        {
+          title: "Proposal",
+          body: "Scope, fees and dates. No small print.",
+        },
+        {
+          title: "Contract and deposit",
+          body: "Nothing moves without a signature. It protects both sides. A 50% deposit before work begins.",
+        },
+        {
+          title: "Kick-off",
+          body: "Access, how we communicate, the opening call. Every project gets its own slot in the schedule, with no overlap. Deadlines count from the start date, not from this first contact.",
+        },
+      ],
+    },
+    invite: {
+      title: "Project",
+      body: "Every project starts with a few simple questions. You do not need to know exactly what you need, or to prepare a brief. We want to understand the context, what you are trying to solve, and where we can be most useful.",
+      note: "A few questions. No obligation.",
+      after:
+        "Once we have the request, we read the project and set out the next steps. If it is a fit, we move to a conversation and a proposal.",
+      cta: "Tell us about the project",
+      emailNote: "Or write directly to the email in the footer.",
     },
     metaTitle: "Studio · UrsoParvo Studio",
     metaDescription:
-      "Designer with deep experience across product, identity and visual communication. Past clients include BMW, Mercedes-Benz and Talkdesk. Now running UrsoParvo Studio in Coimbra, focused on corporate visual identity built to last.",
-  },
-
-  process: {
-    title: "Process",
-    steps: [
-      {
-        title: "Conversation",
-        body: "First contact. Understand the problem before talking about solutions.",
-      },
-      {
-        title: "Quote",
-        body: "A proposal with scope, numbers and dates. No small print.",
-      },
-      {
-        title: "Contract",
-        body: "Nothing moves without a signature. It protects both sides.",
-      },
-      {
-        title: "Invoice",
-        body: "A 50% deposit before work begins.",
-      },
-      {
-        title: "Access",
-        body: "What we need from you, how we communicate, where the files are kept.",
-      },
-      {
-        title: "Kickoff",
-        body: "An opening call and the work begins.",
-      },
-    ],
-  },
-
-  checklist: {
-    title: "First contact",
-    intro: "The more complete it is, the faster the quote.",
-    items: [
-      {
-        title: "Brand materials",
-        body: "Logo, guidelines, whatever exists.",
-      },
-      {
-        title: "Goals",
-        body: "What should change with this project.",
-      },
-      {
-        title: "References",
-        body: "What you like and what you want to avoid.",
-      },
-      {
-        title: "Deadlines",
-        body: "Concrete dates.",
-      },
-    ],
+      "Independent visual identity studio in Coimbra. The discipline of designing real systems, applied to brand.",
   },
 
   contact: {
     title: "Project",
-    intro: "Tell us what needs to change, be created or communicated.",
+    intro: "Tell us what you are trying to solve. You do not need a brief.",
     minDeliveryNote:
       "Every project gets its own slot in the schedule, with no overlap with other work. Deadlines count from the start date set in the first meeting, not from this contact.",
     fields: {
@@ -135,7 +133,7 @@ export const en: Dict = {
     copied: "Message copied.",
     sentNote:
       "Your email client should have opened. If it did not, write directly:",
-    flowCta: "Let's talk",
+    flowCta: "Tell us about the project",
     flowNote: "Or write directly to the email in the footer.",
   },
 
