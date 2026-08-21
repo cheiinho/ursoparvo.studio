@@ -105,12 +105,12 @@ export const pt: ProjectFlowContent = {
   meta: {
     title: "Falar sobre um projecto · UrsoParvo Studio",
     description:
-      "Conte-nos o que precisa de mudar, criar ou comunicar. Respondemos com uma leitura clara do projecto e uma estimativa inicial.",
+      "Conte o que está a tentar resolver. Não precisa de um briefing. Respondemos com uma leitura do projecto e os próximos passos.",
   },
   intro: {
     kicker: "Projecto",
     title: "Falar sobre um projecto",
-    body: "Não precisa de ter tudo definido. Escolha o que mais se aproxima — depois afinamos juntos.",
+    body: "Não precisa de saber exactamente o que precisa. Escolha o que mais se aproxima.",
   },
   nav: {
     back: "Voltar",
@@ -126,9 +126,9 @@ export const pt: ProjectFlowContent = {
   questions: {
     projectType: {
       kicker: "Projecto",
-      question: "Em que vamos trabalhar?",
+      question: "O que está a tentar resolver?",
       description:
-        "Não precisa de ter tudo definido. Escolha o que mais se aproxima.",
+        "Não precisa de um briefing. Escolha o que mais se aproxima.",
       continueLabel: "Continuar",
       backLabel: "Voltar",
       options: [
@@ -515,8 +515,8 @@ export const pt: ProjectFlowContent = {
     },
     description: {
       kicker: "Contexto",
-      question: "Quer deixar-nos mais algum contexto?",
-      placeholder: "O que está a tentar mudar, criar ou comunicar. Pode ser informal.",
+      question: "O que está a acontecer — e o que gostaria que fosse diferente?",
+      placeholder: "Pode ser informal. Não precisa de estar definido.",
       continueLabel: "Continuar",
       backLabel: "Voltar",
     },
@@ -564,7 +564,7 @@ export const pt: ProjectFlowContent = {
   complete: {
     kicker: "Enviado",
     title: "Recebemos o projecto.",
-    body: "Lemos o que enviou e respondemos para o email que indicou.",
+    body: "Vamos lê-lo e responder com os próximos passos.",
     home: "Voltar ao início",
   },
   errors: {

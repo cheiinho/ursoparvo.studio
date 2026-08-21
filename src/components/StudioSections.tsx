@@ -43,14 +43,14 @@ export default function StudioSections({ dict, lang }: StudioSectionsProps) {
       <section
         className="site-container site-container--wide studio-section rise"
         style={{ "--stagger": 2 } as React.CSSProperties}
-        aria-labelledby="processo-h"
+        aria-labelledby="metodo-h"
       >
-        <h2 id="processo-h" className="studio-section__title">
-          {dict.process.title}
+        <h2 id="metodo-h" className="studio-section__title">
+          {dict.studio.method.title}
         </h2>
         <div className="studio-section__body">
           <ol className="process-list type-corpo">
-            {dict.process.steps.map((step) => (
+            {dict.studio.method.steps.map((step) => (
               <li key={step.title}>
                 <div>
                   <h3 className="type-corpo">{step.title}</h3>
@@ -65,21 +65,23 @@ export default function StudioSections({ dict, lang }: StudioSectionsProps) {
       <section
         className="site-container site-container--wide studio-section rise"
         style={{ "--stagger": 3 } as React.CSSProperties}
-        aria-labelledby="checklist-h"
+        aria-labelledby="colaboracao-h"
       >
-        <h2 id="checklist-h" className="studio-section__title">
-          {dict.checklist.title}
+        <h2 id="colaboracao-h" className="studio-section__title">
+          {dict.studio.engagement.title}
         </h2>
         <div className="studio-section__body">
-          <p className="type-corpo measure">{dict.checklist.intro}</p>
-          <ul className="check-list type-corpo">
-            {dict.checklist.items.map((item) => (
-              <li key={item.title}>
-                <h3 className="type-corpo">{item.title}</h3>
-                <p className="type-corpo">{item.body}</p>
+          <p className="type-corpo measure">{dict.studio.engagement.intro}</p>
+          <ol className="process-list process-list--quiet type-corpo">
+            {dict.studio.engagement.steps.map((step) => (
+              <li key={step.title}>
+                <div>
+                  <h3 className="type-corpo">{step.title}</h3>
+                  <p className="type-corpo">{step.body}</p>
+                </div>
               </li>
             ))}
-          </ul>
+          </ol>
         </div>
       </section>
 
@@ -89,21 +91,20 @@ export default function StudioSections({ dict, lang }: StudioSectionsProps) {
         aria-labelledby="contacto-h"
       >
         <h2 id="contacto-h" className="studio-section__title">
-          {dict.contact.title}
+          {dict.studio.invite.title}
         </h2>
         <div className="studio-section__body">
-          <p className="type-corpo measure">{dict.contact.intro}</p>
-          <p className="type-nota text-secondary measure">
-            {dict.contact.minDeliveryNote}
-          </p>
+          <p className="type-corpo measure">{dict.studio.invite.body}</p>
+          <p className="type-nota text-secondary measure">{dict.studio.invite.note}</p>
           <MotionLink
             href={PROJECT_PATH[lang]}
             className="form-submit"
             {...press}
           >
-            {dict.contact.flowCta}
+            {dict.studio.invite.cta}
           </MotionLink>
-          <p className="type-nota text-secondary measure">{dict.contact.flowNote}</p>
+          <p className="type-corpo measure">{dict.studio.invite.after}</p>
+          <p className="type-nota text-secondary measure">{dict.studio.invite.emailNote}</p>
         </div>
       </section>
     </>

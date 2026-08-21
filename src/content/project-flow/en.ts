@@ -104,12 +104,12 @@ export const en: ProjectFlowContent = {
   meta: {
     title: "Let’s talk about the project · UrsoParvo Studio",
     description:
-      "Tell us what needs to change, be created or communicated. We’ll come back with a clear reading of the project and an initial estimate.",
+      "Tell us what you are trying to solve. You do not need a brief. We come back with a reading of the project and the next steps.",
   },
   intro: {
     kicker: "Project",
     title: "Let’s talk about the project",
-    body: "You don’t need to have everything defined. Choose what feels closest — we’ll refine it together.",
+    body: "You do not need to know exactly what you need. Choose what feels closest.",
   },
   nav: {
     back: "Back",
@@ -125,8 +125,8 @@ export const en: ProjectFlowContent = {
   questions: {
     projectType: {
       kicker: "Project",
-      question: "What are we working on?",
-      description: "You don’t need to have everything defined. Choose what feels closest.",
+      question: "What are you trying to solve?",
+      description: "You do not need a brief. Choose what feels closest.",
       continueLabel: "Continue",
       backLabel: "Back",
       options: [
@@ -513,8 +513,8 @@ export const en: ProjectFlowContent = {
     },
     description: {
       kicker: "Context",
-      question: "Anything else we should know?",
-      placeholder: "What are you trying to change, create or communicate. Informal is fine.",
+      question: "What is happening — and what would you like to be different?",
+      placeholder: "Informal is fine. It does not need to be defined.",
       continueLabel: "Continue",
       backLabel: "Back",
     },
@@ -562,7 +562,7 @@ export const en: ProjectFlowContent = {
   complete: {
     kicker: "Sent",
     title: "We have the project.",
-    body: "We’ll read what you sent and reply to the email you gave us.",
+    body: "We’ll read it and reply with the next steps.",
     home: "Back to the start",
   },
   errors: {

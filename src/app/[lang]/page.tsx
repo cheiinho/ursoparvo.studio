@@ -5,7 +5,7 @@ import PublicShell from "@/components/PublicShell";
 import RevealTitle from "@/components/RevealTitle";
 import { MotionLink } from "@/components/ui-motion";
 import { getDict } from "@/content/dict";
-import { hasLang, HOME_PATH, LANGS, OTHER_LANG, PROJECT_PATH } from "@/lib/i18n";
+import { hasLang, HOME_PATH, LANGS, OTHER_LANG, PROJECT_PATH, STUDIO_PATH } from "@/lib/i18n";
 
 type PageParams = { params: Promise<{ lang: string }> };
 
@@ -49,6 +49,12 @@ export default async function HomePage({ params }: PageParams) {
     >
       <section className="site-container site-container--wide home-statement">
         <RevealTitle text={dict.home.statement} className="type-display" />
+        <p className="type-corpo measure home-statement__lede">{dict.home.lede}</p>
+      </section>
+      <div className="masonry-bleed">
+        <ProjectGrid lang={lang} gridLabel={dict.home.gridLabel} />
+      </div>
+      <section className="site-container home-close" aria-label={dict.home.ctaLabel}>
         <MotionLink
           href={PROJECT_PATH[lang]}
           className="home-cta"
@@ -58,10 +64,10 @@ export default async function HomePage({ params }: PageParams) {
         >
           {dict.home.ctaLabel}
         </MotionLink>
+        <MotionLink href={STUDIO_PATH[lang]} className="home-close__studio type-corpo">
+          {dict.home.studioLabel}
+        </MotionLink>
       </section>
-      <div className="masonry-bleed">
-        <ProjectGrid lang={lang} gridLabel={dict.home.gridLabel} />
-      </div>
     </PublicShell>
   );
 }

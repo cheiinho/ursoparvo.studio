@@ -60,7 +60,9 @@ export type Dict = {
   skipLink: string;
   home: {
     statement: string;
+    lede: string;
     ctaLabel: string;
+    studioLabel: string;
     gridLabel: string;
     metaTitle: string;
     metaDescription: string;
@@ -71,17 +73,25 @@ export type Dict = {
       title: string;
       paragraphs: readonly string[];
     };
+    method: {
+      title: string;
+      steps: readonly { title: string; body: string }[];
+    };
+    engagement: {
+      title: string;
+      intro: string;
+      steps: readonly { title: string; body: string }[];
+    };
+    invite: {
+      title: string;
+      body: string;
+      note: string;
+      after: string;
+      cta: string;
+      emailNote: string;
+    };
     metaTitle: string;
     metaDescription: string;
-  };
-  process: {
-    title: string;
-    steps: readonly { title: string; body: string }[];
-  };
-  checklist: {
-    title: string;
-    intro: string;
-    items: readonly { title: string; body: string }[];
   };
   contact: ContactDict;
   theme: ThemeDict;
