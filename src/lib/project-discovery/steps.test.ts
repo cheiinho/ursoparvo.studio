@@ -73,14 +73,20 @@ describe("skip label", () => {
 });
 
 describe("review summary", () => {
-  it("omits unanswered optional questions and questions that were never asked", () => {
+  it("groups answers into a short commercial summary", () => {
     const sections = getReviewSections(caseSmallRefresh, pt);
-    const steps = sections.map((section) => section.step);
-    assert.ok(steps.includes("redesignDepth"));
-    assert.ok(!steps.includes("existingBrand"));
-    assert.ok(!steps.includes("guidelines"));
-    assert.ok(!steps.includes("applicationScale"));
-    assert.ok(!steps.includes("specialists"));
+    const titles = sections.map((section) => section.title);
+    assert.deepEqual(titles, ["Tipo", "Âmbito", "Aplicações", "Calendário", "Orçamento"]);
+    assert.ok(!sections.some((section) => section.step === "guidelines"));
+    assert.ok(!sections.some((section) => section.step === "strategyClarity"));
+    assert.ok(!sections.some((section) => section.step === "stakeholders"));
     assert.ok(!sections.some((section) => section.values.includes("Por definir")));
+  });
+
+  it("includes specialist extensions when they were selected", () => {
+    const sections = getReviewSections(caseEventCampaign, pt);
+    const extensions = sections.find((section) => section.title === "Extensões");
+    assert.ok(extensions);
+    assert.ok(extensions.values.includes("Motion"));
   });
 });

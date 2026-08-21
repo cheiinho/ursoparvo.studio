@@ -141,12 +141,14 @@ export function buildStudioBrief(
     `${labels.timeline}\n${timeline}`,
     `${labels.budget}\n${budget}`,
     `${labels.initialEstimate}\n${rangeText(payload.estimate.min, payload.estimate.max, locale, labels.toBeDiscussed)}`,
-    `${labels.confidence}\n${labels.confidenceLabels[payload.estimate.confidence]}`,
+    options.includeInternal !== false
+      ? `${labels.confidence}\n${labels.confidenceLabels[payload.estimate.confidence]}`
+      : null,
     payload.description ? `${labels.notes}\n${payload.description}` : null,
     options.includeInternal !== false && result.internalNotes.length > 0
       ? `${labels.notes}\n${result.internalNotes.join("\n")}`
       : null,
-    `${labels.contact}\n${payload.contact.name}\n${payload.contact.email}${payload.contact.company ? `\n${payload.contact.company}` : ""}${payload.contact.website ? `\n${payload.contact.website}` : ""}`,
+    `${labels.contact}\n${payload.contact.name}\n${payload.contact.email}${payload.contact.company ? `\n${payload.contact.company}` : ""}${payload.contact.website ? `\n${payload.contact.website}` : ""}${payload.contact.phone ? `\n${payload.contact.phone}` : ""}`,
   ].filter((section): section is string => Boolean(section));
 
   return sections.join("\n\n");

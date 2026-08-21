@@ -77,6 +77,10 @@ export type Dict = {
       title: string;
       steps: readonly { title: string; body: string }[];
     };
+    services: {
+      title: string;
+      items: readonly { title: string; body: string }[];
+    };
     engagement: {
       title: string;
       intro: string;

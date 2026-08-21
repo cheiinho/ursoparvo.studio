@@ -43,6 +43,26 @@ export default function StudioSections({ dict, lang }: StudioSectionsProps) {
       <section
         className="site-container site-container--wide studio-section rise"
         style={{ "--stagger": 2 } as React.CSSProperties}
+        aria-labelledby="servicos-h"
+      >
+        <h2 id="servicos-h" className="studio-section__title">
+          {dict.studio.services.title}
+        </h2>
+        <div className="studio-section__body">
+          <ul className="check-list type-corpo">
+            {dict.studio.services.items.map((item) => (
+              <li key={item.title}>
+                <h3 className="type-corpo">{item.title}</h3>
+                <p className="type-corpo">{item.body}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section
+        className="site-container site-container--wide studio-section rise"
+        style={{ "--stagger": 3 } as React.CSSProperties}
         aria-labelledby="metodo-h"
       >
         <h2 id="metodo-h" className="studio-section__title">
@@ -64,7 +84,7 @@ export default function StudioSections({ dict, lang }: StudioSectionsProps) {
 
       <section
         className="site-container site-container--wide studio-section rise"
-        style={{ "--stagger": 3 } as React.CSSProperties}
+        style={{ "--stagger": 4 } as React.CSSProperties}
         aria-labelledby="colaboracao-h"
       >
         <h2 id="colaboracao-h" className="studio-section__title">
@@ -87,15 +107,19 @@ export default function StudioSections({ dict, lang }: StudioSectionsProps) {
 
       <section
         className="site-container site-container--wide studio-section rise"
-        style={{ "--stagger": 4 } as React.CSSProperties}
+        style={{ "--stagger": 5 } as React.CSSProperties}
         aria-labelledby="contacto-h"
       >
         <h2 id="contacto-h" className="studio-section__title">
           {dict.studio.invite.title}
         </h2>
         <div className="studio-section__body">
-          <p className="type-corpo measure">{dict.studio.invite.body}</p>
-          <p className="type-nota text-secondary measure">{dict.studio.invite.note}</p>
+          {dict.studio.invite.body ? (
+            <p className="type-corpo measure">{dict.studio.invite.body}</p>
+          ) : null}
+          {dict.studio.invite.note ? (
+            <p className="type-nota text-secondary measure">{dict.studio.invite.note}</p>
+          ) : null}
           <MotionLink
             href={PROJECT_PATH[lang]}
             className="form-submit"

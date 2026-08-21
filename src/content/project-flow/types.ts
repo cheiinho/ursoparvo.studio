@@ -88,6 +88,14 @@ export type ProjectFlowContent = {
     title: string;
     empty: string;
     continueLabel: string;
+    sections: {
+      type: string;
+      scope: string;
+      applications: string;
+      extensions: string;
+      timeline: string;
+      budget: string;
+    };
   };
   estimate: {
     kicker: string;
@@ -96,7 +104,8 @@ export type ProjectFlowContent = {
     indicative: string;
     lowTitle: string;
     lowBody: string;
-    refinement: string;
+    rangeNote: string;
+    finalNote: string;
     specialists: string;
     talk: string;
     edit: string;
