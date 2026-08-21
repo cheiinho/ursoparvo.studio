@@ -3,7 +3,7 @@ import type { Dict } from "./types";
 export const pt: Dict = {
   site: {
     title: "UrsoParvo Studio",
-    description: "Estúdio de identidade visual. À prova de tendências.",
+    description: "Estúdio de desenho visual. Identidade, grafismo, direcção de arte e ilustração.",
   },
 
   header: {
@@ -19,82 +19,106 @@ export const pt: Dict = {
 
   home: {
     statement: "À prova de tendências.",
-    lede: "Estúdio independente de identidade visual. A diferença entre o que parece bem numa apresentação e o que aguenta no uso real.",
+    lede: "Identidade visual, grafismo, direcção de arte e ilustração.",
     ctaLabel: "Falar sobre um projecto",
     studioLabel: "Conhecer o estúdio",
     gridLabel: "Projectos",
     metaTitle: "UrsoParvo Studio",
     metaDescription:
-      "Estúdio independente de identidade visual em Coimbra. Identidade pensada para o uso real, não para a apresentação.",
+      "Estúdio de desenho visual em Coimbra. Identidade, grafismo, direcção de arte e ilustração.",
   },
 
   studio: {
     title: "O estúdio.",
     about: {
-      title: "Porquê",
+      title: "O trabalho",
       paragraphs: [
-        "O UrsoParvo Studio é um estúdio independente de identidade visual. Trabalha a diferença entre o que parece bem numa apresentação e o que aguenta no uso real — para empresas e instituições que querem uma marca com presença, não uma marca a seguir tendências.",
-        "Essa forma de decidir formou-se com João Pedro Leite a desenhar produtos digitais e sistemas em contextos exigentes. Ferramentas internas na BMW Group, plataformas na Mercedes-Benz, sistemas de contact centre na Talkdesk, serviços públicos na Segurança Social. Utilizadores reais, onde o detalhe importava e o erro tinha custo.",
-        "A identidade visual do Politécnico de Coimbra está no centro desse território: uma instituição com história própria, muita gente a passar por ela todos os dias, uma marca que tinha de aguentar esse peso. A identidade tem de sobreviver à realidade. O estúdio trabalha a partir de Coimbra.",
+        "O estúdio trabalha a partir de Coimbra. João Pedro Leite dirige-o.",
+        "A identidade visual do Politécnico de Coimbra é um projecto da casa: uma instituição com história própria e muita gente a passar por ela todos os dias.",
+        "Antes disto, desenhou produto digital na BMW Group, Mercedes-Benz, Talkdesk e Segurança Social.",
+        "Alguns projectos pedem competências fora do desenho visual. Nesses casos trabalhamos com especialistas em áreas como motion, filme, fotografia, texto ou desenvolvimento.",
+      ],
+    },
+    services: {
+      title: "O que fazemos",
+      items: [
+        {
+          title: "Identidade",
+          body: "Identidades novas e redesigns, sistemas visuais e as regras para os usar.",
+        },
+        {
+          title: "Grafismo",
+          body: "Campanhas, publicações, cartazes, embalagem e material de comunicação.",
+        },
+        {
+          title: "Direcção de arte",
+          body: "Direcção visual para campanhas, eventos e projectos culturais.",
+        },
+        {
+          title: "Ilustração",
+          body: "Imagem para identidades, campanhas, editorial e eventos.",
+        },
+        {
+          title: "Eventos e cultura",
+          body: "Identidades, imagens principais e comunicação para festivais e eventos.",
+        },
       ],
     },
     method: {
-      title: "Trabalho",
+      title: "Como avançamos",
       steps: [
         {
           title: "Perceber",
-          body: "O contexto, as restrições, o que tem de mudar.",
+          body: "Começamos pelo projecto, o que já existe e o que precisa de mudar.",
         },
         {
-          title: "Decidir",
-          body: "A direcção e as escolhas que a tornam possível.",
+          title: "Desenhar",
+          body: "Exploramos e desenvolvemos a direcção visual.",
         },
         {
           title: "Construir",
-          body: "A identidade, o sistema, as aplicações onde vai viver.",
+          body: "Passamos a direcção a um sistema que se possa usar com consistência.",
         },
         {
           title: "Entregar",
-          body: "Orientações, ficheiros, e o que é preciso para o uso continuar.",
+          body: "Preparamos as aplicações e a documentação necessárias para o uso.",
         },
       ],
     },
     engagement: {
-      title: "Colaboração",
-      intro:
-        "O trabalho avança com regras claras, para ambos os lados saberem o que se passa, o que custa e o que vem a seguir.",
+      title: "Antes de começar",
+      intro: "Âmbito, valores e prazos ficam definidos por escrito.",
       steps: [
         {
           title: "Proposta",
-          body: "Âmbito, valores e prazos. Sem letras pequenas.",
+          body: "Âmbito, valores e prazos.",
         },
         {
           title: "Contrato e sinal",
-          body: "Nada avança sem assinatura. Protege ambos os lados. Sinal de 50% antes de começar.",
+          body: "Nada avança sem assinatura. Sinal de 50% antes de começar.",
         },
         {
           title: "Arranque",
-          body: "Acessos, a forma de comunicar, a chamada inicial. Cada projecto tem uma janela própria na agenda, sem sobreposição. Os prazos contam a partir da data de início, não deste primeiro contacto.",
+          body: "Acessos, a forma de comunicar, a chamada inicial. Os prazos contam a partir da data de início, não deste contacto.",
         },
       ],
     },
     invite: {
       title: "Projecto",
-      body: "Cada projecto começa com algumas perguntas simples. Não precisa de saber exactamente o que precisa, nem de preparar um briefing. Queremos perceber o contexto, o que está a tentar resolver, e onde podemos ser mais úteis.",
-      note: "Algumas perguntas. Sem compromisso.",
-      after:
-        "Depois de recebermos o pedido, lemos o projecto e definimos os próximos passos. Se houver enquadramento, avançamos para uma conversa e uma proposta.",
-      cta: "Conte-nos sobre o projecto",
+      body: "",
+      note: "",
+      after: "Lemos o pedido e respondemos com os próximos passos.",
+      cta: "Falar sobre um projecto",
       emailNote: "Ou escreva directamente para o email no rodapé.",
     },
     metaTitle: "Estúdio · UrsoParvo Studio",
     metaDescription:
-      "Estúdio independente de identidade visual em Coimbra. A disciplina de desenhar sistemas reais, aplicada à marca.",
+      "Estúdio de desenho visual em Coimbra. Identidade, grafismo, direcção de arte e ilustração.",
   },
 
   contact: {
     title: "Projecto",
-    intro: "Conte o que está a tentar resolver. Não precisa de um briefing.",
+    intro: "Conte-nos sobre o projecto. Não precisa de um briefing.",
     minDeliveryNote:
       "Cada projecto tem uma janela própria na agenda, sem sobreposição com outros trabalhos. Os prazos contam a partir da data de início definida na primeira reunião, não a partir deste contacto.",
     fields: {
@@ -133,7 +157,7 @@ export const pt: Dict = {
     copied: "Mensagem copiada.",
     sentNote:
       "O seu cliente de email deve ter aberto. Se não abriu, escreva directamente:",
-    flowCta: "Conte-nos sobre o projecto",
+    flowCta: "Falar sobre um projecto",
     flowNote: "Ou escreva directamente para o email no rodapé.",
   },
 

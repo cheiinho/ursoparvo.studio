@@ -81,16 +81,10 @@ export const APPLICATION_CONTEXTS = [
 export type ApplicationContext = (typeof APPLICATION_CONTEXTS)[number];
 
 export const APPLICATION_GROUPS = {
-  digital: [
-    "website",
-    "social",
-    "email",
-    "digitalProducts",
-    "presentations",
-  ],
-  editorial: ["reports", "brochures", "publications", "print"],
-  physical: ["packaging", "signage", "environment", "merchandise", "objects"],
-  campaigns: ["advertising", "posters", "launches", "events"],
+  digital: ["website", "social", "email", "presentations"],
+  editorial: ["posters", "brochures", "publications", "packaging", "print"],
+  physical: ["signage", "environment", "merchandise", "objects"],
+  campaigns: ["advertising", "events", "launches"],
 } as const satisfies Record<string, readonly ApplicationContext[]>;
 
 export const APPLICATION_SCALES = [
@@ -271,7 +265,6 @@ export type EstimateResult = {
 
 export type ClientEstimate = {
   classification: ProjectClassification;
-  confidence: Confidence;
   requiresDiscovery: boolean;
   requiresSpecialists: SpecialistService[];
   clientRange: {

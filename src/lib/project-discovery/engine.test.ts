@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "vitest";
-import { estimateProject } from "./engine";
+import { estimateProject, toClientEstimate } from "./engine";
 import {
   caseEventCampaign,
   caseFullIdentitySystem,
@@ -355,5 +355,20 @@ describe("null commercial values", () => {
     const result = estimate(caseSmallRefresh, config);
     assert.equal(result.internalCost, null);
     assert.equal(result.clientRange.min, null);
+  });
+});
+
+describe("client payload", () => {
+  it("does not expose internal scoring or fees", () => {
+    const client = toClientEstimate(estimate(caseSmallRefresh));
+    assert.equal("confidence" in client, false);
+    assert.equal("internalCost" in client, false);
+    assert.equal("internalEffort" in client, false);
+    assert.equal("complexityScore" in client, false);
+    assert.equal("scopeScore" in client, false);
+    assert.equal("riskScore" in client, false);
+    assert.equal("recommendedFee" in client, false);
+    assert.ok(client.clientRange.min);
+    assert.ok(client.clientRange.max);
   });
 });

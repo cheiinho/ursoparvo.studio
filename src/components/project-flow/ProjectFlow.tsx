@@ -41,6 +41,7 @@ import type {
   TimelineKind,
 } from "@/lib/project-discovery/types";
 import { HOME_PATH, type Lang } from "@/lib/i18n";
+import { hasVisibleRange } from "@/content/project-flow/narrative";
 import { DateInput, TextareaField, TextInput, todayIsoDate } from "./fields";
 import { EstimateSummary } from "./EstimateSummary";
 import { getReviewSections, ReviewSummary } from "./ReviewSummary";
@@ -376,7 +377,11 @@ function ProjectFlowReady({ lang, content, email, locale }: ProjectFlowProps) {
             <StepNavigation
               backLabel={content.nav.back}
               continueLabel={
-                state.estimate ? content.estimate.talk : content.estimate.preparing
+                !state.estimate
+                  ? content.estimate.preparing
+                  : hasVisibleRange(state.estimate)
+                    ? content.nav.continue
+                    : content.estimate.talk
               }
               onBack={goBack}
               onContinue={() => goTo("contact")}
@@ -395,7 +400,6 @@ function ProjectFlowReady({ lang, content, email, locale }: ProjectFlowProps) {
                 lang={lang}
               />
               <div className="estimate-review">
-                <h2 className="studio-section__title">{content.review.title}</h2>
                 <ReviewSummary
                   sections={getReviewSections(state.answers, content)}
                   editLabel={content.nav.edit}
@@ -469,6 +473,15 @@ function ProjectFlowReady({ lang, content, email, locale }: ProjectFlowProps) {
               autoComplete="url"
               optionalLabel={content.contact.optional}
               onChange={(value) => patchContact({ website: value })}
+            />
+            <TextInput
+              id="project-phone"
+              label={content.contact.phone}
+              value={state.contact.phone ?? ""}
+              type="tel"
+              autoComplete="tel"
+              optionalLabel={content.contact.optional}
+              onChange={(value) => patchContact({ phone: value })}
             />
             <div className="hp-field" aria-hidden="true">
               <label htmlFor="project-website">Website</label>

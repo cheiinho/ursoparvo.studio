@@ -3,7 +3,7 @@ import type { Dict } from "./types";
 export const en: Dict = {
   site: {
     title: "UrsoParvo Studio",
-    description: "A visual identity studio. Time-proof brands.",
+    description: "A visual design studio. Identity, graphic design, art direction and illustration.",
   },
 
   header: {
@@ -19,82 +19,106 @@ export const en: Dict = {
 
   home: {
     statement: "Time-proof brands.",
-    lede: "An independent visual identity studio. The difference between what looks right in a presentation and what holds up in actual use.",
-    ctaLabel: "Let’s talk",
+    lede: "Visual identity, graphic design, art direction and illustration.",
+    ctaLabel: "Talk about a project",
     studioLabel: "The studio",
     gridLabel: "Projects",
     metaTitle: "UrsoParvo Studio",
     metaDescription:
-      "Independent visual identity studio in Coimbra. Identity designed to work in the real world, not just in a presentation.",
+      "Visual design studio in Coimbra. Identity, graphic design, art direction and illustration.",
   },
 
   studio: {
     title: "The studio.",
     about: {
-      title: "Why",
+      title: "The work",
       paragraphs: [
-        "UrsoParvo Studio is an independent visual identity studio. The work sits between what looks right in a presentation and what holds up in actual use — for companies and institutions that want a brand with presence, not one chasing the trend of the moment.",
-        "That discipline was formed with João Pedro Leite designing digital products and systems in demanding settings. Internal tools at BMW Group, platforms at Mercedes-Benz, contact centre systems at Talkdesk, public services at Segurança Social. Real users, where detail mattered and mistakes had a cost.",
-        "The visual identity for Politécnico de Coimbra sits at the centre of that territory: an institution with its own history, thousands of people moving through it every day, a brand that had to carry that weight. Identity has to survive reality. The studio works from Coimbra.",
+        "The studio works from Coimbra. João Pedro Leite runs it.",
+        "The visual identity for Politécnico de Coimbra is a studio project: an institution with its own history and a lot of people moving through it every day.",
+        "Before this, he designed digital products at BMW Group, Mercedes-Benz, Talkdesk and Segurança Social.",
+        "Some projects need skills beyond visual design. When that happens, we work with specialists in areas such as motion, film, photography, writing or development.",
+      ],
+    },
+    services: {
+      title: "What we make",
+      items: [
+        {
+          title: "Identity",
+          body: "New identities and redesigns, visual systems, and the rules for using them.",
+        },
+        {
+          title: "Graphic design",
+          body: "Campaigns, publications, posters, packaging and communication materials.",
+        },
+        {
+          title: "Art direction",
+          body: "Visual direction for campaigns, events and cultural projects.",
+        },
+        {
+          title: "Illustration",
+          body: "Image-making for identities, campaigns, editorial and events.",
+        },
+        {
+          title: "Events and culture",
+          body: "Identities, key visuals and communication for festivals and events.",
+        },
       ],
     },
     method: {
-      title: "Work",
+      title: "How we work",
       steps: [
         {
           title: "Understand",
-          body: "The context, the constraints, what has to change.",
+          body: "We start with the project, what already exists and what needs to change.",
         },
         {
-          title: "Decide",
-          body: "The direction, and the choices that make it possible.",
+          title: "Design",
+          body: "We explore and develop the visual direction.",
         },
         {
           title: "Build",
-          body: "The identity, the system, the applications where it will live.",
+          body: "We turn the direction into a system that can be used consistently.",
         },
         {
           title: "Deliver",
-          body: "Guidance, files, and what is needed for the work to continue in use.",
+          body: "We prepare the applications and documentation needed to use it.",
         },
       ],
     },
     engagement: {
-      title: "Working together",
-      intro:
-        "The work moves with clear rules, so both sides know what is happening, what it costs, and what comes next.",
+      title: "Before work starts",
+      intro: "Scope, fees and dates are set down in writing.",
       steps: [
         {
           title: "Proposal",
-          body: "Scope, fees and dates. No small print.",
+          body: "Scope, fees and dates.",
         },
         {
           title: "Contract and deposit",
-          body: "Nothing moves without a signature. It protects both sides. A 50% deposit before work begins.",
+          body: "Nothing moves without a signature. A 50% deposit before work begins.",
         },
         {
           title: "Kick-off",
-          body: "Access, how we communicate, the opening call. Every project gets its own slot in the schedule, with no overlap. Deadlines count from the start date, not from this first contact.",
+          body: "Access, how we communicate, the opening call. Deadlines count from the start date, not from this first contact.",
         },
       ],
     },
     invite: {
       title: "Project",
-      body: "Every project starts with a few simple questions. You do not need to know exactly what you need, or to prepare a brief. We want to understand the context, what you are trying to solve, and where we can be most useful.",
-      note: "A few questions. No obligation.",
-      after:
-        "Once we have the request, we read the project and set out the next steps. If it is a fit, we move to a conversation and a proposal.",
-      cta: "Tell us about the project",
+      body: "",
+      note: "",
+      after: "We read the request and reply with the next steps.",
+      cta: "Talk about a project",
       emailNote: "Or write directly to the email in the footer.",
     },
     metaTitle: "Studio · UrsoParvo Studio",
     metaDescription:
-      "Independent visual identity studio in Coimbra. The discipline of designing real systems, applied to brand.",
+      "Visual design studio in Coimbra. Identity, graphic design, art direction and illustration.",
   },
 
   contact: {
     title: "Project",
-    intro: "Tell us what you are trying to solve. You do not need a brief.",
+    intro: "Tell us about the project. You do not need a brief.",
     minDeliveryNote:
       "Every project gets its own slot in the schedule, with no overlap with other work. Deadlines count from the start date set in the first meeting, not from this contact.",
     fields: {
@@ -133,7 +157,7 @@ export const en: Dict = {
     copied: "Message copied.",
     sentNote:
       "Your email client should have opened. If it did not, write directly:",
-    flowCta: "Tell us about the project",
+    flowCta: "Talk about a project",
     flowNote: "Or write directly to the email in the footer.",
   },
 

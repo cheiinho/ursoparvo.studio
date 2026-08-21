@@ -1,4 +1,3 @@
-import { formatEuro } from "@/lib/estimate";
 import type { ClientEstimate, ProjectInput } from "@/lib/project-discovery/types";
 import { APPLICATION_GROUPS } from "@/lib/project-discovery/types";
 import type { ProjectFlowContent } from "./types";
@@ -68,18 +67,32 @@ export function buildEstimateNarrative(
 export function specialistSentence(
   estimate: ClientEstimate,
   content: ProjectFlowContent,
+  lang: "pt" | "en" = "pt",
 ): string | null {
   if (estimate.requiresSpecialists.length === 0) return null;
   const names = estimate.requiresSpecialists.map(
     (id) => content.labels[id] ?? id,
   );
-  const lang = names.includes("Motion") && content.labels.motion === "Motion" ? "en" : "pt";
   const list = listJoin(
     names.map((name) => name.toLowerCase()),
-    content.labels.motion === "Motion" ? "en" : "pt",
+    lang,
   );
-  void lang;
   return content.estimate.specialists.replace("{list}", list);
+}
+
+export function hasVisibleRange(estimate: ClientEstimate): boolean {
+  return (
+    !estimate.requiresDiscovery &&
+    estimate.clientRange.min !== null &&
+    estimate.clientRange.max !== null
+  );
+}
+
+function formatPtAmount(value: number): string {
+  const rounded = Math.round(value);
+  const sign = rounded < 0 ? "−" : "";
+  const grouped = String(Math.abs(rounded)).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  return `${sign}${grouped}`;
 }
 
 export function formatRange(
@@ -88,5 +101,14 @@ export function formatRange(
   locale: string,
 ): string | null {
   if (min === null || max === null) return null;
-  return `${formatEuro(min, locale)}–${formatEuro(max, locale)}`;
+  if (locale.toLowerCase().startsWith("pt")) {
+    return `${formatPtAmount(min)}–${formatPtAmount(max)} €`;
+  }
+  const n = (value: number) =>
+    new Intl.NumberFormat("en-GB", {
+      style: "currency",
+      currency: "EUR",
+      maximumFractionDigits: 0,
+    }).format(value);
+  return `${n(min)}–${n(max)}`;
 }

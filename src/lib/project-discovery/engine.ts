@@ -536,7 +536,6 @@ export function estimateProject(
 export function toClientEstimate(result: EstimateResult): ClientEstimate {
   return {
     classification: result.classification,
-    confidence: result.confidence,
     requiresDiscovery: result.requiresDiscovery,
     requiresSpecialists: result.requiresSpecialists,
     clientRange: result.clientRange,
