@@ -47,13 +47,6 @@ export default function PublicShell({
           </MotionLink>
           <nav className="site-header__nav">
             <MotionLink
-              href={STUDIO_PATH[lang]}
-              className="nav-link"
-              {...press}
-            >
-              {header.studioLabel}
-            </MotionLink>
-            <MotionLink
               href={langHref}
               className="nav-link"
               aria-label={header.langAria}
@@ -64,6 +57,16 @@ export default function PublicShell({
               {header.langLabel}
             </MotionLink>
             <ThemeToggle labels={theme} className="nav-link" />
+            <MotionLink
+              href={STUDIO_PATH[lang]}
+              className="theme-link nav-link"
+              aria-label={header.studioLabel}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 500, damping: 30 }}
+            >
+              <span className="nav-plus" aria-hidden="true" />
+            </MotionLink>
           </nav>
         </div>
       </header>
