@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ProjectGrid from "@/components/ProjectGrid";
 import PublicShell from "@/components/PublicShell";
-import RevealTitle from "@/components/RevealTitle";
 import { MotionLink } from "@/components/ui-motion";
 import { getDict } from "@/content/dict";
 import { hasLang, HOME_PATH, LANGS, OTHER_LANG, PROJECT_PATH, STUDIO_PATH } from "@/lib/i18n";
@@ -47,10 +46,6 @@ export default async function HomePage({ params }: PageParams) {
       theme={dict.theme}
       langHref={HOME_PATH[OTHER_LANG[lang]]}
     >
-      <section className="site-container site-container--wide home-statement">
-        <RevealTitle text={dict.home.statement} className="type-display" />
-        <p className="type-lede home-statement__lede">{dict.home.lede}</p>
-      </section>
       <div className="masonry-bleed">
         <ProjectGrid lang={lang} gridLabel={dict.home.gridLabel} />
       </div>
