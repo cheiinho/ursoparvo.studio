@@ -48,14 +48,14 @@ export default function PublicShell({
           <nav className="site-header__nav">
             <MotionLink
               href={STUDIO_PATH[lang]}
-              className="nav-link type-corpo"
+              className="nav-link"
               {...press}
             >
               {header.studioLabel}
             </MotionLink>
             <MotionLink
               href={langHref}
-              className="nav-link type-corpo"
+              className="nav-link"
               aria-label={header.langAria}
               lang={header.langHrefLang}
               hrefLang={header.langHrefLang}
@@ -63,7 +63,7 @@ export default function PublicShell({
             >
               {header.langLabel}
             </MotionLink>
-            <ThemeToggle labels={theme} className="nav-link type-corpo" />
+            <ThemeToggle labels={theme} className="nav-link" />
           </nav>
         </div>
       </header>

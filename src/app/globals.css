@@ -1,39 +1,43 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: "Sfizia";
-  src: url("/fonts/sfizia/Sfizia-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Sfizia";
-  src: url("/fonts/sfizia/Sfizia-Italic.woff2") format("woff2");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Sfizia";
-  src: url("/fonts/sfizia/Sfizia-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
-  /* Exactly three sizes site-wide: display (h1), corpo (everything), nota (labels/footer) */
-  --fs-display: clamp(2.75rem, 1.5rem + 5.5vw, 6rem);
-  --fs-corpo: clamp(1.0625rem, 1rem + 0.2vw, 1.125rem);
-  --fs-nota: 0.875rem;
+  /*
+   * Typographic system — Nudica only.
+   * Contrast comes from weight, scale, italic, tracking, measure, and rhythm.
+   * Loaded cuts: 400 / 400 italic / 500 / 700 via next/font → --font-brand.
+   */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
 
-  /* Display face: Sfizia (licensed, files not in repo). Falls back to Inter
-     until public/fonts/sfizia/Sfizia-Regular.woff2 exists. */
-  --font-display: "Sfizia", var(--font-text), ui-sans-serif, system-ui,
-    sans-serif;
+  --fs-display: clamp(2.75rem, 1.35rem + 5.75vw, 5.5rem);
+  --fs-heading: clamp(1.5rem, 1.2rem + 1.35vw, 2.125rem);
+  --fs-lede: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  --fs-corpo: clamp(1.0625rem, 1rem + 0.2vw, 1.125rem);
+  --fs-project: clamp(1.35rem, 1.05rem + 1.4vw, 1.85rem);
+  --fs-nota: 0.875rem;
+  --fs-label: 0.8125rem;
+  --fs-meta: 0.8125rem;
+
+  --lh-display: 0.94;
+  --lh-heading: 1.02;
+  --lh-lede: 1.45;
+  --lh-corpo: 1.55;
+  --lh-project: 1.05;
+  --lh-nota: 1.45;
+  --lh-label: 1.4;
+
+  --track-display: -0.042em;
+  --track-heading: -0.028em;
+  --track-lede: -0.008em;
+  --track-corpo: -0.004em;
+  --track-project: -0.03em;
+  --track-nota: 0;
+  --track-label: 0.05em;
+  --track-nav: 0.01em;
+
+  --measure-lede: 36rem;
+  --measure-body: 66ch;
 
   --surface: #faf9f6;
   --field: #f1efe9;
@@ -93,7 +97,7 @@
   --color-text: var(--text);
   --color-text-secondary: var(--text-secondary);
   --color-accent: var(--accent);
-  --font-sans: var(--font-text), system-ui, sans-serif;
+  --font-sans: var(--font-brand), system-ui, sans-serif;
 }
 
 *,
@@ -111,8 +115,9 @@ body {
   margin: 0;
   background-color: var(--surface);
   color: var(--text);
-  font-family: var(--font-text), system-ui, sans-serif;
-  font-weight: 400;
+  font-family: var(--font-brand), system-ui, sans-serif;
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--track-corpo);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color var(--dur-theme) var(--ease-standard);
@@ -133,28 +138,80 @@ button {
   outline-offset: 2px;
 }
 
+/* Display / hero — Nudica Bold as graphic form */
 .type-display {
-  font-family: var(--font-display);
+  font-family: var(--font-brand), system-ui, sans-serif;
   font-size: var(--fs-display);
-  font-weight: 400;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-display);
+  letter-spacing: var(--track-display);
   text-wrap: balance;
+}
+
+/* Section statements — own hierarchy, not a mini-hero */
+.type-heading {
+  font-family: var(--font-brand), system-ui, sans-serif;
+  font-size: var(--fs-heading);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--track-heading);
+  text-wrap: balance;
+}
+
+/* Hero support copy — lighter than the headline */
+.type-lede {
+  font-size: var(--fs-lede);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-lede);
+  letter-spacing: var(--track-lede);
+  text-wrap: pretty;
+  max-width: var(--measure-lede);
 }
 
 .type-corpo {
   font-size: var(--fs-corpo);
-  font-weight: 400;
-  line-height: 1.5;
-  letter-spacing: -0.011em;
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-corpo);
+  letter-spacing: var(--track-corpo);
   text-wrap: pretty;
+}
+
+/* Project names — small editorial wordmarks */
+.type-project {
+  font-size: var(--fs-project);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-project);
+  letter-spacing: var(--track-project);
+  text-wrap: balance;
 }
 
 .type-nota {
   font-size: var(--fs-nota);
-  font-weight: 400;
-  line-height: 1.45;
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-nota);
+  letter-spacing: var(--track-nota);
   font-feature-settings: "tnum";
+}
+
+.type-label {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-label);
+  letter-spacing: var(--track-label);
+}
+
+.type-meta {
+  font-size: var(--fs-meta);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-nota);
+  letter-spacing: var(--track-nota);
+  font-feature-settings: "tnum";
+}
+
+/* Second voice within the same family */
+.type-italic {
+  font-style: italic;
+  font-weight: var(--fw-regular);
 }
 
 .text-secondary {
@@ -162,7 +219,7 @@ button {
 }
 
 .measure {
-  max-width: 66ch;
+  max-width: var(--measure-body);
 }
 
 .site-container {
@@ -240,7 +297,9 @@ button {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  font-weight: 500;
+  font-size: var(--fs-nota);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--track-nav);
   color: var(--text-secondary);
   text-decoration: none;
   transition: color var(--dur-micro) var(--ease-standard);
@@ -261,6 +320,11 @@ button {
 .site-footer {
   padding-block: var(--space-8);
   padding-bottom: calc(var(--space-8) + env(safe-area-inset-bottom, 0px));
+  color: var(--text-secondary);
+}
+
+.site-footer__brand {
+  font-weight: var(--fw-bold);
   color: var(--text-secondary);
 }
 
@@ -390,6 +454,7 @@ button.site-footer__item:hover {
 .home-statement__lede {
   margin: 0 auto;
   text-wrap: pretty;
+  max-width: var(--measure-lede);
 }
 
 .home-close {
@@ -426,8 +491,9 @@ button.site-footer__item:hover {
   border-radius: var(--radius-ui);
   background: var(--text);
   color: var(--surface);
-  font-weight: 500;
+  font-weight: var(--fw-medium);
   font-size: var(--fs-corpo);
+  letter-spacing: var(--track-corpo);
   text-decoration: none;
   white-space: nowrap;
   transition: opacity var(--dur-micro) var(--ease-standard);
@@ -455,13 +521,12 @@ button.site-footer__item:hover {
   }
 }
 
-/* Masked line reveal for display titles. The mask gets a hair of extra
-   room on both ends so accents and serif descenders survive the clip. */
+/* Masked line reveal for display titles. Extra room so accents survive the clip. */
 .reveal-mask {
   display: block;
   overflow: hidden;
-  padding-block: 0.18em;
-  margin-block: -0.18em;
+  padding-block: 0.12em;
+  margin-block: -0.12em;
 }
 
 .reveal-line {
@@ -485,8 +550,8 @@ button.site-footer__item:hover {
 .studio-section__title {
   margin: 0;
   font-size: var(--fs-nota);
-  font-weight: 500;
-  line-height: 1.45;
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-nota);
   color: var(--text-secondary);
 }
 
@@ -545,7 +610,9 @@ button.site-footer__item:hover {
 .process-list > li::before {
   content: counter(step, decimal-leading-zero);
   color: var(--text-secondary);
+  font-weight: var(--fw-medium);
   font-feature-settings: "tnum";
+  letter-spacing: var(--track-nota);
 }
 
 .process-list h3,
@@ -555,7 +622,8 @@ button.site-footer__item:hover {
 
 .process-list h3,
 .check-list h3 {
-  font-weight: 500;
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--track-heading);
 }
 
 .process-list p {
@@ -653,7 +721,11 @@ button.site-footer__item:hover {
 
 .tile-overlay__name {
   display: block;
-  font-weight: 500;
+  font-size: var(--fs-project);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-project);
+  letter-spacing: var(--track-project);
+  text-wrap: balance;
 }
 
 .tile--accent {
@@ -722,14 +794,15 @@ button.site-footer__item:hover {
 }
 
 .field label {
-  font-size: var(--fs-nota);
-  font-weight: 500;
-  line-height: 1.45;
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-label);
+  letter-spacing: var(--track-nota);
   color: var(--text-secondary);
 }
 
 .field label .text-secondary {
-  font-weight: 400;
+  font-weight: var(--fw-regular);
 }
 
 .field input,
@@ -762,9 +835,10 @@ button.site-footer__item:hover {
 .field legend {
   padding: 0;
   margin-bottom: var(--space-2);
-  font-size: var(--fs-nota);
-  font-weight: 500;
-  line-height: 1.45;
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-label);
+  letter-spacing: var(--track-nota);
   color: var(--text-secondary);
 }
 
@@ -843,8 +917,9 @@ button.site-footer__item:hover {
   background: var(--text);
   color: var(--surface);
   font: inherit;
-  font-weight: 500;
+  font-weight: var(--fw-medium);
   font-size: var(--fs-corpo);
+  letter-spacing: var(--track-corpo);
   white-space: nowrap;
   transition: opacity var(--dur-micro) var(--ease-standard);
 }
@@ -889,15 +964,17 @@ a.form-submit {
 
 .project-step__kicker {
   margin: 0;
-  font-weight: 500;
-  letter-spacing: 0.08em;
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--text-secondary);
 }
 
 .project-step__question {
   margin: 0;
-  font-weight: 500;
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--track-heading);
   max-width: 28rem;
   text-wrap: pretty;
 }
@@ -934,8 +1011,9 @@ a.form-submit {
 .option-group__title {
   padding: 0;
   margin-bottom: var(--space-2);
-  font-weight: 500;
-  letter-spacing: 0.08em;
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--text-secondary);
 }
@@ -977,7 +1055,7 @@ a.form-submit {
 }
 
 .option__title {
-  font-weight: 500;
+  font-weight: var(--fw-medium);
 }
 
 .option__description {
@@ -1059,8 +1137,9 @@ a.form-submit {
 
 .review-summary__title {
   margin: 0;
-  font-weight: 500;
-  letter-spacing: 0.08em;
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--text-secondary);
 }
@@ -1093,6 +1172,7 @@ a.form-submit {
 .estimate-summary__range {
   margin: 0;
   font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
 }
 
 @media (min-width: 768px) {

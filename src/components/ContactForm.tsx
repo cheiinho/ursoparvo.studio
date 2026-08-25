@@ -165,7 +165,7 @@ export default function ContactForm({ dict, email }: ContactFormProps) {
 
       <div className="form-result" aria-live="polite">
         {status === "sent" ? (
-          <p className="form-note type-nota text-secondary">
+          <p className="form-note type-nota type-italic text-secondary">
             {dict.sentConfirmation}
           </p>
         ) : null}

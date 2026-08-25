@@ -38,7 +38,7 @@ export default function StudioSections({ dict, lang }: StudioSectionsProps) {
             {paragraph}
           </p>
         ))}
-        <p className="studio-note type-nota text-secondary measure">
+        <p className="studio-note type-nota type-italic text-secondary measure">
           {dict.studio.note}
         </p>
       </div>

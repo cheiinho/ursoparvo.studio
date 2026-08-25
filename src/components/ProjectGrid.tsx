@@ -45,7 +45,7 @@ export default function ProjectGrid({ lang, gridLabel }: ProjectGridProps) {
               transition={{ duration: reduceMotion ? 0 : 0.18, ease: "easeOut" }}
             >
               <motion.span
-                className="tile-overlay__name type-corpo"
+                className="tile-overlay__name"
                 variants={{
                   rest: { y: reduceMotion ? 0 : 8 },
                   hover: { y: 0 },
