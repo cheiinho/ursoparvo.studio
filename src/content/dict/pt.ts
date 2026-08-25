@@ -30,126 +30,48 @@ export const pt: Dict = {
 
   studio: {
     title: "O estúdio.",
-    about: {
-      title: "O trabalho",
-      paragraphs: [
-        "O estúdio trabalha a partir de Coimbra. João Pedro Leite dirige-o.",
-        "A identidade visual do Politécnico de Coimbra é um projecto da casa: uma instituição com história própria e muita gente a passar por ela todos os dias.",
-        "Antes disto, desenhou produto digital na BMW Group, Mercedes-Benz, Talkdesk e Segurança Social.",
-        "Alguns projectos pedem competências fora do desenho visual. Nesses casos trabalhamos com especialistas em áreas como motion, filme, fotografia, texto ou desenvolvimento.",
-      ],
-    },
-    services: {
-      title: "O que fazemos",
-      items: [
-        {
-          title: "Identidade",
-          body: "Identidades novas e redesigns, sistemas visuais e as regras para os usar.",
-        },
-        {
-          title: "Grafismo",
-          body: "Campanhas, publicações, cartazes, embalagem e material de comunicação.",
-        },
-        {
-          title: "Direcção de arte",
-          body: "Direcção visual para campanhas, eventos e projectos culturais.",
-        },
-        {
-          title: "Ilustração",
-          body: "Imagem para identidades, campanhas, editorial e eventos.",
-        },
-        {
-          title: "Eventos e cultura",
-          body: "Identidades, imagens principais e comunicação para festivais e eventos.",
-        },
-      ],
-    },
-    method: {
-      title: "Como avançamos",
-      steps: [
-        {
-          title: "Perceber",
-          body: "Começamos pelo projecto, o que já existe e o que precisa de mudar.",
-        },
-        {
-          title: "Desenhar",
-          body: "Exploramos e desenvolvemos a direcção visual.",
-        },
-        {
-          title: "Construir",
-          body: "Passamos a direcção a um sistema que se possa usar com consistência.",
-        },
-        {
-          title: "Entregar",
-          body: "Preparamos as aplicações e a documentação necessárias para o uso.",
-        },
-      ],
-    },
-    engagement: {
-      title: "Antes de começar",
-      intro: "Âmbito, valores e prazos ficam definidos por escrito.",
-      steps: [
-        {
-          title: "Proposta",
-          body: "Âmbito, valores e prazos.",
-        },
-        {
-          title: "Contrato e sinal",
-          body: "Nada avança sem assinatura. Sinal de 50% antes de começar.",
-        },
-        {
-          title: "Arranque",
-          body: "Acessos, a forma de comunicar, a chamada inicial. Os prazos contam a partir da data de início, não deste contacto.",
-        },
-      ],
-    },
+    essay: [
+      "Uma identidade não é uma tendência. As tendências passam. As modas mudam. O tempo pede outras coisas.",
+      "Uma identidade pode acompanhar o seu tempo sem ficar presa a ele. Pode mudar de forma, experimentar novas linguagens e adaptar-se a diferentes momentos sem perder aquilo que a torna reconhecível.",
+      "Porque uma marca não nasce inteira no dia em que é apresentada. É mais parecida com uma semente. Tem uma raiz, mas também tem espaço para crescer. Precisa de ser cuidada, usada, testada e exposta ao mundo. Precisa de tempo para revelar aquilo que pode ser.",
+      "Atirar uma semente à terra e esperar que a chuva faça o resto não é cultivar. O mesmo acontece com uma identidade. Um símbolo, uma paleta ou um conjunto de regras não fazem uma marca existir. São o início de um sistema que ganha significado através das pessoas, das escolhas e das experiências que lhe dão vida.",
+      "Por isso, a questão não é simplesmente saber se uma identidade é bonita ou feia. A beleza é demasiado relativa para ser um critério. A questão é outra.",
+    ],
+    questions: [
+      "O que precisa de dizer?",
+      "O que precisa de fazer sentir?",
+      "Que personalidade deve ter?",
+      "Como quer ser reconhecida?",
+      "E como pode continuar a responder a tudo isto quando o mundo à sua volta mudar?",
+    ],
+    closing: [
+      "Uma identidade forte não precisa de parecer actual para sempre. Precisa de ter uma razão para continuar a existir.",
+      "E essa razão está na raiz. O resto pode crescer.",
+    ],
+    note: "O estúdio trabalha a partir de Coimbra. João Pedro Leite.",
     invite: {
       title: "Projecto",
-      body: "",
-      note: "",
-      after: "Lemos o pedido e respondemos com os próximos passos.",
-      cta: "Falar sobre um projecto",
-      emailNote: "Ou escreva directamente para o email no rodapé.",
+      cta: "Enviar projecto",
     },
     metaTitle: "Estúdio · UrsoParvo Studio",
     metaDescription:
-      "Estúdio de desenho visual em Coimbra. Identidade, grafismo, direcção de arte e ilustração.",
+      "Uma identidade não é uma tendência. Estúdio de desenho visual em Coimbra.",
   },
 
   contact: {
     title: "Projecto",
-    intro: "Conte-nos sobre o projecto. Não precisa de um briefing.",
-    minDeliveryNote:
-      "Cada projecto tem uma janela própria na agenda, sem sobreposição com outros trabalhos. Os prazos contam a partir da data de início definida na primeira reunião, não a partir deste contacto.",
+    intro: "O primeiro passo é perceber o projecto.",
     fields: {
+      about: "Em que está a trabalhar?",
+      change: "O que gostaria que fosse diferente?",
+      timing: "Quando pensa começar?",
       name: "Nome",
-      contact: "Email ou telefone",
-      services: "O que precisa",
-      description: "Descrição breve do projecto ou empresa",
-      descriptionHint: "opcional",
-      deadline: "Prazo desejado",
-      referral: "Como conheceu o estúdio",
-      referralHint: "opcional",
+      email: "Email",
     },
-    serviceOptions: [
-      { id: "identidade", label: "Identidade visual corporativa" },
-      { id: "grafismo", label: "Grafismo" },
-      { id: "fotografia", label: "Fotografia" },
-    ],
-    deadlineOptions: ["Sem pressa", "Um a três meses", "Teria de ser urgente"],
-    referralOptions: ["Redes sociais", "Recomendação", "Pesquisa online", "Outro"],
-    servicesError: "Escolha pelo menos um serviço.",
-    estimate: {
-      locale: "pt-PT",
-      intro:
-        "Com base no que descreveu, o investimento estimado para este projecto situa-se entre {min} e {max}. Este valor é uma referência inicial e será afinado na primeira conversa.",
-      mailtoLabel: "Estimativa apresentada",
-    },
-    submit: "Enviar pedido",
+    submit: "Enviar projecto",
     sending: "A enviar…",
-    subjectPrefix: "Orçamento",
-    sentConfirmation:
-      "Mensagem enviada. Respondemos em breve para o contacto que indicou.",
+    subjectPrefix: "Projecto",
+    sentConfirmation: "Mensagem enviada. A resposta segue para o contacto indicado.",
     sendError:
       "Não foi possível enviar a partir do site. Pode abrir a mensagem no seu email ou copiá-la.",
     openEmail: "Abrir no email",
@@ -157,8 +79,6 @@ export const pt: Dict = {
     copied: "Mensagem copiada.",
     sentNote:
       "O seu cliente de email deve ter aberto. Se não abriu, escreva directamente:",
-    flowCta: "Falar sobre um projecto",
-    flowNote: "Ou escreva directamente para o email no rodapé.",
   },
 
   theme: {

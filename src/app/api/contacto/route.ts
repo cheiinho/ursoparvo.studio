@@ -1,8 +1,5 @@
 import { pt } from "@/content/dict/pt";
 import { SITE } from "@/content/site";
-import { estimateBudget, formatEuro, type ServiceId } from "@/lib/estimate";
-
-const SERVICE_IDS = pt.contact.serviceOptions.map((option) => option.id);
 
 function asTrimmedString(value: unknown, maxLength: number): string {
   return typeof value === "string" ? value.trim().slice(0, maxLength) : "";
@@ -34,40 +31,24 @@ export async function POST(request: Request) {
   }
 
   const nome = asTrimmedString(payload.nome, 200);
-  const contacto = asTrimmedString(payload.contacto, 200);
-  const descricao = asTrimmedString(payload.descricao, 800);
-  const prazo = asTrimmedString(payload.prazo, 100);
-  const origem = asTrimmedString(payload.origem, 100);
-  const servicos = Array.isArray(payload.servicos)
-    ? payload.servicos
-        .map(String)
-        .filter((value): value is ServiceId =>
-          SERVICE_IDS.includes(value as ServiceId),
-        )
-    : [];
+  const email = asTrimmedString(payload.email, 200);
+  const about = asTrimmedString(payload.about, 2000);
+  const change = asTrimmedString(payload.change, 2000);
+  const timing = asTrimmedString(payload.timing, 200);
 
-  if (!nome || !contacto || servicos.length === 0) {
+  if (!nome || !looksLikeEmail(email) || !about) {
     return Response.json({ ok: false, reason: "invalid" }, { status: 400 });
   }
 
-  const labels = pt.contact.serviceOptions
-    .filter((option) => servicos.includes(option.id))
-    .map((option) => option.label);
-  const range = estimateBudget(servicos);
-  const rangeText = `${formatEuro(range.min, "pt-PT")} - ${formatEuro(
-    range.max,
-    "pt-PT",
-  )}`;
-
-  const subject = `${pt.contact.subjectPrefix}: ${labels.join(", ")} (${nome})`;
+  const subject = `${pt.contact.subjectPrefix}: ${nome}`;
   const text = [
     `${pt.contact.fields.name}: ${nome}`,
-    `${pt.contact.fields.contact}: ${contacto}`,
-    `${pt.contact.fields.services}: ${labels.join(", ")}`,
-    ...(prazo ? [`${pt.contact.fields.deadline}: ${prazo}`] : []),
-    ...(origem ? [`${pt.contact.fields.referral}: ${origem}`] : []),
-    `${pt.contact.estimate.mailtoLabel}: ${rangeText}`,
-    ...(descricao ? ["", `${pt.contact.fields.description}:`, descricao] : []),
+    `${pt.contact.fields.email}: ${email}`,
+    "",
+    `${pt.contact.fields.about}:`,
+    about,
+    ...(change ? ["", `${pt.contact.fields.change}:`, change] : []),
+    ...(timing ? ["", `${pt.contact.fields.timing}:`, timing] : []),
   ].join("\n");
 
   try {
@@ -84,7 +65,7 @@ export async function POST(request: Request) {
             process.env.CONTACT_FROM_EMAIL ??
             "UrsoParvo Studio <orcamentos@ursoparvo.studio>",
           to: [process.env.CONTACT_TO_EMAIL ?? SITE.email],
-          ...(looksLikeEmail(contacto) ? { reply_to: contacto } : {}),
+          reply_to: email,
           subject,
           text,
         }),
