@@ -325,12 +325,44 @@ button.site-footer__item:hover {
 }
 
 .studio-open {
-  display: grid;
-  gap: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  padding-bottom: var(--space-16);
 }
 
 .studio-open h1 {
   margin: 0;
+}
+
+.studio-essay {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  min-width: 0;
+}
+
+.studio-essay p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.studio-questions {
+  list-style: none;
+  margin: var(--space-2) 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.studio-questions li {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.studio-note {
+  margin-top: var(--space-6);
 }
 
 .studio-section {
@@ -472,15 +504,6 @@ button.site-footer__item:hover {
 }
 
 @media (min-width: 900px) {
-  .studio-open {
-    grid-template-columns: 220px minmax(0, 1fr);
-    column-gap: var(--space-12);
-  }
-
-  .studio-open h1 {
-    grid-column: 1 / -1;
-  }
-
   .studio-section {
     grid-template-columns: 220px minmax(0, 1fr);
     column-gap: var(--space-12);
@@ -671,11 +694,47 @@ button.site-footer__item:hover {
   text-decoration-color: var(--accent);
 }
 
+.project-inquiry {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding-bottom: var(--space-16);
+  max-width: 40rem;
+}
+
+.project-inquiry h1 {
+  margin: 0;
+}
+
+.project-inquiry__intro {
+  margin: 0;
+}
+
 .contact-form {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
-  max-width: 480px;
+  gap: var(--space-8);
+  max-width: 40rem;
+}
+
+.field-group {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.field-group__legend {
+  padding: 0;
+  font-size: var(--fs-nota);
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
 }
 
 .field {

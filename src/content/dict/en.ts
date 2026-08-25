@@ -18,7 +18,7 @@ export const en: Dict = {
   skipLink: "Skip to content",
 
   home: {
-    statement: "Time-proof brands.",
+    statement: "Resistant to trends.",
     lede: "Visual identity, graphic design, art direction and illustration.",
     ctaLabel: "Talk about a project",
     studioLabel: "The studio",
@@ -30,126 +30,59 @@ export const en: Dict = {
 
   studio: {
     title: "The studio.",
-    about: {
-      title: "The work",
-      paragraphs: [
-        "The studio works from Coimbra. João Pedro Leite runs it.",
-        "The visual identity for Politécnico de Coimbra is a studio project: an institution with its own history and a lot of people moving through it every day.",
-        "Before this, he designed digital products at BMW Group, Mercedes-Benz, Talkdesk and Segurança Social.",
-        "Some projects need skills beyond visual design. When that happens, we work with specialists in areas such as motion, film, photography, writing or development.",
-      ],
-    },
-    services: {
-      title: "What we make",
-      items: [
-        {
-          title: "Identity",
-          body: "New identities and redesigns, visual systems, and the rules for using them.",
-        },
-        {
-          title: "Graphic design",
-          body: "Campaigns, publications, posters, packaging and communication materials.",
-        },
-        {
-          title: "Art direction",
-          body: "Visual direction for campaigns, events and cultural projects.",
-        },
-        {
-          title: "Illustration",
-          body: "Image-making for identities, campaigns, editorial and events.",
-        },
-        {
-          title: "Events and culture",
-          body: "Identities, key visuals and communication for festivals and events.",
-        },
-      ],
-    },
-    method: {
-      title: "How we work",
-      steps: [
-        {
-          title: "Understand",
-          body: "We start with the project, what already exists and what needs to change.",
-        },
-        {
-          title: "Design",
-          body: "We explore and develop the visual direction.",
-        },
-        {
-          title: "Build",
-          body: "We turn the direction into a system that can be used consistently.",
-        },
-        {
-          title: "Deliver",
-          body: "We prepare the applications and documentation needed to use it.",
-        },
-      ],
-    },
-    engagement: {
-      title: "Before work starts",
-      intro: "Scope, fees and dates are set down in writing.",
-      steps: [
-        {
-          title: "Proposal",
-          body: "Scope, fees and dates.",
-        },
-        {
-          title: "Contract and deposit",
-          body: "Nothing moves without a signature. A 50% deposit before work begins.",
-        },
-        {
-          title: "Kick-off",
-          body: "Access, how we communicate, the opening call. Deadlines count from the start date, not from this first contact.",
-        },
-      ],
-    },
+    essay: [
+      "An identity is not a trend.",
+      "Trends pass. Fashions change. Time asks for different things.",
+      "An identity can belong to its time without becoming defined by it. It can change shape, explore new languages and adapt to different moments without losing what makes it recognisable.",
+      "Because a brand is not complete the day it is presented.",
+      "It is more like a seed. It has roots, but it also has room to grow. It needs to be tended, used, tested and exposed to the world. It needs time to reveal what it can become.",
+      "Putting a seed in the ground and waiting for the rain to do the rest is not cultivation.",
+      "The same is true of identity. A symbol, a colour palette or a set of guidelines do not make a brand exist. They are the beginning of a system that gains meaning through the people, choices and experiences that give it life.",
+      "So the question is not simply whether an identity is beautiful or ugly. Beauty is too relative to be a useful measure.",
+      "The questions are different.",
+    ],
+    questions: [
+      "What does it need to say?",
+      "What does it need to make people feel?",
+      "What kind of character should it have?",
+      "How does it want to be recognised?",
+      "And how can it continue to answer those questions as the world around it changes?",
+    ],
+    closing: [
+      "A strong identity does not need to look current forever.",
+      "It needs a reason to continue existing.",
+      "That reason lives in the roots.",
+      "Everything else can grow.",
+    ],
+    note: "The studio works from Coimbra. João Pedro Leite.",
     invite: {
       title: "Project",
-      body: "",
-      note: "",
-      after: "We read the request and reply with the next steps.",
-      cta: "Talk about a project",
-      emailNote: "Or write directly to the email in the footer.",
+      cta: "Send a project",
     },
     metaTitle: "Studio · UrsoParvo Studio",
-    metaDescription:
-      "Visual design studio in Coimbra. Identity, graphic design, art direction and illustration.",
+    metaDescription: "An identity is not a trend. Visual design studio in Coimbra.",
   },
 
   contact: {
     title: "Project",
-    intro: "Tell us about the project. You do not need a brief.",
-    minDeliveryNote:
-      "Every project gets its own slot in the schedule, with no overlap with other work. Deadlines count from the start date set in the first meeting, not from this contact.",
+    intro: "The first step is simply to understand the project.",
+    groups: {
+      about: "The project",
+      change: "What needs to change",
+      timing: "Timing",
+      contact: "Contact",
+    },
     fields: {
+      about: "What are you working on?",
+      change: "What would you like to be different?",
+      timing: "When are you thinking of starting?",
       name: "Name",
-      contact: "Email or phone",
-      services: "What you need",
-      description: "Brief description of the project or company",
-      descriptionHint: "optional",
-      deadline: "Desired timeline",
-      referral: "How you found the studio",
-      referralHint: "optional",
+      email: "Email",
     },
-    serviceOptions: [
-      { id: "identidade", label: "Corporate visual identity" },
-      { id: "grafismo", label: "Graphic design" },
-      { id: "fotografia", label: "Photography" },
-    ],
-    deadlineOptions: ["No rush", "One to three months", "Urgent"],
-    referralOptions: ["Social media", "A recommendation", "Online search", "Other"],
-    servicesError: "Choose at least one service.",
-    estimate: {
-      locale: "en-GB",
-      intro:
-        "Based on what you described, the estimated investment for this project sits between {min} and {max}. This figure is an initial reference and will be refined in the first conversation.",
-      mailtoLabel: "Estimate shown",
-    },
-    submit: "Send request",
+    submit: "Send a project",
     sending: "Sending…",
-    subjectPrefix: "Quote",
-    sentConfirmation:
-      "Message sent. We will reply soon to the contact you provided.",
+    subjectPrefix: "Project",
+    sentConfirmation: "Message sent. A reply will go to the address you gave.",
     sendError:
       "The message could not be sent from the site. You can open it in your email or copy it.",
     openEmail: "Open in email",
@@ -157,8 +90,6 @@ export const en: Dict = {
     copied: "Message copied.",
     sentNote:
       "Your email client should have opened. If it did not, write directly:",
-    flowCta: "Talk about a project",
-    flowNote: "Or write directly to the email in the footer.",
   },
 
   theme: {

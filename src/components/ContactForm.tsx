@@ -3,12 +3,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import type { ContactDict } from "@/content/dict/types";
-import {
-  estimateBudget,
-  formatEuro,
-  type EstimateRange,
-  type ServiceId,
-} from "@/lib/estimate";
 
 type ContactFormProps = {
   dict: ContactDict;
@@ -21,12 +15,8 @@ type Message = { subject: string; body: string };
 
 export default function ContactForm({ dict, email }: ContactFormProps) {
   const [status, setStatus] = useState<Status>("idle");
-  const [estimate, setEstimate] = useState<EstimateRange | null>(null);
   const [message, setMessage] = useState<Message | null>(null);
-  const [servicesError, setServicesError] = useState(false);
   const [copied, setCopied] = useState(false);
-
-  const serviceIds = dict.serviceOptions.map((option) => option.id);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -34,46 +24,25 @@ export default function ContactForm({ dict, email }: ContactFormProps) {
     const data = new FormData(event.currentTarget);
     const get = (key: string) => String(data.get(key) ?? "").trim();
 
-    const services = data
-      .getAll("servicos")
-      .map(String)
-      .filter((value): value is ServiceId =>
-        serviceIds.includes(value as ServiceId),
-      );
+    const nome = get("nome");
+    const contacto = get("email");
+    const about = get("about");
+    const change = get("change");
+    const timing = get("timing");
 
-    if (services.length === 0) {
-      setServicesError(true);
-      return;
-    }
-    setServicesError(false);
     setCopied(false);
 
-    const serviceLabels = dict.serviceOptions
-      .filter((option) => services.includes(option.id))
-      .map((option) => option.label);
-
-    const range = estimateBudget(services);
-    const rangeText = `${formatEuro(range.min, dict.estimate.locale)} - ${formatEuro(
-      range.max,
-      dict.estimate.locale,
-    )}`;
-
-    const subject = `${dict.subjectPrefix}: ${serviceLabels.join(", ")} (${get(
-      "nome",
-    )})`;
+    const subject = `${dict.subjectPrefix}: ${nome}`;
     const body = [
-      `${dict.fields.name}: ${get("nome")}`,
-      `${dict.fields.contact}: ${get("contacto")}`,
-      `${dict.fields.services}: ${serviceLabels.join(", ")}`,
-      `${dict.fields.deadline}: ${get("prazo")}`,
-      ...(get("origem") ? [`${dict.fields.referral}: ${get("origem")}`] : []),
-      `${dict.estimate.mailtoLabel}: ${rangeText}`,
-      ...(get("descricao")
-        ? ["", `${dict.fields.description}:`, get("descricao")]
-        : []),
+      `${dict.fields.name}: ${nome}`,
+      `${dict.fields.email}: ${contacto}`,
+      "",
+      `${dict.fields.about}:`,
+      about,
+      ...(change ? ["", `${dict.fields.change}:`, change] : []),
+      ...(timing ? ["", `${dict.fields.timing}:`, timing] : []),
     ].join("\r\n");
 
-    setEstimate(range);
     setMessage({ subject, body });
     setStatus("sending");
 
@@ -82,12 +51,11 @@ export default function ContactForm({ dict, email }: ContactFormProps) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          nome: get("nome"),
-          contacto: get("contacto"),
-          servicos: services,
-          descricao: get("descricao"),
-          prazo: get("prazo"),
-          origem: get("origem"),
+          nome,
+          email: contacto,
+          about,
+          change,
+          timing,
           website: get("website"),
         }),
       });
@@ -121,22 +89,6 @@ export default function ContactForm({ dict, email }: ContactFormProps) {
     }
   }
 
-  const estimateText = estimate
-    ? dict.estimate.intro
-        .split(/(\{min\}|\{max\})/)
-        .map((part, index) => {
-          if (part === "{min}" || part === "{max}") {
-            const value = part === "{min}" ? estimate.min : estimate.max;
-            return (
-              <strong key={index}>
-                {formatEuro(value, dict.estimate.locale)}
-              </strong>
-            );
-          }
-          return part;
-        })
-    : null;
-
   const emailLink = (
     <a href={`mailto:${email}`} className="text-link">
       {email}
@@ -145,88 +97,60 @@ export default function ContactForm({ dict, email }: ContactFormProps) {
 
   return (
     <form className="contact-form" onSubmit={onSubmit}>
-      <div className="field">
-        <label htmlFor="orc-nome">{dict.fields.name}</label>
-        <input
-          id="orc-nome"
-          name="nome"
-          type="text"
-          required
-          autoComplete="name"
-        />
-      </div>
+      <fieldset className="field-group">
+        <legend className="field-group__legend">{dict.groups.about}</legend>
+        <div className="field">
+          <label htmlFor="orc-about">{dict.fields.about}</label>
+          <textarea
+            id="orc-about"
+            name="about"
+            required
+            maxLength={2000}
+            rows={5}
+          />
+        </div>
+      </fieldset>
 
-      <div className="field">
-        <label htmlFor="orc-contacto">{dict.fields.contact}</label>
-        <input
-          id="orc-contacto"
-          name="contacto"
-          type="text"
-          required
-          autoComplete="email"
-          inputMode="email"
-        />
-      </div>
+      <fieldset className="field-group">
+        <legend className="field-group__legend">{dict.groups.change}</legend>
+        <div className="field">
+          <label htmlFor="orc-change">{dict.fields.change}</label>
+          <textarea id="orc-change" name="change" maxLength={2000} rows={4} />
+        </div>
+      </fieldset>
 
-      <div className="field">
-        <fieldset aria-describedby={servicesError ? "orc-servicos-erro" : undefined}>
-          <legend>{dict.fields.services}</legend>
-          <div className="choice-list">
-            {dict.serviceOptions.map((option) => (
-              <label key={option.id}>
-                <input type="checkbox" name="servicos" value={option.id} />
-                {option.label}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-        <p
-          id="orc-servicos-erro"
-          className="form-error type-nota"
-          aria-live="polite"
-        >
-          {servicesError ? dict.servicesError : null}
-        </p>
-      </div>
+      <fieldset className="field-group">
+        <legend className="field-group__legend">{dict.groups.timing}</legend>
+        <div className="field">
+          <label htmlFor="orc-timing">{dict.fields.timing}</label>
+          <input id="orc-timing" name="timing" type="text" maxLength={200} />
+        </div>
+      </fieldset>
 
-      <div className="field">
-        <label htmlFor="orc-descricao">
-          {dict.fields.description}{" "}
-          <span className="text-secondary">({dict.fields.descriptionHint})</span>
-        </label>
-        <textarea id="orc-descricao" name="descricao" maxLength={800} />
-      </div>
-
-      <div className="field">
-        <label htmlFor="orc-prazo">{dict.fields.deadline}</label>
-        <select
-          id="orc-prazo"
-          name="prazo"
-          required
-          defaultValue={dict.deadlineOptions[0]}
-        >
-          {dict.deadlineOptions.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="field">
-        <label htmlFor="orc-origem">
-          {dict.fields.referral}{" "}
-          <span className="text-secondary">({dict.fields.referralHint})</span>
-        </label>
-        <select id="orc-origem" name="origem" defaultValue="">
-          <option value="" />
-          {dict.referralOptions.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-      </div>
+      <fieldset className="field-group">
+        <legend className="field-group__legend">{dict.groups.contact}</legend>
+        <div className="field">
+          <label htmlFor="orc-nome">{dict.fields.name}</label>
+          <input
+            id="orc-nome"
+            name="nome"
+            type="text"
+            required
+            autoComplete="name"
+          />
+        </div>
+        <div className="field">
+          <label htmlFor="orc-email">{dict.fields.email}</label>
+          <input
+            id="orc-email"
+            name="email"
+            type="email"
+            required
+            autoComplete="email"
+            inputMode="email"
+          />
+        </div>
+      </fieldset>
 
       <div className="hp-field" aria-hidden="true">
         <label htmlFor="orc-website">Website</label>
@@ -251,10 +175,6 @@ export default function ContactForm({ dict, email }: ContactFormProps) {
       </motion.button>
 
       <div className="form-result" aria-live="polite">
-        {status !== "idle" && status !== "sending" && estimateText ? (
-          <p className="type-corpo measure">{estimateText}</p>
-        ) : null}
-
         {status === "sent" ? (
           <p className="form-note type-nota text-secondary">
             {dict.sentConfirmation}

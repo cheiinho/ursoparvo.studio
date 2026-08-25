@@ -21,105 +21,39 @@ export default function StudioSections({ dict, lang }: StudioSectionsProps) {
           text={dict.studio.title}
           className="type-display"
         />
+        <div className="studio-essay">
+          {dict.studio.essay.map((paragraph) => (
+            <p key={paragraph} className="type-corpo measure">
+              {paragraph}
+            </p>
+          ))}
+          <ul className="studio-questions measure">
+            {dict.studio.questions.map((question) => (
+              <li key={question} className="type-corpo">
+                {question}
+              </li>
+            ))}
+          </ul>
+          {dict.studio.closing.map((paragraph) => (
+            <p key={paragraph} className="type-corpo measure">
+              {paragraph}
+            </p>
+          ))}
+          <p className="studio-note type-nota text-secondary measure">
+            {dict.studio.note}
+          </p>
+        </div>
       </section>
 
       <section
         className="site-container site-container--wide studio-section rise"
         style={{ "--stagger": 1 } as React.CSSProperties}
-        aria-labelledby="sobre-h"
-      >
-        <h2 id="sobre-h" className="studio-section__title">
-          {dict.studio.about.title}
-        </h2>
-        <div className="studio-section__body">
-          {dict.studio.about.paragraphs.map((paragraph) => (
-            <p key={paragraph} className="type-corpo measure">
-              {paragraph}
-            </p>
-          ))}
-        </div>
-      </section>
-
-      <section
-        className="site-container site-container--wide studio-section rise"
-        style={{ "--stagger": 2 } as React.CSSProperties}
-        aria-labelledby="servicos-h"
-      >
-        <h2 id="servicos-h" className="studio-section__title">
-          {dict.studio.services.title}
-        </h2>
-        <div className="studio-section__body">
-          <ul className="check-list type-corpo">
-            {dict.studio.services.items.map((item) => (
-              <li key={item.title}>
-                <h3 className="type-corpo">{item.title}</h3>
-                <p className="type-corpo">{item.body}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      <section
-        className="site-container site-container--wide studio-section rise"
-        style={{ "--stagger": 3 } as React.CSSProperties}
-        aria-labelledby="metodo-h"
-      >
-        <h2 id="metodo-h" className="studio-section__title">
-          {dict.studio.method.title}
-        </h2>
-        <div className="studio-section__body">
-          <ol className="process-list type-corpo">
-            {dict.studio.method.steps.map((step) => (
-              <li key={step.title}>
-                <div>
-                  <h3 className="type-corpo">{step.title}</h3>
-                  <p className="type-corpo">{step.body}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      <section
-        className="site-container site-container--wide studio-section rise"
-        style={{ "--stagger": 4 } as React.CSSProperties}
-        aria-labelledby="colaboracao-h"
-      >
-        <h2 id="colaboracao-h" className="studio-section__title">
-          {dict.studio.engagement.title}
-        </h2>
-        <div className="studio-section__body">
-          <p className="type-corpo measure">{dict.studio.engagement.intro}</p>
-          <ol className="process-list process-list--quiet type-corpo">
-            {dict.studio.engagement.steps.map((step) => (
-              <li key={step.title}>
-                <div>
-                  <h3 className="type-corpo">{step.title}</h3>
-                  <p className="type-corpo">{step.body}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      <section
-        className="site-container site-container--wide studio-section rise"
-        style={{ "--stagger": 5 } as React.CSSProperties}
         aria-labelledby="contacto-h"
       >
         <h2 id="contacto-h" className="studio-section__title">
           {dict.studio.invite.title}
         </h2>
         <div className="studio-section__body">
-          {dict.studio.invite.body ? (
-            <p className="type-corpo measure">{dict.studio.invite.body}</p>
-          ) : null}
-          {dict.studio.invite.note ? (
-            <p className="type-nota text-secondary measure">{dict.studio.invite.note}</p>
-          ) : null}
           <MotionLink
             href={PROJECT_PATH[lang]}
             className="form-submit"
@@ -127,8 +61,6 @@ export default function StudioSections({ dict, lang }: StudioSectionsProps) {
           >
             {dict.studio.invite.cta}
           </MotionLink>
-          <p className="type-corpo measure">{dict.studio.invite.after}</p>
-          <p className="type-nota text-secondary measure">{dict.studio.invite.emailNote}</p>
         </div>
       </section>
     </>
