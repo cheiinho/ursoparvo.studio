@@ -1,7 +1,19 @@
-import { MotionA, press } from "@/components/ui-motion";
+import { MotionA, MotionLink, press } from "@/components/ui-motion";
 import { SITE } from "@/content/site";
 
-export default function PublicFooter() {
+type PublicFooterProps = {
+  langHref: string;
+  langLabel: string;
+  langAria: string;
+  langHrefLang: string;
+};
+
+export default function PublicFooter({
+  langHref,
+  langLabel,
+  langAria,
+  langHrefLang,
+}: PublicFooterProps) {
   const year = new Date().getFullYear();
 
   return (
@@ -10,13 +22,25 @@ export default function PublicFooter() {
         <p className="site-footer__item">
           <span className="site-footer__brand">© {year} {SITE.name}</span>
         </p>
-        <MotionA
-          href={`mailto:${SITE.email}`}
-          className="site-footer__item"
-          {...press}
-        >
-          {SITE.email}
-        </MotionA>
+        <div className="site-footer__links">
+          <MotionLink
+            href={langHref}
+            className="site-footer__item"
+            aria-label={langAria}
+            lang={langHrefLang}
+            hrefLang={langHrefLang}
+            {...press}
+          >
+            {langLabel}
+          </MotionLink>
+          <MotionA
+            href={`mailto:${SITE.email}`}
+            className="site-footer__item"
+            {...press}
+          >
+            {SITE.email}
+          </MotionA>
+        </div>
       </div>
     </footer>
   );

@@ -12,8 +12,10 @@ type PublicShellProps = {
   header: HeaderDict;
   skipLink: string;
   theme: ThemeDict;
-  /** Path to the same page in the other language, for the toggle. */
+  /** Path to the same page in the other language, for the footer toggle. */
   langHref: string;
+  /** When true, the + control becomes a close cross back to home. */
+  studioOpen?: boolean;
   children: React.ReactNode;
 };
 
@@ -23,6 +25,7 @@ export default function PublicShell({
   skipLink,
   theme,
   langHref,
+  studioOpen = false,
   children,
 }: PublicShellProps) {
   return (
@@ -46,26 +49,20 @@ export default function PublicShell({
             />
           </MotionLink>
           <nav className="site-header__nav">
+            <ThemeToggle labels={theme} />
             <MotionLink
-              href={langHref}
-              className="nav-link"
-              aria-label={header.langAria}
-              lang={header.langHrefLang}
-              hrefLang={header.langHrefLang}
-              {...press}
-            >
-              {header.langLabel}
-            </MotionLink>
-            <ThemeToggle labels={theme} className="nav-link" />
-            <MotionLink
-              href={STUDIO_PATH[lang]}
-              className="theme-link nav-link"
-              aria-label={header.studioLabel}
+              href={studioOpen ? HOME_PATH[lang] : STUDIO_PATH[lang]}
+              className="theme-link"
+              aria-label={studioOpen ? header.homeAria : header.studioLabel}
+              aria-expanded={studioOpen}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
             >
-              <span className="nav-plus" aria-hidden="true" />
+              <span
+                className={studioOpen ? "nav-plus nav-plus--close" : "nav-plus"}
+                aria-hidden="true"
+              />
             </MotionLink>
           </nav>
         </div>
@@ -73,7 +70,12 @@ export default function PublicShell({
       <main id="conteudo-principal" className="shell-main">
         {children}
       </main>
-      <PublicFooter />
+      <PublicFooter
+        langHref={langHref}
+        langLabel={header.langLabel}
+        langAria={header.langAria}
+        langHrefLang={header.langHrefLang}
+      />
     </div>
   );
 }

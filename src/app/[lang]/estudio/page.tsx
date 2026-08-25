@@ -44,6 +44,7 @@ export default async function EstudioPage({ params }: PageParams) {
       skipLink={dict.skipLink}
       theme={dict.theme}
       langHref={STUDIO_PATH.en}
+      studioOpen
     >
       <StudioSections dict={dict} lang="pt" />
     </PublicShell>
