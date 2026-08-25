@@ -15,12 +15,6 @@ export type ThemeDict = {
 export type ContactDict = {
   title: string;
   intro: string;
-  groups: {
-    about: string;
-    change: string;
-    timing: string;
-    contact: string;
-  };
   fields: {
     about: string;
     change: string;

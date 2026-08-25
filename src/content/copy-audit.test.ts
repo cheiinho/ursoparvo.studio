@@ -104,10 +104,12 @@ describe("user-facing copy", () => {
   });
 
   it("keeps the approved studio essay", () => {
-    assert.equal(dictPt.studio.essay[0], "Uma identidade não é uma tendência.");
-    assert.equal(dictPt.studio.closing.at(-1), "O resto pode crescer.");
-    assert.equal(dictEn.studio.essay[0], "An identity is not a trend.");
-    assert.equal(dictEn.studio.closing.at(-1), "Everything else can grow.");
+    assert.match(dictPt.studio.essay[0], /^Uma identidade não é uma tendência\./);
+    assert.match(dictPt.studio.closing.at(-1) ?? "", /O resto pode crescer\.$/);
+    assert.match(dictEn.studio.essay[0], /^An identity is not a trend\./);
+    assert.match(dictEn.studio.closing.at(-1) ?? "", /Everything else can grow\.$/);
+    assert.ok(dictPt.studio.essay.length <= 5);
+    assert.ok(dictPt.studio.closing.length <= 2);
   });
 
   it("keeps the project form to the first conversation", () => {

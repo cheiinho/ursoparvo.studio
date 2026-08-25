@@ -31,15 +31,11 @@ export const pt: Dict = {
   studio: {
     title: "O estúdio.",
     essay: [
-      "Uma identidade não é uma tendência.",
-      "As tendências passam. As modas mudam. O tempo pede outras coisas.",
+      "Uma identidade não é uma tendência. As tendências passam. As modas mudam. O tempo pede outras coisas.",
       "Uma identidade pode acompanhar o seu tempo sem ficar presa a ele. Pode mudar de forma, experimentar novas linguagens e adaptar-se a diferentes momentos sem perder aquilo que a torna reconhecível.",
-      "Porque uma marca não nasce inteira no dia em que é apresentada.",
-      "É mais parecida com uma semente. Tem uma raiz, mas também tem espaço para crescer. Precisa de ser cuidada, usada, testada e exposta ao mundo. Precisa de tempo para revelar aquilo que pode ser.",
-      "Atirar uma semente à terra e esperar que a chuva faça o resto não é cultivar.",
-      "O mesmo acontece com uma identidade. Um símbolo, uma paleta ou um conjunto de regras não fazem uma marca existir. São o início de um sistema que ganha significado através das pessoas, das escolhas e das experiências que lhe dão vida.",
-      "Por isso, a questão não é simplesmente saber se uma identidade é bonita ou feia. A beleza é demasiado relativa para ser um critério.",
-      "A questão é outra.",
+      "Porque uma marca não nasce inteira no dia em que é apresentada. É mais parecida com uma semente. Tem uma raiz, mas também tem espaço para crescer. Precisa de ser cuidada, usada, testada e exposta ao mundo. Precisa de tempo para revelar aquilo que pode ser.",
+      "Atirar uma semente à terra e esperar que a chuva faça o resto não é cultivar. O mesmo acontece com uma identidade. Um símbolo, uma paleta ou um conjunto de regras não fazem uma marca existir. São o início de um sistema que ganha significado através das pessoas, das escolhas e das experiências que lhe dão vida.",
+      "Por isso, a questão não é simplesmente saber se uma identidade é bonita ou feia. A beleza é demasiado relativa para ser um critério. A questão é outra.",
     ],
     questions: [
       "O que precisa de dizer?",
@@ -49,10 +45,8 @@ export const pt: Dict = {
       "E como pode continuar a responder a tudo isto quando o mundo à sua volta mudar?",
     ],
     closing: [
-      "Uma identidade forte não precisa de parecer actual para sempre.",
-      "Precisa de ter uma razão para continuar a existir.",
-      "E essa razão está na raiz.",
-      "O resto pode crescer.",
+      "Uma identidade forte não precisa de parecer actual para sempre. Precisa de ter uma razão para continuar a existir.",
+      "E essa razão está na raiz. O resto pode crescer.",
     ],
     note: "O estúdio trabalha a partir de Coimbra. João Pedro Leite.",
     invite: {
@@ -67,12 +61,6 @@ export const pt: Dict = {
   contact: {
     title: "Projecto",
     intro: "O primeiro passo é perceber o projecto.",
-    groups: {
-      about: "O projecto",
-      change: "O que precisa de mudar",
-      timing: "Calendário",
-      contact: "Contacto",
-    },
     fields: {
       about: "Em que está a trabalhar?",
       change: "O que gostaria que fosse diferente?",
