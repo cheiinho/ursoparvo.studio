@@ -97,60 +97,49 @@ export default function ContactForm({ dict, email }: ContactFormProps) {
 
   return (
     <form className="contact-form" onSubmit={onSubmit}>
-      <fieldset className="field-group">
-        <legend className="field-group__legend">{dict.groups.about}</legend>
-        <div className="field">
-          <label htmlFor="orc-about">{dict.fields.about}</label>
-          <textarea
-            id="orc-about"
-            name="about"
-            required
-            maxLength={2000}
-            rows={5}
-          />
-        </div>
-      </fieldset>
+      <div className="field">
+        <label htmlFor="orc-about">{dict.fields.about}</label>
+        <textarea
+          id="orc-about"
+          name="about"
+          required
+          maxLength={2000}
+          rows={5}
+        />
+      </div>
 
-      <fieldset className="field-group">
-        <legend className="field-group__legend">{dict.groups.change}</legend>
-        <div className="field">
-          <label htmlFor="orc-change">{dict.fields.change}</label>
-          <textarea id="orc-change" name="change" maxLength={2000} rows={4} />
-        </div>
-      </fieldset>
+      <div className="field">
+        <label htmlFor="orc-change">{dict.fields.change}</label>
+        <textarea id="orc-change" name="change" maxLength={2000} rows={4} />
+      </div>
 
-      <fieldset className="field-group">
-        <legend className="field-group__legend">{dict.groups.timing}</legend>
-        <div className="field">
-          <label htmlFor="orc-timing">{dict.fields.timing}</label>
-          <input id="orc-timing" name="timing" type="text" maxLength={200} />
-        </div>
-      </fieldset>
+      <div className="field">
+        <label htmlFor="orc-timing">{dict.fields.timing}</label>
+        <input id="orc-timing" name="timing" type="text" maxLength={200} />
+      </div>
 
-      <fieldset className="field-group">
-        <legend className="field-group__legend">{dict.groups.contact}</legend>
-        <div className="field">
-          <label htmlFor="orc-nome">{dict.fields.name}</label>
-          <input
-            id="orc-nome"
-            name="nome"
-            type="text"
-            required
-            autoComplete="name"
-          />
-        </div>
-        <div className="field">
-          <label htmlFor="orc-email">{dict.fields.email}</label>
-          <input
-            id="orc-email"
-            name="email"
-            type="email"
-            required
-            autoComplete="email"
-            inputMode="email"
-          />
-        </div>
-      </fieldset>
+      <div className="field">
+        <label htmlFor="orc-nome">{dict.fields.name}</label>
+        <input
+          id="orc-nome"
+          name="nome"
+          type="text"
+          required
+          autoComplete="name"
+        />
+      </div>
+
+      <div className="field">
+        <label htmlFor="orc-email">{dict.fields.email}</label>
+        <input
+          id="orc-email"
+          name="email"
+          type="email"
+          required
+          autoComplete="email"
+          inputMode="email"
+        />
+      </div>
 
       <div className="hp-field" aria-hidden="true">
         <label htmlFor="orc-website">Website</label>

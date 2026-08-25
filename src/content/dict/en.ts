@@ -31,15 +31,11 @@ export const en: Dict = {
   studio: {
     title: "The studio.",
     essay: [
-      "An identity is not a trend.",
-      "Trends pass. Fashions change. Time asks for different things.",
+      "An identity is not a trend. Trends pass. Fashions change. Time asks for different things.",
       "An identity can belong to its time without becoming defined by it. It can change shape, explore new languages and adapt to different moments without losing what makes it recognisable.",
-      "Because a brand is not complete the day it is presented.",
-      "It is more like a seed. It has roots, but it also has room to grow. It needs to be tended, used, tested and exposed to the world. It needs time to reveal what it can become.",
-      "Putting a seed in the ground and waiting for the rain to do the rest is not cultivation.",
-      "The same is true of identity. A symbol, a colour palette or a set of guidelines do not make a brand exist. They are the beginning of a system that gains meaning through the people, choices and experiences that give it life.",
-      "So the question is not simply whether an identity is beautiful or ugly. Beauty is too relative to be a useful measure.",
-      "The questions are different.",
+      "Because a brand is not complete the day it is presented. It is more like a seed. It has roots, but it also has room to grow. It needs to be tended, used, tested and exposed to the world. It needs time to reveal what it can become.",
+      "Putting a seed in the ground and waiting for the rain to do the rest is not cultivation. The same is true of identity. A symbol, a colour palette or a set of guidelines do not make a brand exist. They are the beginning of a system that gains meaning through the people, choices and experiences that give it life.",
+      "So the question is not simply whether an identity is beautiful or ugly. Beauty is too relative to be a useful measure. The questions are different.",
     ],
     questions: [
       "What does it need to say?",
@@ -49,10 +45,8 @@ export const en: Dict = {
       "And how can it continue to answer those questions as the world around it changes?",
     ],
     closing: [
-      "A strong identity does not need to look current forever.",
-      "It needs a reason to continue existing.",
-      "That reason lives in the roots.",
-      "Everything else can grow.",
+      "A strong identity does not need to look current forever. It needs a reason to continue existing.",
+      "That reason lives in the roots. Everything else can grow.",
     ],
     note: "The studio works from Coimbra. João Pedro Leite.",
     invite: {
@@ -66,12 +60,6 @@ export const en: Dict = {
   contact: {
     title: "Project",
     intro: "The first step is simply to understand the project.",
-    groups: {
-      about: "The project",
-      change: "What needs to change",
-      timing: "Timing",
-      contact: "Contact",
-    },
     fields: {
       about: "What are you working on?",
       change: "What would you like to be different?",
