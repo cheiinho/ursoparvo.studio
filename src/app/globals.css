@@ -73,6 +73,11 @@
   --container-gutter: clamp(1.5rem, 5vw, 4rem);
   --radius-ui: 4px;
 
+  /* Fixed header: safe area + top pad + logo + bottom pad */
+  --header-offset: calc(
+    env(safe-area-inset-top, 0px) + var(--space-8) + 44px + var(--space-6)
+  );
+
   color-scheme: light;
 }
 
@@ -258,8 +263,20 @@ button {
 }
 
 .site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  background: transparent;
   padding-top: calc(var(--space-8) + env(safe-area-inset-top, 0px));
-  padding-bottom: var(--space-12);
+  padding-bottom: var(--space-6);
+  pointer-events: none;
+}
+
+.site-header a,
+.site-header button {
+  pointer-events: auto;
 }
 
 .site-header__inner {
@@ -282,6 +299,12 @@ button {
 }
 
 @media (min-width: 768px) {
+  :root {
+    --header-offset: calc(
+      env(safe-area-inset-top, 0px) + var(--space-8) + 56px + var(--space-6)
+    );
+  }
+
   .site-header__logo {
     height: 56px;
   }
@@ -314,6 +337,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: var(--space-24);
+  padding-top: var(--header-offset);
   padding-bottom: var(--space-24);
 }
 
@@ -574,7 +598,7 @@ button.site-footer__item:hover {
 
   .studio-section__title {
     position: sticky;
-    top: var(--space-8);
+    top: calc(var(--header-offset) + var(--space-4));
     align-self: start;
   }
 }
