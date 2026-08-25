@@ -510,7 +510,7 @@ function ProjectFlowReady({ lang, content, email, locale }: ProjectFlowProps) {
       {currentStep === "complete" ? (
         <section className="project-step">
           <p className="project-step__kicker type-nota">{content.complete.kicker}</p>
-          <h1 className="project-step__question type-corpo">{content.complete.title}</h1>
+          <h1 className="project-step__question type-heading">{content.complete.title}</h1>
           <p className="type-corpo measure">{content.complete.body}</p>
           <div className="step-nav">
             <button type="button" className="step-nav__back type-corpo" onClick={resetFlow}>

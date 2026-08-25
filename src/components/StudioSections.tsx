@@ -53,7 +53,7 @@ export default function StudioSections({ dict, lang }: StudioSectionsProps) {
             {dict.studio.services.items.map((item) => (
               <li key={item.title}>
                 <h3 className="type-corpo">{item.title}</h3>
-                <p className="type-corpo">{item.body}</p>
+                <p className="type-corpo text-secondary">{item.body}</p>
               </li>
             ))}
           </ul>
@@ -128,7 +128,7 @@ export default function StudioSections({ dict, lang }: StudioSectionsProps) {
             {dict.studio.invite.cta}
           </MotionLink>
           <p className="type-corpo measure">{dict.studio.invite.after}</p>
-          <p className="type-nota text-secondary measure">{dict.studio.invite.emailNote}</p>
+          <p className="type-nota type-italic text-secondary measure">{dict.studio.invite.emailNote}</p>
         </div>
       </section>
     </>

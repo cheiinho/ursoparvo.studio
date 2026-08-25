@@ -7,7 +7,9 @@ export default function PublicFooter() {
   return (
     <footer className="site-footer type-nota">
       <div className="site-container site-footer__inner">
-        <p className="site-footer__item">© {year} {SITE.name}</p>
+        <p className="site-footer__item">
+          <span className="site-footer__brand">© {year} {SITE.name}</span>
+        </p>
         <MotionA
           href={`mailto:${SITE.email}`}
           className="site-footer__item"

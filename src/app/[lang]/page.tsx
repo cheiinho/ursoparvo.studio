@@ -49,7 +49,7 @@ export default async function HomePage({ params }: PageParams) {
     >
       <section className="site-container site-container--wide home-statement">
         <RevealTitle text={dict.home.statement} className="type-display" />
-        <p className="type-corpo measure home-statement__lede">{dict.home.lede}</p>
+        <p className="type-lede home-statement__lede">{dict.home.lede}</p>
       </section>
       <div className="masonry-bleed">
         <ProjectGrid lang={lang} gridLabel={dict.home.gridLabel} />
@@ -64,7 +64,7 @@ export default async function HomePage({ params }: PageParams) {
         >
           {dict.home.ctaLabel}
         </MotionLink>
-        <MotionLink href={STUDIO_PATH[lang]} className="home-close__studio type-corpo">
+        <MotionLink href={STUDIO_PATH[lang]} className="home-close__studio type-corpo type-italic">
           {dict.home.studioLabel}
         </MotionLink>
       </section>
