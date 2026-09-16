@@ -47,3 +47,8 @@ next-env.d.ts
 
 # Cursor IDE
 /.cursor/
+
+# Confidential research source material — never publish
+/docs/carpool-ux-research.pdf
+/docs/**/*UXR*.pdf
+/docs/**/*carpool*research*.pdf
