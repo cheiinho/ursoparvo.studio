@@ -38,6 +38,16 @@ const nextConfig: NextConfig = {
       { source: "/en/estudio", destination: "/en/studio", permanent: true },
       { source: "/pt/project", destination: "/pt/projecto", permanent: true },
       { source: "/en/projecto", destination: "/en/project", permanent: true },
+      {
+        source: "/pt/work/carpool",
+        destination: "/pt/trabalho/carpool",
+        permanent: true,
+      },
+      {
+        source: "/en/trabalho/carpool",
+        destination: "/en/work/carpool",
+        permanent: true,
+      },
     ];
   },
 };

@@ -30,3 +30,8 @@ export const PROJECT_PATH: Record<Lang, string> = {
   pt: "/pt/projecto",
   en: "/en/project",
 };
+
+export const CARPOOL_PATH: Record<Lang, string> = {
+  pt: "/pt/trabalho/carpool",
+  en: "/en/work/carpool",
+};
