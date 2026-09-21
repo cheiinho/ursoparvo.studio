@@ -1,0 +1,374 @@
+.intraday {
+  --intraday-purple: #3c2a63;
+  --intraday-on-purple: #f6f1e6;
+  --intraday-lilac: #e6ddf5;
+  --intraday-lilac-dark: #2c2836;
+  --intraday-cream: #f6f1e6;
+  --intraday-cream-dark: #231e1a;
+  --intraday-on-cream-dark: #f3ede4;
+  --intraday-band: #6a4b12;
+  color: var(--text);
+}
+
+.intraday-ui {
+  background: #ffffff;
+  color: #1c1c1c;
+  color-scheme: light;
+  --focus-ring: #1a1a1a;
+  border: 1px solid #e4e2dc;
+  border-radius: var(--radius-ui);
+  overflow-wrap: anywhere;
+}
+
+.intraday-ui .intraday-muted {
+  color: #5e584f;
+}
+
+.intraday-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+  justify-content: space-between;
+  background: #eeeeea;
+  padding: var(--space-3) var(--space-4);
+}
+
+.intraday-banner {
+  background: #f3eee4;
+  color: #1c1c1c;
+  border: 1px solid #d9d2c6;
+  margin: var(--space-4);
+  padding: var(--space-4);
+}
+
+.intraday-banner p {
+  margin: 0;
+  transition: color var(--dur-micro) var(--ease-standard);
+}
+
+.intraday-ui button,
+.intraday button {
+  font: inherit;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-ui);
+  background: #e4e2dc;
+  color: #2f2e2c;
+}
+
+.intraday button:disabled {
+  opacity: 0.45;
+}
+
+.intraday-field--system {
+  background: var(--intraday-purple);
+  color: var(--intraday-on-purple);
+  --focus-ring: #f6f1e6;
+}
+
+.intraday-field--questions {
+  background: var(--intraday-lilac);
+  color: #1a1a1a;
+}
+
+.intraday-field--ending {
+  background: var(--intraday-cream);
+  color: #1a1a1a;
+}
+
+.dark .intraday-field--questions {
+  background: var(--intraday-lilac-dark);
+  color: var(--intraday-on-cream-dark);
+}
+
+.dark .intraday-field--ending {
+  background: var(--intraday-cream-dark);
+  color: var(--intraday-on-cream-dark);
+}
+
+.intraday-section,
+.intraday-field {
+  padding-block: var(--space-16);
+}
+
+.intraday-stack {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.intraday-stack > * {
+  margin: 0;
+}
+
+.intraday h2,
+.intraday h3,
+.intraday p {
+  margin: 0;
+}
+
+.intraday-stack h2,
+.intraday-stack h3,
+.intraday-stack p,
+.intraday-stack ul,
+.intraday-stack ol,
+.intraday-stack fieldset,
+.intraday-stack details {
+  margin: 0;
+}
+
+.intraday-transition {
+  max-width: var(--measure-body);
+}
+
+.intraday-evidence {
+  display: inline-block;
+  width: fit-content;
+  border-bottom: 1px solid currentColor;
+}
+
+.intraday-toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-4);
+  padding: 0;
+  margin: var(--space-8) 0 0;
+  list-style: none;
+}
+
+.intraday-toc a {
+  color: inherit;
+}
+
+.intraday-target {
+  border: 1px solid currentColor;
+  padding: var(--space-4);
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+}
+
+.intraday fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.intraday-choices,
+.intraday-steps,
+.intraday-actions,
+.intraday-radios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.intraday-choices label,
+.intraday-steps label,
+.intraday-radios label,
+.intraday-check {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  min-width: 44px;
+  padding-inline: var(--space-2);
+}
+
+.intraday-check input,
+.intraday-choices input,
+.intraday-steps input,
+.intraday-radios input {
+  width: 1.125rem;
+  height: 1.125rem;
+  accent-color: #2f2e2c;
+}
+
+.intraday-helper,
+.intraday-banner,
+.intraday-status {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.intraday-table-wrap {
+  overflow-x: auto;
+}
+
+.intraday-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.intraday-table caption {
+  text-align: left;
+  margin-bottom: var(--space-2);
+}
+
+.intraday-table th,
+.intraday-table td {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid #e4e2dc;
+  vertical-align: top;
+}
+
+.intraday-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 180px;
+  font-family: inherit;
+}
+
+.intraday-series-enter {
+  animation: intraday-in var(--dur-micro) var(--ease-standard);
+}
+
+.intraday-mark {
+  transition: opacity var(--dur-micro) var(--ease-standard);
+}
+
+@keyframes intraday-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.intraday-chart-region {
+  min-height: 180px;
+}
+
+.intraday-schedule ul,
+.intraday-queues {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.intraday-schedule li,
+.intraday-queues li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding-block: var(--space-2);
+  border-bottom: 1px solid #e4e2dc;
+}
+
+.intraday-panel {
+  margin: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid #e4e2dc;
+  background: #ffffff;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.intraday-panel ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.intraday-body {
+  padding: var(--space-4);
+  display: grid;
+  gap: var(--space-4);
+}
+
+@media (min-width: 45rem) {
+  .intraday-frame {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .intraday-recon,
+  .intraday-banner,
+  .intraday-body,
+  .intraday-panel {
+    grid-column: 1 / -1;
+  }
+
+  .intraday-bar {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .intraday-surfaces {
+    grid-column: 2;
+    grid-row: 2;
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .intraday-notifications {
+    grid-column: 3;
+    grid-row: 2;
+    margin: var(--space-3);
+  }
+}
+
+.intraday-fields {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.intraday-fields label {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.intraday-fields input {
+  min-height: 44px;
+  border: 1px solid #e4e2dc;
+  border-radius: var(--radius-ui);
+  background: #ffffff;
+  color: #1c1c1c;
+  padding-inline: var(--space-3);
+}
+
+.intraday details summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+@media (min-width: 45rem) {
+  .intraday-split--brief,
+  .intraday-split--switch,
+  .intraday-step-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 0.8fr);
+    gap: var(--space-8);
+    align-items: start;
+  }
+}
+
+@media (max-width: 44.99rem) {
+  .intraday-choices,
+  .intraday-steps,
+  .intraday-actions,
+  .intraday-radios {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .intraday-chart-scroll {
+    overflow-x: auto;
+  }
+
+  .intraday-chart-scroll .intraday-chart {
+    min-width: 40rem;
+  }
+}

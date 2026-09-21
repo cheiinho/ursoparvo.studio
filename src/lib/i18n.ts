@@ -35,3 +35,7 @@ export const CARPOOL_PATH: Record<Lang, string> = {
   pt: "/pt/trabalho/carpool",
   en: "/en/work/carpool",
 };
+
+export const INTRADAY_PATH = {
+  en: "/en/work/intraday-reforecasting",
+} as const;
