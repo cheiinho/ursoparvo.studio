@@ -43,6 +43,11 @@ export type Dict = {
     ctaLabel: string;
     studioLabel: string;
     gridLabel: string;
+    productLabel: string;
+    graphicLabel: string;
+    productEmpty: string;
+    graphicEmpty: string;
+    openCaseStudy: string;
     metaTitle: string;
     metaDescription: string;
   };

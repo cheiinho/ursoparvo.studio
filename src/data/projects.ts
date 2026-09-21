@@ -1,90 +1,33 @@
-export type ProjectTone =
-  | "accent"
-  | "field"
-  | "clay"
-  | "moss"
-  | "slate"
-  | "sand";
+import { CARPOOL_PATH, type Lang } from "@/lib/i18n";
+
+export type ProjectKind = "product" | "graphic";
 
 export type Project = {
   slug: string;
+  kind: ProjectKind;
   title: { pt: string; en: string };
   meta: { pt: string; en: string };
-  tone: ProjectTone;
-  /** CSS aspect-ratio value, e.g. "4 / 5" */
-  ratio: string;
+  /** Locale-aware path when the case study is published. */
+  href?: Record<Lang, string>;
 };
 
-/** Editorial placeholders until real work is published. */
+/**
+ * Published portfolio work only.
+ * Placeholders and invented briefs do not belong here.
+ */
 export const PROJECTS: readonly Project[] = [
   {
-    slug: "cavea",
-    title: { pt: "Cávea", en: "Cávea" },
+    slug: "carpool",
+    kind: "product",
+    title: { pt: "Carpool", en: "Carpool" },
     meta: {
-      pt: "Identidade para uma sala de concertos.",
-      en: "Identity for a concert hall.",
+      pt: "UX research · Disponibilidade, readiness e a pergunta certa de investimento",
+      en: "UX research · Availability, readiness and the right investment question",
     },
-    tone: "accent",
-    ratio: "4 / 5",
-  },
-  {
-    slug: "norte-fundido",
-    title: { pt: "Norte Fundido", en: "Norte Fundido" },
-    meta: {
-      pt: "Rebranding de uma fundição familiar do Porto.",
-      en: "Rebranding for a family foundry in Porto.",
-    },
-    tone: "clay",
-    ratio: "1 / 1",
-  },
-  {
-    slug: "atlantica",
-    title: { pt: "Atlântica", en: "Atlântica" },
-    meta: {
-      pt: "Sistema de identidade para uma seguradora com um século de história.",
-      en: "Identity system for an insurer with a century of history.",
-    },
-    tone: "slate",
-    ratio: "3 / 4",
-  },
-  {
-    slug: "miradouro",
-    title: { pt: "Miradouro", en: "Miradouro" },
-    meta: {
-      pt: "Marca e rótulos para um produtor de vinho do Dão.",
-      en: "Brand and labels for a Dão wine producer.",
-    },
-    tone: "moss",
-    ratio: "16 / 10",
-  },
-  {
-    slug: "lume",
-    title: { pt: "Lume", en: "Lume" },
-    meta: {
-      pt: "Identidade e sinalética para uma livraria independente.",
-      en: "Identity and wayfinding for an independent bookshop.",
-    },
-    tone: "sand",
-    ratio: "1 / 1",
-  },
-  {
-    slug: "ponte",
-    title: { pt: "Ponte", en: "Ponte" },
-    meta: {
-      pt: "Identidade para um gabinete de engenharia civil.",
-      en: "Identity for a civil engineering practice.",
-    },
-    tone: "field",
-    ratio: "4 / 5",
-  },
-  {
-    slug: "sal",
-    title: { pt: "Sal", en: "Sal" },
-    meta: {
-      pt: "Marca para uma cooperativa de sal de Aveiro.",
-      en: "Brand for a salt cooperative in Aveiro.",
-    },
-    tone: "slate",
-    ratio: "16 / 10",
+    href: CARPOOL_PATH,
   },
 ];
+
+export function projectsByKind(kind: ProjectKind): readonly Project[] {
+  return PROJECTS.filter((project) => project.kind === kind);
+}

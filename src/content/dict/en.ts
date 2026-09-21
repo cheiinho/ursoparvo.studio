@@ -3,7 +3,8 @@ import type { Dict } from "./types";
 export const en: Dict = {
   site: {
     title: "UrsoParvo Studio",
-    description: "A visual design studio. Identity, graphic design, art direction and illustration.",
+    description:
+      "A visual design studio. Identity, graphic design, art direction, and product research when needed.",
   },
 
   header: {
@@ -19,13 +20,18 @@ export const en: Dict = {
 
   home: {
     statement: "Resistant to trends.",
-    lede: "Visual identity, graphic design, art direction and illustration.",
+    lede: "Visual identity, graphic design, art direction. Product and UX research when the problem requires it.",
     ctaLabel: "Talk about a project",
     studioLabel: "The studio",
-    gridLabel: "Projects",
+    gridLabel: "Selected work",
+    productLabel: "Product",
+    graphicLabel: "Graphic",
+    productEmpty: "No product case studies published yet.",
+    graphicEmpty: "Selected identity and graphic work will be published here.",
+    openCaseStudy: "Open case study",
     metaTitle: "UrsoParvo Studio",
     metaDescription:
-      "Visual design studio in Coimbra. Identity, graphic design, art direction and illustration.",
+      "Visual design studio in Coimbra. Identity, graphic design, art direction, and product research when needed.",
   },
 
   studio: {

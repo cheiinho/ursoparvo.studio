@@ -3,7 +3,8 @@ import type { Dict } from "./types";
 export const pt: Dict = {
   site: {
     title: "UrsoParvo Studio",
-    description: "Estúdio de desenho visual. Identidade, grafismo, direcção de arte e ilustração.",
+    description:
+      "Estúdio de desenho visual. Identidade, grafismo, direcção de arte, e research de produto quando necessário.",
   },
 
   header: {
@@ -19,13 +20,18 @@ export const pt: Dict = {
 
   home: {
     statement: "À prova de tendências.",
-    lede: "Identidade visual, grafismo, direcção de arte e ilustração.",
+    lede: "Identidade visual, grafismo, direcção de arte. Produto e UX research quando o problema o exige.",
     ctaLabel: "Falar sobre um projecto",
     studioLabel: "Conhecer o estúdio",
-    gridLabel: "Projectos",
+    gridLabel: "Trabalho seleccionado",
+    productLabel: "Produto",
+    graphicLabel: "Grafismo",
+    productEmpty: "Ainda não há casos de produto publicados.",
+    graphicEmpty: "O trabalho seleccionado de identidade e grafismo será publicado aqui.",
+    openCaseStudy: "Abrir caso de estudo",
     metaTitle: "UrsoParvo Studio",
     metaDescription:
-      "Estúdio de desenho visual em Coimbra. Identidade, grafismo, direcção de arte e ilustração.",
+      "Estúdio de desenho visual em Coimbra. Identidade, grafismo, direcção de arte, e research de produto quando necessário.",
   },
 
   studio: {

@@ -46,8 +46,23 @@ export default async function HomePage({ params }: PageParams) {
       theme={dict.theme}
       langHref={HOME_PATH[OTHER_LANG[lang]]}
     >
-      <div className="masonry-bleed">
-        <ProjectGrid lang={lang} gridLabel={dict.home.gridLabel} />
+      <header className="site-container home-lead">
+        <p className="type-display">{dict.home.statement}</p>
+        <p className="type-lede measure text-secondary">{dict.home.lede}</p>
+      </header>
+      <div className="site-container work-bleed">
+        <ProjectGrid
+          lang={lang}
+          product={{
+            title: dict.home.productLabel,
+            empty: dict.home.productEmpty,
+          }}
+          graphic={{
+            title: dict.home.graphicLabel,
+            empty: dict.home.graphicEmpty,
+          }}
+          openLabel={dict.home.openCaseStudy}
+        />
       </div>
       <section className="site-container home-close" aria-label={dict.home.ctaLabel}>
         <MotionLink
