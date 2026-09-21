@@ -5,9 +5,12 @@ import { dataset } from "@/content/intraday/dataset";
 import { affectedPeriodLabel, isPresent, periodSpan } from "@/content/intraday/derive";
 import DataTable from "./DataTable";
 import ForecastChart from "./ForecastChart";
+import ProductChrome from "./ProductChrome";
 import ScheduleList from "./ScheduleList";
 
 type Props = {
+  product: string;
+  reconstruction: string;
   issue: string;
   severity: string;
   showForecast: string;
@@ -31,6 +34,8 @@ function textValue(value: number | null, empty: string): string {
 }
 
 export default function IssuePath({
+  product,
+  reconstruction,
   issue,
   severity,
   showForecast,
@@ -65,8 +70,16 @@ export default function IssuePath({
 
   return (
     <div className="intraday-stack">
-      <div className="intraday-ui intraday-issue">
-        <p className="intraday-kicker">{illustrative}</p>
+      <section className="intraday-ui intraday-issue td-app">
+        <p className="intraday-recon">{reconstruction}</p>
+        <ProductChrome product={product} active="forecast">
+        <header className="td-pagehead">
+          <div>
+            <p className="td-title">Forecasting issues</p>
+            <p className="td-sub">{dataset.queue}</p>
+          </div>
+          <p className="intraday-kicker">{illustrative}</p>
+        </header>
         <table className="intraday-issue__table">
           <caption>{issue}</caption>
           <thead>
@@ -96,8 +109,9 @@ export default function IssuePath({
           </tbody>
         </table>
         <p className="intraday-helper">{severity}</p>
-      </div>
-      <section className={`intraday-ui intraday-destination${active === "forecast" ? " is-active" : ""}`}>
+        </ProductChrome>
+      </section>
+      <section className={`intraday-ui intraday-destination td-app${active === "forecast" ? " is-active" : ""}`}>
         <h3 ref={forecastRef} id="issue-forecast-period" tabIndex={-1} className="intraday-page-title">
           {heading}
         </h3>
@@ -146,7 +160,7 @@ export default function IssuePath({
           ])}
         />
       </section>
-      <section className={`intraday-ui intraday-destination${active === "schedule" ? " is-active" : ""}`}>
+      <section className={`intraday-ui intraday-destination td-app${active === "schedule" ? " is-active" : ""}`}>
         <ScheduleList
           asHeading
           headingRef={scheduleRef}

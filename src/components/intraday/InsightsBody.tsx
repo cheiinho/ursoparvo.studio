@@ -9,7 +9,7 @@ type Props = {
 
 export default function InsightsBody({ text, illustrative, account, queue, dateLabel, timeZone }: Props) {
   return (
-    <div className="intraday-insights">
+    <div className="intraday-insights td-note-card">
       {illustrative ? <p className="intraday-kicker">{illustrative}</p> : null}
       {account ? <p className="intraday-contextline">{account}</p> : null}
       {dateLabel ? (

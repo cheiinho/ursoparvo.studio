@@ -88,7 +88,16 @@ export default function ScheduleList({
                     return (
                       <td
                         key={hour}
-                        className={[onShift ? "is-shift" : "", affected ? "is-affected" : ""].filter(Boolean).join(" ") || undefined}
+                        className={
+                          [
+                            onShift ? "is-shift" : "",
+                            onShift && hour === start ? "is-shift-start" : "",
+                            onShift && hour === end - 1 ? "is-shift-end" : "",
+                            affected ? "is-affected" : "",
+                          ]
+                            .filter(Boolean)
+                            .join(" ") || undefined
+                        }
                       />
                     );
                   })}

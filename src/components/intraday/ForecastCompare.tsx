@@ -7,8 +7,10 @@ import { announceOnChange } from "@/content/intraday/state";
 import { useAnnounce } from "./Announcer";
 import DataTable from "./DataTable";
 import ForecastChart, { type ChartSeries } from "./ForecastChart";
+import ProductChrome from "./ProductChrome";
 
 type Props = {
+  product: string;
   reconstruction: string;
   showPrevious: string;
   previousHidden: string;
@@ -33,6 +35,7 @@ function inAffected(time: string): boolean {
 }
 
 export default function ForecastCompare({
+  product,
   reconstruction,
   showPrevious,
   previousHidden,
@@ -97,57 +100,67 @@ export default function ForecastCompare({
   }
 
   return (
-    <section className="intraday-ui intraday-compare" aria-label={chartRegion}>
+    <section className="intraday-ui intraday-compare td-app" aria-label={chartRegion}>
       <p className="intraday-recon">{reconstruction}</p>
-      <div className="intraday-appbar">
-        <p className="intraday-product">{dataset.queue}</p>
-        <p className="intraday-contextline">
-          {dataset.dateLabel}. {dataset.timeZone}
-        </p>
-        <p className="intraday-kicker">{illustrative}</p>
-      </div>
-      <div className="intraday-toolbar">
-        <label className="intraday-check">
-          <input type="checkbox" checked={on} onChange={(event) => toggle(event.target.checked)} />
-          {showPrevious}
-        </label>
-      </div>
-      {on ? <p className="intraday-delta">{delta}</p> : null}
-      <p className="intraday-summary">{summary}</p>
-      <div className="intraday-chart-scroll">
-        <ForecastChart
-          patternId="compare-band"
-          axis={axis}
-          series={series}
-          band={{
-            start: dataset.affected.start,
-            end: bandEnd,
-            label: `${dataset.affected.start} to ${dataset.affected.end}`,
-          }}
-          tone="paper"
-          yLabel={contacts}
-          enter={on}
-          selectedTime={selected}
-          onSelectTime={setSelected}
+      <ProductChrome product={product} active="forecast">
+        <header className="td-pagehead">
+          <div>
+            <p className="td-title">Forecast</p>
+            <p className="td-sub">{dataset.queue}</p>
+          </div>
+          <div className="td-datebar" aria-hidden="true">
+            <span className="td-date">{dataset.dateLabel}</span>
+            <span className="td-chip">Today</span>
+            <span className="td-chip is-on">Week</span>
+          </div>
+          <p className="intraday-kicker">
+            {illustrative}. {dataset.timeZone}
+          </p>
+        </header>
+        <div className="td-chartcard">
+          <p className="td-chart-title">Contact volume offered</p>
+          <ForecastChart
+            patternId="compare-band"
+            axis={axis}
+            series={series}
+            band={{
+              start: dataset.affected.start,
+              end: bandEnd,
+              label: `${dataset.affected.start} to ${dataset.affected.end}`,
+            }}
+            tone="paper"
+            yLabel={contacts}
+            enter={on}
+            selectedTime={selected}
+            onSelectTime={setSelected}
+          />
+          <div className={`td-change td-change--toggle${on ? " is-on" : ""}`}>
+            <label className="intraday-check td-switch">
+              <input type="checkbox" checked={on} onChange={(event) => toggle(event.target.checked)} />
+              {showPrevious}
+            </label>
+            {on ? <p className="intraday-delta">{delta}</p> : <p className="intraday-helper">{previousHidden}</p>}
+          </div>
+        </div>
+        <p className="intraday-summary">{summary}</p>
+        {selectedRow ? (
+          <p className="intraday-readout">
+            {selectedRow.time}. {columns.previous} {textValue(selectedRow.previous, empty)}. {columns.current}{" "}
+            {textValue(selectedRow.next, empty)}. {columns.actual}{" "}
+            {textValue(inAffected(selectedRow.time) ? selectedRow.actual : null, empty)}.
+          </p>
+        ) : null}
+        <DataTable
+          caption={summary}
+          columns={[columns.time, columns.previous, columns.current, columns.actual]}
+          rows={dataset.quarters.map((quarter) => [
+            quarter.time,
+            textValue(quarter.previous, empty),
+            textValue(quarter.next, empty),
+            textValue(inAffected(quarter.time) ? quarter.actual : null, empty),
+          ])}
         />
-      </div>
-      {selectedRow ? (
-        <p className="intraday-readout">
-          {selectedRow.time}. {columns.previous} {textValue(selectedRow.previous, empty)}. {columns.current}{" "}
-          {textValue(selectedRow.next, empty)}. {columns.actual}{" "}
-          {textValue(inAffected(selectedRow.time) ? selectedRow.actual : null, empty)}.
-        </p>
-      ) : null}
-      <DataTable
-        caption={summary}
-        columns={[columns.time, columns.previous, columns.current, columns.actual]}
-        rows={dataset.quarters.map((quarter) => [
-          quarter.time,
-          textValue(quarter.previous, empty),
-          textValue(quarter.next, empty),
-          textValue(inAffected(quarter.time) ? quarter.actual : null, empty),
-        ])}
-      />
+      </ProductChrome>
     </section>
   );
 }

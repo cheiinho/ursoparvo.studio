@@ -303,6 +303,7 @@ export default function IntradayCaseStudy({ content }: Props) {
           <EvidenceLabel kind="inference" text={content.labels.inference} />
           <p className="type-corpo">{content.decisionThree.baseline}</p>
           <ForecastCompare
+            product={content.frame.product}
             reconstruction={content.frame.reconstruction}
             showPrevious={content.decisionThree.showPrevious}
             previousHidden={content.decisionThree.previousHidden}
@@ -318,6 +319,8 @@ export default function IntradayCaseStudy({ content }: Props) {
             columns={content.decisionThree.columns}
           />
           <IssuePath
+            product={content.frame.product}
+            reconstruction={content.frame.reconstruction}
             issue={content.decisionThree.issue}
             severity={content.decisionThree.severity}
             showForecast={content.decisionThree.showForecast}

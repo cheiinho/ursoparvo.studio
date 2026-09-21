@@ -54,6 +54,14 @@ function axisMax(value: number): number {
   return Math.max(step, Math.ceil(value / step) * step);
 }
 
+function seriesInk(id: string, tone: "paper" | "field", strong: boolean): string {
+  if (tone === "field") return strong ? "#F6F1E6" : "#E4D9F2";
+  if (id === "previous") return "#C78100";
+  if (id === "next" || id === "current") return "#3A0088";
+  if (id.startsWith("actual")) return "#2F7D4A";
+  return strong ? "#3A0088" : "#5E584F";
+}
+
 export default function ForecastChart({
   patternId,
   axis,
@@ -95,14 +103,6 @@ export default function ForecastChart({
 
   return (
     <div className="intraday-chartblock">
-      <ul className="intraday-legend" aria-hidden="true">
-        {legend.map((item) => (
-          <li key={item.label}>
-            <span className={`intraday-swatch intraday-swatch--${item.style}${item.weight === "strong" ? " is-strong" : ""}`} />
-            {item.label}
-          </li>
-        ))}
-      </ul>
       <div className="intraday-chart-scroll">
       <svg className="intraday-chart" viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-hidden="true">
         <defs>
@@ -175,7 +175,7 @@ export default function ForecastChart({
                       y={yOf(point.value) - 3.5}
                       width="7"
                       height="7"
-                      fill={ink}
+                      fill={seriesInk(item.id, tone, true)}
                       stroke={tone === "field" ? "#3C2A63" : "#FFFFFF"}
                       strokeWidth="1"
                     />
@@ -191,7 +191,7 @@ export default function ForecastChart({
                   key={points}
                   points={points}
                   fill="none"
-                  stroke={item.weight === "strong" ? ink : muted}
+                  stroke={seriesInk(item.id, tone, item.weight === "strong")}
                   strokeWidth={item.weight === "strong" ? 2.5 : 1.5}
                   strokeLinejoin="round"
                   strokeLinecap="round"
@@ -234,6 +234,16 @@ export default function ForecastChart({
           : null}
       </svg>
       </div>
+      <ul className="intraday-legend" aria-hidden="true">
+        {legend.map((item) => (
+          <li key={item.label}>
+            <span
+              className={`intraday-swatch intraday-swatch--${item.style} intraday-swatch--${item.id}${item.weight === "strong" ? " is-strong" : ""}`}
+            />
+            {item.label}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
