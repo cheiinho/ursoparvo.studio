@@ -1126,19 +1126,21 @@
 }
 
 .wfm-banner {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.65rem 1rem;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.35rem 0.75rem;
   align-items: center;
   padding: 0.65rem 1rem;
   background: var(--wfm-warn-bg);
   border-bottom: 1px solid #ead7b0;
+  border-left: 3px solid var(--wfm-warn);
   color: var(--wfm-ink);
 }
 
 .wfm-banner.is-done {
   background: var(--wfm-ok-bg);
   border-bottom-color: #c5e4d2;
+  border-left-color: var(--wfm-ok);
 }
 
 .wfm-banner__icon {
@@ -1175,7 +1177,8 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 0.35rem 0.75rem;
-  margin-left: auto;
+  grid-column: 1 / -1;
+  margin-left: 2rem;
 }
 
 .wfm button {
@@ -1437,7 +1440,17 @@
 
 .wfm .intraday-schedgrid td,
 .wfm .intraday-schedgrid th[scope="col"] {
-  height: 2.6rem;
+  height: 3.1rem;
+}
+
+.wfm .intraday-schedgrid th[scope="row"] {
+  height: auto;
+}
+
+.wfm .intraday-person {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
 }
 
 .wfm .intraday-schedcards li.is-in {

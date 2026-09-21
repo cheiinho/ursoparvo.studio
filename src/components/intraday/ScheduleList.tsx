@@ -79,9 +79,11 @@ export default function ScheduleList({
               return (
                 <tr key={row.name}>
                   <th scope="row">
-                    <span>{row.name}</span>
-                    <span className="intraday-muted">
-                      {row.shiftStart}–{row.shiftEnd}
+                    <span className="intraday-person">
+                      <span>{row.name}</span>
+                      <span className="intraday-muted">
+                        {row.shiftStart}–{row.shiftEnd}
+                      </span>
                     </span>
                     <span className="intraday-muted">{row.detail}</span>
                   </th>
