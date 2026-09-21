@@ -70,48 +70,43 @@ export default function IssuePath({
 
   return (
     <div className="intraday-stack">
-      <section className="intraday-ui intraday-issue td-app">
+      <section className="intraday-ui intraday-issue wfm">
         <p className="intraday-recon">{reconstruction}</p>
-        <ProductChrome product={product} active="forecast">
-        <header className="td-pagehead">
-          <div>
-            <p className="td-title">Forecasting issues</p>
-            <p className="td-sub">{dataset.queue}</p>
-          </div>
-          <p className="intraday-kicker">{illustrative}</p>
-        </header>
-        <table className="intraday-issue__table">
-          <caption>{issue}</caption>
-          <thead>
-            <tr>
-              <th scope="col">{queueLabel}</th>
-              <th scope="col">{time}</th>
-              <th scope="col">
-                <span className="sr-only">{showForecast}</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">{dataset.queue}</th>
-              <td>{span}</td>
-              <td>
-                <div className="intraday-actions">
-                  <button type="button" onClick={() => show(forecastRef.current, "forecast")}>
-                    {showForecast}
-                  </button>
-                  <button type="button" onClick={() => show(scheduleRef.current, "schedule")}>
-                    {showSchedule}
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <p className="intraday-helper">{severity}</p>
+        <ProductChrome product={product} section="Forecasting issues" context={dataset.queue}>
+          <article className="wfm-issue">
+            <header>
+              <p className="wfm-kicker">{illustrative}</p>
+              <p className="wfm-title">{dataset.queue}</p>
+              <p className="wfm-meta">{span}</p>
+            </header>
+            <p className="wfm-issue__body">{issue}</p>
+            <dl className="wfm-facts">
+              <div>
+                <dt>{queueLabel}</dt>
+                <dd>{dataset.queue}</dd>
+              </div>
+              <div>
+                <dt>{time}</dt>
+                <dd>{span}</dd>
+              </div>
+              <div>
+                <dt>Signal</dt>
+                <dd>Contact volume</dd>
+              </div>
+            </dl>
+            <div className="intraday-actions">
+              <button type="button" onClick={() => show(forecastRef.current, "forecast")}>
+                {showForecast}
+              </button>
+              <button type="button" onClick={() => show(scheduleRef.current, "schedule")}>
+                {showSchedule}
+              </button>
+            </div>
+            <p className="wfm-help">{severity}</p>
+          </article>
         </ProductChrome>
       </section>
-      <section className={`intraday-ui intraday-destination td-app${active === "forecast" ? " is-active" : ""}`}>
+      <section className={`intraday-ui intraday-destination wfm${active === "forecast" ? " is-active" : ""}`}>
         <h3 ref={forecastRef} id="issue-forecast-period" tabIndex={-1} className="intraday-page-title">
           {heading}
         </h3>
@@ -160,7 +155,7 @@ export default function IssuePath({
           ])}
         />
       </section>
-      <section className={`intraday-ui intraday-destination td-app${active === "schedule" ? " is-active" : ""}`}>
+      <section className={`intraday-ui intraday-destination wfm${active === "schedule" ? " is-active" : ""}`}>
         <ScheduleList
           asHeading
           headingRef={scheduleRef}

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { dataset } from "@/content/intraday/dataset";
 import ProductChrome from "./ProductChrome";
+import WfmSwitch from "./WfmSwitch";
 
 type Props = {
   region: string;
@@ -67,88 +68,96 @@ export default function QueueSwitch({
   const [serviceLevel, patience, shrinkage] = fields;
 
   return (
-    <section className="intraday-ui intraday-settings td-app" aria-label={region}>
+    <section className="intraday-ui intraday-settings wfm" aria-label={region}>
       <div className="intraday-frame-note">
         <p className="intraday-recon">{reconstruction}</p>
         <p>{sentence}</p>
+        {on ? <p>{onLine}</p> : null}
       </div>
-      <ProductChrome product={product} active="configurations">
-        <form className="td-form" onSubmit={(event) => event.preventDefault()}>
-          <header className="td-pagehead">
+      <ProductChrome
+        product={product}
+        section={queueLabel}
+        context={`${accountLabel}: ${dataset.account}`}
+      >
+        <form className="wfm-form" onSubmit={(event) => event.preventDefault()}>
+          <header className="wfm-pagehead">
             <div>
-              <p className="td-eyebrow">{queueLabel}</p>
-              <p className="td-title">{dataset.queue}</p>
+              <p className="wfm-kicker">{queueLabel}</p>
+              <p className="wfm-title">{dataset.queue}</p>
             </div>
-            <p className="td-sub">
-              {accountLabel}: {dataset.account}. {dataset.dateLabel}. {dataset.timeZone}
+            <p className="wfm-meta">
+              {dataset.dateLabel}. {dataset.timeZone}. {illustrative}
             </p>
-            <p className="intraday-kicker">{illustrative}</p>
           </header>
-          <div className={`td-change${on ? " is-on" : ""}`}>
-            <p className="td-change__title">Reforecast</p>
-            <label className="intraday-check td-switch">
-              <input
-                type="checkbox"
-                checked={on}
-                onChange={(event) => setOn(event.target.checked)}
-                aria-describedby="reforecast-helper"
-              />
-              {control}
-            </label>
-            <p id="reforecast-helper" className="intraday-helper">
-              {helper}
-            </p>
-            {on ? <p className="intraday-online">{onLine}</p> : null}
+          <div className={`wfm-setting wfm-setting--hero${on ? " is-on" : ""}`}>
+            <div>
+              <p className="wfm-kicker">Reforecast</p>
+              <p id="reforecast-label" className="wfm-setting__label">
+                {control}
+              </p>
+              <p id="reforecast-helper" className="wfm-help">
+                {helper}
+              </p>
+            </div>
+            <WfmSwitch
+              checked={on}
+              onChange={setOn}
+              label={control}
+              labelledBy="reforecast-label"
+              describedBy="reforecast-helper"
+            />
           </div>
-          <div className="td-form__existing">
-            <p className="td-section">{disclosure}</p>
-            <p className="intraday-helper">{existingNote}</p>
-            <label className="td-field">
-              <span>
+          <div className="wfm-settings">
+            <p className="wfm-section">{disclosure}</p>
+            <p className="wfm-help">{existingNote}</p>
+            <label className="wfm-setting">
+              <span className="wfm-setting__label">
                 {serviceLevel} <abbr title="required">*</abbr>
               </span>
               <input disabled readOnly value={existingValue} />
-              <span className="intraday-helper">
+              <span className="wfm-help">
                 Interactions answered within this percentage threshold will be considered as meeting service level.
               </span>
             </label>
-            <label className="td-field">
-              <span>
+            <label className="wfm-setting">
+              <span className="wfm-setting__label">
                 Service level goal <abbr title="required">*</abbr>
               </span>
               <input disabled readOnly value="20 minutes" />
-              <span className="intraday-helper">
+              <span className="wfm-help">
                 With this service level time the queue is treated as immediate, for example a phone channel.
                 Interactions answered within this time threshold will be considered as meeting service level.
               </span>
             </label>
-            <label className="td-field">
-              <span>
+            <label className="wfm-setting">
+              <span className="wfm-setting__label">
                 {patience} <abbr title="required">*</abbr>
               </span>
               <input disabled readOnly value="35 seconds" />
-              <span className="intraday-helper">
+              <span className="wfm-help">
                 Interactions that wait longer than this time threshold will be assumed to be abandoned.
               </span>
             </label>
-            <label className="td-field">
-              <span>
+            <label className="wfm-setting">
+              <span className="wfm-setting__label">
                 {shrinkage} <abbr title="required">*</abbr>
               </span>
               <input disabled readOnly value="5%" />
-              <span className="intraday-helper">
+              <span className="wfm-help">
                 Percentage of scheduled staffing that will be lost to unplanned activities.
               </span>
             </label>
-            <p className="td-section">Queue options</p>
+            <p className="wfm-section">Queue options</p>
             {QUEUE_OPTIONS.map((option) => (
-              <div key={option.title} className="td-option">
-                <p className="td-option__title">{option.title}</p>
-                <label className="intraday-check">
-                  <input type="checkbox" disabled />
-                  {option.control}
-                </label>
-                <p className="intraday-helper">{option.helper}</p>
+              <div key={option.title} className="wfm-setting">
+                <div>
+                  <p className="wfm-setting__label">{option.title}</p>
+                  <label className="wfm-check">
+                    <input type="checkbox" disabled />
+                    {option.control}
+                  </label>
+                  <p className="wfm-help">{option.helper}</p>
+                </div>
               </div>
             ))}
           </div>

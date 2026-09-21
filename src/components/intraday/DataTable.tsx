@@ -2,9 +2,10 @@ type Props = {
   caption: string;
   columns: readonly string[];
   rows: readonly (readonly string[])[];
+  mark?: readonly string[];
 };
 
-export default function DataTable({ caption, columns, rows }: Props) {
+export default function DataTable({ caption, columns, rows, mark }: Props) {
   return (
     <div className="intraday-table-wrap">
       <table className="intraday-table type-nota">
@@ -20,7 +21,7 @@ export default function DataTable({ caption, columns, rows }: Props) {
         </thead>
         <tbody>
           {rows.map((row) => (
-            <tr key={row.join("|")}>
+            <tr key={row.join("|")} className={mark?.includes(row[0]) ? "is-marked" : undefined}>
               {row.map((cell, index) =>
                 index === 0 ? (
                   <th key={cell} scope="row">

@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { domain } from "@/content/intraday/derive";
 
 export type ChartPoint = {
@@ -56,10 +59,10 @@ function axisMax(value: number): number {
 
 function seriesInk(id: string, tone: "paper" | "field", strong: boolean): string {
   if (tone === "field") return strong ? "#F6F1E6" : "#E4D9F2";
-  if (id === "previous") return "#C78100";
-  if (id === "next" || id === "current") return "#3A0088";
-  if (id.startsWith("actual")) return "#2F7D4A";
-  return strong ? "#3A0088" : "#5E584F";
+  if (id === "previous") return "#8D6B3A";
+  if (id === "next" || id === "current") return "#1B4F72";
+  if (id.startsWith("actual")) return "#2F7D4F";
+  return strong ? "#1B4F72" : "#5E6770";
 }
 
 export default function ForecastChart({
@@ -74,6 +77,7 @@ export default function ForecastChart({
   selectedTime,
   onSelectTime,
 }: Props) {
+  const [hover, setHover] = useState<string | null>(null);
   const values = series.flatMap((item) =>
     item.points.flatMap((point) => (point.value === null ? [] : [point.value])),
   );
@@ -100,16 +104,27 @@ export default function ForecastChart({
   const legend = series.filter(
     (item, index, list) => list.findIndex((candidate) => candidate.label === item.label) === index,
   );
+  const focusTime = selectedTime ?? hover;
+  const plot = tone === "paper";
 
   return (
     <div className="intraday-chartblock">
       <div className="intraday-chart-scroll">
-      <svg className="intraday-chart" viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-hidden="true">
+      <svg
+        className="intraday-chart"
+        viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
+        role="img"
+        aria-hidden="true"
+        onMouseLeave={() => setHover(null)}
+      >
         <defs>
           <pattern id={patternId} width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(32)">
             <line x1="0" y1="0" x2="0" y2="7" stroke={bandStroke} strokeWidth="1.25" />
           </pattern>
         </defs>
+        {plot ? (
+          <rect x={PAD_L} y={PAD_T} width={innerW} height={innerH} fill="#fbfcfd" />
+        ) : null}
         {yTicks.map((tick) => (
           <g key={`y-${tick}`}>
             <line x1={PAD_L} x2={WIDTH - PAD_R} y1={yOf(tick)} y2={yOf(tick)} stroke={grid} />
@@ -154,14 +169,31 @@ export default function ForecastChart({
             </text>
           </g>
         ) : null}
-        {selectedTime ? (
-          <rect
-            x={xOf(selectedTime) - step / 2}
-            y={PAD_T}
-            width={step}
-            height={innerH}
-            fill={tone === "field" ? "rgba(246,241,230,0.08)" : "rgba(28,28,28,0.05)"}
-          />
+        <line
+          x1={PAD_L}
+          x2={WIDTH - PAD_R}
+          y1={PAD_T + innerH}
+          y2={PAD_T + innerH}
+          stroke={plot ? "#c5ced6" : "rgba(246,241,230,0.4)"}
+        />
+        {focusTime && axis.includes(focusTime) ? (
+          <g>
+            <rect
+              x={xOf(focusTime) - step / 2}
+              y={PAD_T}
+              width={step}
+              height={innerH}
+              fill={tone === "field" ? "rgba(246,241,230,0.08)" : "rgba(27,79,114,0.08)"}
+            />
+            <line
+              x1={xOf(focusTime)}
+              x2={xOf(focusTime)}
+              y1={PAD_T}
+              y2={PAD_T + innerH}
+              stroke={plot ? "#1b4f72" : "#f6f1e6"}
+              strokeDasharray="2 3"
+            />
+          </g>
         ) : null}
         {series.map((item) => {
           if (item.style === "markers") {
@@ -219,19 +251,19 @@ export default function ForecastChart({
             {time}
           </text>
         ))}
-        {onSelectTime
-          ? axis.map((time) => (
-              <rect
-                key={`hit-${time}`}
-                x={xOf(time) - step / 2}
-                y={PAD_T}
-                width={step}
-                height={innerH}
-                fill="transparent"
-                onClick={() => onSelectTime(time)}
-              />
-            ))
-          : null}
+        {axis.map((time) => (
+          <rect
+            key={`hit-${time}`}
+            x={xOf(time) - step / 2}
+            y={PAD_T}
+            width={step}
+            height={innerH}
+            fill="transparent"
+            onMouseEnter={() => setHover(time)}
+            onFocus={() => setHover(time)}
+            onClick={() => onSelectTime?.(time)}
+          />
+        ))}
       </svg>
       </div>
       <ul className="intraday-legend" aria-hidden="true">

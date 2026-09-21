@@ -80,6 +80,9 @@ export default function ScheduleList({
                 <tr key={row.name}>
                   <th scope="row">
                     <span>{row.name}</span>
+                    <span className="intraday-muted">
+                      {row.shiftStart}–{row.shiftEnd}
+                    </span>
                     <span className="intraday-muted">{row.detail}</span>
                   </th>
                   {hours.map((hour) => {
@@ -108,15 +111,18 @@ export default function ScheduleList({
         </table>
       </div>
       <ul className="intraday-schedcards">
-        {rows.map((row) => (
-          <li key={row.name}>
-            <span>{row.name}</span>
-            <span>
-              {row.shiftStart} to {row.shiftEnd}
-            </span>
-            <span className="intraday-muted">{row.detail}</span>
-          </li>
-        ))}
+        {rows.map((row) => {
+          const inPeriod = row.shiftStart <= affectedStart && affectedStart < row.shiftEnd;
+          return (
+            <li key={row.name} className={inPeriod ? "is-in" : undefined}>
+              <span>{row.name}</span>
+              <span>
+                {row.shiftStart}–{row.shiftEnd}
+              </span>
+              <span className="intraday-muted">{row.detail}</span>
+            </li>
+          );
+        })}
       </ul>
       <p className="intraday-schedule__note">{note}</p>
     </div>

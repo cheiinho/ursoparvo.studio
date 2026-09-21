@@ -219,8 +219,11 @@ export default function IntradayCaseStudy({ content }: Props) {
           </h2>
           <EvidenceLabel kind="designDecision" text={content.labels.designDecision} />
           <p className="type-lede">{content.decisionOne.message}</p>
-          <div className="intraday-split intraday-split--switch">
-            <QueueSwitch
+          <div className="intraday-stack">
+            <EvidenceLabel kind="requirement" text={content.labels.requirement} />
+            <p className="type-corpo">{content.decisionOne.conflict}</p>
+          </div>
+          <QueueSwitch
               region={content.frame.region}
               product={content.frame.product}
               reconstruction={content.frame.reconstruction}
@@ -236,11 +239,6 @@ export default function IntradayCaseStudy({ content }: Props) {
               fields={content.decisionOne.fields}
               disclosure={content.decisionOne.disclosure}
             />
-            <div className="intraday-stack">
-              <EvidenceLabel kind="requirement" text={content.labels.requirement} />
-              <p className="type-corpo">{content.decisionOne.conflict}</p>
-            </div>
-          </div>
           <p className="intraday-transition type-corpo">{content.decisionOne.transition}</p>
         </div>
       </section>

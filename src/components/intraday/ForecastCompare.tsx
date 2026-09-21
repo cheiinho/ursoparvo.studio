@@ -8,6 +8,7 @@ import { useAnnounce } from "./Announcer";
 import DataTable from "./DataTable";
 import ForecastChart, { type ChartSeries } from "./ForecastChart";
 import ProductChrome from "./ProductChrome";
+import WfmSwitch from "./WfmSwitch";
 
 type Props = {
   product: string;
@@ -100,25 +101,27 @@ export default function ForecastCompare({
   }
 
   return (
-    <section className="intraday-ui intraday-compare td-app" aria-label={chartRegion}>
+    <section className="intraday-ui intraday-compare wfm" aria-label={chartRegion}>
       <p className="intraday-recon">{reconstruction}</p>
-      <ProductChrome product={product} active="forecast">
-        <header className="td-pagehead">
+      <ProductChrome product={product} section="Forecast" context={dataset.queue}>
+        <header className="wfm-pagehead">
           <div>
-            <p className="td-title">Forecast</p>
-            <p className="td-sub">{dataset.queue}</p>
+            <p className="wfm-title">Forecast</p>
+            <p className="wfm-meta">
+              {illustrative}. {dataset.timeZone}
+            </p>
           </div>
-          <div className="td-datebar" aria-hidden="true">
-            <span className="td-date">{dataset.dateLabel}</span>
-            <span className="td-chip">Today</span>
-            <span className="td-chip is-on">Week</span>
+          <div className="wfm-scope" aria-hidden="true">
+            <span className="wfm-scope__date">{dataset.dateLabel}</span>
+            <span className="is-on">Today</span>
+            <span>Week</span>
           </div>
-          <p className="intraday-kicker">
-            {illustrative}. {dataset.timeZone}
-          </p>
+          <div className="wfm-queues">
+            <span className="is-on">{dataset.queue}</span>
+          </div>
         </header>
-        <div className="td-chartcard">
-          <p className="td-chart-title">Contact volume offered</p>
+        <div className="wfm-forecast">
+          <p className="wfm-kicker">Contact volume offered</p>
           <ForecastChart
             patternId="compare-band"
             axis={axis}
@@ -134,12 +137,9 @@ export default function ForecastCompare({
             selectedTime={selected}
             onSelectTime={setSelected}
           />
-          <div className={`td-change td-change--toggle${on ? " is-on" : ""}`}>
-            <label className="intraday-check td-switch">
-              <input type="checkbox" checked={on} onChange={(event) => toggle(event.target.checked)} />
-              {showPrevious}
-            </label>
-            {on ? <p className="intraday-delta">{delta}</p> : <p className="intraday-helper">{previousHidden}</p>}
+          <div className={`wfm-comparebar${on ? " is-on" : ""}`}>
+            <WfmSwitch checked={on} onChange={toggle} label={showPrevious} />
+            {on ? <p className="intraday-delta">{delta}</p> : <p className="wfm-help">{previousHidden}</p>}
           </div>
         </div>
         <p className="intraday-summary">{summary}</p>
@@ -153,6 +153,7 @@ export default function ForecastCompare({
         <DataTable
           caption={summary}
           columns={[columns.time, columns.previous, columns.current, columns.actual]}
+          mark={dataset.quarters.filter((quarter) => inAffected(quarter.time)).map((quarter) => quarter.time)}
           rows={dataset.quarters.map((quarter) => [
             quarter.time,
             textValue(quarter.previous, empty),
