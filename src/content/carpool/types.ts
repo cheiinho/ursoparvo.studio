@@ -35,11 +35,17 @@ export type CarpoolContent = {
     line: string;
     methods: readonly { title: string; detail: string }[];
     caveat: string;
+    voice: string;
   };
   personas: {
     headline: string;
     line: string;
-    items: readonly { name: string; role: string; need: string }[];
+    items: readonly {
+      name: string;
+      role: string;
+      need: string;
+      lens: string;
+    }[];
   };
   availability: {
     kicker: string;
@@ -51,6 +57,7 @@ export type CarpoolContent = {
     kicker: string;
     statement: string;
     line: string;
+    attribution: string;
   };
   readiness: {
     kicker: string;
@@ -114,10 +121,14 @@ export type CarpoolContent = {
   };
   outcome: {
     kicker: string;
+    climax: string;
     headline: string;
     line: string;
+    beforeLabel: string;
+    afterLabel: string;
     before: string;
     after: string;
+    arc: readonly { label: string; text: string }[];
   };
   reflection: {
     headline: string;

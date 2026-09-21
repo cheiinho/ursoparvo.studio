@@ -195,11 +195,11 @@ export function WaitTimeline({
           ))}
         </ol>
         <div
-          className={`carpool-wait__panel${reduce ? "" : " is-animated"}`}
+          className={`carpool-wait__panel${step >= 4 ? " is-bad" : ""}${reduce ? "" : " is-animated"}`}
           aria-live="polite"
         >
           {step < 4 ? (
-            <p className="type-corpo">Jan → Sep</p>
+            <p className="type-corpo">Jan to Sep</p>
           ) : (
             <>
               <p className="type-heading">{i.cancelled}</p>
@@ -237,14 +237,16 @@ export function ReadinessPlay({
         <div className="carpool-ready__card">
           <p className="type-meta">Car 07</p>
           <div className="carpool-ready__tags">
-            <span className={ready ? undefined : "is-on"}>{i.availableTag}</span>
+            <span className={ready ? undefined : "is-on is-available"}>
+              {i.availableTag}
+            </span>
             <span className={ready ? "is-on" : undefined}>{i.readyTag}</span>
           </div>
           <p className="type-corpo" aria-live="polite">
             {i[READY_STEPS[step]]}
           </p>
           <div
-            className={`carpool-ready__meter${reduce ? "" : " is-animated"}`}
+            className={`carpool-ready__meter${ready ? " is-ready" : ""}${reduce ? "" : " is-animated"}`}
             style={
               {
                 "--ready-progress": `${((step + 1) / READY_STEPS.length) * 100}%`,
@@ -398,7 +400,10 @@ export function HistoryTabs({
           {rows
             .filter((row) => row.tab === tab)
             .map((row) => (
-              <li key={`${row.car}-${row.status}`}>
+              <li
+                key={`${row.car}-${row.status}`}
+                data-status={tab === 3 ? "cancelled" : "open"}
+              >
                 <span>{row.car}</span>
                 <strong>{row.status}</strong>
               </li>

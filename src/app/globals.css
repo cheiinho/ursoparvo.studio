@@ -1302,18 +1302,33 @@ a.form-submit {
 /* ——— Carpool case study ——— */
 
 .carpool {
+  --carpool-ok: #2f6b4f;
+  --carpool-warn: #8a5a16;
+  --carpool-bad: #8b3a32;
+  --carpool-ready: #1f4f7a;
+  --carpool-charge: #6b4f2f;
+  --carpool-band: color-mix(in srgb, var(--field) 78%, var(--tone-moss) 22%);
   display: flex;
   flex-direction: column;
-  gap: var(--space-16);
+  gap: 0;
   padding-bottom: var(--space-24);
   overflow-x: clip;
+}
+
+.dark .carpool {
+  --carpool-ok: #7dba96;
+  --carpool-warn: #d4a45a;
+  --carpool-bad: #e08a7e;
+  --carpool-ready: #8eb6d8;
+  --carpool-charge: #c4a06a;
+  --carpool-band: color-mix(in srgb, var(--field) 82%, var(--tone-moss) 18%);
 }
 
 .carpool-cover {
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
-  padding-bottom: var(--space-8);
+  padding-bottom: var(--space-16);
 }
 
 .carpool-cover h1 {
@@ -1350,15 +1365,18 @@ a.form-submit {
   letter-spacing: 0.02em;
   text-transform: uppercase;
   color: var(--text-secondary);
+  background: transparent;
 }
 
 .carpool-chip--research {
-  border-color: var(--text);
-  color: var(--text);
+  border-color: var(--carpool-ready);
+  color: var(--carpool-ready);
 }
 
 .carpool-chip--exploration {
   border-style: dashed;
+  border-color: var(--carpool-warn);
+  color: var(--carpool-warn);
 }
 
 .carpool-chip--reconstruction {
@@ -1366,27 +1384,66 @@ a.form-submit {
 }
 
 .carpool-chip--inference {
-  border-color: var(--text);
   border-style: dashed;
+  border-color: var(--text);
+  color: var(--text);
+}
+
+.carpool-chip--context {
+  border-color: var(--text-secondary);
+}
+
+.carpool-section {
+  display: grid;
+  gap: var(--space-4);
+  padding-block: var(--space-12);
+}
+
+.carpool-section__kicker {
+  margin: 0;
 }
 
 .carpool-section__body {
+  display: flex;
+  flex-direction: column;
   gap: var(--space-6);
+  min-width: 0;
 }
 
 .carpool-section--pivot {
-  padding-block: var(--space-8);
+  padding-block: var(--space-16);
 }
 
 .carpool-section--lead .carpool-statement {
   max-width: 16ch;
 }
 
+.carpool-section--result {
+  margin-top: var(--space-8);
+  padding: var(--space-12) var(--space-6);
+  margin-inline: calc(-1 * var(--space-6));
+  background: var(--carpool-band);
+  border-radius: var(--radius-ui);
+}
+
+@media (min-width: 768px) {
+  .carpool-section--result {
+    padding: var(--space-16);
+    margin-inline: 0;
+  }
+}
+
 .carpool-statement,
-.carpool-pivot {
+.carpool-pivot,
+.carpool-climax {
   margin: 0;
   max-width: 18ch;
   text-wrap: balance;
+}
+
+.carpool-climax {
+  max-width: 16ch;
+  color: var(--text);
 }
 
 .carpool-assumption-chain {
@@ -1395,28 +1452,23 @@ a.form-submit {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: var(--space-2);
   max-width: 20rem;
 }
 
 .carpool-assumption-chain li {
   margin: 0;
-  padding: var(--space-3) 0;
-  border-top: 1px solid var(--text);
-  position: relative;
+  padding: var(--space-3) var(--space-4);
+  background: var(--field);
+  border-left: 3px solid var(--text);
 }
 
-.carpool-assumption-chain li:not(:last-child)::after {
-  content: "";
-  display: block;
-  width: 1px;
-  height: var(--space-3);
-  background: var(--text);
-  margin: var(--space-2) 0 0 0.55em;
-}
-
-.carpool-assumption-chain li:last-child {
-  border-bottom: 1px solid var(--text);
+.carpool-voice {
+  margin: 0;
+  padding-left: var(--space-4);
+  border-left: 3px solid var(--carpool-ready);
+  max-width: 36rem;
+  text-wrap: pretty;
 }
 
 .carpool-personas {
@@ -1430,7 +1482,7 @@ a.form-submit {
   margin: 0;
   padding: 0;
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-6);
 }
 
 @media (min-width: 768px) {
@@ -1443,8 +1495,12 @@ a.form-submit {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  padding-top: var(--space-3);
-  border-top: 1px solid var(--text);
+  padding: var(--space-4);
+  background: var(--field);
+}
+
+.carpool-personas__grid .type-heading {
+  margin: 0;
 }
 
 .carpool-boundary {
@@ -1469,7 +1525,6 @@ a.form-submit {
 
 .carpool-list li {
   padding: var(--space-2) 0;
-  border-top: 1px solid var(--text-secondary);
 }
 
 .carpool-questions {
@@ -1480,20 +1535,52 @@ a.form-submit {
 @media (min-width: 768px) {
   .carpool-questions {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-8);
   }
+}
+
+.carpool-questions__after {
+  padding: var(--space-4);
+  background: color-mix(in srgb, var(--surface) 55%, var(--tone-moss) 45%);
+}
+
+.dark .carpool-questions__after {
+  background: color-mix(in srgb, var(--field) 70%, var(--tone-moss) 30%);
+}
+
+.carpool-arc {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .carpool-arc {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.carpool-arc li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
 }
 
 .carpool-frame {
   margin: 0;
-  border: 1px solid var(--text-secondary);
+  border: 1px solid color-mix(in srgb, var(--text) 22%, transparent);
   border-radius: var(--radius-ui);
   overflow: hidden;
-  background: color-mix(in srgb, var(--surface) 92%, var(--text) 8%);
+  background: var(--surface);
 }
 
 .carpool-frame__bar {
   padding: var(--space-2) var(--space-3);
-  border-bottom: 1px solid var(--text-secondary);
+  background: var(--field);
 }
 
 .carpool-frame__body {
@@ -1506,8 +1593,8 @@ a.form-submit {
 .carpool-frame__caption {
   margin: 0;
   padding: var(--space-3);
-  border-top: 1px solid var(--text-secondary);
   color: var(--text-secondary);
+  background: var(--field);
 }
 
 .carpool-methods {
@@ -1528,12 +1615,12 @@ a.form-submit {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  padding-top: var(--space-3);
-  border-top: 1px solid var(--text);
+  padding: var(--space-3) 0;
 }
 
 .carpool-methods__title {
   margin: 0;
+  color: var(--carpool-ready);
 }
 
 .carpool-methods__caveat {
@@ -1572,11 +1659,12 @@ a.form-submit {
 .carpool-history__tabs button,
 .carpool-wait__steps button {
   appearance: none;
-  border: 1px solid var(--text-secondary);
-  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--text) 35%, transparent);
+  background: var(--field);
   color: var(--text);
   border-radius: var(--radius-ui);
   min-height: 44px;
+  min-width: 44px;
   padding: 0.45em 0.7em;
   font: inherit;
   cursor: pointer;
@@ -1594,7 +1682,8 @@ a.form-submit {
 }
 
 .carpool-day.is-empty {
-  opacity: 0.45;
+  opacity: 0.55;
+  border-style: dashed;
 }
 
 .carpool-day:focus-visible,
@@ -1605,7 +1694,7 @@ a.form-submit {
 .carpool-reserve:focus-visible,
 .carpool-text-btn:focus-visible,
 .carpool-range:focus-visible {
-  outline: 2px solid var(--text);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
@@ -1624,13 +1713,28 @@ a.form-submit {
   gap: var(--space-3);
   flex-wrap: wrap;
   padding: var(--space-3);
-  border: 1px solid var(--text-secondary);
+  border: 1px solid color-mix(in srgb, var(--text) 22%, transparent);
   border-radius: var(--radius-ui);
 }
 
+.carpool-play__cars li.is-open {
+  border-color: color-mix(in srgb, var(--carpool-ok) 55%, transparent);
+  background: color-mix(in srgb, var(--carpool-ok) 10%, var(--surface));
+}
+
+.carpool-play__cars li.is-open span:last-child {
+  color: var(--carpool-ok);
+}
+
 .carpool-play__cars li.is-closed {
-  opacity: 0.55;
+  opacity: 0.85;
   border-style: dashed;
+  border-color: color-mix(in srgb, var(--carpool-bad) 45%, transparent);
+  background: color-mix(in srgb, var(--carpool-bad) 8%, var(--surface));
+}
+
+.carpool-play__cars li.is-closed span:last-child {
+  color: var(--carpool-bad);
 }
 
 .carpool-play__punch {
@@ -1638,12 +1742,11 @@ a.form-submit {
   flex-direction: column;
   gap: var(--space-2);
   padding-top: var(--space-3);
-  border-top: 1px solid var(--text);
 }
 
 .carpool-range {
   width: 100%;
-  accent-color: var(--text);
+  accent-color: var(--carpool-ready);
   min-height: 44px;
 }
 
@@ -1666,17 +1769,23 @@ a.form-submit {
 }
 
 .carpool-wait__steps .is-done button {
-  border-color: var(--text);
+  border-color: var(--carpool-ready);
 }
 
 .carpool-wait__panel {
   min-height: 5.5rem;
   padding: var(--space-4);
-  border: 1px solid var(--text);
+  border: 1px solid color-mix(in srgb, var(--text) 28%, transparent);
   border-radius: var(--radius-ui);
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+  background: var(--field);
+}
+
+.carpool-wait__panel.is-bad {
+  border-color: color-mix(in srgb, var(--carpool-bad) 55%, transparent);
+  background: color-mix(in srgb, var(--carpool-bad) 10%, var(--surface));
 }
 
 .carpool-wait__panel.is-animated {
@@ -1688,8 +1797,9 @@ a.form-submit {
   flex-direction: column;
   gap: var(--space-3);
   padding: var(--space-4);
-  border: 1px solid var(--text);
+  border: 1px solid color-mix(in srgb, var(--text) 28%, transparent);
   border-radius: var(--radius-ui);
+  background: var(--field);
 }
 
 .carpool-ready__tags {
@@ -1709,13 +1819,20 @@ a.form-submit {
 }
 
 .carpool-ready__tags span.is-on {
-  border-color: var(--text);
-  color: var(--text);
+  border-color: var(--carpool-ready);
+  color: var(--carpool-ready);
+  background: color-mix(in srgb, var(--carpool-ready) 12%, var(--surface));
+}
+
+.carpool-ready__tags span.is-on.is-available {
+  border-color: var(--carpool-warn);
+  color: var(--carpool-warn);
+  background: color-mix(in srgb, var(--carpool-warn) 12%, var(--surface));
 }
 
 .carpool-ready__meter {
   height: 4px;
-  background: color-mix(in srgb, var(--text) 18%, transparent);
+  background: color-mix(in srgb, var(--text) 14%, transparent);
   border-radius: 999px;
   overflow: hidden;
 }
@@ -1725,11 +1842,15 @@ a.form-submit {
   display: block;
   height: 100%;
   width: var(--ready-progress, 25%);
-  background: var(--text);
+  background: var(--carpool-charge);
+}
+
+.carpool-ready__meter.is-ready::after {
+  background: var(--carpool-ready);
 }
 
 .carpool-ready__meter.is-animated::after {
-  transition: width 220ms ease;
+  transition: width 220ms ease, background-color 220ms ease;
 }
 
 .carpool-ready__controls {
@@ -1764,6 +1885,7 @@ a.form-submit {
   color: var(--surface);
   border-radius: var(--radius-ui);
   min-height: 44px;
+  min-width: 44px;
   padding: 0.55em 1.1em;
   font: inherit;
   cursor: pointer;
@@ -1774,7 +1896,7 @@ a.form-submit {
   appearance: none;
   border: 0;
   background: transparent;
-  color: var(--text);
+  color: var(--carpool-ready);
   font: inherit;
   text-decoration: underline;
   text-underline-offset: 0.18em;
@@ -1787,12 +1909,15 @@ a.form-submit {
 .carpool-error {
   margin: 0;
   padding: var(--space-3);
-  border: 1px solid var(--text);
+  border: 1px solid color-mix(in srgb, var(--carpool-warn) 55%, transparent);
   border-radius: var(--radius-ui);
+  background: color-mix(in srgb, var(--carpool-warn) 12%, var(--surface));
+  color: var(--text);
 }
 
 .carpool-error {
-  border-style: dashed;
+  border-color: color-mix(in srgb, var(--carpool-bad) 55%, transparent);
+  background: color-mix(in srgb, var(--carpool-bad) 12%, var(--surface));
 }
 
 .carpool-history__tabs {
@@ -1822,8 +1947,18 @@ a.form-submit {
   gap: var(--space-3);
   flex-wrap: wrap;
   padding: var(--space-3);
-  border: 1px solid var(--text);
+  border: 1px solid color-mix(in srgb, var(--text) 22%, transparent);
   border-radius: var(--radius-ui);
+  background: var(--field);
+}
+
+.carpool-history__list strong {
+  color: var(--carpool-ready);
+  font-weight: var(--fw-medium);
+}
+
+.carpool-history__list li[data-status="cancelled"] strong {
+  color: var(--carpool-bad);
 }
 
 .carpool-usage__grid {
@@ -1848,13 +1983,14 @@ a.form-submit {
 .carpool-zoom__stage {
   min-height: 12rem;
   padding: var(--space-4);
-  border: 1px solid var(--text);
+  border: 1px solid color-mix(in srgb, var(--text) 28%, transparent);
   border-radius: var(--radius-ui);
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: var(--space-4);
   transform-origin: center top;
+  background: var(--field);
 }
 
 .carpool-zoom__stage:not(.is-static) {
@@ -1876,8 +2012,9 @@ a.form-submit {
   gap: var(--space-3);
   max-width: 18rem;
   padding: var(--space-4);
-  border: 1px solid var(--text-secondary);
+  border: 1px solid color-mix(in srgb, var(--text) 28%, transparent);
   border-radius: var(--radius-ui);
+  background: var(--surface);
 }
 
 .carpool-flow {
@@ -1892,21 +2029,23 @@ a.form-submit {
 .carpool-flow li {
   position: relative;
   padding: 0.35em 0.65em;
-  border: 1px solid var(--text-secondary);
+  border: 1px solid color-mix(in srgb, var(--text) 28%, transparent);
   border-radius: var(--radius-ui);
   font-size: var(--fs-label);
   letter-spacing: 0.02em;
   text-transform: uppercase;
+  background: var(--surface);
 }
 
 .carpool-flow li.is-platform {
-  border-color: var(--text);
-  background: var(--text);
+  border-color: var(--carpool-ready);
+  background: var(--carpool-ready);
   color: var(--surface);
 }
 
 .carpool-flow.is-warn li {
   border-style: dashed;
+  border-color: color-mix(in srgb, var(--carpool-warn) 55%, transparent);
 }
 
 .carpool-zoom__flow li:not(.is-static) {
@@ -1963,13 +2102,14 @@ a.form-submit {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  padding-top: var(--space-3);
-  border-top: 1px solid var(--text-secondary);
+  padding: var(--space-4);
+  background: var(--field);
 }
 
 @media (max-width: 639px) {
   .carpool-statement,
-  .carpool-pivot {
+  .carpool-pivot,
+  .carpool-climax {
     max-width: none;
     font-size: clamp(1.75rem, 8vw, 2.75rem);
   }

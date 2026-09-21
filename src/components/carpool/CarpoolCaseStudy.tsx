@@ -27,19 +27,19 @@ function Section({
   id: string;
   kicker: string;
   children: React.ReactNode;
-  tone?: "default" | "pivot" | "open";
+  tone?: "default" | "pivot" | "open" | "result";
   weight?: "default" | "lead";
 }) {
   return (
     <section
       id={id}
-      className={`carpool-section carpool-section--${tone} carpool-section--${weight} studio-section`}
+      className={`carpool-section carpool-section--${tone} carpool-section--${weight}`}
       aria-labelledby={`${id}-title`}
     >
-      <p className="studio-section__title" id={`${id}-title`}>
+      <p className="carpool-section__kicker type-meta text-secondary" id={`${id}-title`}>
         {kicker}
       </p>
-      <div className="studio-section__body carpool-section__body">{children}</div>
+      <div className="carpool-section__body">{children}</div>
     </section>
   );
 }
@@ -95,15 +95,19 @@ export default function CarpoolCaseStudy({ content }: Props) {
           caveat={c.investigation.caveat}
           labels={c.labels}
         />
+        <blockquote className="carpool-voice type-lede measure">
+          {c.investigation.voice}
+        </blockquote>
         <div className="carpool-personas">
           <h3 className="type-meta">{c.personas.headline}</h3>
           <p className="type-nota text-secondary measure">{c.personas.line}</p>
           <ul className="carpool-personas__grid">
             {c.personas.items.map((persona) => (
               <li key={persona.name}>
-                <p className="type-corpo">{persona.name}</p>
+                <p className="type-heading">{persona.name}</p>
                 <p className="type-meta text-secondary">{persona.role}</p>
-                <p className="type-nota">{persona.need}</p>
+                <p className="type-nota text-secondary">{persona.lens}</p>
+                <p className="type-corpo">{persona.need}</p>
               </li>
             ))}
           </ul>
@@ -125,6 +129,9 @@ export default function CarpoolCaseStudy({ content }: Props) {
         <Statement>{c.wait.statement}</Statement>
         <WaitTimeline labels={c.labels} i={i} />
         <p className="type-corpo measure">{c.wait.line}</p>
+        <p className="type-nota type-italic text-secondary measure">
+          {c.wait.attribution}
+        </p>
       </Section>
 
       <Section id="readiness" kicker={c.readiness.kicker} weight="lead">
@@ -222,19 +229,28 @@ export default function CarpoolCaseStudy({ content }: Props) {
         />
       </Section>
 
-      <Section id="outcome" kicker={c.outcome.kicker} tone="open">
+      <Section id="outcome" kicker={c.outcome.kicker} tone="result">
+        <p className="carpool-climax type-display">{c.outcome.climax}</p>
         <h2 className="type-heading">{c.outcome.headline}</h2>
         <p className="type-corpo measure">{c.outcome.line}</p>
         <div className="carpool-questions">
           <div>
-            <p className="type-meta text-secondary">Before</p>
+            <p className="type-meta text-secondary">{c.outcome.beforeLabel}</p>
             <p className="type-lede">{c.outcome.before}</p>
           </div>
-          <div>
-            <p className="type-meta text-secondary">After</p>
-            <p className="type-lede">{c.outcome.after}</p>
+          <div className="carpool-questions__after">
+            <p className="type-meta">{c.outcome.afterLabel}</p>
+            <p className="type-heading">{c.outcome.after}</p>
           </div>
         </div>
+        <ol className="carpool-arc">
+          {c.outcome.arc.map((beat) => (
+            <li key={beat.label}>
+              <p className="type-meta text-secondary">{beat.label}</p>
+              <p className="type-corpo">{beat.text}</p>
+            </li>
+          ))}
+        </ol>
         <h3 className="type-meta">{c.reflection.headline}</h3>
         {c.reflection.body.map((p) => (
           <p key={p} className="type-corpo measure">
