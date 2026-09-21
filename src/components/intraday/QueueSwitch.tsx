@@ -39,48 +39,52 @@ export default function QueueSwitch({
   const [on, setOn] = useState(false);
 
   return (
-    <section className="intraday-ui" aria-label={region}>
-      <p className="intraday-recon type-label">{reconstruction}</p>
-      <p className="type-nota intraday-body">{sentence}</p>
-      <div className="intraday-bar">
-        <p className="type-label">{product}</p>
-        <p className="type-nota">
+    <section className="intraday-ui intraday-settings" aria-label={region}>
+      <div className="intraday-frame-note">
+        <p className="intraday-recon">{reconstruction}</p>
+        <p>{sentence}</p>
+      </div>
+      <div className="intraday-appbar">
+        <p className="intraday-product">{product}</p>
+        <p className="intraday-contextline">
           {accountLabel}: {dataset.account}
         </p>
       </div>
-      <form className="intraday-body intraday-stack" onSubmit={(event) => event.preventDefault()}>
-        <p className="type-label">{illustrative}</p>
-        <p className="type-nota">
-          {dataset.queue}. {dataset.dateLabel}. {dataset.timeZone}.
-        </p>
-        <div className="intraday-fields">
-          <p>
-            <span className="type-label">{queueLabel}. </span>
-            {dataset.queue}
+      <form className="intraday-workspace" onSubmit={(event) => event.preventDefault()}>
+        <header className="intraday-pagehead">
+          <p className="intraday-page-title">{dataset.queue}</p>
+          <p className="intraday-contextline">
+            {dataset.dateLabel}. {dataset.timeZone}
           </p>
-          <label className="intraday-check">
-            <input
-              type="checkbox"
-              checked={on}
-              onChange={(event) => setOn(event.target.checked)}
-              aria-describedby="reforecast-helper"
-            />
-            {control}
-          </label>
-          <p id="reforecast-helper" className="intraday-helper type-nota">
-            {helper}
-          </p>
-          {on ? <p className="type-nota">{onLine}</p> : null}
+          <p className="intraday-kicker">{illustrative}</p>
+        </header>
+        <div className="intraday-setting intraday-setting--hero">
+          <div>
+            <p className="intraday-kicker">{queueLabel}</p>
+            <label className="intraday-check">
+              <input
+                type="checkbox"
+                checked={on}
+                onChange={(event) => setOn(event.target.checked)}
+                aria-describedby="reforecast-helper"
+              />
+              {control}
+            </label>
+            <p id="reforecast-helper" className="intraday-helper">
+              {helper}
+            </p>
+            {on ? <p className="intraday-online">{onLine}</p> : null}
+          </div>
         </div>
-        <details>
-          <summary className="type-label">{disclosure}</summary>
+        <details className="intraday-settings__existing">
+          <summary>{disclosure}</summary>
+          <p className="intraday-helper">{existingNote}</p>
           <div className="intraday-fields">
-            <p className="type-nota">{existingNote}</p>
             {fields.map((field) => (
-              <label key={field}>
-                <span className="type-label">{field}</span>
+              <label key={field} className="intraday-setting">
+                <span>{field}</span>
                 <input disabled />
-                <span className="type-nota intraday-muted">{existingValue}</span>
+                <span className="intraday-muted">{existingValue}</span>
               </label>
             ))}
           </div>

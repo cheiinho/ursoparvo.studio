@@ -6,7 +6,6 @@ import { quarterByTime } from "@/content/intraday/derive";
 import { announceOnChange } from "@/content/intraday/state";
 import { useAnnounce } from "./Announcer";
 import DataTable from "./DataTable";
-import EvidenceLabel from "./EvidenceLabel";
 import ForecastChart, { type ChartSeries } from "./ForecastChart";
 
 type Props = {
@@ -98,36 +97,42 @@ export default function ForecastCompare({
   }
 
   return (
-    <div className="intraday-stack">
-      <label className="intraday-check">
-        <input type="checkbox" checked={on} onChange={(event) => toggle(event.target.checked)} />
-        {showPrevious}
-      </label>
-      {on ? <p className="type-lede">{delta}</p> : null}
-      <EvidenceLabel kind="illustrative" text={illustrative} />
-      <p className="type-nota">{summary}</p>
-      <div className="intraday-ui intraday-chart-region" aria-label={chartRegion}>
-        <p className="intraday-recon type-label">{reconstruction}</p>
-        <div className="intraday-chart-scroll">
-          <ForecastChart
-            patternId="compare-band"
-            axis={axis}
-            series={series}
-            band={{
-              start: dataset.affected.start,
-              end: bandEnd,
-              label: `${dataset.affected.start} to ${dataset.affected.end}`,
-            }}
-            tone="paper"
-            yLabel={contacts}
-            enter={on}
-            selectedTime={selected}
-            onSelectTime={setSelected}
-          />
-        </div>
+    <section className="intraday-ui intraday-compare" aria-label={chartRegion}>
+      <p className="intraday-recon">{reconstruction}</p>
+      <div className="intraday-appbar">
+        <p className="intraday-product">{dataset.queue}</p>
+        <p className="intraday-contextline">
+          {dataset.dateLabel}. {dataset.timeZone}
+        </p>
+        <p className="intraday-kicker">{illustrative}</p>
+      </div>
+      <div className="intraday-toolbar">
+        <label className="intraday-check">
+          <input type="checkbox" checked={on} onChange={(event) => toggle(event.target.checked)} />
+          {showPrevious}
+        </label>
+      </div>
+      {on ? <p className="intraday-delta">{delta}</p> : null}
+      <p className="intraday-summary">{summary}</p>
+      <div className="intraday-chart-scroll">
+        <ForecastChart
+          patternId="compare-band"
+          axis={axis}
+          series={series}
+          band={{
+            start: dataset.affected.start,
+            end: bandEnd,
+            label: `${dataset.affected.start} to ${dataset.affected.end}`,
+          }}
+          tone="paper"
+          yLabel={contacts}
+          enter={on}
+          selectedTime={selected}
+          onSelectTime={setSelected}
+        />
       </div>
       {selectedRow ? (
-        <p className="type-nota">
+        <p className="intraday-readout">
           {selectedRow.time}. {columns.previous} {textValue(selectedRow.previous, empty)}. {columns.current}{" "}
           {textValue(selectedRow.next, empty)}. {columns.actual}{" "}
           {textValue(inAffected(selectedRow.time) ? selectedRow.actual : null, empty)}.
@@ -143,6 +148,6 @@ export default function ForecastCompare({
           textValue(inAffected(quarter.time) ? quarter.actual : null, empty),
         ])}
       />
-    </div>
+    </section>
   );
 }

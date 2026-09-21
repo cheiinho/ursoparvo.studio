@@ -212,7 +212,7 @@ export default function IntradayCaseStudy({ content }: Props) {
         </div>
       </section>
 
-      <section id="decision-one" aria-labelledby="decision-one-title">
+      <section id="decision-one" className="intraday-peak" aria-labelledby="decision-one-title">
         <div className="site-container site-container--wide intraday-section intraday-stack">
           <h2 id="decision-one-title" className="type-heading">
             {content.decisionOne.heading}
@@ -245,7 +245,7 @@ export default function IntradayCaseStudy({ content }: Props) {
         </div>
       </section>
 
-      <section id="decision-two" aria-labelledby="decision-two-title">
+      <section id="decision-two" className="intraday-peak" aria-labelledby="decision-two-title">
         <div className="site-container site-container--wide intraday-section intraday-stack">
           <h2 id="decision-two-title" className="type-heading">
             {content.decisionTwo.heading}
@@ -293,7 +293,7 @@ export default function IntradayCaseStudy({ content }: Props) {
         </div>
       </section>
 
-      <section id="decision-three" aria-labelledby="decision-three-title">
+      <section id="decision-three" className="intraday-peak" aria-labelledby="decision-three-title">
         <div className="site-container site-container--wide intraday-section intraday-stack">
           <h2 id="decision-three-title" className="type-heading">
             {content.decisionThree.heading}
@@ -332,6 +332,8 @@ export default function IntradayCaseStudy({ content }: Props) {
             actual={content.decisionThree.columns.actual}
             empty={content.chart.empty}
             illustrative={content.labels.illustrative}
+            contacts={content.chart.contacts}
+            queueLabel={content.decisionOne.queueLabel}
           />
           <p className="intraday-transition type-corpo">{content.decisionThree.transition}</p>
         </div>

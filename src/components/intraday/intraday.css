@@ -290,30 +290,30 @@
   .intraday-frame {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
-    align-items: center;
+    align-items: stretch;
   }
 
-  .intraday-recon,
-  .intraday-banner,
-  .intraday-body,
-  .intraday-panel {
+  .intraday-frame > .intraday-recon,
+  .intraday-frame > .intraday-banner,
+  .intraday-frame > .intraday-workspace,
+  .intraday-frame > .intraday-panel {
     grid-column: 1 / -1;
   }
 
-  .intraday-bar {
+  .intraday-frame > .intraday-appbar {
     grid-column: 1;
     grid-row: 2;
   }
 
-  .intraday-surfaces {
+  .intraday-frame > .intraday-nav {
     grid-column: 2;
     grid-row: 2;
-    padding: var(--space-2) var(--space-3);
   }
 
-  .intraday-notifications {
+  .intraday-frame > .intraday-notifications {
     grid-column: 3;
     grid-row: 2;
+    align-self: center;
     margin: var(--space-3);
   }
 }
@@ -369,6 +369,458 @@
   }
 
   .intraday-chart-scroll .intraday-chart {
-    min-width: 40rem;
+    min-width: 44rem;
   }
+
+  .intraday-schedgrid {
+    display: none;
+  }
+
+  .intraday-schedcards {
+    display: grid;
+  }
+
+  .intraday-forecast {
+    grid-template-columns: 1fr;
+  }
+}
+
+.intraday-ui {
+  font-size: var(--fs-nota);
+  line-height: var(--lh-nota);
+  box-shadow: 0 12px 32px rgba(28, 28, 28, 0.06);
+}
+
+.intraday-recon {
+  margin: 0;
+  padding: var(--space-2) var(--space-4);
+  border-bottom: 1px solid #e4e2dc;
+  color: #5e584f;
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--track-label);
+}
+
+.intraday-frame-note {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  background: #f7f6f3;
+  border-bottom: 1px solid #e4e2dc;
+}
+
+.intraday-frame-note .intraday-recon {
+  padding: 0;
+  border: 0;
+}
+
+.intraday-appbar,
+.intraday-toolbar,
+.intraday-pagehead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-4);
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  background: #eeeeea;
+}
+
+.intraday-pagehead,
+.intraday-toolbar {
+  background: #ffffff;
+  border-bottom: 1px solid #e6e4de;
+}
+
+.intraday-product,
+.intraday-page-title,
+.intraday-panel__title,
+.intraday-schedule__title {
+  margin: 0;
+  color: #1c1c1c;
+  font-size: 1.125rem;
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.intraday-kicker,
+.intraday-contextline,
+.intraday-muted,
+.intraday-helper,
+.intraday-summary,
+.intraday-banner__meta,
+.intraday-schedule__note {
+  margin: 0;
+  color: #5e584f;
+}
+
+.intraday-kicker {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--track-label);
+}
+
+.intraday-nav {
+  background: #eeeeea;
+  padding: 0 var(--space-3);
+}
+
+.intraday-nav__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  min-height: 44px;
+}
+
+.intraday-nav label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  color: #5e584f;
+  border-bottom: 2px solid transparent;
+}
+
+.intraday-nav input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+}
+
+.intraday-nav label:has(input:checked) {
+  color: #1c1c1c;
+  border-bottom-color: #1c1c1c;
+}
+
+.intraday-nav label:focus-within,
+.intraday-ui button:focus-visible,
+.intraday-check:focus-within {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.intraday-workspace {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+.intraday-forecast {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 14rem;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.intraday-forecast .intraday-table-wrap {
+  grid-column: 1 / -1;
+  max-height: 18rem;
+  overflow: auto;
+}
+
+.intraday-rail,
+.intraday-panel,
+.intraday-destination,
+.intraday-issue {
+  border: 1px solid #e6e4de;
+  background: #ffffff;
+}
+
+.intraday-rail {
+  padding: var(--space-3);
+}
+
+.intraday-banner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: start;
+}
+
+.intraday-banner__mark {
+  width: 10px;
+  height: 10px;
+  margin-top: 0.45rem;
+  background: #6a4b12;
+}
+
+.intraday-banner__copy,
+.intraday-banner__actions,
+.intraday-notices,
+.intraday-fields,
+.intraday-setting--hero {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.intraday-banner p,
+.intraday-delta,
+.intraday-online,
+.intraday-insights__text,
+.intraday-issue caption {
+  margin: 0;
+  color: #1c1c1c;
+}
+
+.intraday-delta,
+.intraday-issue caption,
+.intraday-insights__text {
+  padding: 0 var(--space-4);
+  text-align: left;
+}
+
+.intraday-chartblock {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.intraday-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: #5e584f;
+  font-size: var(--fs-label);
+}
+
+.intraday-swatch {
+  display: inline-block;
+  width: 1.5rem;
+  height: 0;
+  margin-right: var(--space-2);
+  border-top: 2px solid #1c1c1c;
+  vertical-align: middle;
+}
+
+.intraday-swatch--dotted {
+  border-top-style: dotted;
+}
+
+.intraday-swatch--markers {
+  width: 7px;
+  height: 7px;
+  border: 0;
+  background: #1c1c1c;
+}
+
+.intraday-swatch.is-strong {
+  border-top-width: 3px;
+}
+
+.intraday-chart-scroll {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.intraday-table th,
+.intraday-table td,
+.intraday-issue__table th,
+.intraday-issue__table td,
+.intraday-schedgrid th,
+.intraday-schedgrid td {
+  border-bottom: 1px solid #e6e4de;
+}
+
+.intraday-table thead th {
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+}
+
+.intraday-issue,
+.intraday-destination,
+.intraday-compare,
+.intraday-settings {
+  display: grid;
+  gap: var(--space-4);
+  padding-bottom: var(--space-4);
+}
+
+.intraday-issue__table,
+.intraday-schedgrid {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.intraday-issue__table th,
+.intraday-issue__table td {
+  padding: var(--space-3);
+  text-align: left;
+  vertical-align: top;
+}
+
+.intraday-setting {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3) 0;
+  border-top: 1px solid #e6e4de;
+}
+
+.intraday-setting--hero {
+  margin: 0 var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid #d9d2c6;
+  background: #f7f6f3;
+}
+
+.intraday-settings__existing {
+  margin: 0 var(--space-4);
+}
+
+.intraday-settings summary {
+  min-height: 44px;
+}
+
+.intraday-fields input {
+  width: 100%;
+}
+
+.intraday-ui button:hover:not(:disabled) {
+  background: #d8d6d0;
+}
+
+.intraday-panel {
+  margin: 0;
+  border-width: 1px 0 0;
+  animation: intraday-in var(--dur-micro) var(--ease-standard);
+}
+
+.intraday-notices {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.intraday-notices li {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid #eeeeea;
+}
+
+.intraday-destination.is-active {
+  box-shadow: inset 0 0 0 1.5px #6a4b12;
+}
+
+.intraday-schedscroll {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.intraday-schedgrid th,
+.intraday-schedgrid td {
+  min-width: 2.5rem;
+  height: 2.25rem;
+  padding: 0;
+  text-align: center;
+  font-size: var(--fs-label);
+}
+
+.intraday-schedgrid th[scope="row"] {
+  min-width: 12rem;
+  padding: var(--space-2);
+  text-align: left;
+}
+
+.intraday-schedgrid th[scope="row"] span {
+  display: block;
+}
+
+.intraday-schedgrid .is-shift {
+  background: #e4e2dc;
+}
+
+.intraday-schedgrid .is-affected {
+  box-shadow: inset 0 0 0 1.5px #6a4b12;
+  background: #f3eee4;
+}
+
+.intraday-schedgrid .is-shift.is-affected {
+  background: #e7d7b8;
+}
+
+.intraday-schedcards {
+  display: none;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0 var(--space-4);
+  list-style: none;
+}
+
+.intraday-schedcards li {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border: 1px solid #e6e4de;
+}
+
+.intraday-insights {
+  display: grid;
+  gap: var(--space-3);
+  min-height: 12rem;
+  padding: var(--space-2);
+  align-content: start;
+}
+
+.intraday-readout {
+  margin: 0;
+  padding: 0 var(--space-4);
+}
+
+.intraday-peak .intraday-ui {
+  width: 100%;
+}
+
+.intraday-statebar,
+.intraday-stack > fieldset .intraday-radios label {
+  min-height: 44px;
+}
+
+@media (min-width: 45rem) {
+  .intraday-schedgrid {
+    display: table;
+  }
+
+  .intraday-schedcards {
+    display: none;
+  }
+}
+
+@media (max-width: 44.99rem) {
+  .intraday-schedgrid,
+  .intraday-schedscroll {
+    display: none;
+  }
+
+  .intraday-schedcards {
+    display: grid;
+  }
+
+  .intraday-nav__list,
+  .intraday-banner__actions,
+  .intraday-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .intraday-forecast {
+    grid-template-columns: 1fr;
+  }
+
+  .intraday-frame {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .intraday-frame > .intraday-recon { order: 1; }
+  .intraday-frame > .intraday-appbar { order: 2; }
+  .intraday-frame > .intraday-nav { order: 3; }
+  .intraday-frame > .intraday-notifications { order: 4; }
+  .intraday-frame > .intraday-panel { order: 5; }
+  .intraday-frame > .intraday-banner { order: 6; }
+  .intraday-frame > .intraday-workspace { order: 7; }
 }
