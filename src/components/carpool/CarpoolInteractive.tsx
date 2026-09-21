@@ -116,9 +116,15 @@ export function AvailabilityPlay({
             </li>
           ))}
         </ul>
-        <div className="carpool-play__punch">
-          <p className="type-lede">{statement}</p>
-          {day >= 2 ? <p className="type-heading">{after}</p> : null}
+        <div className="carpool-play__punch" aria-live="polite">
+          {day >= 2 ? (
+            <>
+              <p className="type-lede">{statement}</p>
+              <p className="type-heading">{after}</p>
+            </>
+          ) : (
+            <p className="type-nota text-secondary">{i.tryAnotherDay}</p>
+          )}
         </div>
       </div>
     </Frame>
