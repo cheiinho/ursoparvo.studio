@@ -6,10 +6,7 @@ export type EvidenceKind =
   | "exploration";
 
 export type CarpoolContent = {
-  meta: {
-    title: string;
-    description: string;
-  };
+  meta: { title: string; description: string };
   disclosure: string;
   labels: Record<EvidenceKind, string>;
   cover: {
@@ -22,59 +19,76 @@ export type CarpoolContent = {
   brief: {
     kicker: string;
     headline: string;
-    body: readonly string[];
+    line: string;
   };
   assumption: {
     kicker: string;
-    headline: string;
-    body: readonly string[];
-    chain: readonly string[];
+    statement: string;
+    body: string;
+    nodes: readonly string[];
     bridge: string;
     contextNote: string;
   };
   investigation: {
     kicker: string;
     headline: string;
-    body: readonly string[];
+    line: string;
     methods: readonly { title: string; detail: string }[];
     caveat: string;
   };
   personas: {
     headline: string;
-    body: string;
+    line: string;
     items: readonly { name: string; role: string; need: string }[];
   };
-  experience: {
+  availability: {
     kicker: string;
-    headline: string;
-    body: readonly string[];
-    signal: string;
+    statement: string;
+    after: string;
+    line: string;
   };
-  service: {
+  wait: {
     kicker: string;
-    headline: string;
-    body: readonly string[];
-    steps: readonly string[];
-    diagramNote: string;
+    statement: string;
+    line: string;
+  };
+  readiness: {
+    kicker: string;
+    statement: string;
+    line: string;
+  };
+  intents: {
+    kicker: string;
+    statement: string;
+    line: string;
+  };
+  rules: {
+    kicker: string;
+    statement: string;
+    line: string;
+  };
+  history: {
+    kicker: string;
+    statement: string;
+    line: string;
+  };
+  usage: {
+    kicker: string;
+    statement: string;
+    line: string;
+    note: string;
   };
   turningPoint: {
     kicker: string;
     statement: string;
     qualifier: string;
-    body: readonly string[];
     shift: string;
   };
-  findings: {
+  service: {
     kicker: string;
-    headline: string;
-    intro: string;
-    items: readonly {
-      id: string;
-      weight: "lead" | "support";
-      title: string;
-      body: readonly string[];
-      level: string;
-    }[];
+    statement: string;
+    steps: readonly string[];
+    diagramNote: string;
   };
   software: {
     kicker: string;
@@ -86,7 +100,7 @@ export type CarpoolContent = {
   investment: {
     kicker: string;
     headline: string;
-    body: readonly string[];
+    line: string;
     contextNote: string;
     chainA: readonly string[];
     chainB: readonly string[];
@@ -101,7 +115,7 @@ export type CarpoolContent = {
   outcome: {
     kicker: string;
     headline: string;
-    body: readonly string[];
+    line: string;
     before: string;
     after: string;
   };
@@ -109,36 +123,52 @@ export type CarpoolContent = {
     headline: string;
     body: readonly string[];
   };
-  artefacts: {
-    availabilityCaption: string;
-    intentsCaption: string;
-    readinessCaption: string;
-    cancelCaption: string;
-    cancelExploreCaption: string;
-    ruleCaption: string;
-    historyCaption: string;
-    explorationStripNote: string;
-    uiPoolTitle: string;
-    uiReserve: string;
-    uiLeisure: string;
-    uiWork: string;
-    uiNextAvailable: string;
-    uiWhenNeed: string;
-    uiCancelled: string;
-    uiNoReason: string;
-    uiReasonMaintenance: string;
-    uiJoinWaitlist: string;
-    uiActiveRule: string;
-    uiTooLate: string;
-    uiEligibility: string;
-    uiHistoryEmpty: string;
-    uiHistoryDefault: string;
-    uiUpcoming: string;
-    uiAvailableFrom: string;
-    uiCharging: string;
-    uiReadyAt: string;
-    uiInspection: string;
-    availableLabel: string;
-    readyLabel: string;
+  interact: {
+    selectDate: string;
+    vehicles: string;
+    noAvailability: string;
+    fewerOptions: string;
+    tryAnotherDay: string;
+    dayLabels: readonly string[];
+    vehicleOpen: string;
+    vehicleClosed: string;
+    scrubHint: string;
+    booked: string;
+    monthsPass: string;
+    stillBooked: string;
+    twentyDays: string;
+    cancelled: string;
+    noReason: string;
+    noAlternative: string;
+    playReady: string;
+    stepReturn: string;
+    stepInspection: string;
+    stepCharging: string;
+    stepReady: string;
+    availableTag: string;
+    readyTag: string;
+    workMode: string;
+    leisureMode: string;
+    workNeed: string;
+    leisureNeed: string;
+    reserve: string;
+    lateRule: string;
+    earlyRule: string;
+    tryAgain: string;
+    showBefore: string;
+    tabUpcoming: string;
+    tabActive: string;
+    tabCompleted: string;
+    tabCancelled: string;
+    statusOpen: string;
+    statusCompleted: string;
+    statusCancelled: string;
+    scheduled: string;
+    actual: string;
+    pickup: string;
+    returnLabel: string;
+    illustrative: string;
+    zoomHint: string;
+    platformNode: string;
   };
 };

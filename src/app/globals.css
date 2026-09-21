@@ -1306,6 +1306,7 @@ a.form-submit {
   flex-direction: column;
   gap: var(--space-16);
   padding-bottom: var(--space-24);
+  overflow-x: clip;
 }
 
 .carpool-cover {
@@ -1360,6 +1361,15 @@ a.form-submit {
   border-style: dashed;
 }
 
+.carpool-chip--reconstruction {
+  border-style: dotted;
+}
+
+.carpool-chip--inference {
+  border-color: var(--text);
+  border-style: dashed;
+}
+
 .carpool-section__body {
   gap: var(--space-6);
 }
@@ -1368,6 +1378,11 @@ a.form-submit {
   padding-block: var(--space-8);
 }
 
+.carpool-section--lead .carpool-statement {
+  max-width: 16ch;
+}
+
+.carpool-statement,
 .carpool-pivot {
   margin: 0;
   max-width: 18ch;
@@ -1380,14 +1395,24 @@ a.form-submit {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  max-width: 36rem;
+  gap: 0;
+  max-width: 20rem;
 }
 
 .carpool-assumption-chain li {
   margin: 0;
   padding: var(--space-3) 0;
   border-top: 1px solid var(--text);
+  position: relative;
+}
+
+.carpool-assumption-chain li:not(:last-child)::after {
+  content: "";
+  display: block;
+  width: 1px;
+  height: var(--space-3);
+  background: var(--text);
+  margin: var(--space-2) 0 0 0.55em;
 }
 
 .carpool-assumption-chain li:last-child {
@@ -1422,30 +1447,6 @@ a.form-submit {
   border-top: 1px solid var(--text);
 }
 
-.carpool-signal {
-  margin: 0;
-  padding-left: var(--space-4);
-  border-left: 2px solid var(--text);
-}
-
-.carpool-findings {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-12);
-}
-
-.carpool-finding {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  padding-top: var(--space-6);
-  border-top: 1px solid var(--text-secondary);
-}
-
-.carpool-finding--lead {
-  gap: var(--space-6);
-}
-
 .carpool-boundary {
   display: grid;
   gap: var(--space-8);
@@ -1467,8 +1468,8 @@ a.form-submit {
 }
 
 .carpool-list li {
-  padding-left: var(--space-4);
-  border-left: 1px solid var(--text-secondary);
+  padding: var(--space-2) 0;
+  border-top: 1px solid var(--text-secondary);
 }
 
 .carpool-questions {
@@ -1484,26 +1485,29 @@ a.form-submit {
 
 .carpool-frame {
   margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  min-width: 0;
+  border: 1px solid var(--text-secondary);
+  border-radius: var(--radius-ui);
+  overflow: hidden;
+  background: color-mix(in srgb, var(--surface) 92%, var(--text) 8%);
 }
 
 .carpool-frame__bar {
-  display: flex;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--text-secondary);
 }
 
 .carpool-frame__body {
-  border: 1px solid var(--text);
-  background: var(--field);
   padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
 }
 
 .carpool-frame__caption {
   margin: 0;
+  padding: var(--space-3);
+  border-top: 1px solid var(--text-secondary);
   color: var(--text-secondary);
-  max-width: var(--measure-lede);
 }
 
 .carpool-methods {
@@ -1525,97 +1529,87 @@ a.form-submit {
   flex-direction: column;
   gap: var(--space-2);
   padding-top: var(--space-3);
-  border-top: 1px solid var(--text-secondary);
+  border-top: 1px solid var(--text);
 }
 
 .carpool-methods__title {
   margin: 0;
-  color: var(--text);
 }
 
 .carpool-methods__caveat {
   margin: var(--space-4) 0 0;
 }
 
-.carpool-ui {
+.carpool-play,
+.carpool-wait,
+.carpool-ready,
+.carpool-intent,
+.carpool-ruleplay,
+.carpool-history,
+.carpool-usage,
+.carpool-zoom {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  color: var(--text);
+  min-width: 0;
 }
 
-.carpool-ui--compact {
-  gap: var(--space-3);
-}
-
-.carpool-ui__chrome {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: var(--space-3);
-  align-items: baseline;
-}
-
-.carpool-ui__product {
-  font-weight: var(--fw-medium);
-  font-size: var(--fs-meta);
-}
-
-.carpool-ui__tabs,
-.carpool-ui__filters {
-  display: flex;
-  flex-wrap: wrap;
+.carpool-play__days {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-2);
 }
 
-.carpool-ui__tabs span,
-.carpool-ui__filters span {
-  min-height: 32px;
-  display: inline-flex;
-  align-items: center;
-  padding: 0.2em 0.6em;
-  border: 1px solid var(--text-secondary);
-  border-radius: var(--radius-ui);
-  font-size: var(--fs-label);
+@media (min-width: 640px) {
+  .carpool-play__days {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
 }
 
-.carpool-ui__tabs .is-active,
-.carpool-ui__filters .is-active {
-  border-color: var(--text);
+.carpool-day,
+.carpool-ready__controls button,
+.carpool-intent__toggle button,
+.carpool-history__tabs button,
+.carpool-wait__steps button {
+  appearance: none;
+  border: 1px solid var(--text-secondary);
+  background: transparent;
+  color: var(--text);
+  border-radius: var(--radius-ui);
+  min-height: 44px;
+  padding: 0.45em 0.7em;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.carpool-day.is-active,
+.carpool-ready__controls button.is-active,
+.carpool-intent__toggle button.is-active,
+.carpool-history__tabs button.is-active,
+.carpool-wait__steps .is-current button {
   background: var(--text);
   color: var(--surface);
-}
-
-.carpool-calendar {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: var(--space-2);
-}
-
-.carpool-calendar__day {
-  aspect-ratio: 1;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--text-secondary);
-  font-size: var(--fs-label);
-}
-
-.carpool-calendar__day.is-blocked {
-  opacity: 0.35;
-  text-decoration: line-through;
-}
-
-.carpool-calendar__day.is-ambiguous {
-  border-style: dashed;
-  opacity: 0.7;
-}
-
-.carpool-calendar__day.is-open {
   border-color: var(--text);
-  font-weight: var(--fw-medium);
 }
 
-.carpool-ui__cars {
+.carpool-day.is-empty {
+  opacity: 0.45;
+}
+
+.carpool-day:focus-visible,
+.carpool-ready__controls button:focus-visible,
+.carpool-intent__toggle button:focus-visible,
+.carpool-history__tabs button:focus-visible,
+.carpool-wait__steps button:focus-visible,
+.carpool-reserve:focus-visible,
+.carpool-text-btn:focus-visible,
+.carpool-range:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+.carpool-play__cars {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -1624,48 +1618,22 @@ a.form-submit {
   gap: var(--space-2);
 }
 
-.carpool-ui__cars li {
+.carpool-play__cars li {
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
   gap: var(--space-3);
-  align-items: center;
-  padding: var(--space-3) 0;
-  border-top: 1px solid var(--text-secondary);
-  font-size: var(--fs-nota);
-}
-
-.carpool-ui__cars li.is-muted {
-  opacity: 0.55;
-}
-
-.carpool-ui__cars button {
-  min-height: 36px;
-  padding: 0.35em 0.8em;
-  border: 1px solid var(--text);
+  flex-wrap: wrap;
+  padding: var(--space-3);
+  border: 1px solid var(--text-secondary);
   border-radius: var(--radius-ui);
-  background: var(--text);
-  color: var(--surface);
-  font: inherit;
-  font-size: var(--fs-label);
 }
 
-.carpool-ui__cars button:disabled {
+.carpool-play__cars li.is-closed {
   opacity: 0.55;
+  border-style: dashed;
 }
 
-.carpool-intents {
-  display: grid;
-  gap: var(--space-4);
-}
-
-@media (min-width: 640px) {
-  .carpool-intents {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-.carpool-intents__col {
+.carpool-play__punch {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -1673,45 +1641,243 @@ a.form-submit {
   border-top: 1px solid var(--text);
 }
 
-.carpool-readiness {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
+.carpool-range {
+  width: 100%;
+  accent-color: var(--text);
+  min-height: 44px;
 }
 
-.carpool-readiness__card {
+.carpool-wait__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+@media (min-width: 768px) {
+  .carpool-wait__steps {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.carpool-wait__steps button {
+  width: 100%;
+}
+
+.carpool-wait__steps .is-done button {
+  border-color: var(--text);
+}
+
+.carpool-wait__panel {
+  min-height: 5.5rem;
+  padding: var(--space-4);
+  border: 1px solid var(--text);
+  border-radius: var(--radius-ui);
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+}
+
+.carpool-wait__panel.is-animated {
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.carpool-ready__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
   padding: var(--space-4);
   border: 1px solid var(--text);
-  background: var(--surface);
+  border-radius: var(--radius-ui);
 }
 
-.carpool-readiness__warn {
-  color: var(--text);
-  font-weight: var(--fw-medium);
-}
-
-.carpool-readiness__tags {
+.carpool-ready__tags {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
-  margin-top: var(--space-2);
 }
 
-.carpool-readiness__tags span {
-  min-height: 28px;
-  display: inline-flex;
-  align-items: center;
-  padding: 0.15em 0.5em;
+.carpool-ready__tags span {
+  padding: 0.2em 0.55em;
   border: 1px solid var(--text-secondary);
+  border-radius: var(--radius-ui);
   font-size: var(--fs-label);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
 }
 
-.carpool-readiness__tags .is-ready {
+.carpool-ready__tags span.is-on {
   border-color: var(--text);
-  font-weight: var(--fw-medium);
+  color: var(--text);
+}
+
+.carpool-ready__meter {
+  height: 4px;
+  background: color-mix(in srgb, var(--text) 18%, transparent);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.carpool-ready__meter::after {
+  content: "";
+  display: block;
+  height: 100%;
+  width: var(--ready-progress, 25%);
+  background: var(--text);
+}
+
+.carpool-ready__meter.is-animated::after {
+  transition: width 220ms ease;
+}
+
+.carpool-ready__controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+@media (min-width: 768px) {
+  .carpool-ready__controls {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.carpool-intent__toggle {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+  max-width: 24rem;
+}
+
+.carpool-ruleplay__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.carpool-reserve {
+  appearance: none;
+  border: 1px solid var(--text);
+  background: var(--text);
+  color: var(--surface);
+  border-radius: var(--radius-ui);
+  min-height: 44px;
+  padding: 0.55em 1.1em;
+  font: inherit;
+  cursor: pointer;
+  align-self: start;
+}
+
+.carpool-text-btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  cursor: pointer;
+  min-height: 44px;
+  padding: 0;
+}
+
+.carpool-banner,
+.carpool-error {
+  margin: 0;
+  padding: var(--space-3);
+  border: 1px solid var(--text);
+  border-radius: var(--radius-ui);
+}
+
+.carpool-error {
+  border-style: dashed;
+}
+
+.carpool-history__tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+@media (min-width: 768px) {
+  .carpool-history__tabs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.carpool-history__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.carpool-history__list li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding: var(--space-3);
+  border: 1px solid var(--text);
+  border-radius: var(--radius-ui);
+}
+
+.carpool-usage__grid {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.carpool-usage__grid dt {
+  font-size: var(--fs-label);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+}
+
+.carpool-usage__grid dd {
+  margin: var(--space-1) 0 0;
+  font-size: var(--fs-heading, 1.25rem);
+}
+
+.carpool-zoom__stage {
+  min-height: 12rem;
+  padding: var(--space-4);
+  border: 1px solid var(--text);
+  border-radius: var(--radius-ui);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-4);
+  transform-origin: center top;
+}
+
+.carpool-zoom__stage:not(.is-static) {
+  transition: transform 220ms ease, opacity 220ms ease;
+}
+
+.carpool-zoom__stage.is-level-0 {
+  transform: scale(1);
+}
+
+.carpool-zoom__stage.is-level-1,
+.carpool-zoom__stage.is-level-2 {
+  transform: scale(0.98);
+}
+
+.carpool-zoom__ui {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 18rem;
+  padding: var(--space-4);
+  border: 1px solid var(--text-secondary);
+  border-radius: var(--radius-ui);
 }
 
 .carpool-flow {
@@ -1719,98 +1885,47 @@ a.form-submit {
   margin: 0;
   padding: 0;
   display: flex;
-  flex-direction: column;
-  gap: 0;
+  flex-wrap: wrap;
+  gap: var(--space-2);
 }
 
 .carpool-flow li {
   position: relative;
-  padding: var(--space-2) 0 var(--space-2) var(--space-6);
-  border-left: 1px solid var(--text-secondary);
-  font-size: var(--fs-nota);
-}
-
-.carpool-flow li::before {
-  content: "";
-  position: absolute;
-  left: -3px;
-  top: 0.85em;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--text);
-}
-
-.carpool-flow.is-warn li {
-  border-left-color: var(--text);
-}
-
-.carpool-pair {
-  display: grid;
-  gap: var(--space-6);
-}
-
-@media (min-width: 900px) {
-  .carpool-pair {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-.carpool-status {
-  margin: 0;
-  font-size: var(--fs-meta);
-  font-weight: var(--fw-medium);
-}
-
-.carpool-status.is-bad {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.carpool-link {
-  margin: 0;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.carpool-rule__steps {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.carpool-rule__steps li {
-  padding: var(--space-3);
+  padding: 0.35em 0.65em;
   border: 1px solid var(--text-secondary);
-  font-size: var(--fs-nota);
+  border-radius: var(--radius-ui);
+  font-size: var(--fs-label);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
-.carpool-rule__steps .is-action {
+.carpool-flow li.is-platform {
   border-color: var(--text);
   background: var(--text);
   color: var(--surface);
-  font-weight: var(--fw-medium);
 }
 
-.carpool-rule__steps .is-error {
-  border-color: var(--text);
+.carpool-flow.is-warn li {
+  border-style: dashed;
 }
 
-.carpool-rule__late {
-  display: block;
-  margin-top: var(--space-2);
-  font-size: var(--fs-label);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+.carpool-zoom__flow li:not(.is-static) {
+  opacity: 0;
+  transform: translateY(6px);
+  animation: carpool-flow-in 240ms ease forwards;
 }
 
-.carpool-rule__alt {
-  margin: var(--space-4) 0 0;
-  padding-top: var(--space-3);
-  border-top: 1px dashed var(--text-secondary);
+.carpool-zoom__stage.is-static .carpool-zoom__flow li {
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+
+@keyframes carpool-flow-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .carpool-invest {
@@ -1853,12 +1968,19 @@ a.form-submit {
 }
 
 @media (max-width: 639px) {
-  .carpool-calendar {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
+  .carpool-statement,
   .carpool-pivot {
     max-width: none;
     font-size: clamp(1.75rem, 8vw, 2.75rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carpool-wait__panel.is-animated,
+  .carpool-ready__meter.is-animated::after,
+  .carpool-zoom__stage:not(.is-static),
+  .carpool-zoom__flow li {
+    transition: none !important;
+    animation: none !important;
   }
 }
