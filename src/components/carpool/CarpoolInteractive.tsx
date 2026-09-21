@@ -460,13 +460,10 @@ export function ServiceZoom({
   const reduce = useReducedMotion();
   const rootRef = useRef<HTMLDivElement>(null);
   const max = 2;
+  const level = reduce ? max : zoom;
 
   useEffect(() => {
-    if (reduce) {
-      setZoom(max);
-      return;
-    }
-    if (manual) return;
+    if (manual || reduce) return;
     const root = rootRef.current;
     if (!root) return;
 
@@ -498,7 +495,7 @@ export function ServiceZoom({
           type="range"
           min={0}
           max={max}
-          value={zoom}
+          value={level}
           aria-label={i.zoomHint}
           onChange={(event) => {
             setManual(true);
@@ -506,15 +503,15 @@ export function ServiceZoom({
           }}
         />
         <div
-          className={`carpool-zoom__stage is-level-${zoom}${reduce ? " is-static" : ""}`}
+          className={`carpool-zoom__stage is-level-${level}${reduce ? " is-static" : ""}`}
         >
-          {zoom === 0 ? (
+          {level === 0 ? (
             <div className="carpool-zoom__ui">
               <p className="type-meta">{i.platformNode}</p>
               <p className="type-corpo">{i.reserve}</p>
             </div>
           ) : null}
-          {zoom >= 1 ? (
+          {level >= 1 ? (
             <ol className="carpool-flow carpool-zoom__flow">
               {steps.map((step, index) => (
                 <li
@@ -535,7 +532,7 @@ export function ServiceZoom({
             </ol>
           ) : null}
         </div>
-        {zoom === max ? (
+        {level === max ? (
           <p className="type-heading" aria-live="polite">
             {statement}
           </p>
