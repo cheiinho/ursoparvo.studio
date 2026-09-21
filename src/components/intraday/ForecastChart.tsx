@@ -59,10 +59,10 @@ function axisMax(value: number): number {
 
 function seriesInk(id: string, tone: "paper" | "field", strong: boolean): string {
   if (tone === "field") return strong ? "#F6F1E6" : "#E4D9F2";
-  if (id === "previous") return "#8D6B3A";
-  if (id === "next" || id === "current") return "#1B4F72";
-  if (id.startsWith("actual")) return "#2F7D4F";
-  return strong ? "#1B4F72" : "#5E6770";
+  if (id === "previous") return "#7A5620";
+  if (id === "next" || id === "current") return "#3A0088";
+  if (id.startsWith("actual")) return "#1B7A46";
+  return strong ? "#3A0088" : "#514A5C";
 }
 
 export default function ForecastChart({
@@ -92,8 +92,8 @@ export default function ForecastChart({
   };
   const yOf = (value: number) => PAD_T + (1 - value / scaleMax) * innerH;
   const ink = tone === "field" ? "#F6F1E6" : "#1C1C1C";
-  const muted = tone === "field" ? "#E4D9F2" : "#5E584F";
-  const grid = tone === "field" ? "rgba(246,241,230,0.22)" : "#E6E4DE";
+  const muted = tone === "field" ? "#E4D9F2" : "#3D3450";
+  const grid = tone === "field" ? "rgba(246,241,230,0.22)" : "#D9D4E2";
   const bandStroke = "#6A4B12";
   const startIndex = band ? axis.indexOf(band.start) : -1;
   const endIndex = band ? axis.indexOf(band.end) : -1;
@@ -128,12 +128,12 @@ export default function ForecastChart({
         {yTicks.map((tick) => (
           <g key={`y-${tick}`}>
             <line x1={PAD_L} x2={WIDTH - PAD_R} y1={yOf(tick)} y2={yOf(tick)} stroke={grid} />
-            <text x={PAD_L - 8} y={yOf(tick) + 3} textAnchor="end" fill={muted} fontSize="11">
+            <text x={PAD_L - 8} y={yOf(tick) + 3} textAnchor="end" fill={muted} fontSize="12">
               {tick}
             </text>
           </g>
         ))}
-        <text x={8} y={PAD_T - 10} fill={muted} fontSize="11">
+        <text x={8} y={PAD_T - 10} fill={muted} fontSize="12">
           {yLabel}
         </text>
         {ticks.map((time) => (
@@ -164,7 +164,7 @@ export default function ForecastChart({
               stroke={bandStroke}
               strokeWidth="1.5"
             />
-            <text x={bandX + 8} y={PAD_T + 16} fill={bandStroke} fontSize="11">
+            <text x={bandX + 8} y={PAD_T + 16} fill={bandStroke} fontSize="12">
               {band.label}
             </text>
           </g>
@@ -174,7 +174,7 @@ export default function ForecastChart({
           x2={WIDTH - PAD_R}
           y1={PAD_T + innerH}
           y2={PAD_T + innerH}
-          stroke={plot ? "#c5ced6" : "rgba(246,241,230,0.4)"}
+          stroke={plot ? "#C8C0D2" : "rgba(246,241,230,0.4)"}
         />
         {focusTime && axis.includes(focusTime) ? (
           <g>
@@ -183,14 +183,14 @@ export default function ForecastChart({
               y={PAD_T}
               width={step}
               height={innerH}
-              fill={tone === "field" ? "rgba(246,241,230,0.08)" : "rgba(27,79,114,0.08)"}
+              fill={tone === "field" ? "rgba(246,241,230,0.08)" : "rgba(58,0,136,0.08)"}
             />
             <line
               x1={xOf(focusTime)}
               x2={xOf(focusTime)}
               y1={PAD_T}
               y2={PAD_T + innerH}
-              stroke={plot ? "#1b4f72" : "#f6f1e6"}
+              stroke={plot ? "#3A0088" : "#f6f1e6"}
               strokeDasharray="2 3"
             />
           </g>
@@ -224,7 +224,7 @@ export default function ForecastChart({
                   points={points}
                   fill="none"
                   stroke={seriesInk(item.id, tone, item.weight === "strong")}
-                  strokeWidth={item.weight === "strong" ? 2.5 : 1.5}
+                  strokeWidth={item.weight === "strong" ? 3 : 2}
                   strokeLinejoin="round"
                   strokeLinecap="round"
                   strokeDasharray={item.style === "dotted" ? "2 4" : undefined}
@@ -247,7 +247,7 @@ export default function ForecastChart({
           />
         ))}
         {ticks.map((time) => (
-          <text key={`tick-${time}`} x={xOf(time)} y={HEIGHT - 12} textAnchor="middle" fill={muted} fontSize="11">
+          <text key={`tick-${time}`} x={xOf(time)} y={HEIGHT - 12} textAnchor="middle" fill={muted} fontSize="12">
             {time}
           </text>
         ))}
