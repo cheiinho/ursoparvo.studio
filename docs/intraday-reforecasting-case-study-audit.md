@@ -1,970 +1,1359 @@
-# Intraday Reforecasting — Deep Project Analysis, Evidence Audit & Case Study Architecture
+# Intraday Reforecasting — Phase 1 audit
 
-**Status:** Audit only. Phase 1 deliverable. No implementation, no redesign, no final copy.
-**Date:** 2026-09-21
-**Standard:** Every important statement is classified. Nothing below is promoted above its source. Where the evidence stops, the document says so.
+Strategic, narrative and experiential foundation for a portfolio case study.
 
----
+Status: Phase 1 only. This document does not authorise implementation, final copy, components, or visual assets.
 
-## 00. Source access note (this environment)
-
-| Source | Level | File / location | Status |
-|---|---|---|---|
-| A — Requirements | 1 | `Intraday_reforecasting_models.pdf` (2 pages, Google Docs export) | Read in full (text) |
-| B — Presentation speech | 5 | `intraday_reforecasting_speech.docx` (21 slides of speaker notes) | Read in full (text) |
-| C — Current case study | 4 | `Intraday-Reforecasting-under-4MB-final.pdf` (20 pages, image-only) | Every page rendered and inspected, including high-resolution crops of the research artefacts, flow diagram, product screens and issue table |
-| D — Figma prototype | 3 | `figma.com/proto/V237VWTnQ1TRkcJZ69vB2k` | **Not accessible from this environment** (request timed out; requires an authenticated browser). Treated as *not independently inspected*. Every statement about the prototype below derives from the screenshots embedded in Source C. |
-| E — Repository | — | `/workspace` (`main` fast-forwarded to `48eebfb`, which merges the Carpool case study) | Inspected: routes, components, content model, CSS system, fonts, tests, docs |
-| F — Designer-provided context | 6 | The brief for this audit | One statement: the team worked directly and closely with three companies to obtain feedback quickly because the timeline was limited |
-
-Citation convention used throughout: **REQ** = Source A (with the acceptance-criteria number), **SPEECH** = Source B (with slide number), **PDF p.N** = Source C page, **REPO** = Source E, **JOÃO** = Source F.
-
-Reading order note: the speech is the *lowest-ranked project source* (Level 5) even though it is the richest narrative. Several of the most quotable statements in this project exist only in the speech. They are marked as such.
+This pass replaces the earlier audit on this branch. `docs/intraday-reforecasting-case-study-spec.md` was written against that earlier audit. It is not an authority for the case study until it is revised against this document. Do not build from it as it stands.
 
 ---
 
-## 01. Executive summary
+## 1. Executive summary
 
-**What the project is.** A workforce-management (WFM) feature for contact-centre resource planners: when actual intraday values diverge from the forecast beyond a threshold, the system reforecasts the rest of the day, and the new forecast propagates to the Forecast, Schedule and Insights surfaces. The designer's work covers how the feature is switched on, how the planner learns that the system changed the forecast, and how the planner inspects and acts on that change.
+Intraday Reforecasting was a product-design project, Q2 2023, for a workforce-management product used by resource planners in contact centres. The public case study keeps the company anonymous.
 
-**What the evidence actually supports (high confidence).**
-- The user story, the "mitigation strategy" note and the acceptance criteria (same day, 30-minute cadence, threshold, several periods, low-volume exclusion, different algorithm, 10% accuracy *target*, no customer configuration for the first release, feature flag, propagation to three pages plus reporting, baseline-forecast property, scheduling simulation trigger, more than once a day). — REQ
-- The designed states: queue-level "Turn on reforecast" checkbox; "Anomaly detected — Reforecast in progress in the affected queues" notification; banners on Forecast, Team schedule and Insights with "Apply filter", "Preview" and "Check insights"; "Reforecast completed — Check updated data to solve possible issues"; "N issues found" in the Forecast header; "Show previous forecast" overlay; a "Forecasting issues" log with trigger time, end time, queue, severity and description; anomaly-period highlighting on the forecast chart and the schedule timeline. — PDF p.10–19
-- The strategic use of high-fidelity prototypes under time pressure to get feedback quickly and help development start. — PDF p.11, SPEECH 2 & 21
+The job, in the requirements' own words, was: a resource planner wants to update the forecast when the day does not go as planned, so staffing decisions can be made on the current day. The same note says this is a mitigation strategy, not an everyday behaviour for every customer, and that someone still had to learn whether reforecasting should be automatic per queue or started on demand.
 
-**What the evidence does *not* support (must not be claimed).**
-- That accuracy improved by 10% (REQ states it as a requirement to meet; no measurement exists in any source).
-- That the system "continuously reforecasts". It monitors every 30 minutes; it reforecasts only when conditions are met and, per the speech and the PDF diagram, at most twice a day per queue with at least one hour between runs. The caps are not in REQ.
-- Any participant count, session count, usability score, adoption, production status or business impact.
-- That the Kano model, Value Proposition Canvas and Empathy Map are research evidence. All three are explicitly labelled in the PDF as generated with ChatGPT, carry a disclaimer that their content "may not be comprehensive or applicable" and that research is still needed, and the Empathy Map's "What do they SAY?" quadrant is empty. They are hypothesis-mapping artefacts, not findings.
+What the system does is narrower than "the forecast updates continuously." The requirements say the check runs at least every 30 minutes, on the same account-timezone day, and that a reforecast runs only when real values differ from the forecast by more than a threshold, over several periods, and not on low-volume queues. The presentation later describes that check as a comparison of the last four 15-minute intervals, with a reforecast allowed at most twice a day per queue and not again for at least an hour. Those caps are not in the requirements. The requirements do say a reforecast may run more than once in a day, and that it uses a different method from the ordinary forecast. A target in the requirements is to improve intraday accuracy by 10% over the original forecast. Nothing in the material shows that this target was measured or met.
 
-**The most important audit finding.** The current case study inverts its own evidence weight: its weakest material (three AI-generated canvases) occupies three full pages under "Understanding processes and dependencies", while its strongest material (the requirements constraints, the automation-versus-control note, the system logic, and the state model of the design) is either compressed into one page or absent. The reconstruction should reverse that.
+The design work that is actually documented is not the algorithm. It is three decisions about a system that can change the forecast without the planner asking:
 
-**Recommended thesis (one sentence).** The system could decide on its own to change the forecast; the design's job was to make that change reach the planner where they were working, make it inspectable against what it replaced, and make the next step obvious — while asking the customer to configure exactly one thing.
+1. Put a single per-queue control, "Turn on reforecast," into the existing queue configuration, and leave the detection rules out of the form. This conflicts with the requirements' "no customer configuration at launch." Whether the control shipped is open.
+2. When a reforecast starts or finishes, say so in the notification centre and with a banner on Forecast, Team schedule and Insights, because those are the places the new numbers appear and the planner may be in any of them.
+3. After the numbers change, let the planner compare the previous forecast with the new one, read a log of forecasting issues, and jump to the affected period on the forecast and on the schedule.
 
-**Recommended backbone: three decisions.** (1) One switch per queue as the entire configuration surface. (2) The change reaches the planner in context: notification centre plus banners across the three affected surfaces, with state progression and filters. (3) The change is inspectable and actionable: previous-versus-new overlay, an issues log with severity, and anomaly-period highlighting that connects forecast to schedule.
+The existing 20-page case study shows those decisions, then buries them under ChatGPT-generated canvases, generic benefit bullets, and screenshots of branded product chrome. The research section does not connect to a decision. The speech's "continuous 24/7 reforecasting" is the same speech that also states the caps. Treating the PDF as the structure of the new case study would repeat that failure.
 
-**Recommended interactive spine (five interactions).** Scenario selector; detection-and-reforecast simulation (monitoring vs execution, threshold, caps); state change in a neutral product environment; previous-versus-new toggle; issue-to-location follow-through.
+The portfolio piece should make the system behaviour understandable, then show why those three decisions exist. Validation is honest and thin: high-fidelity prototypes were used because time was short; the designer has said the team worked directly with multiple customer companies for rapid feedback. No participant counts, quotes, task results or satisfaction scores exist in the material. The outcome that can be claimed is a design outcome: a planner can be told that the forecast changed, can see what it replaced, and can find the period that needs a staffing decision. It is not a claim that accuracy improved by 10%, that the feature shipped, or that planners were faster.
+
+The Figma prototype was not opened in this environment. Statements about prototype behaviour come from the requirements, the speech, and screenshots inside the case-study PDF.
 
 ---
 
-## 02. Source hierarchy
+## 2. Project reconstruction
 
-### 02.1 Hierarchy as applied
+### What it was
 
-| Level | Source | Present? | Notes |
-|---|---|---|---|
-| 1 | Original requirements | Yes (REQ) | Two pages. Acceptance criteria are explicit and several items are marked "to be defined as part of the epic". Two internal codenames and one named engineer appear. |
-| 2 | Documented research / interviews / scenarios / customer info | Partial | PDF p.4 contains five scenario cards and five "things that may affect the forecast" cards. No method, participants, dates or attribution beyond "User's scenarios". SPEECH 4 claims the scenarios came from interviews with resource planners. REQ says customer research "is needed" (future tense). |
-| 3 | Original Figma / product design work | Not directly | Only via screenshots in PDF p.10–19. |
-| 4 | Current portfolio case study | Yes (PDF) | 20 pages. Image-only. |
-| 5 | Presentation speech | Yes (SPEECH) | Retrospective explanation. Introduces system parameters not in REQ (2×/day cap, 1-hour interval, 8-week history, nightly run, multiplication factor). |
-| 6 | Explicit information from João | Yes (JOÃO) | Three-company collaboration. |
-| 7 | This audit's interpretation | — | Always marked. |
+A same-day mechanism that watches the gap between forecast and actuals and, when that gap is large enough for long enough, replaces the day's forecast with a new one. The new forecast is what Forecast, the schedule, Insights and reporting then show. The original forecast is kept as a baseline so accuracy can be compared later.
 
-### 02.2 How disagreements were handled
+### Who it was for
 
-Each disagreement is listed in §14 with both positions. Where a lower-level source adds detail that a higher-level source leaves open (for example REQ says "to be defined", SPEECH gives a number), the detail is treated as **DESIGNER-PROVIDED CONTEXT / PROJECT CONTEXT at Level 5 confidence**, not as a documented requirement. It may be used in the case study only if João confirms it or if it is presented as "the logic the design was built around".
+The requirements name one role: the resource planner. The speech and the PDF scenarios speak in that role's voice (staffing for the rest of the day, service level, moving people between departments). No other role is documented as the primary user. Team leaders appear only inside a scenario, as people who pull agents into coaching. They are not established as users of this feature.
+
+### The operational problem
+
+A forecast made before the day is a plan for how many people are needed. During the day the plan and the floor diverge: volume rises, handle time rises, or the people who were scheduled are not there. The planner's staffing decisions are only as current as the forecast they are looking at. If the forecast stays on the morning numbers, the planner is deciding against a picture that is already wrong.
+
+The requirements frame the feature as mitigation, not as a new way of forecasting every day. Not every customer wants the system to rewrite the plan automatically.
+
+### What triggered the need
+
+Unexpected change during the day, of the kinds named in the speech and on PDF page 4: coaching pulling people off the phones, a lunchtime volume peak, a large absence at the start of a shift, more agents than the plan assumed, a need to train or to move people without breaking service level. The speech groups the measurable factors as additional volume, reduced capacity, and higher average handle time.
+
+### What changed during the day
+
+Documented as things that happen to the operation, not as a measured dataset:
+
+- Contact volume can run ahead of the forecast (the only signal the issues log in the PDF actually describes: "CVO is N% higher than forecasted").
+- Average handle time can rise. Planners ask what that does to the rest of the day. It is not shown as the field the anomaly detector reads.
+- Capacity can fall (absence, coaching) or rise (more hires than expected). Again, this is a planner problem in the material. It is not shown as an input to detection.
+
+### How the layers relate
+
+| Layer | What it is, from the material |
+|---|---|
+| Forecast | The plan for the rest of today. After a reforecast, the reforecast is the forecast (requirement 7). |
+| Actual values | "Real" values compared with the forecast. In the issues UI, the concrete example is contact volume (CVO). |
+| Deviation | The difference between real and forecast. It must persist over several periods before it counts (requirement 3.3; example given: four 15-minute periods). |
+| Threshold | The size of difference that is large enough to run. Not defined in the requirements ("to be defined as part of the epic"). Later sources disagree on the method. See §8 and §32. |
+| Anomaly | The word the interface uses once that condition is met ("Anomaly detected"). The requirements never use the word. Severity labels Critical / Major / Minor appear in the issues table. No formula is given. |
+| Reforecast | A separate forecasting method, not the ordinary algorithm, run only when the conditions hold. It can run more than once in a day (requirement 10). |
+| New forecast | The reforecast, shown on Forecast, schedule (scheduler work marked TBD), Insights, and sent to reporting. |
+| Baseline | A database property so the system can still say which numbers came from the original forecast. Used to measure accuracy. This is why a comparison view is possible at all. |
+| Staffing decision | What the planner is trying to make. The documented UI takes them as far as the affected queue and the affected period on the forecast and the schedule. It does not show the planner moving agents. Requirement 9 says a reforecast triggers a scheduling simulation. Performance of that simulation is out of scope. What the planner saw afterwards is not in the case study. |
+
+### What the system had to monitor
+
+On a cadence of at least every 30 minutes: real versus forecast, on the same account day, ignoring ultra-low and low-volume queues, and only treating a deviation as actionable when it holds over several periods and clears a minimum volume. The presentation adds: look at the last four quarter-hours.
+
+### What the system had to decide
+
+Whether the deviation is large enough to spend a reforecast. Then: produce a new forecast for the rest of the day by a different method, store the baseline, and trigger a scheduling simulation. The designer did not design that method. The speech describes the rest-of-day forecast being multiplied by a factor derived from the gap. The requirements only say "a different method" and a 10% accuracy target. The factor is not a fact of the requirements.
+
+### What the user had to understand
+
+That the numbers on screen may have changed without them asking; which queues are affected; whether the run is still in progress or finished; how different the new forecast is from the one it replaced; which period was anomalous; and that the next look is the schedule for that period.
+
+### What the user had to configure
+
+Open, and the sources disagree.
+
+- Requirements: the customer has no configuration. A flag turns the feature on for selected customers. Later, customers would be able to turn it on themselves. The note asks for research on per-queue automation versus running it when someone chooses.
+- Speech and PDF: the design adds one control to the existing queue screen, "Turn on reforecast," with the helper "If enabled, the system will reforecast this queue." The speech calls this a deliberate decision not to expose the reforecast settings.
+
+Do not write that the switch was "the entire configuration of the shipped product." Write that the presented design reduced customer setup to one queue-level switch, against a requirement that deferred customer setup.
+
+### What the user had to do after the forecast changed
+
+Documented actions, in interface order:
+
+- Read the notification or the banner.
+- Preview affected queues (the control exists; what Preview shows is not specified).
+- Apply a filter to affected queues.
+- On Insights, "Check insights" is offered. What it loads beyond the Insights surface is open.
+- After completion, open "N issues found."
+- Show or hide the previous forecast.
+- "Check forecast" from an issue.
+- See the anomalous period marked on the forecast and on the team schedule.
+
+The staffing action itself (move, hold, train, coach) stays with the planner. The case study must not invent a completed staffing workflow.
+
+### Constraints
+
+- Same calendar day, in the account time zone. Not a multi-day replan.
+- Conditional execution, not "every 30 minutes, rewrite the forecast."
+- Low-volume queues excluded. Mixed low and normal intervals called out as an unsolved rule in the requirements.
+- Minimum call volume inside the threshold, also undefined.
+- A different algorithm from the normal forecast.
+- No customer configuration at launch, in the requirements. A flag for selected customers.
+- Scheduling simulation is triggered and is out of scope for performance.
+- Time pressure, from the speech and from the designer: feedback had to be fast, so the work went to high-fidelity prototypes early.
+- Public portfolio: company, customers, logos, and proprietary chrome cannot be shown.
+
+### What was technically difficult
+
+From the requirements, not from guesswork: defining the threshold; deciding how many periods count; excluding low volume; handling a mix of quiet and busy intervals; using a different forecasting method; keeping a baseline; running a scheduling simulation when the forecast changes; allowing more than one run per day without thrashing. The presentation adds a nightly threshold from eight weeks of history, a two-run cap, and a one-hour gap. Those three are not confirmed by the requirements.
+
+### What was difficult in the UX
+
+The system can change a plan the planner is already using, while they are looking at a different page. The rules that justify the change are too many to put in a form. The planner still has to trust the new numbers enough to staff from them, which means seeing what changed and where, without being asked to operate the model.
+
+### What was organisationally difficult
+
+The requirements leave the threshold, the period count, the minimum calls, and the mixed-interval rule to the epic. They also leave the scheduler's behaviour TBD and name a later phase for customer self-serve. The speech says developers could start in parallel because the prototype was high fidelity, and that feedback had to happen before development. The designer has said the timeline was short and that feedback came from working directly with customer companies. How those companies were engaged is not documented.
+
+### What design was actually responsible for
+
+The documented design responsibility is the planner-facing behaviour around a model someone else owned:
+
+- Whether, and how simply, a customer turns the behaviour on for a queue.
+- How an in-progress and a completed reforecast are announced wherever the numbers live.
+- How the planner inspects the replacement forecast and reaches the period that matters.
+
+Design was not responsible, on this evidence, for the forecasting algorithm, the threshold mathematics, or the scheduling-simulation engine.
+
+### Questions that stay open
+
+Production status. Whether the switch or only the internal flag shipped. Whether accuracy was measured. Which of the presentation's parameters were final. Whether handle time or absence can trigger a run, or only contact volume. What Preview and Check insights do. What the schedule showed after the simulation. Whether a manual "run now" was ever designed. See §38.
 
 ---
 
-## 03. Project reconstruction
+## 3. Source hierarchy
 
-### 03.1 Context (classified)
+### Levels used in this audit
 
-| Statement | Class | Source |
+| Level | What it covers | How it may be used |
 |---|---|---|
-| Talkdesk, Q2 2023, João as Product Designer | PROJECT CONTEXT | PDF p.2, SPEECH 1 |
-| The product is a Workforce Management module with Forecast, Scenarios, Insights, Team schedule, Your schedule, Configurations | DOCUMENTED FACT (as visible in screens) | PDF p.10, 12, 14, 16 |
-| Users are resource planners / WFM analysts | DOCUMENTED FACT | REQ user story; PDF p.6–8 label "WFM Analyst" |
-| The feature is a mitigation strategy; not every customer wants it every day | DOCUMENTED FACT | REQ note; PDF p.3 |
-| Customer research was needed to decide between queue-level automation and on-demand runs | DOCUMENTED FACT (as an open question at requirement time) | REQ note |
-| Time was constrained; feedback had to be obtained quickly before development | PROJECT CONTEXT | PDF p.11, SPEECH 2 |
-| Access to the internal design system was limited; hi-fi prototypes were chosen to closely resemble the final product | PROJECT CONTEXT | PDF p.11 |
-| The team worked closely with three companies for fast feedback | DESIGNER-PROVIDED CONTEXT | JOÃO |
-| Resource planners were interviewed and their scenarios documented | PROJECT CONTEXT (Level 5 only) | SPEECH 4 |
-| Threshold definition, algorithm and simulation performance were engineering-owned | DOCUMENTED FACT | REQ Must 3.1, 3.4, 4, 9.1 |
+| 1. Original project evidence | Requirements PDF (2 pages). Presentation speech (21 slides). Existing case-study PDF (20 image pages). Figma prototype (not opened). | Historical project facts. They are not equal to each other. See below. |
+| 2. Designer-provided context | The designer has said the team worked directly with multiple customer companies to get feedback quickly, because the timeline was limited. A prior note from the designer specified three companies. No names, session counts, or quotes were given. The portfolio must stay anonymous. Purple, lilac and cream may remain as the case study's own palette. The reconstructed product UI must be neutral. | Context for validation and for visual constraints. Not formal research evidence. |
+| 3. Portfolio code | Routing, content loading, type, colour, layout, motion, copy tests, the fact that no Intraday page exists. | Technical integration only. Not evidence about the project. Not a narrative or visual template. |
+| 4. Inference | Relationships and narrative choices argued in this document. | Must stay labelled as inference. Never rewritten as something that happened. |
 
-### 03.2 The layers and how they connect
+### Inside Level 1, authority is split
 
-REAL-WORLD OPERATIONAL CHANGE → SYSTEM DETECTION → FORECASTING LOGIC → USER AWARENESS → INTERPRETATION → STAFFING DECISIONS
+The brief groups requirements, speech, PDF and Figma as one level. They still disagree, so this audit ranks them by question type:
 
-| Layer | What the sources establish | Who owns it |
-|---|---|---|
-| Operational change | Volume increases, capacity decreases, AHT increases, absenteeism, coaching, surplus agents, redistribution (PDF p.4; SPEECH 4–5) | The operation |
-| Detection | Every 30 minutes, compare actuals with forecast over several 15-minute periods; trigger only above a threshold; exclude low-volume queues (REQ 2–3; PDF p.9; SPEECH 6–9) | Engineering / data |
-| Forecasting logic | Different method from the baseline forecast; reforecast becomes the new forecast; baseline stored for accuracy measurement; simulation triggered (REQ 4, 7, 8, 9) | Engineering / data |
-| Awareness | Notification centre + banners on three surfaces (PDF p.11–15) | **Design** |
-| Interpretation | Previous vs new forecast; issues log with severity; anomaly location (PDF p.16–19) | **Design** |
-| Decision | "Make informed staffing decisions" (REQ); "jump to affected time periods in the schedule" (SPEECH 20); Check forecast / Check insights links (PDF p.18, p.14) | Planner, supported by design |
+- For what the product was required to do: the requirements are the authority. The speech and the PDF do not override an acceptance criterion.
+- For what the design presented to people: the speech and the PDF screenshots are the authority. They can show a decision that the requirements had deferred.
+- For what was measured or shipped: none of the Level 1 sources say. Absence is not success.
+- For pixel-level prototype behaviour: the Figma file would be the authority. It was not inspected. PDF screenshots are a record of a prototype, read through a slide, and they contradict each other on dates and on some banner lines.
 
-Interpretation (Level 7): the designer's territory begins where the system's certainty ends. The system knows *that* it changed the forecast; only the design can make that change *legible*.
+The case-study PDF is evidence of a previous presentation. It is not the information architecture of the next one.
 
-### 03.3 What the designer actually designed (documented)
+### Files
 
-1. A queue-level activation control inside the existing queue configuration form. — PDF p.10
-2. Two notification-centre messages with state-specific language and a "Preview" action. — PDF p.11, p.15
-3. A banner component with at least three wording states and up to three actions, placed on Forecast, Team schedule and Insights. — PDF p.12–15, p.19
-4. A Forecast header state: "Updated today at 12:00 PM, 3 issues found" with the count linking to an issues page. — PDF p.14, p.16, p.18
-5. A "Show previous forecast" overlay (dotted series for CVO, AHT and Staff). — PDF p.16–17
-6. A "Forecasting issues" page: list of events with trigger time, end time, queue, severity chip, description and "Check forecast" link. — PDF p.18
-7. Anomaly-period highlighting on the forecast chart and on the schedule timeline (with tooltip "Anomaly detected in this period"). — PDF p.19
+- Requirements: `Intraday_reforecasting_models_e451.pdf` (text extracted).
+- Speech: `intraday_reforecasting_speech_fcc3.docx` (text extracted).
+- Case study: `Intraday-Reforecasting-under-4MB-final_8080.pdf` (20 pages, image-only; read from rendered pages and crops).
+- Figma: `https://www.figma.com/proto/V237VWTnQ1TRkcJZ69vB2k?node-id=0:1`. Not fetched. No claim in this audit depends on having opened it.
+
+### How disagreements were handled
+
+They are listed in §32. They are not averaged into a single "the product worked like this."
 
 ---
 
-## 04. Problem model
+## 4. Evidence taxonomy
 
-### 04.1 Reconstructing the problem at five levels
+Every important statement in the eventual case study belongs to one of these. The words in parentheses are the public label when a label is useful. Not every sentence needs a chip. A section that would be misunderstood without one does.
 
-| Level | Statement | Class | Evidence |
+| Category | Meaning | Public label |
+|---|---|---|
+| FACT | Stated in requirements, speech, or the case-study PDF as something that existed or was shown. | Leave unlabelled, or "Documented" only if a neighbour is weaker. |
+| RESEARCH | Would require documented research. Almost nothing in this project qualifies. Do not use this label for the ChatGPT canvases or for the designer's account of customer conversations. | Research |
+| REQUIREMENT | An acceptance criterion or an explicit product rule. | Requirement |
+| DESIGN DECISION | A choice the design presentation argues: the switch, the banner placement, the comparison, the issue path. | Design decision |
+| DESIGNER-PROVIDED CONTEXT | Stated by the designer, not written up as research. | Context |
+| INFERENCE | A reading that follows from the evidence but is not stated as a finding. | Inference |
+| RECONSTRUCTION | UI rebuilt because the original chrome and data cannot be shown. | Reconstruction |
+| EXPLORATION | An interaction built for the portfolio to teach the system, not a feature of the product. | Exploration |
+| FICTIONAL / ILLUSTRATIVE | Numbers, names, dates and queues invented so a demonstration is coherent. | Illustrative |
+
+Rules that follow:
+
+- A target is a REQUIREMENT. It is not an outcome.
+- A screenshot in the PDF is evidence that a prototype showed that screen. A rebuilt screen is a RECONSTRUCTION.
+- Scenario sentences on PDF page 4 are documented in the presentation. The speech says they came from interviews. The method, the people and the notes are not in the file. Classify the sentences as FACT of the presentation, and the interview claim as a claim to audit (§31), not as RESEARCH.
+- The detection simulation, the scenario selector and the surface switcher are EXPLORATION. They teach documented behaviour. They are not evidence that a user performed those steps.
+- Inference never becomes a quote, a metric, or a "we found."
+
+---
+
+## 5. Problem model
+
+"Planners needed a better forecast" is true and useless. The difficulty is what happens after the system is allowed to change the forecast on its own.
+
+Five facts force the design:
+
+1. The forecast is not a chart. It is the input to staffing. Requirement 7 puts the new numbers on the forecast, the schedule and Insights because those are where decisions are made. Requirement 9 then kicks a scheduling simulation.
+2. The day moves. The scenarios are all versions of "the next few hours are no longer the morning plan."
+3. Rewriting the forecast on a timer would be noise. The requirements and the speech both say the system should run only when the gap is real. The speech adds a hard cap. The requirements' note says some customers do not want this every day.
+4. The rules are too specific to be a settings page: period count, minimum volume, low-volume exclusion, mixed intervals, a nightly threshold, a different algorithm. The design that was presented refuses to turn those into controls.
+5. Because the run is not requested by the person looking at the screen, that person can be anywhere the numbers appear. A change with no announcement looks like the tool is wrong.
+
+The tension, stated as a design problem:
+
+The system may replace the plan the planner is using. The planner did not ask for that replacement. They still have to staff the rest of the day from it. So the interface has to make the replacement visible in the place they already are, comparable with what it replaced, and specific about where on the day to look. It should not ask them to configure the model.
+
+That is why the feature was hard to design. The model can be correct and the experience can still fail, if the planner either misses the change, cannot tell how large it is, or cannot find the hour that now needs people.
+
+What should stay automatic, on the evidence: detection, the threshold, the method, the baseline, the simulation trigger.
+
+What should stay human: whether this queue is allowed to do it at all (in the presented design), and every staffing move after the period is identified.
+
+What must not be asked of the customer, in the presented design: the parameters of detection.
+
+What the requirements still wanted researched, and what this case study must not pretend was settled: automatic per queue, versus the planner choosing when to run.
+
+---
+
+## 6. User and operational scenarios
+
+### What is actually in the material
+
+Speech slide 4 says the scenarios were documented with resource planners and calls them interviews. PDF page 4 shows the same five situations. No interview guide, no count, no recording, no quote attribution beyond the sentences themselves. Treat the sentences as documented scenario copy. Treat "interview" as an unsupported method label until notes exist (§31).
+
+| # | Documented situation | Operational change | What a planner needs |
 |---|---|---|---|
-| Operational problem | During the day, demand and capacity move away from what was planned; the plan for the rest of the day may no longer hold. | DOCUMENTED FACT | PDF p.4 scenarios; SPEECH 3–5 |
-| User problem | The planner has to answer "how does the rest of the day look now, and what should I do?" under time pressure, without reforecasting constantly. | DOCUMENTED FACT + RESEARCH INTERPRETATION | REQ user story; PDF p.4 ("how does the rest of the day look…", "where can we find opportunities…"); SPEECH 3 ("can't just reforecast every hour") |
-| System problem | Decide when a deviation is meaningful (threshold, several periods, minimum volume, same day), recompute with a different method, propagate the result, and keep the baseline for measurement. | DOCUMENTED FACT | REQ Must 1–4, 7–10 |
-| Design problem | Given a system that can change the forecast on its own, decide (a) how much the customer configures, (b) how the planner learns that the forecast changed while working elsewhere, (c) how the planner understands the size and location of the change and what to do next. | DESIGN RATIONALE (inferred from the relationship between REQ note, REQ 5–7 and the designed states) | REQ note; PDF p.10–19; SPEECH 10–20 |
-| Portfolio-worthy challenge | Translating an automated, threshold-driven system into an experience with one configuration decision, unambiguous state communication across surfaces, and inspectable consequences. | INTERPRETATION | This audit |
+| 1 | Team leaders pull agents into coaching. | Capacity down for part of the day. | Effect on staffing for the rest of the day. |
+| 2 | Agents asked not to leave during lunch. Volume is high at lunch and drops after about four hours. | Temporary capacity hold against a peak, then a drop. | Presence during the peak, not a flat all-day story. |
+| 3 | About 100 hours lost to absence. First shift calls in sick. It is 9:00. | A known capacity hole from a known time. | The rest of the day with those hours gone, immediately. |
+| 4 | More agents were hired than the plan assumed. | Capacity up. | Where training can run without missing service level. |
+| 5 | Move agents to other departments. | Capacity moves between queues. | Whether service level still holds. |
 
-### 04.2 Testing the hypothesis in the brief
+Speech slide 5 then names three factors, each with a planner question:
 
-Hypothesis: *"How can the system determine when a deviation is meaningful enough to justify a new forecast, and how can the product make that automated change understandable and actionable for the person responsible for staffing decisions?"*
+- Additional volume. A 30% rise is the example used. What does staffing look like at 21:00, and what can be done.
+- Capacity decrease. Fewer people, absence or similar.
+- Average handle time. A 30% rise is the example. What that does later in the day.
 
-- The **first half** (how the system determines meaningfulness) is a real problem in the sources, but REQ assigns it to the epic and to the algorithm (Must 3.1, 3.2, 3.4, 3.5, 4). SPEECH 6 confirms the designer needed to *understand* it ("Before designing the interface, I needed to deeply understand the technical process"). It is **design material**, not a design decision the designer made.
-- The **second half** is exactly the territory of PDF p.10–19. It is validated as the design problem.
+The 30% figures are examples inside the speech, not measured deviations and not the product threshold.
 
-Verdict: partially validated. The case study should present the first half as *what had to be understood* and the second half as *what was designed*. Collapsing them would over-claim the designer's role in the detection logic.
-
-### 04.3 Four-layer model with source per step
+### The chain, and where it breaks
 
 ```
-LAYER 1 — REALITY        Volume rises / AHT lengthens / agents are absent or pulled          PDF p.4; SPEECH 4–5
-        ↓
-LAYER 2 — FORECAST       Baseline forecast for the day (stored as such)                       REQ 8
-        ↓
-LAYER 3 — DEVIATION      Actuals diverge from forecast                                        REQ 3; PDF p.9
-                         System evaluates every 30 min over several 15-min periods            REQ 2, 3.3; PDF p.9; SPEECH 6
-                         Threshold + minimum volume + not low-volume queue + same day          REQ 1, 3.1, 3.2, 3.4
-                         → Anomaly → reforecast (different method) → new forecast              REQ 4, 7; PDF p.11
-                         → Propagated to Forecast / Schedule / Insights / Reporting            REQ 7
-                         → Scheduling simulation triggered                                     REQ 9
-        ↓
-LAYER 4 — DECISION       Planner learns of the change (notification, banner)                  PDF p.11–15
-                         Planner inspects (previous vs new, issues, location)                  PDF p.16–19
-                         Planner acts (staffing decision; Check forecast / Check insights)     REQ user story; PDF p.14, p.18
+SCENARIO
+→ OPERATIONAL CHANGE
+→ DATA SIGNAL THE SYSTEM IS DOCUMENTED TO READ
+→ SYSTEM RESPONSE
+→ FORECAST CONSEQUENCE
+→ PLANNER CONSEQUENCE
+→ USER ACTION THE UI ACTUALLY OFFERS
 ```
 
-Every step is supported. The model may be used. Two caveats: the 2×/day cap and 1-hour interval (SPEECH 6, PDF p.9) are not in REQ (REQ 10 says only "more than one time a day"); and whether AHT deviations trigger detection is not established (see §07.4).
+Applied honestly:
+
+- Volume spike. Operational change is more contacts than forecast. The issues log shows this signal (CVO versus forecast, over consecutive periods). If the gap holds over the required periods and clears the threshold, a reforecast can run. The new forecast replaces the day's forecast. The planner looks at magnitude (previous versus new) and at the period, then decides staffing. The UI offers filter, comparison, issue, highlighted period. It does not offer the staffing move.
+- Handle-time increase. Operational change is documented. The data signal is not. No issue row, requirement line, or speech sentence says the detector watches handle time. The forecast, once updated, would need to reflect longer handling, but that is an inference about the model, not a documented trigger. Mark the trigger OPEN. The planner consequence (more people, or longer waits) can be explained as inference.
+- Capacity loss or gain (absence, coaching, extra hires, moves). Operational change is documented, including the most concrete scenario in the set (100 hours, 9:00, first shift). The detector, as written, compares real and forecast, and the only worked example is contact volume. Absence is something the planner already knows. It is not shown as an anomaly the system discovers. Do not build a scenario interaction that says "the system detected absenteeism." The honest version is: this is a change the planner must reason about; the documented detector is about volume versus forecast; whether capacity was an input is open.
+
+### The common problem
+
+The five scenarios are not five features. They are one situation: the plan for the rest of the day is no longer a safe staffing input, and the reason differs. Some reasons show up as contact volume the system can watch. Some are capacity facts the planner already has. The product, as documented, automates the first kind and leaves the planner responsible for the decision in both.
+
+That split is the content of the scenario interaction. Collapsing them into "the system handles all of these" would invent a detector the sources do not describe.
+
+### What to keep in the case study
+
+Keep three, because they teach the split without a catalogue:
+
+- Volume (documented signal).
+- Handle time (documented planner question, trigger open).
+- Capacity / absence (documented planner emergency, not a documented detection signal).
+
+Coaching, extra hires, training and cross-department moves are the same capacity question in different clothes. Mention them as a single line under capacity. Do not give each a card.
 
 ---
 
-## 05. User scenario analysis
+## 7. System logic
 
-### 05.1 Inventory (verbatim content from PDF p.4; attribution class: USER / CUSTOMER EVIDENCE with **unknown provenance**)
+### Corrected chain
 
-| # | Scenario card (PDF p.4) | What changes | Effect on capacity / demand | Effect on the forecast | Planner's decision |
-|---|---|---|---|---|---|
-| S1 | Team Leaders contact agents for coaching sessions. | Agents pulled off the floor | Capacity ↓ (planned, short-notice) | Volume forecast unchanged; staffing requirement now unmet | Allow / reschedule coaching; check service level for the rest of the day |
-| S2 | Agents refrain from leaving earlier during lunch. High volumes during this period, decreasing significantly after 4 hours. | Peak demand vs shift boundaries | Demand ↑ in a window; capacity must hold | Intraday volume profile matters more than the daily total | Hold presence during peak; release later |
-| S3 | We lose 100 hours due to absenteeism; all agents call in sick for their first shift. It's 9:00; how does the rest of the day look with these 100 hours taken out? Crucial to recalibrate and forecast effectively. | Large capacity loss at day start | Capacity ↓↓ | Volume forecast unchanged; the *staffing* picture must be recomputed | Redistribute, extend shifts, accept lower service level |
-| S4 | We've welcomed a greater number of agents than anticipated. Where can we find opportunities to conduct training sessions? | Capacity surplus | Capacity ↑ | Forecast unchanged; slack appears | Schedule training in the slack |
-| S5 | In which other departments can we allocate agents without affecting the service level in those departments? | Cross-queue reallocation | Capacity moves between queues | Each queue's forecast vs staffing | Move agents where the margin allows |
-
-"Things that may affect the forecast" cards (PDF p.4): additional volume; capacity decrease; your average time has increased; fewer hours for absenteeism or other occurrences; "If there's a 30% increase in handling time, how will this impact us at 9 PM, and what actions can we take to address it?"
-
-SPEECH 5 adds the example "30% increase in call volume → impact on staffing at 9 PM".
-
-### 05.2 Common structure
-
-Every scenario has the same skeleton: **an unplanned change → a mismatch between required staffing and available staffing for the rest of the day → a question of the form "how does the rest of the day look, and what can I do?"**
-
-Two families emerge:
-
-- **Demand-side changes** (volume ↑, AHT ↑): these move the *forecast itself*. They are the deviations the documented detection logic observes — REQ 3 compares "real and forecast", SPEECH 6 compares against "calls actually received", and every issue description in PDF p.18 is expressed as "CVO is N% higher than forecasted for N consecutive periods".
-- **Capacity-side changes** (absenteeism, coaching, surplus, redistribution): these do not change the forecast; they change what is available against it. REQ 9 ("Reforecast will trigger a simulation (scheduling)") is the only documented bridge between the reforecast and staffing.
-
-**Analytical consequence (RESEARCH INTERPRETATION, high importance):** the current case study lists all scenarios as if the feature answers all of them. The documented feature answers the demand-side family directly. The capacity-side scenarios explain *why planners care about rest-of-day accuracy*, but the sources do not say that anomaly detection observes absenteeism. The reconstruction must keep this distinction, or it will claim behaviour that is not evidenced.
-
-### 05.3 Which scenarios to keep
-
-| Scenario | Explanatory value | Recommendation |
-|---|---|---|
-| Additional volume (30%) | Highest: it is the documented trigger type, and it maps to the issue descriptions | **Keep; lead scenario** |
-| AHT +30% at 9 PM | High: demand-side; shows the "later in the day" consequence | **Keep** (mark AHT-as-trigger as unconfirmed) |
-| 100 hours of absenteeism at 9:00 | High as a *planner-pressure* illustration; shows why rest-of-day matters | **Keep, reframed** as the capacity-side motivation |
-| Coaching | Redundant with absenteeism (smaller capacity loss) | Condense into one line |
-| Lunch peak | Illustrates intraday shape; partially redundant with volume | Condense |
-| Surplus agents / training | Redundant with redistribution (both are "where is the slack?") | Condense into one line |
-| Redistribution across departments | Adds the multi-queue dimension, which matters for "affected queues" and "Apply filter" | Keep as one sentence tied to queue-level design |
-
-### 05.4 Interactive scenario selector
-
-Recommended with three inputs, not four: **Volume**, **Handle time**, **Capacity** (absenteeism is a sub-case of capacity and should be the example text, not a separate control). The selector's job is to show that different causes converge on the same planner question, and to show honestly which causes the system observes directly (demand) and which it does not (capacity). Values must be labelled illustrative.
-
----
-
-## 06. Research analysis
-
-### 06.1 Artefact-by-artefact
-
-#### Resource planner scenarios (PDF p.4)
-
-| Question | Answer | Class |
-|---|---|---|
-| Why created? | To ground the abstract user story in operational situations | DESIGN RATIONALE (inferred) |
-| Question it tries to answer | "What actually goes wrong during a day and what does a planner need to know?" | Interpretation |
-| Evidence it contains | Five scenario statements in first-person planner voice; five factor cards | USER / CUSTOMER EVIDENCE, provenance unknown |
-| Safe insight | Planners frame the problem as rest-of-day consequences ("how does the rest of the day look", "at 9 PM") and as decisions ("where can we…", "can we move…"). | RESEARCH INTERPRETATION, well supported by the card wording |
-| Decision influenced | Rest-of-day emphasis (reforecast applies to the remainder of the day, REQ 1); severity by magnitude and duration (PDF p.18) is consistent with the "how bad, for how long" framing | DESIGN RATIONALE; influence not documented explicitly |
-| Influence documented? | Only via SPEECH 4 ("these scenarios helped us understand… real operational decisions under pressure") | Level 5 |
-| Worth showing? | **Yes**, as the case study's strongest human material | |
-| Stronger as interaction? | Yes — as the scenario selector (§05.4) with the original wording quoted as scenario text | |
-
-#### Kano Model (PDF p.6)
-
-| Question | Answer |
-|---|---|
-| Provenance | Header carries a "CHAT GPT" badge. Note in the artefact: "The features listed from CHAT GPT may not be comprehensive or applicable to all contact center web applications. It's important to conduct research and gather feedback from users to determine which features are important and valuable to them." |
-| Class | **DESIGN EXPLORATION (AI-assisted hypothesis mapping)**. Not research evidence. |
-| Content | Feature ideas placed in Attractive / Performance / Indifferent / Must-be / Reverse: e.g. "Alerts for staffing shortages or overages" and "Real-time data updates" under Must-be; "Customizable alerts and notifications" and "Predictive analytics" under Attractive; "Complex and difficult-to-use interface" and "Inaccurate forecasting" under Reverse. |
-| Safe insight | None can be attributed to users. At most: the designer anticipated that alerting and real-time updates would be baseline expectations, and complexity would be penalised. |
-| Decision influenced | Possibly the simplicity of configuration and the emphasis on alerts — **not documented**. |
-| Worth showing? | **No, not as an artefact.** Showing an AI-generated Kano model as "research" in a senior portfolio is a credibility risk. |
-| Alternative | One honest sentence in the "what we had to understand" section: before contact with customers, the designer mapped assumptions about which capabilities would be expected versus valued, using generative tooling as a starting point, and then tested those assumptions against real scenarios. Only if João wants the AI provenance mentioned; otherwise omit entirely. |
-
-#### Value Proposition Canvas (PDF p.7)
-
-| Question | Answer |
-|---|---|
-| Provenance | "CHAT GPT" badge; same disclaimer. |
-| Class | DESIGN EXPLORATION (AI-assisted). |
-| Content | Customer jobs (accurately forecast staffing in real time; optimise schedules; monitor adherence), pains (inaccurate forecasting; inefficient scheduling; lack of visibility; tedious manual processes), gains (automated reforecasting; real-time visibility), products & services (intraday reforecasting tool; real-time monitoring dashboard; historical data analysis; alerts), pain relievers, gain creators. |
-| Safe insight | None attributable to users. |
-| Worth showing? | **No.** Remove. |
-
-#### Empathy Map (PDF p.8)
-
-| Question | Answer |
-|---|---|
-| Provenance | "Designed by: CHAT GPT"; same disclaimer. Template © 2017 Dave Gray / gamestorming. |
-| Class | DESIGN EXPLORATION (AI-assisted). |
-| Notable | The **"What do they SAY?"** quadrant is **empty**. Think/Feel, See, Hear and Do are populated with generic WFM-analyst statements. |
-| Safe insight | None attributable to users. The empty SAY quadrant is itself evidence that no user quotes were captured in this artefact. |
-| Worth showing? | **No.** Remove. |
-
-#### Process / dependency exploration and system logic (PDF p.9)
-
-| Question | Answer |
-|---|---|
-| Why created? | To make the reforecasting mechanics legible to the designer and to stakeholders | SPEECH 6 |
-| Evidence | 30-minute checks over the past 4 quarter-intervals; trigger above a calculated threshold; at least 1 hour before restart; maximum 2 per day per queue; runs across 24 hours; thresholds from the nightly run using "percentile differences" between predicted and actual values over the past 8 weeks; reforecast multiplies the rest-of-day forecast by a factor derived from the difference |
-| Class | PROJECT CONTEXT at Level 4/5 (the PDF and speech agree with each other; REQ leaves most parameters "to be defined") |
-| Safe insight | Monitoring is periodic; reforecasting is conditional and capped. The system is designed to *not* over-react. |
-| Decision influenced | Directly: the "in progress" / "completed" two-state communication; the issue descriptions in "N% for N consecutive periods"; the decision to expose no thresholds to the customer |
-| Worth showing? | **Yes, and it is currently under-used.** The p.9 diagram is dense and small; it should become the detection simulation. |
-
-#### Customer / user context
-
-The only customer context in the sources is REQ's note ("not all customers will want this to happen every day") and JOÃO's three-company statement. There is no customer segmentation, no queue examples beyond "support / sales / campaigns" in the prototype, no quotes.
-
-### 06.2 Research → insight → design implication (what can legitimately be drawn)
-
-| Research input | Insight (class) | Design implication (documented?) |
-|---|---|---|
-| Scenario cards | Planners think in rest-of-day consequences and in decisions (RESEARCH INTERPRETATION) | Reforecast scope = rest of the day (REQ 1, documented); issues describe magnitude and duration (PDF p.18, documented); "Check forecast" links (PDF p.18) |
-| REQ note (mitigation; not every day; automation vs on-demand) | Control over *whether* the system acts matters more than control over *how* it acts (DESIGN RATIONALE) | Queue-level on/off (PDF p.10) — documented as the decision; rationale documented only in SPEECH 10 |
-| REQ 7 (new forecast shown on Forecast, Schedule, Insights) | The change is visible in three places, so awareness must be in three places (DESIGN RATIONALE) | Banners on exactly those three surfaces (PDF p.13) |
-| REQ 8 (baseline forecast stored) | The previous forecast exists as data, so a comparison is possible (DESIGN RATIONALE) | "Show previous forecast" (PDF p.16–17) |
-| System logic (30 min, threshold, caps) | The system has distinct states (monitoring, anomaly, reforecasting, completed) that the user cannot see (DESIGN RATIONALE) | Two-message notification design; "in progress" vs "updated" banner wording (PDF p.11, p.15) |
-
-This table replaces the current "artefact → artefact → artefact" sequence.
-
----
-
-## 07. System logic reconstruction
-
-### 07.1 Model
+The chain in the brief is right as a skeleton and wrong if read as "every real-world change becomes an anomaly." Corrected:
 
 ```
-BASELINE FORECAST (stored with a 'baseline' property)                              REQ 8
-   ↓
-ACTUAL VALUES (e.g. calls actually received)                                        REQ 3; SPEECH 6
-   ↓
-DEVIATION observed over several 15-min periods (e.g. 4 = 1 hour)                    REQ 3.3 ("eg: 4 15m periods"); PDF p.9; SPEECH 6
-   ↓
-THRESHOLD — calculated, not user-set; must consider a minimum call value             REQ 3.1, 3.4; PDF p.9 ("percentile differences… past 8 weeks"); SPEECH 6 ("average error… past 8 weeks… nightly run")
-   ↓
-CONDITIONS — same day (account timezone); not (ultra-)low-volume queue;              REQ 1, 3.2; SPEECH 6 / PDF p.9 (caps)
-             ≥ 1 hour since last run; ≤ 2 runs per day per queue
-   ↓
-ANOMALY → REFORECAST (different method from baseline;                                REQ 4; SPEECH 6 (multiplication factor)
-             described as rest-of-day × factor)
-   ↓
-NEW FORECAST replaces the displayed forecast                                        REQ 7
-   ↓
-FORECAST page · SCHEDULE page (scheduler part TBD) · INSIGHTS page · REPORTING       REQ 7.1–7.4
-   + SCHEDULING SIMULATION triggered                                                 REQ 9
-   ↓
-USER ACTION (staffing decision)                                                     REQ user story
+REAL-WORLD CHANGE
+→ ACTUALS MOVE, OR THE PLANNER ALREADY KNOWS CAPACITY MOVED
+→ ONLY SOME OF THAT IS A FORECAST-VERSUS-ACTUAL SERIES THE SYSTEM WATCHES
+→ PERIODIC CHECK (not a reforecast)
+→ DEVIATION OVER SEVERAL PERIODS, ABOVE A THRESHOLD, QUEUE NOT LOW-VOLUME
+→ ANOMALY (the word the UI uses)
+→ REFORECAST, SUBJECT TO CONSTRAINTS
+→ NEW FORECAST REPLACES THE DAY'S FORECAST; BASELINE KEPT
+→ ANNOUNCED WHERE THE NUMBERS ARE
+→ PLANNER COMPARES, OPENS THE ISSUE, FINDS THE PERIOD
+→ PLANNER MAKES THE STAFFING DECISION (outside the documented UI)
 ```
 
-### 07.2 Parameter table
+### System state versus what the planner sees
 
-| Parameter | REQ (Level 1) | PDF p.9 (Level 4) | SPEECH (Level 5) | Status |
-|---|---|---|---|---|
-| Monitoring interval | "At least runs every 30m" (ambiguous: the check, or the reforecast) | Every 30 minutes the system checks | Every 30 minutes | Reconcilable as *monitoring every 30 min*. Publishable with that wording. |
-| Periods compared | "Over several periods… e.g. 4 15m periods" (example) | Past 4 quarter intervals (1 hour) | Past 4 quarter intervals | Consistent; REQ marks it as an example. Publish as "about an hour of 15-minute periods". |
-| Threshold logic | To be defined in the epic; must account for minimum calls; mixed low/normal periods to be figured out | Nightly run; percentile differences; past 8 weeks | Nightly run; average error; past 8 weeks | Not in Level 1. "Percentile" vs "average" differ. Publish only as "a calculated threshold derived from recent history" unless João confirms. |
-| Historical reference | — | 8 weeks | 8 weeks | Level 4/5 only. Needs confirmation. |
-| Minimum data / volume | Minimum call value; no (ultra-)low-volume queues | — | — | Documented in REQ only; **absent from the current case study**. Should be added (it is a design-relevant constraint: the feature is silent on some queues). |
-| Maximum frequency | "Can be executed more than one time a day" | Maximum 2 per day per queue | Maximum 2 | Cap is Level 4/5. Needs confirmation. |
-| Minimum interval | — | ≥ 1 hour before restart | ≥ 1 hour | Level 4/5. Needs confirmation. |
-| Same-day constraint | Yes; day defined by account timezone | Timeline 00:00–23:59 | — | Documented. **Prototype data contradicts it** (issue "Sun Apr 4 11:54 PM → Mon Apr 5 Running", PDF p.18). |
-| Account timezone | Yes | Team schedule shows "New York" selector | — | Documented. The timezone selector is existing product UI. |
-| Baseline forecast property | Yes; used to measure accuracy | — | — | Documented; enables the comparison feature. |
-| Intraday method | Different algorithms from normal forecast; +10% accuracy target | "Multiplies the forecasts for the day by a factor" | Same | Level 4/5 describes a scaling method; REQ only demands difference. Publish as "a different, lighter method". |
-| Reporting | Values sent to reporting | — | — | Backend; mention once. |
-| Scheduling simulation | Reforecast triggers a simulation; performance out of scope | — | — | Documented; **not represented in the case study**. |
-| Queue-level configuration | Customer has *no* configuration; feature flag for selected customers; later self-serve | "Turn on reforecast" per queue | Per-queue toggle | **Discrepancy** (see §14). |
-| Latest run time | "Could": show latest baseline / intraday run time | "Updated today at 12:00 PM" header | — | Plausibly the "Could" item; interpretation. |
+| System state | What the planner can see, if the presented design is in front of them |
+|---|---|
+| Feature off for this customer or this queue | Nothing. Requirements: flag, and no customer configuration. Presented design: the queue switch is off. |
+| Watching, difference inside the rules | Nothing. Monitoring is silent. This must stay silent in the case study too. |
+| Conditions met, run started | Notification and banner: anomaly detected, reforecast in progress, affected queues. Actions: Preview, Apply filter, and on Insights a Check insights action. |
+| Run finished | Notification: reforecast completed, check the updated data to deal with possible issues. Banner moves to an updated state. Header can show a count of issues. |
+| Baseline stored, new numbers live | Forecast, schedule, Insights and reporting show the new forecast. Previous forecast is available as a comparison, not as the working numbers. |
+| Issues recorded | A log: when it started, when it ended, queue, severity, a description of the volume gap, and a way to the forecast. |
+| Simulation triggered | Not shown. Requirement only. |
 
-### 07.3 Monitoring versus execution (must be explicit)
+### What "the reforecast is the new forecast" commits the design to
 
-- **Monitoring** is periodic and continuous across the day: every 30 minutes (REQ 2; PDF p.9; SPEECH 6).
-- **Reforecast execution** is conditional (threshold, several periods, minimum volume, not low-volume, same day) and, per Level 4/5, capped (≤ 2/day/queue; ≥ 1 hour apart).
-- Therefore the phrases "continuously updates forecasts" (PDF p.2), "consistently updates" (PDF p.2), "continuous reforecasting flow running 24/7" (SPEECH 2) and "this process takes place continuously throughout the 24 hours" (PDF p.9) are **imprecise**. The *check* is continuous; the *reforecast* is exceptional by design. SPEECH 3 itself makes this point ("they can't just reforecast every hour… They needed a system that knows when a reforecast is actually necessary").
-
-Recommended wording: "The system checks every 30 minutes. It reforecasts only when the deviation is large enough, for long enough, on a queue with enough volume — and not more than a couple of times a day."
-
-### 07.4 Unresolved logic questions
-
-- Which signals trigger detection: contact volume only (all documented issue texts are CVO) or also AHT? The forecast and insights charts show AHT; REQ says "real and forecast" generically.
-- Does the triggered scheduling simulation produce visible output to the planner (REQ 9)? The schedule highlight in PDF p.19 marks the anomaly period; it does not show a re-simulated schedule.
-- Severity tiers: Critical / Major / Minor map in the prototype to 40%/6 periods, 20%/4 periods, 10%/2 periods (PDF p.18). No source defines the rule. Classify as DESIGN EXPLORATION unless confirmed.
-- "Preview" (notification and banner chip): behaviour not shown anywhere. SPEECH 11 says "users can preview which queues are affected". Classify as DESIGN DECISION with undocumented behaviour.
+Requirement 7 is the reason Decision 2 and Decision 3 exist. If the reforecast is what those three pages display, then a planner on any of them is looking at numbers that can change underneath them, and the previous numbers still matter because the baseline exists specifically so accuracy can be measured (requirement 8). The comparison control is the planner-facing consequence of keeping that baseline. That link is inference supported by the two requirements plus the control in the prototype. Label it as inference. Do not claim a designer said "we built the toggle because of the database property" unless a source says so.
 
 ---
 
-## 08. Core design tensions
+## 8. Time and monitoring logic
 
-| Tension | Evidence for | Evidence against / limits | Primary? |
+This section is the one the speech gets wrong in its own opening, and the one the case study has to get right.
+
+### What is specified
+
+| Question | Requirements | Speech and PDF flow (page 9) | Status |
 |---|---|---|---|
-| **A. Automation vs control** | REQ note (mitigation; not every day; automation vs on-demand); REQ 5–6 (no customer configuration; feature flag); PDF p.10 toggle; SPEECH 3, 10, 21 | The "manual workflow" SPEECH 21 claims was designed is not visible anywhere. The prototype resolves the tension by *per-queue opt-in to automation*, not by a manual trigger. | **Yes** — it is the origin of Decision 1 |
-| **B. System complexity vs user simplicity** | REQ 3 (threshold, periods, minimum volume, low-volume rules); PDF p.9; PDF p.10 single checkbox; SPEECH 10, 21 ("hide complexity… more backend logic but simpler UX") | The simplicity was partly *required* (REQ 5: customer has no configuration). The designer's contribution was to give the customer exactly one control rather than zero — or many. | **Yes**, folded into Decision 1 |
-| **C. System change vs user awareness** | REQ 7 (three surfaces); PDF p.11–15; SPEECH 11–14 ("might be working in different parts of the system"; "suddenly the numbers change… the banner explains") | — | **Yes** — Decision 2 |
-| **D. Detection vs understanding** | "Anomaly detected" tells the planner nothing about consequence; PDF p.16–19 supply the understanding (comparison, severity, location) | — | **Yes** — Decision 3 |
-| **E. Understanding vs action** | Notification copy "Check updated data to solve possible issues"; "Check forecast" / "Check insights" links; SPEECH 20 (jump to affected periods) | The *action itself* (adjust schedule) is outside the designed screens; the design ends at pointing to the place. | Secondary — fold into Decision 3 as its last beat |
-| **F. Current vs previous forecast** | PDF p.16–17; REQ 8 makes it possible; SPEECH 18 (magnitude, trust) | SPEECH 18's "pattern recognition" and "predict future anomalies" are speculative benefits, not evidence | Secondary — it is the *mechanism* of D, not a separate tension |
+| How often does it look? | "At least runs every 30m." The verb is "runs," which is ambiguous. | Every 30 minutes it checks the last four 15-minute intervals (one hour) against actuals. | The presentation resolves "runs" as a check. Do not upgrade it to "the forecast is recalculated every 30 minutes." |
+| Same day? | Yes. The day is the account time zone. | The flow is described as running through the day. The speech also says "24 hours a day" and "24/7." | Same-day rule is a requirement. "24/7" in the speech fights the same-day rule and the caps in the same speech. Do not use "24/7" or "continuous reforecasting." |
+| What is compared? | Real versus forecast. | Forecast versus actuals, example "calls actually received." | Volume is the worked example. Other metrics: open. |
+| How long must it last? | Several periods. Example: four 15-minute periods. Exact number left to the epic. | The check window is those four intervals. The issues table also shows events of six consecutive periods. | A six-period event can be longer than the four-period check. That is not a contradiction. The minimum count was never closed. |
+| Threshold | To be defined in the epic. Must respect a minimum number of calls, also undefined. | Nightly. PDF: percentile differences over the past eight weeks. Speech: average error over the past eight weeks. | Method is OPEN. Eight weeks and "nightly" are presentation-only. Do not publish a formula. |
+| Low volume | Ultra-low and low-volume queues do not reforecast. Mixed low and normal intervals are an open rule. | Not shown in the case study. | The case study should say the exclusion exists. It should not invent the cutoff. |
+| When a reforecast starts | Only if the difference is over the threshold, with the period and volume conditions. | If the difference is over the calculated threshold. | Conditional trigger is solid. The calculation is not. |
+| How the new numbers are made | A different method from the normal forecast. Target: 10% more accurate than the original on the intraday problem. | Multiplies the rest of the day by a factor taken from the gap. | The factor is speech/PDF, not a requirement. Do not state it as the algorithm. The 10% is a target. |
+| How often it may run | More than once a day. | At most twice a day per queue, and at least one hour between runs. | Cap and gap are not requirements. Keep them out of any sentence that sounds like a specification, or show them only as parameters the presentation described and that are unconfirmed. |
+| During the run | Not described. | UI: "in progress," banner stays up. | No duration, no locking behaviour, no statement that editing is blocked. Do not invent a progress percentage. The PDF's hourglass is a slide illustration. |
+| After completion | New forecast is the forecast. Baseline kept. Simulation triggered. Latest run times are a "could," attributed to a later internal phase, not a must. | UI: completed notification, issue count, comparison, highlighted period. | "Could" items (show the last baseline run time and the last intraday run time) are not part of the core story unless the prototype clearly shows them. Page 16's forecast header does show an "updated" time. Treat displayed run time as something the prototype included, not as proof the "could" was accepted. |
 
-Recommendation: structure the case study on **three tensions** — A+B (how much does the customer control?), C (how does the planner find out?), D+E+F (how does the planner understand and act?). Six tensions in the visitor's path would dilute the story.
+### Sentence the case study is allowed to say
 
----
+The system checks during the day, on the order of every 30 minutes, whether recent actuals have pulled away from the forecast. A reforecast is a separate event. It runs only when that gap is large enough, and it may run more than once. It does not run every time the system looks.
 
-## 09. Design decision audit
+### Sentences it is not allowed to say
 
-Legend for CONFIDENCE: High = decision visible in the prototype and consistent across sources; Medium = visible but rationale only in SPEECH; Low = visible in one place with inconsistencies.
-
-| # | Decision | Problem | Evidence | Design question | Rationale (class) | Trade-off | Expected value | Validation | Conf. | Source |
-|---|---|---|---|---|---|---|---|---|---|---|
-| D1 | Queue-level activation | Not every customer wants automatic reforecasting; not every queue needs it | REQ note; REQ 3.2 (low-volume queues excluded anyway) | At what granularity does the customer decide? | Queue is the unit of forecasting and of the anomaly ("affected queues") — SUPPORTED DESIGN INTERPRETATION; SPEECH 10 states it | Granular control vs more places to configure | Automation only where wanted | None documented beyond prototype feedback (unquantified) | High | PDF p.10; SPEECH 10 |
-| D2 | "Turn on reforecast" as the *only* control, inside the existing queue configuration form | Thresholds, periods, history and caps are complex; REQ says the customer has no configuration | REQ 3, 5, 6; PDF p.9 | What is the minimum the customer must decide? | Complexity stays in the system; the customer decides *whether*, not *how* — SUPPORTED DESIGN INTERPRETATION; SPEECH 10, 21 | No tuning by expert customers | Low setup cost; fewer misconfigurations | Not documented | High | PDF p.10 |
-| D3 | Anomaly detection surfaced as an explicit event ("Anomaly detected") rather than a silent update | A forecast that changes silently confuses the planner | SPEECH 13 ("suddenly the numbers change… you'd be confused") | Should the system announce that it is about to change something? | Announce start and end — DESIGN DECISION | More notifications | Trust; no silent data change | Not documented | High | PDF p.11, 15 |
-| D4 | Notification centre message with "Preview" | Planner may be anywhere in the product | SPEECH 11 | Where does the planner first learn of the change? | The centre is reachable from everywhere — DESIGN DECISION | Notifications can be missed (SPEECH 13 admits it) | Reach | Not documented | High (message) / Low (Preview behaviour) | PDF p.11 |
-| D5 | Cross-surface banners (Forecast, Team schedule, Insights) | REQ 7 propagates the new forecast to exactly those surfaces | REQ 7; PDF p.13 | Where must the explanation live? | Where the numbers change — SUPPORTED DESIGN INTERPRETATION; SPEECH 13 | Screen real estate; repeated messaging | In-context explanation | Not documented | High | PDF p.12–14 |
-| D6 | "Apply filter" → affected queues | Multi-queue accounts; anomaly is per queue | PDF p.12–14; SPEECH 11, 13 | How does the planner narrow to what changed? | Filter the current view rather than navigate away — DESIGN DECISION | — | Speed | Not documented | High | PDF p.13 |
-| D7 | "Reforecast in progress" as a distinct state | The reforecast takes time; the displayed forecast is about to change | PDF p.9 (hourglass icon); PDF p.11–14 | Should the planner see an intermediate state? | Yes: the system is mid-change — DESIGN DECISION | — | Prevents acting on stale numbers | Not documented | High | PDF p.11–14 |
-| D8 | "Reforecast completed — Check updated data to solve possible issues" | Completion alone does not prompt action | SPEECH 15 ("we're prompting action") | What should the completion message ask for? | Language that directs — DESIGN DECISION | — | Faster resolution | Not documented | High | PDF p.15 |
-| D9 | "N issues found" in the Forecast header, linking to the issues page | Planner needs a summary and a way in | PDF p.14, 16, 18 | Where does the count of problems live? | Header, next to "Updated today at…" — DESIGN DECISION | — | Urgency + entry point | Not documented | High | PDF p.16, 18 |
-| D10 | "Show previous forecast" overlay | The new forecast replaces the old (REQ 7); the planner cannot judge magnitude without the old one | REQ 8 (baseline stored); PDF p.16–17; SPEECH 18 | How does the planner judge the size of the change? | Overlay dotted previous series on the same chart — DESIGN DECISION | Visual density | Magnitude and trust | Not documented | High | PDF p.17 |
-| D11 | Forecasting issues log (trigger time, end time, queue, severity, description, "Check forecast") | Multiple events across queues and days | PDF p.18; SPEECH 18 | How does the planner review what happened? | A record per event with cause expressed as "% higher for N periods" — DESIGN DECISION | A page to maintain | Transparency; history | Not documented | High | PDF p.18 |
-| D12 | Severity tiers (Critical / Major / Minor) | Not all deviations are equal | PDF p.18 | How does the planner prioritise? | By magnitude and duration — DESIGN EXPLORATION (rule undefined) | Possible false precision | Prioritisation | Not documented | Medium | PDF p.18 |
-| D13 | Anomaly location highlighted on the forecast chart and schedule timeline | Knowing that something changed is not knowing *where* | PDF p.19; SPEECH 20 | Where in the day did it happen? | Highlight the affected periods — DESIGN DECISION | — | Direct path to the affected slots | Not documented | High | PDF p.19 |
-| D14 | Schedule connection ("jump to affected time periods") | The staffing decision happens in the schedule | SPEECH 20; PDF p.19 (highlighted columns + tooltip) | How does the planner get from forecast to schedule? | Same highlight vocabulary across both surfaces — SUPPORTED DESIGN INTERPRETATION | — | Continuity | Not documented | Medium | PDF p.19 |
-| D15 | High-fidelity prototypes from the start | Limited time; need for fast, credible feedback; developers waiting | PDF p.11; SPEECH 2, 21 | How to validate quickly? | Fidelity close to the final product yields more actionable feedback and lets development start — PROJECT CONTEXT | Less divergent exploration; "speed over pixel-perfect" (SPEECH 21) | Faster validation | Self-reported | High as a strategy; unknown as an outcome | PDF p.11 |
-
-Decisions the prompt asked about that **cannot be audited**: a manual "run reforecast now" action (claimed in SPEECH 21, absent from all screens); "push notifications" (SPEECH 21; only the in-app notification centre is shown).
+"The forecast recalculates every 30 minutes." "Reforecasting runs 24/7." "The threshold is the 8-week percentile" or "the 8-week average error." "The rest of the day is multiplied by a factor." "It runs at most twice" as if that were the requirement. Any of the last three may appear only inside a clearly marked "as described in the presentation, unconfirmed" note, and only if a reviewer decides the parameter is safe to publish. Default: omit them from the public page.
 
 ---
 
-## 10. Three strongest design decisions
+## 9. Research audit
 
-Chosen on evidence, consequence, system thinking and clarity of reasoning — not visual impact.
+### What the requirements asked for
 
-### Decision 1 — One switch per queue is the whole configuration
+The note says customer research is needed to choose between per-queue automation and on-demand runs. That sentence is a REQUIREMENT for research. It is not evidence the research happened.
 
-- **Design question:** How much of a threshold-driven, history-dependent, capped reforecasting system should a customer configure?
-- **Evidence:** REQ note (mitigation; not every customer every day; automation vs on-demand undecided); REQ 3 (threshold, periods, minimum volume, low-volume exclusion all system-defined); REQ 5–6 (no customer configuration at launch; later self-serve); PDF p.10 (single checkbox at the end of the existing queue form, with helper text "If enabled, WFM will reforecast this queue"); SPEECH 10, 21.
-- **Decision:** Per-queue opt-in. Nothing else exposed.
-- **Product behaviour:** The queue configuration form gains one section, "Reforecast", with one checkbox. Everything in PDF p.9 remains internal.
-- **Why strongest:** It resolves tensions A and B in one move; it is traceable to Level 1; it demonstrates that the designer understood the system well enough to decide what *not* to show. It also anticipates REQ 6.1 ("later… a way for customers to turn the feature on").
-- **Caveat to keep visible:** REQ says the customer has *no* configuration in the first release. Whether the toggle shipped, or shipped later, is unknown.
+### What the speech claims
 
-### Decision 2 — The change reaches the planner where they are, as a sequence of states
+- Resource planners were interviewed and the five scenarios came from that.
+- High-fidelity prototypes were used from the start to get feedback quickly and to let development run in parallel.
+- The closing slide says automated and manual workflows were both designed, for different customer needs.
 
-- **Design question:** When the system changes the forecast on its own, how does a planner working in Team schedule or Insights find out, and how do they avoid being confused by numbers that change under them?
-- **Evidence:** REQ 7 (new forecast shown on Forecast, Schedule, Insights); PDF p.11–15 (notification centre messages; banners on the three surfaces; wording progression "Anomaly detected — Reforecast in progress" → "Anomaly detected — Forecast updated" → "Reforecast completed — Check updated data…"); SPEECH 11–15.
-- **Decision:** Two channels (notification centre + in-page banner), three surfaces, explicit start and end states, in-place actions (Apply filter, Preview, Check insights).
-- **Product behaviour:** The banner appears on whichever of the three surfaces the planner is using, persists through the reforecast, changes wording on completion, and can filter the current view to affected queues.
-- **Why strongest:** It is the most complete answer in the sources to a genuinely hard problem (system-initiated change), it is grounded in Level 1 (REQ 7 defines the surfaces), and it is a *system* of states, not a single screen.
+No instrument, sample, date, consent, quote, or finding is attached to any of these sentences.
 
-### Decision 3 — The change is inspectable and points to the next step
+### What the designer has added
 
-- **Design question:** Once the forecast has changed, how does the planner see how much it changed, where in the day, why, and what to do?
-- **Evidence:** REQ 8 (baseline kept → comparison possible); PDF p.16–17 ("Show previous forecast" overlay); PDF p.18 (issues log: trigger/end time, queue, severity, "CVO is 40% higher than forecasted for 6 consecutive periods", "Check forecast"); PDF p.19 (highlighted anomaly periods on chart and schedule; tooltip "Anomaly detected in this period"); SPEECH 18–20.
-- **Decision:** Comparison overlay + event log with severity + location highlighting that uses the same vocabulary on forecast and schedule.
-- **Product behaviour:** From "3 issues found" → issue → "Check forecast" → highlighted period → schedule with the same period highlighted.
-- **Why strongest:** It closes the loop from detection to action and turns the system's internal reasoning ("N% for N periods") into user-facing language. Severity rules are the one under-defined element and must be labelled.
+The team worked directly with multiple customer companies because the timeline was short. A prior note said three companies. Format, timing, and whether those conversations are the "interviews" in the speech are OPEN. This is DESIGNER-PROVIDED CONTEXT.
 
-**Rejected as backbone candidates:** "Prompting action through notification language" (real, but a component of Decision 2/3); "High-fidelity prototyping" (a process decision, belongs in Validation).
+### What is not research
 
----
+PDF pages 6, 7 and 8. Each canvas is labelled as generated with ChatGPT and carries a disclaimer. The empathy map's "say" quadrant is empty. They contain no participant evidence. They did not, on the page, change a decision that the rest of the deck can point to. See §10.
 
-## 11. Validation analysis
+### Findings that can be stated
 
-| Claim | Supported by | Class | Can be stated? |
-|---|---|---|---|
-| Time was limited; feedback had to come quickly before development | PDF p.11; SPEECH 2 | PROJECT CONTEXT | Yes |
-| High-fidelity prototypes were used deliberately to obtain prompt feedback and help developers start | PDF p.11; SPEECH 21 | DESIGN DECISION (process) | Yes |
-| Resource planners were interviewed and their scenarios documented | SPEECH 4 only; PDF p.4 shows the scenarios without method | PROJECT CONTEXT (Level 5) | Only as "scenarios documented with resource planners"; do not state "interviews" as a method unless João confirms |
-| The team worked closely with three companies for fast feedback | JOÃO | DESIGNER-PROVIDED CONTEXT | Yes, labelled as project context; no names, numbers, sessions |
-| Feedback led to adjustments | PDF p.11 ("for validation or adjustments") — intent, not record | UNKNOWN as an outcome | No; say the prototypes were built *to allow* adjustment |
-| Validation happened before development | SPEECH 2 | PROJECT CONTEXT | Yes, as intent |
-| Users, sessions, usability scores, task success, time saved, adoption, production | — | UNKNOWN | **No** |
+None as research findings.
 
-### Coherence of the two validation elements
+What can be stated as project facts that shaped the design:
 
-JOÃO's three-company collaboration and the documented hi-fi prototype strategy form a coherent story *if* the prototypes were what those companies reacted to. That link is not documented. The case study may present them side by side ("hi-fi prototypes, reviewed closely with three customer companies") only with the context label, and must not describe what any company said.
+- The requirements already suspected that full automation would be wrong for some customers.
+- The presented design chose a queue switch rather than a parameter form, and rather than a "run now" control. A manual workflow is asserted in the closing slide and is not in the screens.
+- Feedback was sought through a high-fidelity prototype under time pressure. What changed after feedback is not recorded.
+
+### Observed behaviours, pain points, needs
+
+The scenario sentences are the only user-language in the file. They are needs: rest-of-day effect, a peak that is not the whole day, an immediate read after a large absence, room to train, room to move people. They are not findings from a written study.
+
+### Design implications that are legitimate
+
+- Do not present one generic "volume went up" story. The material distinguishes volume, handle time and capacity, and only volume is tied to the detector.
+- Do not present a settings model of the threshold. Both the requirements (undefined, internal) and the speech (hidden on purpose) point away from that.
+- Do not present a tested manual trigger. It is an open question the requirements named and the closing slide claims without a screen.
 
 ---
 
-## 12. Confidentiality audit
+## 10. Research artefact audit
 
-| Item | Where | Classification | Action |
-|---|---|---|---|
-| "Talkdesk" name | PDF p.2, p.3 (implicit), SPEECH throughout; screenshot label "Collect live metrics from Talkdesk Contact Center" (PDF p.10) | **REQUIRES REVIEW** — PDF p.2 states the content "is confidential and should not be disclosed without authorisation"; the repository's copy policy (`src/content/copy-audit.test.ts`) forbids "Talkdesk" in live copy; the Carpool case anonymised the employer | Default to anonymisation ("a cloud contact-centre platform's workforce-management product"). João to decide. |
-| "Cobalt Design System" | PDF p.11 | SHOULD NOT BE SHOWN (proprietary name; adds nothing) | Rephrase as "the internal design system" |
-| Talkdesk logo / purple product chrome | All screenshots | SHOULD NOT BE SHOWN | Reconstruct neutrally |
-| "Avalon", "apollo" (team/epic codenames), "@Gennadiy Stepanov" | REQ | SHOULD NOT BE SHOWN | Never appear |
-| Requirements document verbatim | REQ | REQUIRES REVIEW | Paraphrase acceptance criteria; do not reproduce the document |
-| System parameters (30 min, 4 periods, 2×/day, 1 h, 8 weeks, nightly run) | PDF p.9; SPEECH | REQUIRES REVIEW — already public in the current PDF, but they describe proprietary logic | João to confirm which may be stated; fall back to qualitative wording |
-| 10% accuracy target | REQ | REQUIRES REVIEW (internal KPI) | If shown, only as a target |
-| Queue names "support", "sales", "campaigns" | PDF p.10, p.18 | SAFE (generic) | Replace anyway with neutral names in the reconstruction |
-| Agent name "Aubrey Luna" | PDF p.14 | SAFE WITH RECONSTRUCTION (appears fictional) | Replace with obviously fictional names |
-| Dates (May 3, 2022; Sun Jan 4; Apr 2–5) | PDF p.12–19 | SAFE (prototype placeholders) — but misleading (see §14) | Use one coherent fictional day |
-| Issue ID "4774983753974hfh4747…" | PDF p.18 | SAFE (garbage placeholder) | Remove |
-| Personal phone number and email | PDF p.20 | SHOULD NOT BE SHOWN on the website | Remove |
-| Existing product UI (event types, adherence %, shrinkage, patience, SL goal) | PDF p.10–14 | SAFE WITH RECONSTRUCTION (generic WFM concepts) | Keep as neutral context |
-| Kano / VPC / Empathy canvases | PDF p.6–8 | SAFE (no confidential data) but **low value and reputationally risky** (AI-generated) | Remove |
-| Illustrations (telescope figure, car, mast) | PDF p.2, 3, 5 | UNKNOWN (licence not established) | Do not reuse without licence confirmation |
-| Flow diagram | PDF p.9 | SAFE WITH RECONSTRUCTION | Rebuild as interaction |
-| Scenario statements | PDF p.4 | SAFE (no company or person identified) | Keep; attribute generically |
-
----
-
-## 13. Claims audit
-
-| Claim | Source | Evidence type | Confidence | Safe to publish? | Recommended wording |
-|---|---|---|---|---|---|
-| The system continuously reforecasts / updates forecasts 24/7 | PDF p.2, p.9; SPEECH 2 | Imprecise paraphrase | Low as worded | **No** | "The system checks every 30 minutes and reforecasts only when the deviation is meaningful." |
-| 30-minute monitoring | REQ 2; PDF p.9; SPEECH 6 | DOCUMENTED FACT (REQ) | High | Yes (subject to §12 review) | "Every 30 minutes" |
-| Compares the past four 15-minute periods | REQ 3.3 (example); PDF p.9; SPEECH 6 | DOCUMENTED as example | Medium-High | Yes, hedged | "About an hour of recent 15-minute periods" |
-| Threshold calculated from ~8 weeks of history in a nightly run | PDF p.9; SPEECH 6 | PROJECT CONTEXT (Level 4/5) | Medium | Only if confirmed | "A threshold calculated from recent history, not set by the customer" |
-| Reforecast at most twice a day, at least one hour apart | PDF p.9; SPEECH 6 | PROJECT CONTEXT (Level 4/5); REQ says only "more than once" | Medium | Only if confirmed | "Capped so it cannot run repeatedly" |
-| Low-volume queues are excluded; minimum call volume | REQ 3.2, 3.4 | DOCUMENTED FACT | High | Yes | "It stays silent on queues with too little volume to judge" |
-| Anomaly detection triggers the reforecast | REQ 3; PDF p.9, 11 | DOCUMENTED FACT | High | Yes | — |
-| Reforecast is automatic (when enabled) | PDF p.10; SPEECH 10 | DESIGN DECISION | High | Yes | "Once a queue is switched on, the system acts on its own" |
-| 10% accuracy improvement | REQ 4.2 | REQUIREMENT / TARGET | High as target; **none** as result | Only as target | "The brief set a target of 10% better intraday accuracy than the original forecast. Whether it was met is not something I can report." |
-| Improved staffing decisions | REQ user story; PDF p.15; SPEECH 15 | DESIGN INTENT | — | Only as intent | "Designed to support the staffing decision" |
-| Customer feedback shaped the design | PDF p.11 (intent); JOÃO | PROJECT CONTEXT | Medium | As process, not outcome | "Prototypes were reviewed with customers to catch problems before development" |
-| Three-company collaboration | JOÃO | DESIGNER-PROVIDED CONTEXT | — | Yes, labelled | "Reviewed closely with three customer companies" — no names, no counts |
-| Resource planners were interviewed | SPEECH 4 | PROJECT CONTEXT (Level 5) | Medium | Hedged | "Scenarios documented with resource planners" |
-| High-fidelity prototyping as strategy | PDF p.11; SPEECH 21 | DESIGN DECISION | High | Yes | — |
-| Development readiness | PDF p.11; SPEECH 2, 21 | PROJECT CONTEXT (intent) | Medium | As intent | "so development could start from something concrete" |
-| Product impact / shipped / adopted | — | UNKNOWN | — | **No** | — |
-| Business impact | — | UNKNOWN | — | **No** | — |
-| Pattern recognition / predicting future anomalies from history | PDF p.17–18; SPEECH 18 | Speculative benefit | Low | Only as *possibility*, not claim | "The log also leaves a record that planners could read for recurring patterns" |
-| "We designed both automated and manual workflows" | SPEECH 21 | Unsupported by screens | Low | **No** unless a manual trigger is shown | — |
-| "Push notifications" | SPEECH 21 | Unsupported | Low | **No** | "In-app notification" |
-| Kano/VPC/Empathy as research | PDF p.6–8 | AI-generated exploration | — | **No** | Remove or one labelled sentence |
-
----
-
-## 14. Source discrepancies and open questions
-
-| # | Topic | Source A (higher) | Source B (lower) | What differs | Reconcilable? | Needs confirmation |
+| Artefact | Why it is in the PDF | Question it answers | Evidence that produced it | Decision it influenced | What changed because of it | Verdict |
 |---|---|---|---|---|---|---|
-| 1 | Monitoring frequency | REQ 2: "at least runs every 30m" | PDF p.9 / SPEECH: checks every 30 min | REQ's "runs" is ambiguous (check or reforecast) | Yes — read as monitoring cadence | — |
-| 2 | Reforecast frequency | REQ 10: "more than one time a day" | PDF p.9 / SPEECH: max 2/day/queue | Cap not in REQ | Yes, if the cap was set in the epic | Was the 2×/day cap final? |
-| 3 | Minimum interval | REQ: silent | PDF p.9 / SPEECH: ≥ 1 hour | Not in REQ | Same as above | Was the 1-hour gap final? |
-| 4 | Threshold methodology | REQ 3.1: to be defined; must consider minimum calls | PDF p.9: "percentile differences… past 8 weeks"; SPEECH: "average error… past 8 weeks" | Percentile vs average; both post-REQ | Partially — both agree on 8 weeks and nightly | Which description is correct, and may it be published? |
-| 5 | Low-volume behaviour | REQ 3.2, 3.4, 3.5 | PDF/SPEECH: silent | Constraint omitted from the case study | Yes — add it | — |
-| 6 | Customer configuration | REQ 5–6: none at launch; feature flag; later self-serve | PDF p.10 / SPEECH: per-queue toggle | The design includes what REQ defers | Yes, if the design targets REQ 6.1 or the requirement changed | Did the toggle ship in the first release? |
-| 7 | Manual control | REQ note: research needed on automation vs on-demand | SPEECH 21: "designed both automated and manual workflows"; PDF: no manual trigger | Claim without artefact | No | Was a manual "reforecast now" designed? |
-| 8 | Accuracy target | REQ 4.2: improve by 10% | PDF/SPEECH: not mentioned | Silence | Yes — treat as target | Was accuracy measured? |
-| 9 | Production status | — | — | Unknown everywhere | — | Did it ship? When? |
-| 10 | Validation method | REQ note: research needed (future) | SPEECH 4: "we interviewed resource planners"; JOÃO: three companies | REQ predates; SPEECH asserts; JOÃO adds | Yes, as a sequence, if confirmed | Who took part, how, when? |
-| 11 | Dates in prototype | Project: Q2 2023 | Screens: May 3, 2022 header; Sun Jan 4 table; Apr 2–5 issues | Inconsistent placeholder dates | Yes — placeholders | None; use a coherent fictional day |
-| 12 | Same-day constraint vs prototype data | REQ 1: same day only | PDF p.18: "Sun Apr 4 11:54 PM → Mon Apr 5 Running" | Event crosses midnight | No (prototype inconsistency) | Fix in reconstruction |
-| 13 | Banner wording | PDF p.12–14: "Anomaly detected" | PDF p.19: "Surge detected… on support queue" | Two vocabularies | Possibly an iteration | Which was final? |
-| 14 | Detection signal | REQ 3: "real and forecast" | PDF p.18: all issues are CVO | AHT as trigger unknown | — | Does AHT deviation trigger? |
-| 15 | Notification layers | PDF: notification centre + banners | SPEECH 21: "push notifications, banners, in-context alerts" | "Push" unsupported | No | Was there push/email? |
-| 16 | Scheduling simulation | REQ 9: reforecast triggers simulation | PDF/SPEECH: not shown | Behaviour absent from case | — | What did the planner see in the schedule after a reforecast? |
-| 17 | "Issues found" during "in progress" | PDF p.14: banner in progress *and* "3 issues found" | PDF p.18: issues are historical events | Not contradictory if issues = history | Yes | Confirm the count is historical events |
-| 18 | Issue period count vs check window | SPEECH 6: 4 periods checked | PDF p.18: "6 consecutive periods" | Detection window vs event duration | Yes (duration can exceed window) | — |
-| 19 | Prototype data | — | PDF p.16: "20 contacts / 20 s / 20 h" | Placeholder values | — | None; replace |
-| 20 | Interviews vs canvases | SPEECH 4: interviews | PDF p.6–8: ChatGPT-generated canvases with empty SAY quadrant | The only "research artefacts" shown contain no user data | — | Were there notes or recordings from real sessions? |
+| Kano canvas, page 6 | Looks like a research step between the problem and the flow. | None that the page states. No feature is classified in a way the later UI depends on. | Caption: ChatGPT, with a disclaimer. | None visible. | None visible. | Remove. Process decoration. |
+| Value proposition canvas, page 7 | Same. | None stated. | Caption: ChatGPT, with a disclaimer. | None visible. The pains on the canvas are not traced to a scenario or a screen. | None visible. | Remove. |
+| Empathy map, page 8 | Same. | "What do they say?" is the question an empathy map is for. The quadrant is empty. | Caption: ChatGPT, with a disclaimer. Empty quadrant. | None visible. | None visible. | Remove. An empty "say" quadrant is the tell. |
+| Five scenario cards, page 4 | To ground the problem in planner situations. | What kinds of day make a morning forecast unsafe? | Speech says interviews. The sentences exist. The method does not. | They justify caring about volume, time-of-day shape, and capacity. They do not, by themselves, justify the switch or the banner. | The factor list on the same spread. | Keep the content. Relabel. Do not call the cards a research study. |
+| Flow diagram, page 9 | To explain the mechanism before the UI. | When does a check become a reforecast? | Presentation of the model. Not user research. | The decision to hide that mechanism from the queue form. | The simplicity of page 10. | Keep as system explanation. It is not a research artefact. |
+| "Don't rush" configuration spread, page 10 | To argue for one control. | How much setup does the customer need? | A design argument in the speech. The requirements had asked for research and had forbidden customer configuration at launch. | The switch. | The queue form gains one checkbox. | Keep. It is a design decision, not research. |
+| High-fidelity rationale, page 11 | To justify prototype fidelity. | How could feedback happen before build, under time pressure? | The designer's process claim. | Fidelity, not a screen behaviour. | Parallel work is claimed. No revision log. | Move into validation. Do not leave it as a caption under a screenshot. |
+
+The chain the visitor should get is evidence, then insight, then design question, then decision, then what the product did. Pages 6 to 8 break that chain. They are a sequence of frameworks with no insight attached. The case study must not read as Kano, then canvas, then empathy map, then UI.
 
 ---
 
-## 15. Current PDF audit (20 pages)
+## 11. Design tensions
 
-| Page | Current purpose | Content | Claims | Evidence | Narrative role | Works | Does not | Verdict |
-|---|---|---|---|---|---|---|---|---|
-| 1 | Cover | Title, "A case by João Leite — Digital Product Designer", abstract shapes | — | — | Open | Typographic confidence | Decorative blobs; no thesis | **REWRITE** as cover with thesis + disclosure |
-| 2 | About | Four columns: "consistently updates forecasts based on real values"; "intricate configurations, anomaly detection, seamless continuous reforecasting flow"; "threshold calculation, reforecasting process, factors"; Q2 2023 at Talkdesk; confidentiality notice | Continuous updating | Generic | Orient | Dates the project | "Continuous" is imprecise; four columns of abstract nouns; illustration | **REMOVE**; fold role/time/confidentiality into cover meta |
-| 3 | Problem | User story verbatim + REQ note verbatim | — | REQ (Level 1) | Setup | Faithful to Level 1; the note is the seed of Decision 1 | Presented as a slogan; the note's significance is not drawn out | **KEEP content, REWRITE framing** as "the brief and its open question" |
-| 4 | Scenarios + factors | Five yellow scenario cards; five red factor cards | Implicit: these are user statements | USER EVIDENCE, provenance unknown | Evidence | Real planner language | Tiny cards; no structure; demand vs capacity not distinguished | **KEEP + MAKE INTERACTIVE** (scenario selector) |
-| 5 | Divider | "Understanding processes and dependencies" + illustration | — | — | Pace | — | Empty page | **REMOVE** |
-| 6 | Kano | ChatGPT-generated canvas with disclaimer | Implicit: research | None (AI hypothesis) | Process theatre | — | Unreadable; AI provenance; no insight | **REMOVE** |
-| 7 | VPC | ChatGPT-generated canvas with disclaimer | Implicit: research | None | Process theatre | — | Same | **REMOVE** |
-| 8 | Empathy map | ChatGPT-generated; SAY quadrant empty | Implicit: research | None | Process theatre | — | Same; empty quadrant undermines it | **REMOVE** |
-| 9 | Reforecasting flow | Timeline diagram (30-min checks, triggers, hourglass, 2/day), "how is the reforecast calculated", "when are thresholds calculated", 8-week bars | 30 min; 4 periods; ≥ 1 h; ≤ 2/day; 24 h; factor; nightly; 8 weeks; percentiles | Level 4/5 | System | The strongest explanatory page | Too small; too dense; no distinction between monitoring and execution; caps unconfirmed | **KEEP + MAKE INTERACTIVE** (detection simulation) |
-| 10 | Configuration | Queue form ("support"), highlighted "Reforecast — Turn on reforecast" section; "Don't rush. Here's the first step" | Per-queue activation | PDF (Level 4) | Decision 1 | The one-checkbox moment is clear | Talkdesk chrome; copy explains the toggle but not *why* it is the only control | **KEEP + REWRITE copy + RECONSTRUCT UI** |
-| 11 | Part I — notification | Hi-fi rationale; notification "Anomaly detected — Reforecast in progress in the affected queues — Preview"; panel over Configurations | Hi-fi strategy; "everything starts with a simple notification" | PDF p.11 | Decision 2 (a) | Hi-fi rationale is honest | Rationale is buried under "So, how we solved it?"; the notification's background page is arbitrary | **KEEP notification; MOVE hi-fi rationale to Validation; RECONSTRUCT** |
-| 12 | Notification → Insights | Panel → Insights with banner "Anomaly detected — Reforecast in progress — Apply filter — Preview" | Banner in context | PDF | Decision 2 (b) | Shows the path | Repeats 11; date May 3, 2022 | **COMBINE** with 13–14 into one interactive |
-| 13 | Banner messages | Four bullets; two banner variants (with/without "Check insights") | Real-time status; affected queues; three surfaces | PDF; REQ 7 | Decision 2 (c) | Lists the surfaces | Text-heavy; the strongest reason (REQ 7) is absent | **REWRITE** as one line + interaction |
-| 14 | Three stacked screens | Insights, Team schedule (New York; 10 agents; adherence), Forecast ("3 issues found") — all with banner | Consistency across surfaces | PDF | Decision 2 (d) | Demonstrates consistency | Stacked screenshots are unreadable; repeats | **MAKE INTERACTIVE** (surface switcher) |
-| 15 | Part II — completed | Bullets; notification "Reforecast completed — Check updated data to solve possible issues"; background banner "Forecast updated" | Completion prompts action | PDF | Decision 2→3 | State language is a real decision | Bullets are generic ("enabling resource planners to make informed…") | **KEEP notification; REWRITE bullets to one sentence** |
-| 16 | Notification → Forecast | Forecast page; "Show previous forecast" off; table with 20/20/20 placeholders | — | PDF | Decision 3 (a) | Entry state for comparison | Placeholder data; repeats 12's pattern | **COMBINE** with 17 |
-| 17 | Part III — previous forecast | "More data is never a downside."; four bullets (foresee anomalies; spot patterns; identify early; comparative analysis); toggle off→on; dotted previous series | Pattern recognition; predicting anomalies | PDF + SPEECH 18 | Decision 3 (b) | The overlay is a genuine before/after **of state** | Headline over-claims; bullets are speculative benefits | **KEEP toggle + MAKE INTERACTIVE; REMOVE headline and bullets** |
-| 18 | Forecasting issues | "3 issues found" → issues page; 3 events (Critical/Major/Minor; % / periods; queues; Check forecast); caption "Ability to access records of past forecasts, enabling users to predict patterns" | Transparency; pattern prediction | PDF | Decision 3 (c) | The issue description format is excellent design evidence | Garbage ID; midnight-crossing event; "predict patterns" over-claim; severity rule undefined | **KEEP + RECONSTRUCT + MAKE INTERACTIVE** (issue → location) |
-| 19 | Part IV — clear path | Schedule with highlighted 9–11 PM columns and tooltip; Forecast with "Surge detected… on support queue" and highlighted 03–04 band; four bullets | Swift, informed action; service level goals | PDF + SPEECH 20 | Decision 3 (d) | Location highlighting is a strong decision | Bullets are generic; "Surge" vs "Anomaly" inconsistency; highlighted times differ between screens | **KEEP highlighting + MAKE INTERACTIVE; REMOVE bullets** |
-| 20 | Thank you | Title; email; phone | — | — | Close | — | Not a web ending; personal phone | **REMOVE**; replace with outcome + reflection |
+Only tensions the sources support. Each one ends in a decision that is documented, not in a slogan.
 
-**Net effect:** 20 pages → roughly 10 web sections, of which 5 are interactive.
+### 1. Automation versus control
+
+Evidence. The requirements note: not every customer wants this every day; research should choose between automating per queue and letting someone choose when to run. Requirements 5 and 6: no customer configuration at launch; a flag for selected customers; self-serve later. Speech and PDF: one switch per queue, and a closing claim that manual and automatic workflows were both designed.
+
+Why it mattered. A reforecast rewrites the plan. Some customers will want that only as an exception. A control that is missing forces the behaviour on them. A control that exposes the model forces them to become operators of a threshold they were never meant to set.
+
+Design question. What, if anything, does the customer decide, and at what level?
+
+Decision that was presented. On or off, per queue, in the existing queue configuration. No threshold, no schedule, no "run now" on the screen that was shown.
+
+Product behaviour. "Turn on reforecast." Helper: if enabled, the system will reforecast this queue. Everything else stays in the system.
+
+Trade-off to say out loud. The requirements did not ask for this control in the first release. The design may be the later self-serve, pulled forward. Shipping status is unknown. The manual workflow in the closing slide has no screen.
+
+### 2. A silent monitor versus a plan that changes underneath someone
+
+Evidence. Checks are periodic and conditional. Requirement 7 places the new forecast on three surfaces. Speech slides 11 to 14: the planner may be in the schedule or in Insights, not on the forecast; a notification alone can be missed; a banner explains why numbers moved.
+
+Why it mattered. Monitoring should not nag. A completed replacement that is invisible looks like a bug.
+
+Design question. How does a background decision become visible in the place the planner is already working, without turning every check into an alert?
+
+Decision. No UI for the healthy check. A notification plus a banner only when a reforecast is in progress, and again when it has finished. The banner is on Forecast, Team schedule and Insights. It can filter to affected queues.
+
+Product behaviour. Two moments, not a live ticker. "Anomaly detected. Reforecast in progress in the affected queues." Then "Reforecast completed. Check updated data to solve possible issues."
+
+### 3. A new number versus an explanation of the change
+
+Evidence. Requirement 7: the reforecast replaces the forecast. Requirement 8: the baseline is kept to measure accuracy. Speech slides 18 to 20 and PDF pages 17 to 19: previous forecast as a dotted series, an issues log, a mark on the period in the forecast and in the schedule.
+
+Why it mattered. Replacement without a comparison hides the size of the change. A comparison without a location does not tell the planner where to act. A location without a queue does not tell them which plan.
+
+Design question. If the system changes the forecast, what must the planner be able to see, and where does that looking end?
+
+Decision. Three linked views: previous against new, a list of issues with severity and a volume description, and the same period highlighted on the forecast and the schedule.
+
+Product behaviour. "Show previous forecast." "N issues found." Description pattern: contact volume is N% higher than forecast for N consecutive periods. "Check forecast." A marked period. The schedule shows that period, not a different one. (The PDF's own screens do not always use the same hours. The reconstruction must.)
+
+### Tensions considered and not used as structure
+
+- Configuration versus cognitive load is the same tension as automation versus control, seen from the form. Do not give it a second chapter.
+- Global state versus local context is how tension 2 shows up in the information architecture (one run, three pages). Teach it inside Decision 2. Do not make it a fourth decision.
+- "System intelligence versus trust" is the vague name for tension 3. Use the concrete version.
 
 ---
 
-## 16. Current implementation audit (Source E)
+## 12. Design decision audit
 
-### 16.1 State of the repository for this case study
+| # | Decision as presented | Evidence | Class | Strength | Keep in the narrative? |
+|---|---|---|---|---|---|
+| D1 | One new control on the existing queue form: "Turn on reforecast." | PDF p.10, speech slide 10 | Design decision. Conflicts with requirement 5. | High. It is the configuration story. | Yes. Decision 1. |
+| D2 | Do not expose threshold, caps, window, or method in that form. | Speech slide 10; the form itself. | Design decision. | High, but it is the other half of D1. | Fold into Decision 1. |
+| D3 | Start with a notification the planner can open from anywhere. | PDF p.11, speech slides 11–12 | Design decision. Not in the requirements. | High. | Part of Decision 2. |
+| D4 | Repeat the status as a banner on Forecast, Team schedule and Insights. | PDF pp.12–15, speech slides 13–14, requirement 7 for why those pages | Design decision plus requirement. | High. | Part of Decision 2. |
+| D5 | Banner actions: Apply filter, Preview, and Check insights on the Insights banner. | PDF and speech. | Design decision. Preview's result is unspecified. | Medium. The actions matter; Preview is a hole. | Show the actions. Do not invent Preview's panel. |
+| D6 | Separate copy for in progress and for completed. Completed copy asks the planner to check issues, not just to notice that the run ended. | Speech slides 15–17, PDF p.15 | Design decision. | High. | Part of Decision 2. |
+| D7 | A count of issues in the forecast header. | PDF pp.14–18 | Design decision. | Medium. It is the hinge into the log. | Part of Decision 3. |
+| D8 | "Show previous forecast" overlays a dotted previous series. | PDF pp.16–17, speech slides 18–19 | Design decision. Supported by the existence of a baseline (requirement 8) only as inference. | High. | Decision 3. |
+| D9 | An issues log: trigger, end, queue, severity, description, Check forecast. | PDF p.18 | Design decision. Severity rule unknown. | High. | Decision 3. |
+| D10 | Mark the anomalous period on the forecast and on the team schedule. | PDF p.19, speech slide 20 | Design decision. | High. This is the link to staffing. | Decision 3. |
+| D11 | Use a high-fidelity prototype early. | PDF p.11, speech slides 2 and 21 | Process decision. | Medium for the portfolio. It explains the validation method. It is not a product behaviour. | Validation section only. |
+| D12 | "Push notifications" as well as banners. | Speech slide 21 only. | Unsupported. The screens show an in-app notification centre. | Do not keep. | Exclude. |
+| D13 | Both automated and manual workflows. | Speech slide 21. Requirements only pose the question. No manual control in the screens. | Unsupported as a designed workflow. | Do not keep as a decision. | Open question. |
+| D14 | Historical view "lets users predict future anomalies" and "spot patterns such as Monday surges." | Speech slides 18–19, PDF p.17 bullets. | Inference presented as a benefit. No observation supports it. | Weak. | Cut the benefit bullets. Keep the comparison. |
+| D15 | Severity as Critical, Major, Minor. | The table shows the labels. | The labels are factual UI. Any ranking rule would be an invention. | Use the labels inside illustrative data. Do not explain a formula. | Inside Decision 3, labelled. |
 
-- **Route:** none. There is no Intraday Reforecasting page, content, component or asset in `main`. Search for "intraday", "reforecast", "Woodland", "Schibsted" returns nothing except a policy test forbidding "Talkdesk" in live copy.
-- **Consequence:** this is a *reconstruction from zero inside an existing system*, not a redesign of an existing page. Everything below describes the system the case study would enter.
+---
 
-### 16.2 Architecture (as found)
+## 13. Three strongest design decisions
 
-| Aspect | Finding | Relevance |
+These three are strong because each changes what the planner can do, each is visible in the prototype, and each answers a different part of the problem model. The others fold into them or fail the evidence test.
+
+### Decision 1. One switch, on the queue, and nothing else
+
+The problem. The behaviour is dangerous if it is universal, and the rules are too technical to be a form.
+
+The evidence. Requirements note, requirements 5 and 6, speech slide 10, PDF page 10.
+
+The design question. What is the customer allowed to decide?
+
+The decision. Whether this queue reforecasts. Not how.
+
+The trade-off. Simpler setup, less control than the requirements' own research question suggested. A customer who wanted to run it once, today, for one bad morning, is not given that. A customer who wanted to tune the threshold is not given that either. Both refusals should be visible in the case study. The first is a gap, not a virtue, until someone confirms it was intentional.
+
+The product behaviour. A checkbox at the bottom of queue configuration. The rest of the form is the queue's existing goals (service level, patience, shrinkage in the prototype). Those fields are context. They are not the design.
+
+The user consequence. Turning it on means accepting that this queue's forecast can change during the day without a further request.
+
+Validation. None recorded. The speech says the point was to avoid overwhelming people. That is the argument, not a test result.
+
+Portfolio interaction. The queue form, reconstructed, with the switch as the only operable control. The other fields are visible and inert, so the visitor sees what was not added.
+
+### Decision 2. The change has to arrive where the planner already is
+
+The problem. The new forecast is written into three places. The planner is in one of them, or in none of them.
+
+The evidence. Requirement 7. Speech slides 11 to 17. PDF pages 11 to 15.
+
+The design question. How is a run announced without turning monitoring into noise?
+
+The decision. Two announcements (started, finished), each in the notification centre and as a banner on the three surfaces. The banner can narrow the view to affected queues. Healthy checks produce no UI.
+
+The trade-off. A planner who misses both the notification and the banner can still be surprised by new numbers. The design stacks two channels and still depends on someone looking at those pages. There is no documented email or push. The speech's "push" claim is dropped.
+
+The product behaviour. In progress: anomaly detected, reforecast in progress in the affected queues, Preview, Apply filter. Finished: reforecast completed, check the updated data. The banner and the notification say the same thing so the channel is not a second story.
+
+The user consequence. They can keep working in the schedule or in Insights and still know the plan is being replaced, then go and look.
+
+Validation. None recorded. The speech's reason (planners are not always on the forecast; a silent number change would be confusing) is a design argument.
+
+Portfolio interaction. A neutral shell. The visitor moves between Forecast, Team schedule and Insights, then advances the system from "in progress" to "updated" and watches the banner, not the chrome.
+
+### Decision 3. The replacement has to be inspectable, and it has to point at a period
+
+The problem. "Updated" does not say whether the afternoon needs two more people or twenty, or which hour broke.
+
+The evidence. Requirements 7 and 8. Speech slides 18 to 20. PDF pages 16 to 19.
+
+The design question. What does the planner look at between "the forecast changed" and "I change the roster"?
+
+The decision. Comparison with the previous forecast, a log of issues, and a marked period that is the same period on the forecast and on the schedule.
+
+The trade-off. The path stops at the period. It does not recommend the staffing move. That is the right boundary: the material never shows a recommended move, and inventing one would fake an outcome. It is also an unfinished edge: requirement 9's simulation is invisible, so the schedule highlight is a signpost, not proof the roster was recomputed in front of the planner.
+
+The product behaviour. Toggle. Issue row with queue, severity, and a volume sentence. Check forecast. Highlight. The schedule opens on that highlight.
+
+The user consequence. They can judge the size of the change and start from the right hour. They still decide what to do with the people.
+
+Validation. None recorded. Claimed benefits about predicting future anomalies are not kept.
+
+Portfolio interaction. One issue, one period, two surfaces. The visitor toggles the previous forecast, then follows the issue to the chart and then to the schedule. The highlighted hour does not change between them.
+
+---
+
+## 14. Design thesis
+
+### Candidates
+
+**A. The work was to make an unsolicited change in the forecast understandable and actionable.**
+Fits Decisions 2 and 3. It ignores the configuration conflict, which is half the requirements note. Too narrow.
+
+**B. Reality changes, so the forecast should change with it.**
+This is the speech's opening. It collapses monitoring into reforecasting and has nothing to say about trust, place, or setup. Reject.
+
+**C. The system could change the forecast without being asked. The design had to let the customer allow that per queue, make the change visible wherever the planner was working, and make the new forecast comparable and locatable. It did not ask the customer to operate the model.**
+Matches the problem model, the three decisions, and the requirement that the method stay different and internal. It does not claim the switch was in the first release.
+
+### Thesis to use
+
+C, in this wording:
+
+The system could decide, on its own, to replace the day's forecast. The design's job was to let that happen only where a customer had allowed it for a queue, to make the replacement reach the planner in the place they were already working, and to make the new forecast inspectable against the one it replaced, down to the period they would have to staff. The customer was not asked to configure the detection.
+
+The public sentence can be shorter. It must not say "one simple switch was the whole product configuration" without the clause about the requirements. Suggested public form, still not final copy:
+
+The forecast could change without the planner asking. The work was to make that change allowed, visible, and inspectable, without turning the model's rules into settings.
+
+Both are INFERENCE as a thesis. The facts underneath them are classified in §13. The thesis is the portfolio's argument, not a sentence the project documented.
+
+---
+
+## 15. Existing case-study audit
+
+The PDF is 20 image pages, title slide through a thank-you slide. It behaves like a talk track. The speech matches it slide for slide, including durations. That explains the structure: it was written to be spoken in about fifteen minutes, not to be read as a case study.
+
+| Pages | What they do now | Verdict |
 |---|---|---|
-| Framework | Next.js 16.2.9 (App Router, `src/app/[lang]/…`), React 19.2, TypeScript, Tailwind v4 via PostCSS, framer-motion 12, vitest | Read `node_modules/next/dist/docs/` before implementation (repo rule) |
-| Localisation | `pt` / `en` segments; `HOME_PATH`, `STUDIO_PATH`, `PROJECT_PATH`, `CARPOOL_PATH` in `src/lib/i18n.ts`; `next.config.ts` redirects mismatched language/slug pairs | A new `INTRADAY_PATH` (e.g. `/en/work/intraday-reforecasting`, `/pt/trabalho/…`) would follow the same pattern |
-| Case-study precedent | Carpool: `src/app/[lang]/work/carpool/page.tsx` + `trabalho/carpool/page.tsx`; `src/components/carpool/{CarpoolCaseStudy,CarpoolInteractive,CarpoolSnapshot}.tsx`; `src/content/carpool/{types,en,pt,index}.ts`; `docs/carpool-*.md` | **Direct template.** The Carpool page already implements: evidence labels (`research / context / inference / reconstruction / exploration`), a disclosure line, section kicker + statement pattern, reduced-motion handling, `aria-pressed` / `role="tablist"` / `aria-live` patterns, range-input scrubbers with `aria-valuetext`, and a "Research snapshot" evidence map |
-| Home | `src/data/projects.ts` lists published work by `kind: "product" | "graphic"`; `ProjectGrid.tsx` renders rows with an "open" action | Adding the case = one entry with `href` |
-| Shell | `PublicShell` (fixed transparent header, bear logo, theme toggle, plus/cross nav, footer with language switch) | Reuse as-is |
-| Typography | **Nudica only** (`src/lib/fonts.ts`: 400 / 400 italic / 500 / 700). Type scale in `globals.css` (`.type-display`, `.type-heading`, `.type-lede`, `.type-corpo`, `.type-project`, `.type-nota`, `.type-label`, `.type-meta`, `.type-italic`) with explicit comment: "Personality comes from weight, scale, width, italic, spacing, and rhythm — not from a second family." | **The PDF's PP Woodland + Schibsted Grotesk pairing does not exist in the site and contradicts a deliberate site decision.** See the visual-direction note in §21 |
-| Colour | Off-white surface `#faf9f6`, ink `#1a1a1a`, secondary `#63605a`, accent yellow `#ffff50` (explicitly not usable as focus ring), four tile tones; dark mode variants | The PDF's purple / lilac / cream palette is not in the system |
-| Layout | `.site-container` 720 px; `.site-container--wide` 1080 px; gutters `clamp(1.5rem, 5vw, 4rem)` | Reconstructed product UI will need the wide container and mobile stacking |
-| Motion | CSS `rise` / `reveal-line` reveals; `prefers-reduced-motion: reduce` collapses all animation; framer-motion springs in grid and links | Motion budget is already restrained; the case must stay inside it |
-| Accessibility | Skip link; `:focus-visible` outline; 44 px targets; `sr-only`; ARIA patterns in Carpool interactives | Good baseline |
-| Content policy | `copy-audit.test.ts`: no em dashes, European Portuguese, pre-1990 spelling in live copy, **no client names as credentials (BMW, Mercedes, Talkdesk, …)**, no first person in studio copy, no agency clichés | The test only scans `dict` and `project-flow`; Carpool content is not scanned. The next phase should extend it to case content |
-| CSS organisation | Single `globals.css` (2,366 lines) with `carpool-*` prefixed blocks (~35 rules) | A second case will double this; a `case-*` shared layer would be a reasonable refactor suggestion (not for this phase) |
-| Docs | `docs/carpool-*.md` (research analysis, final architecture, blueprint, snapshot evidence map, evidence audit) | This document follows that lineage |
-
-### 16.3 Classification
-
-| Category | Items |
-|---|---|
-| MISSING | Everything specific to Intraday Reforecasting: route, content model, components, reconstructed UI, charts, diagrams |
-| OUTDATED | `docs/superpowers/*` (April 2026 spec for a previous site incarnation with Instrument Serif/Inter, 3D bear, circular gallery) — historical, not current |
-| INCORRECT | None for this case (nothing exists) |
-| REDUNDANT | None |
-| REUSABLE | `PublicShell`, `RevealTitle`, type classes, `Section`/`Statement` pattern, evidence `Chip`/`EvidenceLegend`, `Frame`, reduced-motion hooks, ARIA patterns, i18n path pattern, `projects.ts` entry, redirects pattern |
-| RECONSTRUCTION REQUIRED | Neutral WFM UI: queue configuration form, notification centre, banner component, forecast chart with overlay and highlight, schedule timeline with highlight, issues table; a detection simulation; a scenario selector |
+| 1 | Title and a credit. Abstract shapes. No thesis. | Rewrite as a cover that states the thesis and the anonymity. |
+| 2 | Four columns: continuous updating, intricate configuration, anomaly detection, a seamless 24/7 flow, plus the real date and the employer name. | Remove. "Continuous" and "24/7" are the wrong model. The employer name cannot be public. Role and date move to the cover as plain meta. |
+| 3 | The user story and the requirements note, faithfully. | Keep the content. Reframe as the brief, including the open research question. It is currently a pull-quote with no consequence. |
+| 4 | Five scenarios and the factor cards, in type too small to read as a spread. | Keep three scenarios. Make the volume / handle-time / capacity split interactive. Drop the card grid. |
+| 5 | Section opener and an illustration. | Remove. |
+| 6–8 | Kano, value proposition canvas, empathy map. ChatGPT disclaimers. Empty "say" quadrant. | Remove. |
+| 9 | The flow: 30-minute checks, four intervals, threshold, two-a-day, one-hour gap, factor, nightly eight-week threshold. | Keep the logic that the requirements support. Rebuild as an interactive check-versus-run. Quarantine the unconfirmed parameters. |
+| 10 | The queue form and the switch. "Don't rush." | Keep the decision. Reconstruct the form. Cut the heading. The heading is tone, not information. |
+| 11 | Notification, and the high-fidelity rationale stuffed into the caption. | Keep the notification. Move the rationale to validation. |
+| 12–14 | The same banner on the way into Insights, then explained, then shown on three stacked screens. | Merge into one interaction: same state, three surfaces. Delete the repeated bullets. |
+| 15 | Completed notification and "forecast updated." Bullets repeat the user story ("informed staffing decisions"). | Keep the state change. Delete the bullets. |
+| 16–17 | Previous-forecast toggle. Headline "More data is never a downside." Bullets about predicting anomalies. Placeholder 20 / 20 / 20. Date in 2022. | Keep the toggle. Delete the headline and the bullets. Replace the data. |
+| 18 | Issues log. Strong description pattern. Broken identifier, dates that cross midnight, severity with no rule, caption about predicting patterns. | Keep the log structure. Reconstruct the rows. Delete the caption. |
+| 19 | Period highlighted on the schedule and on the forecast. Bullets about swift action and service level. The two screens do not obviously share one hour. One reading of this page has also produced a different banner verb ("surge") from the "anomaly" wording on earlier pages; a crop of the forecast side reads "Anomaly detected" and a tooltip "Anomaly detected in this period." | Keep the path. Force one period. Do not treat a second banner verb as a documented iteration. Wording stays "anomaly" unless a later look at the file proves otherwise. Delete the bullets. |
+| 20 | Thank you, email, phone. | Remove from the public page. |
 
 ---
 
-## 17. Evidence matrix
+## 16. Narrative diagnosis
 
-| Problem | Evidence | Insight | Design question | Design decision | Product behaviour | Validation | Presentation |
-|---|---|---|---|---|---|---|---|
-| Not all customers want automatic reforecasting; the system's logic is complex | REQ note; REQ 3, 5, 6; PDF p.9 | Control over *whether* matters; *how* can stay internal | How much does the customer configure, and at what level? | **D1+D2**: one per-queue checkbox | "Reforecast — Turn on reforecast" in the queue form | Prototype feedback (unquantified) — **gap** | Reconstructed config screen; the checkbox as the whole configuration |
-| The forecast can change while the planner is elsewhere | REQ 7; SPEECH 13 | Awareness must exist on every surface where the numbers change | How does the planner find out, and avoid confusion? | **D3–D7**: notification + banners on three surfaces with start/end states and filters | Notification "Anomaly detected…"; banner persists; "Apply filter"; "Preview"; "Check insights" | Unquantified — **gap** | Neutral environment where state changes; surface switcher |
-| Completion alone does not prompt action | SPEECH 15 | Language should direct | What does the completion message ask for? | **D8+D9**: "Check updated data to solve possible issues"; "N issues found" | Header count links to issues | — gap | Reconstructed states |
-| The new forecast replaces the old; magnitude is invisible | REQ 7, 8; SPEECH 18 | Because the baseline is kept, comparison is possible | How does the planner judge the size of the change? | **D10**: "Show previous forecast" | Dotted previous series | — gap | Toggle interaction (genuine documented before/after of state) |
-| Multiple events across queues need review and priority | PDF p.18 | Events can be described as magnitude × duration | How does the planner review and prioritise? | **D11+D12**: issues log with severity | List with "Check forecast" | — gap; severity rule undefined | Reconstructed table; issue selection |
-| Knowing *that* is not knowing *where* | PDF p.19; SPEECH 20 | Location on the day is the bridge to the schedule | Where did it happen and how do I get to the schedule? | **D13+D14**: highlighted periods on chart and schedule | Same highlight on both surfaces | — gap | Follow-through interaction |
-| Limited time; developers waiting | PDF p.11; SPEECH 2 | Fidelity buys faster, more actionable feedback | How to validate quickly? | **D15**: hi-fi from the start; close customer review (JOÃO) | — | Self-reported process | Validation section with labels |
+### How a visitor experiences the PDF now
 
-Gaps are real: **no decision has documented validation beyond the prototype-review intent.** The case study must say so.
+They are told the project continuously reforecasts, all day, for a named employer. They are shown a user story they could have read in a ticket. They are shown five situations in miniature, then three canvases that announce themselves as machine-written. They are shown a dense diagram of a mechanism, then a checkbox, then a run of product screenshots with branded chrome. The screenshots repeat the same banner. The words around them say the design is transparent, fast, and good for patterns. The deck ends on a thank-you slide. At no point is the visitor made to feel the difference between a check and a reforecast, or to notice that the checkbox contradicts the requirements, or to follow one issue from a sentence to an hour on the schedule. The research does not change the design in front of them. The outcome is the existence of the screens.
 
----
+### What is wrong, specifically
 
-## 18. Evidence-to-experience matrix
+- Slide-deck pacing. Section openers and a closing thank-you are talk structure.
+- Artefacts before decisions. Canvases occupy the middle, where the argument should be.
+- UI before the rule that makes the UI necessary. The banner appears before the visitor has internalised that the numbers can move while you are not on that page.
+- Research disconnected from decisions. There is no finding on pages 6 to 8.
+- The system is explained once, densely, and then abandoned. The rest of the deck never uses the caps, the low-volume rule, or the baseline again.
+- Operational context is a thumbnail grid.
+- The causal chain is "and then we designed." The speech's own best reasons (chaos if you reforecast every hour; confusion if numbers change with no banner) are spoken, not used as the structure.
+- Validation is a sentence about high fidelity and a sentence about interviews.
+- The 10% target is missing, which is lucky only because nobody turned it into a result. The deck also has no honest outcome.
+- Technical difficulty is a diagram caption, not a constraint on the design.
+- The narrative tension (the system may overwrite the plan) is never stated.
 
-| Section | Visitor question | Evidence | Content | Interaction | Reconstructed UI | Decision | Validation | Learning |
-|---|---|---|---|---|---|---|---|---|
-| 00 Cover | What is this and why should I care? | — | Title, thesis, meta, disclosure, legend | None | None | — | — | The frame of the story |
-| 01 Context | What does a resource planner do; what is a forecast for? | REQ user story; screens | Forecast → staffing → schedule in three sentences; the product (anonymised) | None | Small neutral diagram | — | — | Vocabulary |
-| 02 The day diverges | What goes wrong during a day? | PDF p.4; SPEECH 4–5 | Scenario text in planner voice | **Scenario selector** (volume / handle time / capacity) | Illustrative day chart | — | — | Different causes, same question; which the system sees |
-| 03 The brief | What was asked, and what was left open? | REQ | User story; the note; the constraints (same day, threshold, low volume, no configuration, three surfaces, 10% target) | Progressive disclosure of constraints | None | — | — | The seed of the tensions |
-| 04 What had to be understood | How does the system decide? | REQ 2–4; PDF p.9; SPEECH 6 | Monitoring vs execution; caps; what stays internal | **Detection simulation** (scrub the day; sub-threshold vs trigger; caps) | Schematic, not product UI | — | — | Complex system ≠ complex UX |
-| 05 Tensions → questions | What made this hard to design? | §08 | Three tensions → three questions | None (typographic) | None | — | — | The structure of what follows |
-| 06 Decision 1 | How much does a customer configure? | REQ note, 5–6; PDF p.10 | One checkbox | Toggle on → caption | **Queue configuration** | D1, D2 | Labelled gap | Deciding what not to show |
-| 07 Decision 2 | How does the planner find out? | REQ 7; PDF p.11–15 | States and surfaces | **State change in context** (advance state; switch surface; apply filter) | **Notification centre; banner; Forecast / Team schedule / Insights shells** | D3–D8 | Labelled gap | Awareness as a system of states |
-| 08 Decision 3 | How does the planner understand and act? | REQ 8; PDF p.16–19 | Comparison, issues, location | **Previous vs new toggle**; **issue → location** | **Forecast chart with overlay and highlight; Issues table; Schedule timeline with highlight** | D9–D14 | Labelled gap; severity labelled exploration | Inspectability closes the loop |
-| 09 Validation | How was this checked? | PDF p.11; SPEECH 2, 21; JOÃO | Hi-fi prototypes; time pressure; three companies (context label); what is not claimed | None | None | D15 | This *is* the section | Honest validation |
-| 10 Outcome & reflection | What came of it; what remains unknown? | §26 | Design outcome; target vs result; unknowns | None | None | — | — | The designer's contribution, bounded |
+### How they should experience it instead
+
+They should meet a planner's morning plan, then a day that leaves it. They should see that only some of those departures are a signal the system watches. They should watch a check stay quiet and a later check become a reforecast. They should then see the one thing a customer is asked to set, the way the run finds the planner, and the way the planner gets from "it changed" to a period on the schedule. They should leave knowing what was tested (a prototype, with customers, quickly) and what was not (accuracy, the staffing result, the manual alternative).
 
 ---
 
-## 19. Narrative hypotheses (three theses)
+## 17. Proposed narrative architecture
 
-### Thesis A — "The challenge wasn't recalculating the forecast. It was making meaningful change understandable and actionable."
+The twelve-part outline in the brief is close. Two changes, both from the evidence:
 
-- Explains: Decisions 2 and 3 completely; the designer/engineering boundary (REQ 3.1, 4, 9.1).
-- Evidence: REQ assigns recalculation to the epic; PDF p.11–19 are entirely about communication and inspection.
-- Leaves out: Decision 1 (configuration) and the automation-vs-control note.
-- Assumes: that "understandable and actionable" is the designer's territory — supported.
+- There is no research chapter. A chapter would invent a study. What is real belongs in the brief (the research question), in the scenarios (the sentences), and in validation (the prototype and the designer context).
+- "The day" and "when reality diverges" stay as two short sections. The first teaches the vocabulary (forecast, queue, planner, same day). The second teaches the split between a signal the system can see and a capacity fact the planner already knows. Merging them makes the detector look like it understands absenteeism.
 
-### Thesis B — "Reality changes. The forecast needs to change with it."
+### Sections
 
-- Explains: the product proposition and the scenarios.
-- Evidence: PDF p.4; REQ user story.
-- Leaves out: everything the designer did. This is the *feature's* thesis, not the *design's*.
-- Assumes nothing — which is the problem; it is a slogan.
+| # | Section | Job |
+|---|---|---|
+| 01 | Cover | Thesis, role, date, domain, anonymity, evidence legend. |
+| 02 | The plan | What a forecast is for, in this product: a same-day staffing input. Three surfaces, named in neutral language. |
+| 03 | The day diverges | Three scenarios. Volume is visible to the detector. Handle time is a planner question with an open trigger. Capacity is a planner fact, not a documented detection. |
+| 04 | The brief | User story, mitigation, the open choice between automation and on-demand, the constraints that are actually requirements, the 10% as a target. |
+| 05 | What the system had to understand | Check versus reforecast. What is withheld from the UI. Unconfirmed parameters stay off the main path. |
+| 06 | Three tensions | The three questions Decision 1–3 will answer. Short. No new evidence. |
+| 07 | Decision 1 | The switch, and the requirement it does not satisfy. |
+| 08 | Decision 2 | Notification and banner as a state sequence on three surfaces. |
+| 09 | Decision 3 | Previous forecast, issues, one period, two places. |
+| 10 | Validation | What was done, what is context, what is unknown. |
+| 11 | Outcome | Design outcome and the list of results that do not exist. |
+| 12 | Reflection | What design refused to take on (the algorithm, the staffing move), and the open edge (the simulation, the manual run). |
 
-### Thesis C — "The system could detect change automatically, but the experience needed to make that change understandable."
-
-- Explains: the detection/understanding split (tension D).
-- Evidence: same as A.
-- Leaves out: action, and configuration.
-- Assumes: the same as A.
-
-### Recommended thesis (A, extended to include Decision 1)
-
-> The system could decide on its own to change the forecast. The design's job was to make that change reach the planner where they were working, make it inspectable against what it replaced, and make the next step obvious — while asking the customer to configure exactly one thing.
-
-It covers all three decisions, keeps the engineering boundary honest, and contains no claim that needs evidence the sources lack.
+No section exists to "show the UI." UI appears only inside 07, 08 and 09.
 
 ---
 
-## 20. Recommended narrative
+## 18. Interactive experience strategy
 
-Context → the day diverges → the brief and its open question → what had to be understood (system) → three tensions, three questions → one switch → the change reaches the planner → the change can be inspected and acted on → how it was checked → what came of it, and what is not known.
+Interaction is allowed only where it teaches a documented behaviour or a documented limit. Five interactions. Each has a question, a control, a thing it must not imply, and a static fallback so motion is not the explanation.
 
-Each section ends by making the next one necessary:
+### 1. Operational scenario
 
-- Context ends with "the forecast is a plan for a day that has not happened yet" → the day diverges.
-- Scenarios end with "the planner's question is always about the rest of the day" → the brief asks for a rest-of-day reforecast.
-- The brief ends with the note ("not all customers want this every day") and the constraint "no customer configuration" → how does the system decide, then?
-- The system section ends with "none of this is visible to the planner" → what should be?
-- Tensions end with three questions → three decisions.
-- Decision 1 ends with "once switched on, the system acts alone" → how does the planner find out?
-- Decision 2 ends with "Check updated data to solve possible issues" → what does the planner see?
-- Decision 3 ends with the schedule highlight → was this right? → validation.
-- Validation ends with what could and could not be verified → outcome bounded by evidence.
+Question. Which real-world changes is this system even in a position to see?
+
+Control. Three choices: volume, handle time, capacity. One short planner sentence each, from §6. A single illustrative day, with the relevant series emphasised.
+
+Must show. Volume: actuals leave the forecast, and the case study says this is the kind of gap the issues log describes. Handle time: the planner's question, plus an explicit "not established as a trigger." Capacity: the 9:00 absence story, plus an explicit "the planner already knows; the documented detector is not shown reading absenteeism."
+
+Must not imply. That the product detected coaching, absence, or handle time. That 30% is a product threshold.
+
+Answers. What we learned from the scenario list, and which design question it does not answer (it does not answer the switch or the banner).
+
+Class. EXPLORATION, using FICTIONAL numbers and FACT sentences.
+
+### 2. Detection and reforecast
+
+Question. Why is a check not a new forecast?
+
+Control. The visitor steps forward. No autoplay.
+
+States to show, in order. A check inside the band: no reforecast, no banner. A deviation that has not lasted long enough: still no reforecast. A deviation that meets the presented conditions: anomaly, then reforecast in progress, then forecast updated. The visitor must be able to stop on the quiet checks and see that the product UI would still be silent.
+
+Must show. The separation in §8. Low-volume exclusion as a sentence, not a fake cutoff. If the two-a-day cap and the one-hour gap are shown at all, they are behind a clearly labelled "described in the presentation, not in the requirements" control that defaults to off.
+
+Must not imply. A published threshold, a multiplication factor, or that the designer designed the model.
+
+Answers. How the product behaves, and why the configuration in the next section is allowed to be small.
+
+Class. EXPLORATION.
+
+### 3. System state, in a neutral shell
+
+Question. What does a planner see if they are not on the forecast when the run happens?
+
+Control. Surface: Forecast, Team schedule, Insights. System: watching (no banner), in progress, updated. One action: apply the affected-queue filter. Preview and Check insights, if drawn, do nothing except a visible note that the behaviour was not documented. Do not design a fictional preview panel and present it as the product.
+
+Must show. The banner and the notification carry the same sentence. The shell is not branded. Advancing state does not depend on which surface is open: the state is global, the explanation is on the surface you are looking at.
+
+Must not imply. Push, email, a progress percentage, or that every 30-minute check produces a banner.
+
+Answers. The decision, and the product behaviour.
+
+Class. RECONSTRUCTION plus EXPLORATION of the sequence.
+
+### 4. Previous forecast against the new one
+
+Question. Why is "updated" not enough?
+
+Control. Show or hide the previous series. Previous is a dotted line and is also named in text. Current is solid. The anomalous period is marked with a band that is not colour alone.
+
+Must show. The new line is the forecast the planner would staff from. The previous line is what it replaced. A plain-language delta tied to the illustrative data ("higher through the late morning"), never a 10% callout.
+
+Must not imply. That the gap is the accuracy result, or that the visitor is looking at a historical screenshot.
+
+Answers. Why comparison exists.
+
+Class. RECONSTRUCTION. Illustrative data.
+
+### 5. Issue to location
+
+Question. How does a detected event become a place to act?
+
+Control. Start from one issue for today. Open the forecast on its period. Open the schedule on the same period. Other issues may sit in the log so the log looks like a log; their "go to forecast" actions are unavailable, with a note that only one day is illustrated. This avoids a second, contradictory dataset.
+
+Must show. The description pattern (volume, percent, consecutive periods). The period identity is stable across chart and schedule.
+
+Must not imply. A severity formula, a recommended headcount move, or that the scheduling simulation has been shown.
+
+Answers. The decision, and where the design stops.
+
+Class. RECONSTRUCTION.
+
+### Interactions rejected
+
+- A scrubber of "pattern recognition over Mondays." The benefit is unsupported.
+- A settings playground for the threshold. It would teach the opposite of Decision 1.
+- A manual "reforecast now" button. Not in the screens.
+- Autoplaying the day on load. It hides the quiet checks, which are the point of interaction 2.
+- Anything whose only job is to prove the page is interactive.
 
 ---
 
-## 21. Recommended case-study architecture
+## 19. Product state model
 
-For every section: name · purpose · question · content · evidence · interaction · visual form · why it exists.
+Validated against §7 and §8. "Deviation" and "anomaly" are system judgements. They are not screens. "Inspection" and "staffing action" are planner activities, not system modes.
 
-| # | Section | Purpose | Question answered | Content | Evidence | Interaction | Visual form | Why it exists |
-|---|---|---|---|---|---|---|---|---|
-| 00 | Cover | Frame | What is this? | Title; thesis (one sentence); meta "Product design · Workforce management · 2023"; disclosure (anonymised, reconstructed); evidence legend | — | None | Typographic; generous space | Sets the honesty contract |
-| 01 | A plan for a day that has not happened | Orient | What is an intraday forecast for? | Forecast → required staff → schedule; the WFM product in one paragraph; who the planner is | REQ; screens | None | Small three-node diagram | Visitors do not know WFM |
-| 02 | The day diverges | Evidence | What actually goes wrong? | Scenario text in planner voice; demand vs capacity | PDF p.4; SPEECH 4–5 | Scenario selector | Illustrative day chart + quoted scenario | The human reason the feature exists |
-| 03 | The brief, and the question it left open | Setup | What was asked? | User story; the mitigation note; constraints list | REQ | Progressive disclosure (constraints reveal one by one) | Typographic list with evidence chips | Level 1 grounding; seeds Decision 1 |
-| 04 | What the system does before anyone sees anything | System | How does it decide? | Monitoring vs execution; threshold; several periods; minimum volume; caps; rest-of-day method; what stays internal | REQ 2–4; PDF p.9; SPEECH 6 | Detection simulation | Schematic timeline; annotation layer | The designer had to understand this to decide what to hide |
-| 05 | Three tensions, three questions | Pivot | What made this hard? | A+B, C, D+E+F → three questions | §08 | None | Large typographic statements | Structure for the decisions |
-| 06 | One switch | Decision 1 | How much does a customer configure? | The queue form; the last section; the helper text; why nothing else | REQ note, 5–6; PDF p.10 | Toggle → caption "That is the whole configuration." | Reconstructed configuration screen (neutral) | Deciding what not to show |
-| 07 | The change reaches the planner | Decision 2 | How do they find out? | Notification; banners; three surfaces; states; Apply filter | REQ 7; PDF p.11–15 | State change in a neutral environment; surface switcher; filter | Reconstructed shells with banner and notification centre | Awareness as a system |
-| 08 | The change can be inspected, and it points somewhere | Decision 3 | How do they understand and act? | "N issues found"; previous vs new; issues log; severity (labelled exploration); location on chart and schedule | REQ 8; PDF p.16–19 | Previous/new toggle; issue → location follow-through | Reconstructed Forecast, Issues, Schedule | Closes the loop |
-| 09 | How it was checked | Validation | Was this right? | Hi-fi prototypes; time pressure; reviewed closely with three customer companies (context label); what is *not* claimed | PDF p.11; SPEECH 2, 21; JOÃO | None | Plain text with labels | Honesty about validation |
-| 10 | What came of it | Outcome | What did the designer deliver; what is unknown? | Design outcome statement; 10% as a target; unknowns; reflection | §26–27 | None | Typographic close | Bounded claim of contribution |
-
-### Editorial rhythm (§33 of the brief)
-
-READ (00–01) → INTERACT (02) → READ (03) → INTERACT (04) → READ/REFLECT (05) → LOOK+small interaction (06) → INTERACT (07) → INTERACT (08) → READ (09) → REFLECT (10). Five interactive moments in ten sections; never two heavy interactions back to back without a reading beat between 07 and 08 (the section 08 opener should be static text before the toggle).
-
-### Visitor journey (§32 of the brief)
-
-| Stage | Knows | Does not know | Next question | Answered by |
+| State | System behaviour | What the planner sees | Actions that exist in the material | What causes the next state |
 |---|---|---|---|---|
-| After 00 | The claim | The domain | What is a forecast for? | 01 |
-| After 01 | Forecast → staff → schedule | What breaks | What goes wrong? | 02 |
-| After 02 | Days diverge; planners ask about the rest of the day | What was built | What was asked? | 03 |
-| After 03 | The brief and its open question | How the system could decide | How does it decide? | 04 |
-| After 04 | The logic, and that it is invisible | What the designer did | What was hard? | 05 |
-| After 05 | Three questions | The answers | — | 06–08 |
-| After 08 | The behaviour | Whether it worked | Was it checked? | 09 |
-| After 09 | The validation, honestly bounded | The outcome | What came of it? | 10 |
+| Off | Queue or customer not in the behaviour. | No reforecast UI, or the switch off. | The switch, in the presented design. The requirements' flag is not a planner control. | Switch on, or flag on. Relationship between the two is OPEN. |
+| Watching | Periodic comparison. No reforecast. | Nothing about reforecasting. | Ordinary product actions. | A check that fails the rules stays here. |
+| Deviation, not yet actionable | Gap exists but periods, volume, low-volume rule, or (if they existed) cap and interval block a run. | Nothing. | None specific. | Rules met, or the gap subsides. |
+| Anomaly, run started | Reforecast method runs. Baseline still the previous forecast until the run completes. Exact handoff timing is OPEN. | Notification and banner, in progress, affected queues. | Preview, Apply filter, Check insights. Preview's body is OPEN. | Run completes. Failure behaviour is not documented. Do not invent an error state. |
+| Forecast updated | New forecast is the forecast. Baseline retained. Reporting receives the values. Simulation is triggered (not shown). | Completed notification. Banner of the updated state. Issue count. | Open issues. Show previous forecast. | Planner looks, or ignores it. The system does not require a click to "accept" the new forecast. Do not add an accept step. |
+| Issues available | The event is in the log. | Rows with time, queue, severity, description. | Check forecast. | Planner follows a row. |
+| Inspection | Not a system mode. | Previous series, marked period. | Toggle. Go to the schedule period. | Planner moves to staffing. |
+| Staffing action | Not designed in the material. The simulation may have changed the schedule. That result is not shown. | The marked period on the schedule. | Whatever the schedule already allowed. Out of scope. | — |
 
-### Visual direction (§34–35 of the brief)
-
-- **Survives:** editorial scale; large typographic statements as pivots; generous negative space; diagrams as first-class content; the state language of the product; the reforecasting flow *idea*.
-- **Does not survive:** PP Woodland / Schibsted Grotesk (the site is Nudica-only by explicit decision; the case must use the site's type scale); the purple/lilac/cream palette and blob shapes (not in the system; also visually adjacent to the former employer's brand colour); the illustrations (licence unknown; decorative); tiny canvases; stacked screenshots.
-- **Hierarchy problems to fix:** research artefacts and the flow diagram are illegible at presentation scale; captions are secondary in weight but primary in meaning ("3 issues found" is a decision, not a caption); UI labels in screenshots are unreadable on mobile.
-- **Strong compositions to retain in spirit:** p.10's "one highlighted section at the bottom of a long form"; p.17's toggle-off / toggle-on pairing; p.18's header count → log link.
-- **Open decision for João:** whether the case may carry a restrained per-case accent within the site system (the site currently has one accent, yellow). Not for this phase.
-
-### Accessibility requirements (§36)
-
-- Semantic structure: `article` → `section[aria-labelledby]` → `h2`; one `h1`.
-- Every interactive explanation has a textual equivalent that states the same conclusion (e.g. a `<p aria-live="polite">` summarising the current simulation state; a static list version of the scenario table).
-- Charts: SVG with `role="img"` and `aria-label` describing the shape, plus a data-free textual summary; no information carried by colour alone (dotted vs solid for previous vs new; hatch or label for highlighted periods).
-- Controls: real `button` / `input[type=range]` with `aria-pressed`, `aria-valuetext`, visible focus using `--focus-ring`; 44 px targets; keyboard reachable in reading order.
-- Status messages: banner and notification changes announced via `role="status"` once, not on every animation frame.
-- Reduced motion: state changes render instantly; no auto-advancing simulation.
-- Contrast: reconstructed UI must meet AA on the site's surfaces in both themes; the site's yellow accent cannot be used for text or focus.
-
-### Responsive requirements (§37)
-
-| Interaction | Desktop | Tablet | Mobile |
-|---|---|---|---|
-| Scenario selector | Side-by-side controls + chart | Controls above chart | Segmented control; chart simplified to one series; scenario text primary |
-| Detection simulation | Scrubber + annotated timeline | Same, stacked | Step buttons instead of scrubber; timeline as vertical list of checks |
-| State change in context | Product shell at ~1080 px | Shell scaled; banner emphasised | Show only the banner + notification, not the full shell; surface switcher as tabs |
-| Previous vs new | Full chart | Full chart | Chart with two series only (CVO), staff bars dropped; toggle large |
-| Issue → location | Table + chart + schedule | Table above chart | Issue cards; chart highlight; schedule shown as a period list with the highlighted range |
+One line for the case study, as inference: the designer did not design the algorithm. The designer designed which of these states are visible, and what the planner can do in them.
 
 ---
 
-## 22. Interactive experience architecture
+## 20. Neutral UI reconstruction strategy
 
-For each proposed interaction: purpose · visitor action · system response · learning · evidence · decision · why interactive · what is lost if static · verdict.
+The original screens cannot be published. The reconstruction keeps the relationships and drops the identity.
 
-| # | Interaction | Purpose | Visitor action | System response | Learns | Evidence | Decision | Why interactive | Lost if static | Verdict |
-|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | Operational scenarios | Show causes converging on one question, and which the system observes | Select volume / handle time / capacity | Illustrative day chart shifts; scenario text in planner voice; note whether detection sees it | Different causes, same "rest of the day" question | PDF p.4; SPEECH 4–5 | — (context) | Cause → effect is grasped by changing the cause | The demand/capacity distinction becomes a footnote | **Essential** |
-| 2 | Forecast vs actual | Foundation for 3–4 | — | — | — | REQ 3 | — | — | — | **Fold into 4** |
-| 3 | Threshold | Show non-triggering vs triggering deviation | — | — | — | REQ 3; PDF p.9 | — | — | — | **Fold into 4** |
-| 4 | Detection → reforecast simulation | Make monitoring vs execution, threshold, several periods and caps legible | Scrub or step through a fictional day of 30-minute checks | Each check shows deviation vs threshold; a brief spike does not trigger; a sustained one does; rest-of-day series scales; cap indicator | The system is designed not to over-react; complexity stays internal | REQ 2–4; PDF p.9; SPEECH 6 | Design material for D1/D2 | The *sequence* is the insight | The p.9 diagram's density problem returns | **Essential** (values illustrative; parameters labelled by confidence) |
-| 5 | Notification in a neutral environment | Show system-initiated change reaching the planner | Press "advance" (never auto) while viewing Team schedule / Insights / Forecast; switch surface | Notification badge + banner appear; wording progresses; count appears on Forecast | Awareness across surfaces as states | PDF p.11–15; REQ 7 | D3–D8 | Being *in* the environment when it changes is the point | Stacked screenshots (current p.14) | **Essential** |
-| 6 | Affected queues | Show the filter | Press "Apply filter" | View narrows to affected queue(s) | Multi-queue relevance | PDF p.12–14 | D6 | Small | Small | **Fold into 5** |
-| 7 | Previous vs new forecast | Show magnitude | Toggle | Dotted previous series overlays | Comparison enables judgement | PDF p.16–17; REQ 8 | D10 | It *is* a toggle in the product | The p.17 pairing works statically too, but the toggle is cheap and faithful | **Essential** |
-| 8 | Forecasting issues → location | Show the path from event to place | Select an issue; press "Check forecast" | Chart highlights the period; schedule shows the same highlight | Inspectability closes the loop | PDF p.18–19 | D9, D11–D14 | The follow-through is a path, not a picture | Three unrelated screenshots (current p.18–19) | **Essential** |
-| 9 | System logic progressive reveal | — | — | — | — | — | — | — | — | **Fold into 4** (annotation layer) |
-| 10 | Validation before/after | Show a real iteration | — | — | — | **No genuine iteration evidence exists** | — | — | — | **Do not build.** See §24 |
+Keep:
 
-Five essential interactions. Each has a static fallback defined in §21.
+- A queue configuration form whose only new, working control is the reforecast switch, with the documented helper sentence.
+- A notification list with the two documented sentences.
+- A banner with the same sentences and the documented actions (Apply filter, Preview, Check insights).
+- Three surfaces named for their jobs: Forecast, Team schedule, Insights. Plus Configuration, because Decision 1 lives there.
+- A forecast chart, a previous-forecast toggle, a table of the day's intervals only if the chart needs a textual equivalent.
+- An issues table with the documented columns and the documented description pattern.
+- A schedule with a marked period and the same mark on the chart.
 
----
+Remove:
 
-## 23. Neutral product UI requirements
+- Employer name, product name, logos, wordmark, purple product chrome, proprietary navigation, favicons, account identifiers, internal issue identifiers, real or prototype customer names, employee names, the designer's phone number.
+- Prototype dates (2022, January, April, midnight crossings) and placeholder triples (20 contacts, 20 seconds, 20 hours).
+- Any control that was not in the material. Do not add a manual run, a threshold field, email, or push.
 
-Minimum set: **six** reconstructed surfaces/components. Not needed: "Your schedule", "Scenarios", the Configurations → Event types page behind the notification in PDF p.11.
+Language on the frame, every time a product UI appears:
 
-| Surface / component | Purpose | States | Information (preserve) | Interaction | Source | Abstract | Preserve |
-|---|---|---|---|---|---|---|---|
-| Queue configuration | Decision 1 | Toggle off / on | Existing sections (service level goal, patience, shrinkage, queue options) as *context*; final section "Reforecast" with one checkbox and helper text | Toggle | PDF p.10 | Chrome, logo, product names, field values, the "collect live metrics from [vendor]" option | Position at the end of a long form; single control; helper text meaning ("if enabled, the system will reforecast this queue") |
-| Notification centre | Decision 2 | Anomaly detected (in progress) / Reforecast completed | Title; body; relative time; "Preview" affordance; unread dot | Open/close; Preview (behaviour unknown — do not invent beyond "opens the affected view") | PDF p.11, p.15 | Panel styling; the page behind it | Two-message language |
-| Banner | Decision 2 | In progress / Forecast updated / (queue-specific variant labelled as wording variant) | Status word; state phrase; Apply filter; Preview; Check insights (Forecast and Schedule only, per p.14) | Apply filter; Check insights | PDF p.12–15, p.19 | Colours, icon style | Placement at top of content; persistence; wording progression |
-| Forecast | Decision 2 & 3 | Normal / banner in progress / updated with "N issues found" / previous overlay on / anomaly period highlighted | Header with "Updated at … , N issues found"; day/week; chart of contact volume, handle time, staff; legend; "Show previous forecast" toggle | Toggle; header count link | PDF p.14, 16, 17, 19 | Real values (use one coherent fictional day); navigation; filters | Chart composition; overlay as dotted series; highlight band |
-| Team schedule | Decision 2 & 3 | Banner / anomaly periods highlighted with tooltip | Time header; per-period staffing indicators; agent rows with shifts and breaks; highlighted period columns; tooltip text | Hover/focus tooltip | PDF p.14, p.19 | Agent names, adherence numbers, timezone selector | Highlight vocabulary identical to the chart |
-| Forecasting issues | Decision 3 | List | Count; columns: trigger time, end time, queue, severity, description ("N% higher than forecasted for N consecutive periods"), "Check forecast" | Select; Check forecast | PDF p.18 | ID; real dates; queue names | Description grammar; severity as a chip (labelled exploration) |
-| Insights (optional) | Decision 2 | Banner | Banner over a generic chart | Surface switch | PDF p.12, p.14 | Everything except the banner | Presence of the banner on a third surface |
+"Reconstruction. The interaction follows the prototype. The interface is not a screenshot, and the data is illustrative."
 
-Rule for all: every reconstructed screen carries the "Reconstruction" evidence label on first appearance. Use one fictional day (consistent date, times, queue names), one fictional account, and fictional agent names.
+The visual of the shell is neutral: light surface, dark text, a quiet action colour that is not the case study's purple and not the portfolio's yellow. Purple belongs to the editorial pages. If purple enters the product frame, the reconstruction starts to look like the original brand. That is the failure mode.
+
+Do not caption it "historical UI" or "the original screen."
 
 ---
 
-## 24. Before/after opportunities
+## 21. Fictional-data strategy
 
-- **Genuine design iterations:** none are documented in REQ, SPEECH, PDF or REPO. The Figma file could not be inspected. Two wording variants exist ("Anomaly detected" vs "Surge detected… on support queue", PDF p.12–14 vs p.19), which *may* be an iteration but cannot be presented as one without confirmation.
-- **Genuine documented before/after of *state*:** "Show previous forecast" off → on (PDF p.16–17). This is a before/after inside the product, not an iteration of the design. It is safe and should be the case's before/after moment, labelled as product behaviour.
-- **Recommendation:** do not fabricate iterations. If João can supply earlier Figma frames, they can be added as DESIGN EXPLORATION in a later phase. Otherwise the case study demonstrates the principle through the state comparison and the detection simulation.
+One illustrative operation, used everywhere, so the five interactions cannot contradict each other.
+
+Rules:
+
+- Invent an account name that cannot be a real customer. Invent queue names that are functions (support, billing), not brands.
+- One time zone, stated. One calendar day inside the project's season (2023), not the prototype's 2022 dates.
+- The anomaly is a contact-volume gap on one queue, lasting at least the example window of four 15-minute periods, detected at the end of that window. The same clock times appear in the simulation, the chart, the issue, and the schedule.
+- Percentages in the issue text match the series. If the copy says the volume was about 30% above forecast for four periods, the table shows that, and it is labelled illustrative. It is not the 10% accuracy target.
+- A second and third issue may exist so the log is not a single row. They are other days or other queues, not playable, so the case study does not need a second coherent day.
+- Severity labels may be attached to rows because the prototype had the labels. The case study does not define how they were calculated.
+- Agent names, if a schedule needs them, are fictional and few. Do not reuse names read out of the prototype screenshots.
+- Do not reuse the prototype's issue identifier. It is an internal-looking string and, in the PDF, it is not even cleanly readable.
+- Capacity and handle-time views may change the illustrated series. They must not change the clock of the volume story. And they must not show a banner unless the case study has just said, in the same view, that this variant is not a documented trigger.
+- Every frame that shows numbers carries the illustrative label in the frame, not only in a footnote.
+
+Class on all of it: FICTIONAL / ILLUSTRATIVE inside a RECONSTRUCTION.
 
 ---
 
-## 25. What should be removed
+## 22. Visual direction
 
-| Category | Items |
+The case study needs a palette that can carry state, data and editorial hierarchy. It does not need to look like a generic software marketing page, and it must not look like the employer's product.
+
+Use, as the case study's own colours:
+
+- A purple for the few full-bleed editorial moments: cover, the system-logic section, the comparison section. Purple is the project's original accent, kept as a portfolio colour, not as a logo colour.
+- A lilac for the short tension section and for secondary editorial bands.
+- A cream for validation and outcome, so the ending is quieter than the system section.
+- White and near-black for text and for the reconstructed product.
+
+Do not use:
+
+- The portfolio yellow as the case accent. It may remain only where the surrounding site already uses it (for example a focus ring the site already defines). It should not become the colour of anomalies or of the thesis.
+- Purple inside the reconstructed product.
+- Gradients, glass, stock photography, decorative dashboard cards, or a chart that does not encode a real series from §21.
+- The PDF's blob illustrations. They do not explain the system.
+
+Colour inside the data, as a system rather than a theme:
+
+- Current forecast and previous forecast differ by line style first (solid, dotted), not by colour first.
+- The anomalous period is a band plus a pattern or a border, plus a text label.
+- In-progress and completed differ by the words in the banner, not by a red/green semaphore. The material does not define a severity colour code. Do not invent a traffic-light system and call it the product's.
+
+The reconstructed product stays visually quieter than the editorial page, so the visitor can tell "this is the argument" from "this is the tool."
+
+---
+
+## 23. Typography direction
+
+The portfolio has one family, Nudica, in regular, italic, medium and bold. The case study uses that family. It does not add the PDF's display face or a second grotesque.
+
+Hierarchy is by role, not by a new font:
+
+| Role | Treatment |
 |---|---|
-| REPETITIVE | PDF p.12, p.14, p.16 (three "notification → page" screenshots making one point); p.13's four bullets restating p.12 |
-| GENERIC | p.2's four columns; p.15's and p.19's bullets ("enabling resource planners to make informed staffing decisions and adjust workforce management strategies accordingly", "ensuring efficient workforce management and operational planning") |
-| UNSUPPORTED | "Continuously / consistently updates"; "pattern recognition… predict future anomalies… take preemptive action"; "designed both automated and manual workflows"; "push notifications" |
-| LOW-VALUE | Divider p.5; thank-you p.20; cover blobs |
-| PROCESS THEATRE | Kano, VPC, Empathy Map (p.6–8) — AI-generated, disclaimed, no user data |
-| TOO TECHNICAL | Nothing in the current PDF is too technical; the risk runs the other way (p.9 is too compressed) |
-| TOO DECORATIVE | Illustrations p.2, 3, 5; purple hero and closing typography |
-| BETTER REPRESENTED INTERACTIVELY | p.4 scenarios; p.9 flow; p.12–14 banners; p.17 toggle; p.18–19 issue → location |
-| BETTER AS A SINGLE SENTENCE | p.13 banner rationale → "Wherever the numbers change, the explanation is there"; p.15 completion → "Completion asks for action"; p.17 headline → none (remove) |
-| BETTER AS EVIDENCE | p.3's note (currently decoration; it is the origin of Decision 1); "3 issues found" (currently a caption; it is a decision) |
+| Case narrative | Large sizes, italic for the thesis and for planner sentences. This is the voice of the case. |
+| System explanation | Medium weight, shorter measure, diagrams and stepped states. Not the same scale as the thesis. |
+| Product UI | Smaller, regular, the labels the prototype actually used ("Turn on reforecast", "Show previous forecast", "Check forecast"). UI type must look like UI: it sits inside the frame, not as a pull-quote. |
+| Evidence | A small label, same family, tracked slightly open, never a second colour language per category beyond a quiet border or prefix. |
+| Annotation | Italic or the small size, placed on the figure, used to say "illustrative" or "not a documented trigger." |
+
+If everything is inside rounded panels at the same size, the case study becomes the product UI. The narrative sections should often be type alone.
+
+No final display copy is written here. The thesis in §14 is the argument, not the locked headline.
 
 ---
 
-## 26. What should be added (already supported)
+## 24. Editorial rhythm
 
-| Addition | Support |
-|---|---|
-| Explicit distinction between monitoring (every 30 min) and reforecasting (conditional, capped) | REQ 2–3; PDF p.9; SPEECH 3, 6 |
-| The low-volume exclusion and minimum-volume rule as design-relevant constraints ("the feature stays silent where it cannot judge") | REQ 3.2, 3.4 |
-| The requirement that the customer has no configuration, and the feature flag → the toggle as the designer's answer to REQ 6.1 | REQ 5–6 |
-| REQ 7 as the *reason* the banners live on exactly three surfaces | REQ 7 |
-| REQ 8 as the *reason* a previous-forecast comparison is possible | REQ 8 |
-| The scheduling simulation as a documented downstream effect (one sentence; behaviour unknown) | REQ 9 |
-| A state model of the design: idle → monitoring → anomaly → reforecasting → updated → issues | PDF p.9–19 |
-| Design tensions and the three questions | §08 |
-| A validation statement with labels (hi-fi; time; three companies as context) | PDF p.11; SPEECH 2, 21; JOÃO |
-| The 10% target stated *as a target* | REQ 4.2 |
-| An explicit design outcome and an explicit unknowns list | §27 |
-| Evidence labels and a disclosure, as the Carpool page already does | REPO |
+Aim for a short page, on the order of the twelve sections, with weight concentrated on 05, 08 and 09. The PDF's failure mode was the same weight on a canvas, a banner and a thank-you slide.
 
----
-
-## 27. What remains unknown
-
-- Who the resource planners were, how many, how they were engaged, and when.
-- Which three companies took part, in what format, and what they said.
-- Whether any feedback changed the design, and what changed.
-- Whether the feature shipped, in what form, and when; whether the toggle shipped or the feature flag alone.
-- Whether the 10% accuracy target was measured or met.
-- The final threshold method (percentile vs average error), the final history window, and the final caps.
-- Whether a manual "reforecast now" was ever designed.
-- Whether handle-time deviation triggers detection, or only contact volume.
-- The severity rule behind Critical / Major / Minor.
-- What "Preview" opens; what "Check insights" shows.
-- What the planner sees in the schedule after the triggered simulation.
-- Whether "Anomaly detected" or "Surge detected" was the final wording.
-- The contents of the Figma prototype beyond the embedded screenshots.
-- The licence of the illustrations.
-- Whether the former employer may be named.
-
----
-
-## 28. Open questions for João
-
-1. May the case study name the company, or should it be anonymised like Carpool? (The site's copy policy currently forbids the name in live copy.)
-2. Did the feature ship? If so, did the per-queue toggle ship, or only the internal feature flag?
-3. Was intraday accuracy measured against the 10% target? If yes, may the result be published?
-4. Which system parameters may be published: 30 minutes, four periods, eight weeks, nightly run, twice a day, one hour?
-5. Threshold: "percentile differences" (PDF) or "average error" (speech)?
-6. Were the 2×/day cap and 1-hour interval final decisions?
-7. The three companies: format (workshops, prototype walkthroughs, calls), rounds, roles of participants — without names or counts if those must stay private. Did the scenarios on p.4 come from these sessions?
-8. Were resource planners interviewed before the prototype, after, or both?
-9. Did any specific piece of feedback change a screen? If earlier Figma frames exist, may they be shown as explorations?
-10. Was a manual "run reforecast now" action designed at any point?
-11. Does the detection observe handle time, or contact volume only?
-12. How were severity tiers defined, if at all?
-13. What does "Preview" open in the notification and banner? What does "Check insights" show?
-14. What did the planner see in the Team schedule after a reforecast (REQ 9 simulation)?
-15. Which was the final banner wording: "Anomaly detected" or "Surge detected"?
-16. Are the Kano / VPC / Empathy canvases to be mentioned at all? If yes, is the AI provenance to be stated?
-17. May the case study use a restrained per-case accent colour within the site system, or must it stay on the site's single accent?
-18. Are the illustrations licensed for web use? (Recommendation is to drop them regardless.)
-19. Can the Figma file be exported or screenshots supplied for the next phase?
-20. Is Portuguese content required at launch for this case, as with Carpool?
-
----
-
-## 29. Final quality assessment
-
-### Final narrative test (§45 of the brief), against the recommended architecture
-
-| Question | Answer | If NO / partial, why |
+| Section | Weight | Dominant form |
 |---|---|---|
-| Understand the project without knowing the company? | Yes | Anonymised; section 01 supplies the domain |
-| Understand the operational problem? | Yes | Section 02 with planner-voice scenarios |
-| Understand what changes during the day? | Yes | Scenario selector |
-| Understand why a forecast may need to change? | Yes | Sections 02–03 |
-| Understand how the system determines when to reforecast? | Yes, at the level the evidence allows | Parameters beyond REQ are labelled by confidence |
-| Understand what the designer actually designed? | Yes | Sections 06–08; system logic explicitly marked as understood, not designed |
-| See why the interface is structured this way? | Yes | Each decision traced to REQ or to a stated tension |
-| Interact with the product behaviour? | Yes | Five interactions |
-| Understand how the design was validated? | **Partial** | The sources support strategy, not results; section 09 says so |
-| Distinguish historical evidence from reconstructed UI? | Yes | Evidence labels on every reconstruction |
-| Understand what is known and unknown? | Yes | Section 10 |
-| Leave with a clear understanding of the designer's contribution? | Yes | Three decisions + bounded outcome |
+| 01 Cover | One screen. | Thesis, then meta. |
+| 02 The plan | Short. | Three-step diagram: forecast, staffing, the three surfaces. |
+| 03 Diverges | One screen plus the selector. | Planner sentence, then the signal / not-a-signal note. |
+| 04 Brief | Short, but denser. | The user story, the note, a constraint list the visitor can open. |
+| 05 System | The long explanatory section. | The stepped simulation. Type beside it, not a caption underneath a screenshot. |
+| 06 Tensions | Short, typographic. | Three questions, no cards. |
+| 07 Switch | Medium. | One reconstructed form, large enough to read the helper. |
+| 08 Reaches the planner | Long. | The shell. |
+| 09 Inspectable | Long. | Comparison, then the path. |
+| 10 Validation | Short. | Prose and labels. No chart of fake results. |
+| 11 Outcome | Short. | What was designed. What was not measured. |
+| 12 Reflection | A few sentences. | The boundary of the work. |
 
-### Quality-bar check (§46)
-
-No fake research (canvases removed); no invented impact (10% as target); no invented quotes (scenario cards used verbatim, attributed generically); no invented iterations (state comparison used instead); no screenshot dump (six reconstructed surfaces, each tied to a decision); no PDF-to-web conversion (20 pages → 10 sections, 5 interactive); no research without consequence (research → insight → implication table); no decision without rationale (§09); no rationale without evidence (every rationale labelled); no interaction without purpose (§22 verdicts); no claim without source (§13).
+Avoid runs of heading, paragraph, picture, paragraph, picture. After 05, the next thing should be a question, not another diagram. After 09, the next thing should be prose. The visitor should feel the argument narrow, then open into the tool, then narrow again into what is known.
 
 ---
 
-## 30. Recommended next phase
+## 25. Accessibility strategy
 
-**Phase 2 — Content and interaction specification (still no code).** Produce, for review:
+The case study is part of the existing site, so it inherits the site's skip link, focus treatment, target size and reduced-motion switch. These are additional requirements for this piece.
 
-1. Final section copy (EN, then PT) with an evidence label on every claim, following the Carpool content-model pattern (`types.ts` → `en.ts` / `pt.ts`).
-2. Interaction specifications for the five essential interactions: states, controls, fictional dataset (one coherent day), textual equivalents, reduced-motion behaviour, mobile variant.
-3. Neutral UI specification for the six reconstructed surfaces: information hierarchy, states, labels, the fictional account and queue names.
-4. Confidentiality resolution based on João's answers to §28 (company name, parameters, target).
-5. A decision on visual direction within the Nudica-only system, including the accent question.
-6. A test-policy note: extend `copy-audit.test.ts` (or add a sibling) to scan case content for forbidden names.
-
-Only after Phase 2 is approved should Phase 3 (implementation under `/[lang]/work/intraday-reforecasting`) begin.
+- The page is a sequence of sections with headings. Reconstructed UI is inside regions labelled as reconstructions, not as the only content.
+- Every interaction is operable with a keyboard. Scenario choice, simulation step, surface choice, system state, previous-forecast toggle, and the issue path are buttons or native controls, not click-only shapes.
+- The simulation and the shell expose the current state in text, adjacent to the control, and in one polite live region for the whole page. Do not give each widget its own live region.
+- Charts have a table or a sentence that contains the same comparison. The dotted line is never the only encoding.
+- The anomaly band does not rely on purple versus lilac. Pattern, border and label travel with the colour.
+- Focus remains visible on purple editorial fields and on the neutral UI. If the site's yellow focus ring fails on a light field, the case study uses the site's already-defined dark focus treatment on those fields.
+- Touch targets meet the site's minimum. Banner actions do not rely on hover.
+- Text in the reconstructed UI is real text, not an image of the PDF.
+- Nothing is conveyed by a timed animation alone. The stepped control is the interface; motion only follows the step.
+- The evidence label is text, not a colour dot alone.
+- Language of the page follows the locale. Planner sentences that only exist in English are marked as translated when a Portuguese version is written. That translation is a later phase. This audit does not write it.
 
 ---
 
-# FINAL RECOMMENDATION
+## 26. Motion strategy
 
-## THE PROJECT IS REALLY ABOUT
+Motion is for a change of state the visitor just asked for. It is not for entrance effects on paragraphs. The site already collapses animation when reduced motion is requested. This case study does the same, and the stepped controls mean nothing is lost.
 
-A workforce-management system that can change a day's forecast on its own once real values drift far enough, for long enough, from the plan — and the design work needed so that a resource planner switches it on with one decision, learns that the change happened wherever they are working, can see how much changed and where, and knows what to check next. The detection and recalculation were engineering-owned; the designer's contribution is the configuration boundary, the state communication and the inspectability. (REQ; PDF p.10–19; SPEECH 6–20.)
+| Moment | Trigger | What moves | Purpose | Reduced motion |
+|---|---|---|---|---|
+| Scenario change | Visitor picks volume, handle time, or capacity. | The emphasised series and the one-line consequence. | Show that the cause changed. | Swap immediately. Text is already there. |
+| Simulation step | Visitor advances. | The interval marker, then the state label. | Show that several checks can pass before a run exists. | Instant. The state name is the explanation. |
+| Shell: change surface | Visitor picks a surface. | The content inside the frame, not the banner's meaning. | Show the banner is tied to the state, not to one page. | Instant swap. |
+| Shell: advance state | Visitor advances. | Banner and notification text. | Show start versus finish. | Instant text change. |
+| Previous forecast | Visitor toggles. | The dotted series appears or leaves. | Show what the new forecast replaced. | Series appears at full opacity. The text label remains. |
+| Issue path | Visitor follows the issue. | Focus moves to the chart band, then to the schedule band. | Show it is the same period. | Focus moves with no scroll animation beyond the browser's default, or with an instant jump. |
 
-## THE CENTRAL DESIGN CHALLENGE
+No autoplay. No looping hourglass. No count-up of the 10% target. Duration, if motion is on, stays short enough that the state change reads as a response, not as a sequence the visitor has to wait out. Exact durations are an implementation choice and are not specified here, beyond "short, and zero under reduced motion."
 
-Translating an automated, threshold-driven, capped reforecasting mechanism into an experience that asks the customer for exactly one decision, never changes numbers silently, and turns the system's internal reasoning ("N% higher for N periods") into something a planner can judge and act on across the Forecast, Schedule and Insights surfaces.
+---
 
-## THE THREE STRONGEST DESIGN DECISIONS
+## 27. Responsive strategy
 
-**1. One switch per queue is the whole configuration.** Thresholds, periods, history and caps stay inside the system; the customer decides *whether*, per queue, not *how*. Traceable to the requirements' open question about automation versus control and to the "no customer configuration" constraint.
+The story on a narrow screen is the same chain. The product chrome is not.
 
-**2. The change reaches the planner where they are, as a sequence of states.** A notification-centre message plus a persistent banner on the three surfaces the new forecast touches, with explicit "in progress" and "updated / completed" wording and in-place actions (Apply filter, Preview, Check insights). Grounded in the requirement that the reforecast appears on exactly those surfaces.
+| Moment | Desktop | Narrow screen |
+|---|---|---|
+| Scenario | Sentence and a small chart side by side. | Sentence first. Chart second, or omit the chart if the sentence and the "signal / not a signal" line already carry it. The chart is not the evidence. |
+| Simulation | Steps and a horizontal day. | The day becomes a vertical list of checks. The current check is expanded. Quiet checks stay visible so the point survives. |
+| Shell | A reduced product frame with a top bar and the three surfaces. | Do not shrink the full frame until it is illegible. Stack: state control, banner text, then the content of one surface. Surface choice remains. |
+| Comparison | Chart with toggle. | Chart in a scrollable region only if the axes remain labelled. The textual delta is above the chart, not only to its right. |
+| Issue path | Table, then chart, then schedule. | The issue is a single card, not a crushed table. The path is three explicit steps with the period written in each. |
+| Queue form | The form at a readable width. | The switch and its helper stay together. Inert fields can collapse behind a disclosure titled as existing queue settings, so the decision remains the switch. |
 
-**3. The change is inspectable and points to the next step.** "N issues found" in the header; a previous-versus-new overlay (possible because the baseline is stored); an issues log with trigger, end, queue, severity and a plain-language description; the same anomaly-period highlight on the forecast chart and the schedule timeline.
+Tables of issues never become a requirement to pinch-zoom. If a column cannot fit, it moves into the card, it is not dropped silently.
 
-## THE CORE DESIGN THESIS
+---
 
-The system could decide on its own to change the forecast. The design's job was to make that change reach the planner where they were working, make it inspectable against what it replaced, and make the next step obvious — while asking the customer to configure exactly one thing.
+## 28. Validation audit
 
-## THE CASE STUDY STORY
+| Question | What the material supports | Class |
+|---|---|---|
+| What was tested? | A high-fidelity prototype, shown in order to get feedback before or in parallel with development. | Process claim in the speech and on PDF page 11. |
+| With whom? | The speech says resource planners were interviewed about scenarios. The designer says the team worked directly with multiple customer companies, previously specified as three, because time was short. | Interview: unsupported method label on top of documented sentences. Companies: designer-provided context. |
+| What feedback was obtained? | Not recorded. No quotes, no counts, no task results, no preference. | OPEN. |
+| What changed because of feedback? | Not recorded. The deck presents a single design, not a revision. | OPEN. Do not invent discarded iterations. |
+| What was not tested, on the evidence? | Accuracy against the 10% target. The threshold method. Whether planners could explain why a run had started. Whether the banner was noticed. Whether the issue path was faster than hunting. The scheduling simulation. A manual trigger. Low-volume edge cases. | Say so. |
+| What the case study may say | The team used a high-fidelity prototype because the timeline was short, and sought feedback from customer companies while designing. The outcome of that feedback is not documented here. | DESIGNER-PROVIDED CONTEXT plus the process claim. |
 
-A forecast is a plan for a day that has not happened yet. During the day, volume rises, handle time lengthens, agents disappear; planners keep asking how the rest of the day looks and what they can do. The brief asked for a same-day reforecast triggered only when the deviation is meaningful, warned that not every customer wants it every day, and gave the customer no configuration. The designer had to understand how the system would decide — every 30 minutes, over several periods, above a calculated threshold, not on quiet queues, not too often — in order to decide what the planner should never have to see. Three questions followed: how much does a customer configure; how does the planner find out; how do they understand and act. The answers: one switch per queue; a notification and a banner that follow the planner across the product and change wording as the system moves from detecting to updating; a comparison with the previous forecast, an issues log and a highlighted period that leads into the schedule. Built as high-fidelity prototypes under time pressure and reviewed closely with customers so development could start from something concrete. What is known ends there: the brief's accuracy target, the production outcome and the measured effect are not part of the record.
+A strong case study can survive that paragraph if Decisions 1 to 3 are precise. It cannot survive a fabricated success rate.
 
-## THE INTERACTIVE EXPERIENCE
+---
 
-1. Scenario selector (volume / handle time / capacity) showing convergence on the rest-of-day question and which causes the system observes.
-2. Detection-and-reforecast simulation: stepping through 30-minute checks; sub-threshold versus sustained deviation; rest-of-day rescaling; caps — parameters labelled by confidence, values illustrative.
-3. State change in a neutral product environment: visitor-controlled advance; notification and banner appear; wording progresses; surface switcher; Apply filter.
-4. Previous-versus-new forecast toggle.
-5. Issue → location follow-through: select an issue, check the forecast, see the same period highlighted in the schedule.
+## 29. Outcome and metric audit
 
-## THE NEUTRAL UI
+| Item | Status | Public treatment |
+|---|---|---|
+| Improve intraday accuracy by 10% over the original forecast. | REQUIREMENT. Target. No measurement, no baseline result, no after result. | "The brief set a target of a 10% improvement in intraday accuracy over the original forecast." Never "accuracy improved by 10%." |
+| Baseline stored so accuracy can be measured. | REQUIREMENT. | Evidence the team intended to measure. Not evidence they did. |
+| Feature shipped, adopted, rolled out past a flag. | Unknown. | Do not say launched, shipped, or adopted. |
+| Planners made faster or better staffing decisions. | The user story's purpose. Not an observed result. | Do not say time saved or better decisions as a result. |
+| Customers preferred the switch, understood the banner, trusted the comparison. | Not in the material. | Do not say. |
+| Qualitative result that is fair | The presented design defines a path from an unsolicited reforecast to a specific period on the schedule, with a single queue control and without exposing the model. | This is the design outcome. Label it as what the work specified, not as a measured effect. |
+| Unknown | Everything in §38. | A short list at the end, not an apology paragraph in every section. |
 
-- Queue configuration form with the single "Turn on reforecast" control (off / on).
-- Notification centre with two messages (anomaly detected — in progress; reforecast completed).
-- Banner component (in progress / forecast updated; queue-specific wording labelled as a variant) with Apply filter, Preview, Check insights.
-- Forecast page (normal; in progress; updated with "N issues found"; previous overlay; anomaly period highlighted).
-- Team schedule (banner; highlighted anomaly periods with tooltip).
-- Forecasting issues list (trigger, end, queue, severity, description, Check forecast).
-- Insights shell, optional, banner only.
+---
 
-## THE VALIDATION STORY
+## 30. Confidentiality audit
 
-High-fidelity prototypes were used from the start, under a limited timeline, to obtain prompt feedback and allow development to begin from a concrete reference (documented). The prototypes were reviewed closely with three customer companies (designer-provided context; no names, numbers or findings). Resource planners' scenarios were documented (documented); the interview method is asserted only in the presentation speech. No quantitative validation exists in the sources.
+Must not appear in the public case study:
 
-## THE DESIGN OUTCOME
+- The employer name, in the speech, on PDF page 2, and in the deck's metadata.
+- Product or programme names that are internal (the requirements name later internal work and a codename). Do not carry those words into public copy.
+- The named person in the requirements (an engineer mentioned on the simulation line).
+- Logos, wordmarks, and the purple application chrome that identifies the product in the screenshots.
+- Customer and account names from any screenshot. Prototype queue examples may be generic ("support"); still replace them with the illustrative set rather than assuming they are safe.
+- Person names on schedule screenshots.
+- Issue identifiers, URLs, account ids, and any string that looks like an internal id. The issues table has one.
+- The designer's telephone number on the thank-you page. An email is a contact choice for the site's existing contact pattern, not something this case study needs to repeat from the PDF.
+- Browser chrome, favicons, and full-bleed screenshots cropped out of the PDF. Reconstruction replaces them. Cropping a logo out of a screenshot is not enough, because layout, type and colour still identify the product.
+- Filenames of the source PDFs in the public page.
+- The Figma file id, in public copy.
+- Real operational numbers, if any were hiding in the prototype. The visible numbers are placeholders or inconsistent demo data; treat all of them as non-public anyway, and replace them.
+- "Talkdesk" is already rejected by the site's copy check for studio copy. The case study content must be held to that even if the current test does not scan case-study files.
 
-A complex, automated forecasting mechanism was translated into an experience with one configuration decision, explicit and consistent communication of system-initiated change across the affected surfaces, and inspectable consequences that connect the changed forecast to the schedule. Stated as a design outcome; not as a product or business outcome.
+Allowed:
 
-## WHAT WE MUST NOT CLAIM
+- The role (product designer), the quarter (Q2 2023), the domain (workforce management for contact centres), and the mechanics in §§7–8, minus internal names.
+- Purple, lilac and cream as the case study palette.
+- The reconstruction, labelled.
 
-- That accuracy improved by 10% (or by any amount).
-- That the system reforecasts continuously or 24/7.
-- Participant numbers, session counts, usability scores, task success, time saved.
-- Adoption, production status, business impact.
-- That the Kano model, Value Proposition Canvas or Empathy Map are research findings.
-- That a manual reforecast trigger or push notifications were designed.
-- That the "Anomaly / Surge" wording pair is a documented iteration.
-- Any user quote beyond the scenario cards as written.
-- The 2×/day cap, 1-hour interval, 8-week window or nightly percentile method as *requirements* (they are Level 4/5 until confirmed).
+---
 
-## WHAT WE STILL NEED TO KNOW
+## 31. Claims audit
 
-Company naming permission; production status; whether the toggle shipped; accuracy measurement; publishable system parameters and final threshold method; three-company format and whether the scenarios came from it; any real iteration evidence (Figma); manual trigger existence; detection signal (volume vs handle time); severity rule; Preview and Check insights behaviour; post-reforecast schedule behaviour; final banner wording; illustration licence; accent-colour latitude; Portuguese scope.
+| Claim, as it tends to be written | Verdict | Defensible wording |
+|---|---|---|
+| Accuracy improved by 10%. | Unsupported. The sentence is a target. | The brief set a target of a 10% improvement in intraday accuracy. Whether it was reached is not documented. |
+| The forecast updates continuously / 24/7. | Unsupported. Contradicted by the conditions and by the caps in the same speech. | The system checks through the day. A reforecast runs only when the gap qualifies. |
+| The forecast is recalculated every 30 minutes. | Unsupported. | The check is at least every 30 minutes. The reforecast is conditional. |
+| We interviewed N resource planners. | The speech says interviews happened. No method or count. | Scenarios were documented in the voice of resource planners. How they were gathered is not recorded. |
+| Three companies validated the design. | Designer-provided context about working together. Not a validation result. "Three" is from a prior designer note; this brief says multiple. | Under a short timeline, the team worked directly with customer companies. The feedback is not documented here. |
+| Users understood the change. | Unsupported. | The interface states that a reforecast is in progress or finished, on the pages where the numbers appear. |
+| The banner reduced confusion. | Design argument in the speech. Not a result. | The banner exists so a change in the numbers has an explanation in place. |
+| Configuration was kept to one switch so we would not overwhelm users. | Design argument. The screen supports the "one switch" part. | The presented design adds one queue control and no detection settings. |
+| The switch was all the customer could configure, and that matched the requirements. | Partially supported, and partly false. | The presented design shows one switch. The requirements said the customer would have no configuration at launch. |
+| We designed manual and automatic workflows. | Unsupported by screens. | The requirements left that choice open. Only the queue switch is shown. |
+| Push notifications were part of the design. | Unsupported. | An in-app notification and banners are shown. |
+| Previous forecast helps predict future anomalies. | Unsupported. | Previous forecast shows what the new forecast replaced. |
+| Severity tells the planner what to do first, by a defined rule. | Labels are shown. The rule is not. | The log shows a severity label. How it was calculated is not documented. |
+| The project shipped and planners used it. | OPEN. | Do not say. |
+| High-fidelity prototypes led to better feedback. | Process claim, unmeasured. | High-fidelity prototypes were used so feedback could happen early. |
+| We simplified complexity. | Empty unless pointed at the switch. | Detection rules stay out of the queue form. |
+| A seamless experience. | Empty. | Do not say. |
 
-## NEXT PHASE
+---
 
-Phase 2 should turn this audit into a reviewable specification: final labelled copy for the ten sections (EN, then PT), interaction specs for the five essential interactions with one coherent fictional dataset and accessible equivalents, neutral-UI specs for the six reconstructed surfaces, resolution of the confidentiality questions, and a visual-direction decision inside the site's Nudica-only system. No code, components, CSS or assets until that specification is approved.
+## 32. Source discrepancy audit
+
+| # | Topic | Requirements | Speech | PDF | Reading |
+|---|---|---|---|---|---|
+| 1 | What happens every 30 minutes | "At least runs every 30m." | Checks the last four quarter-hours. | Same as the speech, page 9. | Treat as a check. Not a reforecast. |
+| 2 | How often a reforecast may run | More than once a day. | At most twice per queue, and not again for an hour. | Same as the speech. | Cap and gap are unconfirmed. OPEN whether they were final. |
+| 3 | Threshold | Undefined. Must include a minimum call count, also undefined. | Nightly, from average error over eight weeks. | Nightly, from percentile differences over eight weeks. | Speech and PDF disagree with each other and post-date an open requirement. OPEN. Do not publish either formula. |
+| 4 | Method | Different from the normal forecast. 10% target. | Rest of day multiplied by a factor. | Same as the speech. | Factor is not a requirement. Do not state it as fact. |
+| 5 | Low volume and mixed intervals | Excluded. Mixed intervals undefined. | Silent. | Silent. | The case study can mention the exclusion. It cannot show the cutoff. |
+| 6 | Customer setup | None at launch. Flag. Self-serve later. Research the automation-versus-on-demand choice. | One switch per queue, presented as the decision. Closing slide: manual and automatic. | The switch is shown. No manual control. | The design does not implement requirement 5 as written. It may anticipate the later self-serve. OPEN for the release. The manual workflow is not shown. |
+| 7 | Where the new forecast appears | Forecast, schedule (scheduler TBD), Insights, reporting. | Banners on Forecast, Team schedule, Insights. | Same screens. | Aligned. Scheduler behaviour after the run is still TBD in the requirements and absent from the PDF. |
+| 8 | Latest run time on the forecast | A "could," not a must. | Not a point in the speech. | The forecast header in the prototype shows an updated time. | Do not promote it to a requirement. Optional in the reconstruction. |
+| 9 | Banner verb | Not specified. | "Anomaly detected." | Pages 11–15 use anomaly. A full-page reading of page 19 has been inconsistent about a "surge" wording; the forecast crop reads as anomaly, with the tooltip "Anomaly detected in this period." | Use "anomaly." Do not present an alternate verb as an iteration. |
+| 10 | Which metric trips the detector | "Real and forecast." | Calls received, in the explanation. Factors listed separately include handle time and capacity. | Issue text is CVO versus forecast. | Volume is the documented example. Handle time and capacity as triggers are OPEN. |
+| 11 | Notifications | None specified. | In-app notification, banners, and, on the closing slide, push. | In-app notification and banners. | Push is unsupported. |
+| 12 | Dates in the prototype | Project is Q2 2023. | Q2 2023. | May 2022 in the chrome; other dates in the issues table, including a range that crosses midnight. | Placeholder chaos. The reconstruction uses one 2023 day. |
+| 13 | Research | Asked for, future tense, in the note. | Claims interviews. | Shows ChatGPT canvases and "scenarios documented with resource planners." | The canvases are not the research. The interviews are unverified. |
+| 14 | Issue length versus check window | Example of four periods, number not final. | Check looks at four intervals. | An issue of six consecutive periods is shown. | Not a conflict. Duration can exceed the check window. |
+| 15 | "3 issues found" while a banner still says in progress | Not specified. | The count is part of the completed story. | At least one spread shows a count beside an in-progress banner. | Likely because the count is historical issues, not "issues created by this run." OPEN. The reconstruction should not show "in progress" and a fresh issue count as if they were the same event, unless the count is labelled as already on the books. |
+
+Figma, unread, might resolve 6, 9, 10 and 15. Until it is opened, they stay as they are in this table.
+
+---
+
+## 33. Evidence matrix
+
+| Claim | Source | Type | Confidence | How it appears |
+|---|---|---|---|---|
+| User story: update the forecast after unexpected change, to staff. | Requirements | Requirement | High | Section 04, quoted. |
+| Mitigation; not every customer, every day. | Requirements note | Requirement | High | Section 04. |
+| Research needed: per-queue automation versus on demand. | Requirements note | Requirement | High | Section 04, as an open question. Section 10, as unanswered. |
+| Same account-timezone day. | Requirements | Requirement | High | Section 05. |
+| Check at least every 30 minutes. | Requirements, clarified by speech/PDF | Requirement plus presentation | High for "checks," medium for the exact reading of "runs" | Simulation. |
+| Reforecast only above a threshold, over several periods, not on low-volume queues. | Requirements | Requirement | High for the rule, low for the numbers | Simulation, without fake cutoffs. |
+| Different forecasting method. | Requirements | Requirement | High | One sentence in section 05. No formula. |
+| 10% accuracy over the original forecast. | Requirements | Requirement, target | High that it is a target. None as a result. | Outcome section, as a target. |
+| No customer configuration; flag; later self-serve. | Requirements | Requirement | High | Decision 1, as the conflict. |
+| Reforecast becomes the forecast on three surfaces and in reporting. | Requirements | Requirement | High | Sections 02 and 08. |
+| Baseline kept to measure accuracy. | Requirements | Requirement | High | Decision 3, as inference that comparison is possible because the baseline exists. |
+| Re-forecast triggers a scheduling simulation; performance out of scope. | Requirements | Requirement | High | Reflection. Not shown as UI. |
+| May run more than once a day. | Requirements | Requirement | High | Section 05. |
+| Four-interval check, two-a-day cap, one-hour gap, eight-week nightly threshold, multiplication factor. | Speech, PDF page 9 | Fact of the presentation only | Low as product fact | Omitted, or behind an explicit unconfirmed label. |
+| Percentile versus average error. | PDF versus speech | Discrepancy | — | §32. Not in the public page. |
+| Five planner scenarios. | Speech, PDF page 4 | Fact of the presentation | High as copy. Low as research. | Three of them in the selector. |
+| Interviews happened. | Speech | Unverified claim | Low | Not used as a method. |
+| One switch, documented helper sentence. | PDF page 10, speech | Design decision | High | Reconstructed form. |
+| Notification and banner copy for start and finish. | Speech, PDF | Design decision | High | Shell. |
+| Apply filter, Preview, Check insights. | PDF, speech | Design decision | High that the controls exist. Low for Preview's content. | Filter works in the reconstruction. Preview does not grow a fictional body. |
+| Show previous forecast, dotted. | PDF, speech | Design decision | High | Comparison interaction. |
+| Issues log and CVO description pattern. | PDF page 18 | Design decision | High | Issue path. |
+| Period marked on forecast and schedule. | PDF page 19, speech | Design decision | High | Issue path, with one shared period. |
+| Severity labels. | PDF | Fact of the UI | High for the labels. None for the rule. | Illustrative rows. No formula. |
+| High-fidelity prototype for speed. | Speech, PDF page 11 | Process claim | Medium | Validation. |
+| Worked with multiple customer companies, short timeline. | Designer | Designer-provided context | High as context. Not a finding. | Validation. |
+| ChatGPT canvases. | PDF pages 6–8 | Fact of the deck | High | Not shown. Mentioned only if a process note needs to say what was rejected. Default: omit. |
+| Shipped, measured, adopted. | — | Unknown | — | Outcome list of non-claims. |
+
+---
+
+## 34. Evidence to experience matrix
+
+| Evidence | Design decision | Section | Interaction | What the visitor understands |
+|---|---|---|---|---|
+| The forecast is a same-day staffing input, written into three places. | None yet. Setup. | 02 | None. | Why a chart change is an operational event. |
+| Scenarios split into volume, handle time, and capacity. Only volume is in the issue text. | None. This is a limit, not a decision. | 03 | Scenario selector. | Automation has a narrow sensor. The planner's problem is wider. |
+| Not every customer wants this every day. The rules are internal and partly undefined. | One queue switch. No parameter form. | 04 then 07 | Inert fields, one working switch. | Why setup is small, and why that smallness disagrees with "no configuration." |
+| A check every 30 minutes is not a new forecast. | Hide monitoring. Announce only a run. | 05 then 08 | Simulation, including quiet steps. | Why the banner is rare. |
+| The planner may be on the schedule or in Insights when numbers change. | Notification plus banner on all three, start and finish. | 08 | Shell and state advance. | Place and status are different problems. |
+| The new forecast replaces the old, and the old is retained. | Previous versus new. | 09 | Toggle. | "Updated" has a size. |
+| An issue names a queue and a run of periods. | The log, then the same period on the forecast and the schedule. | 09 | Issue path. | Detection ends in a place, not in a dashboard. |
+| The simulation's effect on the roster is unshown. The 10% was not measured. Feedback was not written down. | None. Honesty. | 10–12 | None. | What the work was, and what it was not. |
+
+---
+
+## 35. Current implementation audit
+
+Inspected so a later phase can enter the site. Not used as evidence about Intraday Reforecasting. Not used as a narrative, visual, or interaction template from any other project.
+
+### What exists for this project
+
+Nothing. No route, no content module, no component, no asset. Searching the application source finds the employer name only inside a copy test that forbids it.
+
+### What the site is, technically
+
+- Next.js App Router under `src/app/[lang]/…`, React 19, TypeScript, Tailwind v4, a motion library, vitest. The repository rule is to read `node_modules/next/dist/docs/` before implementation. This phase does not implement.
+- Locales `pt` and `en`. Path maps live in `src/lib/i18n.ts` (`HOME_PATH`, `STUDIO_PATH`, `PROJECT_PATH`, and one published case-study path). A future Intraday path would be a new map plus the same locale pattern. Suggested shape, not a decision: English under `/en/work/…`, Portuguese under `/pt/trabalho/…`.
+- Published work is a typed list in `src/data/projects.ts` with `kind` of `product` or `graphic` and an optional `href`. Adding the case later is one entry. It does not belong in that list during this phase.
+- The public chrome is a shared shell: header, language, theme, footer. Reuse it. Do not redesign the site around this case.
+- Type is Nudica only, exposed as `--font-brand`, with a scale of utility classes. A second family would contradict the site's own type decision. The PDF's faces are out.
+- Colour tokens are an off-white surface, ink, a muted ink, and a yellow accent that the site itself treats carefully for focus. The purple / lilac / cream set is not in the token list. A later phase would add case-study tokens scoped to this page, not new global brand colours.
+- Layout widths are a narrow measure and a wide measure. The shell interactions need the wide measure. Narrative sections can stay narrow.
+- Reduced motion is already global.
+- Copy tests scan studio dictionary and project-flow strings for em dashes, Brazilian spelling, a list of client names including this employer, first person, and a cliché list. They do not scan case-study content. A later phase should extend that scan. This phase does not.
+
+### Classification
+
+| | |
+|---|---|
+| Missing | The entire case study. |
+| Reusable as infrastructure | Shell, locale paths, project list, type scale, reduced motion, focus and target-size conventions, the copy-test approach. |
+| Not reusable as a model | Any other case study's story, section order, interactions, palette, or content schema. Those were built for different evidence. |
+| Outdated relative to the live site | Older design notes under `docs/superpowers/` describe a previous incarnation of the site. Ignore them for this project. |
+| Reconstruction required | Everything in §20. |
+
+A previous specification on this branch modelled the page on another case study's components and chips. That approach is rejected by this audit. Shared infrastructure is allowed. Shared storytelling is not.
+
+---
+
+## 36. Content architecture
+
+Conceptual only. No files are created by this phase. Names below are roles, not a commitment to a directory.
+
+For each section: purpose, narrative role, evidence, what is seen, interaction, annotation, handoff.
+
+**01 Cover.** Purpose: state the thesis and the frame. Role: contract with the visitor. Evidence: none historical; the thesis is inference. Seen: title, one paragraph, meta (product design, Q2 2023, workforce management), anonymity line, legend. Interaction: none. Annotation: none. Handoff: what a forecast is for, here.
+
+**02 The plan.** Purpose: vocabulary. Role: so "the numbers changed" means something. Evidence: requirements 1 and 7. Seen: a plain diagram of forecast to staffing, and the three surfaces. Interaction: none. Annotation: none. Handoff: that plan is what the day breaks.
+
+**03 The day diverges.** Purpose: the operational problem, and the sensor's limit. Role: evidence before system. Evidence: PDF page 4, speech slides 4 and 5, issue description pattern. Seen: three planner sentences. Interaction: scenario selector. Annotation: illustrative numbers; handle time and capacity marked as not documented triggers. Handoff: the brief's job was narrower than all of these stories.
+
+**04 The brief.** Purpose: what was asked, including the open research question and the target. Role: constraints. Evidence: requirements, especially the note, items 1–10, the 10% line. Seen: the user story, the note, a short list (same day, conditional run, low volume, no launch configuration, three surfaces, target). Interaction: the list can expand. It must not become a second essay. Annotation: target labelled as a target. Handoff: meeting those rules required understanding the check.
+
+**05 What the system had to understand.** Purpose: monitoring versus execution. Role: the explanatory centre. Evidence: §8. Seen: the simulation. Interaction: detection steps. Annotation: unconfirmed parameters off by default; "the designer did not design the algorithm." Handoff: three questions.
+
+**06 Three tensions.** Purpose: name the questions. Role: pivot, not a new topic. Evidence: §11. Seen: three sentences. Interaction: none. Annotation: none. Handoff: the switch.
+
+**07 Decision 1.** Purpose: the configuration decision and its conflict with the requirements. Role: first decision. Evidence: PDF page 10, speech slide 10, requirements 5 and 6. Seen: reconstructed form. Interaction: the switch, as a demonstration, not as a saved setting. Annotation: reconstruction; requirement conflict in one sentence beside it. Handoff: once it is on, the planner still has to hear about a run.
+
+**08 Decision 2.** Purpose: place and status. Role: second decision. Evidence: requirement 7, speech 11–17, PDF 11–15. Seen: neutral shell. Interaction: surface and state. Annotation: reconstruction; Preview undocumented. Handoff: hearing about it is not the same as reading the change.
+
+**09 Decision 3.** Purpose: comparison and location. Role: third decision. Evidence: requirements 7 and 8, PDF 16–19, speech 18–20. Seen: chart and schedule. Interaction: toggle, then issue path. Annotation: illustrative; one period. Handoff: what was learned by trying this.
+
+**10 Validation.** Purpose: the thin record. Role: trust. Evidence: §28. Seen: prose. Interaction: none. Annotation: context versus requirement versus unknown. Handoff: what can be claimed.
+
+**11 Outcome.** Purpose: design outcome, then non-claims. Role: close the causal chain without a fake result. Evidence: §29. Seen: a short list. Interaction: none. Annotation: target versus unknown. Handoff: the boundary.
+
+**12 Reflection.** Purpose: what was left with the model and with the planner. Role: judgement. Evidence: the absence of an algorithm in the design material, requirement 9's missing screen, the manual-workflow gap. Seen: prose. Interaction: none. Annotation: inference, where the reflection judges. Handoff: end.
+
+Content objects a later phase would need, described here so they are not invented ad hoc:
+
+- Section records: id, kicker, statement, body, evidence labels.
+- Scenario records: id, planner sentence, signal status (documented trigger / open / not a documented trigger), illustrative series.
+- Simulation steps: id, clock, system state, whether a banner exists, sentence.
+- Shell copy: the two announcement sentences and the action labels, in the product's documented wording.
+- One dataset: day, zone, queues, intervals, previous and new forecast, one playable issue, the matching schedule period.
+- Strings for "reconstruction," "illustrative," and the unconfirmed-parameter note.
+
+English first. Portuguese, when written, follows the site's existing copy rules (European Portuguese, the site's orthography conventions, no em dash). That writing is not this phase.
+
+---
+
+## 37. Visitor journey
+
+| Section | Knows before | Sees | Does | Learns | Question it creates | Answered by |
+|---|---|---|---|---|---|---|
+| 01 | Nothing. | Thesis, meta. | Reads. | This is about an unsolicited change to a forecast, not about a feature tour. | What is the forecast doing in this job? | 02 |
+| 02 | The thesis. | Plan to staff to three surfaces. | Reads. | The number is a staffing input. | What breaks it during the day? | 03 |
+| 03 | The plan's role. | Three situations. | Picks one. | Only one of the three is a signal the issues log shows. | What was the team actually asked to build? | 04 |
+| 04 | The day is messy. | The ticket, including its doubt and its target. | Opens the constraint list. | The system must be conditional, same-day, and mostly not configured. | How can a check be that careful and the UI still be one switch? | 05 |
+| 05 | The constraints. | Quiet checks, then one run. | Steps. | Looking is not rewriting. The rules never needed to be on screen. | What, then, is the design problem? | 06 |
+| 06 | The mechanism. | Three questions. | Reads. | Allow it, announce it, explain it. | What did they allow the customer to set? | 07 |
+| 07 | The questions. | The form. | Toggles the one control. | Setup is the queue, not the model, and the requirements had postponed even that. | If it is on, how does a planner who is not watching get told? | 08 |
+| 08 | The switch. | The shell. | Changes page, then advances the run. | The announcement travels. The healthy system stays quiet. | Once told, how do they judge the new numbers and find the hour? | 09 |
+| 09 | The announcement. | Dotted previous line, one issue, one band on two surfaces. | Toggles, then follows. | The path ends at the period, not at a recommended roster. | Was this watched with anyone, and what came of it? | 10 |
+| 10 | The path. | A short account. | Reads. | Prototype and customer access are real as context. Results are not in the file. | What is it fair to say happened? | 11 |
+| 11 | The gap. | Design outcome, target, unknowns. | Reads. | The work specified a behaviour. It did not prove a metric. | What did design refuse? | 12 |
+| 12 | The outcome. | The boundary. | Reads. | The algorithm and the staffing move stayed outside the design, on purpose or by the edge of the material. | — | — |
+
+---
+
+## 38. Open questions
+
+For the designer. Do not answer them inside the case study with a plausible guess.
+
+1. Did the feature ship? To the flag only, or with the queue switch?
+2. Was intraday accuracy measured against the baseline, and what happened relative to the 10% target?
+3. Which threshold method was real, if either, and may it be described in public?
+4. Were the two-a-day cap and the one-hour gap final?
+5. Were the page-4 scenarios from the customer conversations? What was the format, and were there notes?
+6. Is "three companies" the right public level of detail, or only "customer companies"?
+7. Was a manual "run now" designed and cut, or never drawn?
+8. Can handle time or absence trigger a run, or only contact volume?
+9. What does Preview show? What does Check insights do beyond opening Insights?
+10. What did the schedule show after the simulation?
+11. Is the issue count historical, and can it appear during "in progress"?
+12. How is severity calculated?
+13. Was there an in-app-only notification, or also email or push?
+14. What changed after prototype feedback? If nothing was recorded, say so and stop asking the page to imply iterations.
+15. Should the public voice be impersonal (this audit's default) or first person? The site's studio copy avoids first person. A case study may differ. Unresolved.
+16. Is Portuguese required at launch of the page, or English first?
+
+---
+
+## 39. Keep, rewrite, move, merge, remove, missing
+
+### Keep
+
+- The user story and the requirements note, including the doubt.
+- Three scenarios, with the signal split.
+- The check-versus-run distinction, stripped of unconfirmed formulas.
+- The switch, the helper sentence, the two announcement sentences, the three surfaces, Apply filter, the previous-forecast control, the issue description pattern, the period mark.
+- The high-fidelity rationale, relocated.
+- The designer's context about time and customer companies, labelled.
+- Anonymity. Purple, lilac, cream as editorial colour only.
+
+### Rewrite
+
+- Page 2's "continuous" and "24/7" language.
+- Page 9, from a dense poster into a stepped explanation.
+- Page 10, from a branded screenshot into a reconstruction that includes the requirements conflict.
+- Pages 11–15, from a sequence of screenshots into one state model.
+- Pages 16–19, from benefit bullets into comparison plus one path.
+- Any caption that predicts future anomalies or promises better staffing as a result.
+
+### Move
+
+- High-fidelity process note from the notification slide to validation.
+- The 10% line from nowhere (it is absent in the PDF) into the brief and the outcome, as a target.
+- Low-volume exclusion from the requirements into the system section. The PDF omitted it.
+
+### Merge
+
+- Pages 12, 13 and 14 into Decision 2.
+- Pages 16 and 17 into the comparison.
+- Pages 18 and 19 into the issue path.
+- Coaching, hiring, training and cross-department moves into the capacity scenario.
+
+### Remove
+
+- Kano, value proposition canvas, empathy map.
+- Decorative section openers and the illustration pages.
+- Thank-you slide with personal phone details.
+- Employer identity, logos, chrome, internal ids, prototype dates, placeholder 20/20/20.
+- "More data is never a downside" and the pattern-prediction bullets.
+- Push notifications and the undocumented manual workflow, as claims.
+- A second banner vocabulary ("surge") unless a future look at the source file proves it was a real, final string. It is not the wording to design around.
+
+### Missing, and must be added because the sources support it
+
+- The explicit statement that a quiet check has no UI.
+- The conflict between "no configuration" and the switch.
+- The baseline as the reason a previous forecast can exist (inference, labelled).
+- The boundary: design stops at the period; the simulation's schedule result is unknown.
+- The metric discipline around 10%.
+- A single coherent illustrative day, labelled.
+- Evidence labels on the few claims that would otherwise be misread.
+- The list of what was not validated.
+
+### Missing, and must stay missing
+
+- Quotes, counts, success rates, time saved, adoption, a severity formula, a threshold formula, a recommended staffing action, iterations nobody wrote down.
+
+---
+
+## 40. Final three-decision model
+
+### Decision 1
+
+| | |
+|---|---|
+| Problem | Automatic replacement of the plan is not wanted by every customer, and the rules are not a form. |
+| Evidence | Requirements note, requirements 5–6, speech slide 10, PDF page 10. |
+| Design question | What may the customer decide? |
+| Decision | On or off, per queue, in the existing queue settings. No detection settings. |
+| Trade-off | Less than the research question implied (no on-demand run). More than the launch requirement allowed (a customer control). Status of the compromise is unknown. |
+| Product behaviour | "Turn on reforecast." If enabled, the system will reforecast this queue. |
+| User consequence | Allowing it means the day's forecast for that queue can change without a further request. |
+| Validation | Not recorded. |
+| Portfolio interaction | Reconstructed form, one working control. |
+| Classification | Design decision, in tension with a requirement. |
+
+### Decision 2
+
+| | |
+|---|---|
+| Problem | The new numbers land on three surfaces. The planner is in one place. A silent rewrite looks like a fault. Monitoring itself should stay quiet. |
+| Evidence | Requirement 7, speech slides 11–17, PDF pages 11–15. |
+| Design question | When, and where, is a run announced? |
+| Decision | Notify and banner at start and at finish, on Forecast, Team schedule and Insights. Offer to filter to affected queues. Do not announce a healthy check. |
+| Trade-off | Two channels can still be missed. No documented out-of-product channel. |
+| Product behaviour | The two documented sentences. Preview exists; its body is not specified. |
+| User consequence | They can be in the schedule and still learn that the plan is being replaced. |
+| Validation | Not recorded. The rationale is a design argument. |
+| Portfolio interaction | Neutral shell, surface switch, state advance. |
+| Classification | Design decision, required by where requirement 7 puts the data. |
+
+### Decision 3
+
+| | |
+|---|---|
+| Problem | A replaced forecast hides its own size and its location. |
+| Evidence | Requirements 7–8, speech slides 18–20, PDF pages 16–19. |
+| Design question | What can the planner inspect before they touch the roster? |
+| Decision | Previous against new; an issues log with a volume description; the same period marked on the forecast and the schedule. |
+| Trade-off | The path does not choose the staffing action. The simulation that might have updated the roster is not shown. |
+| Product behaviour | Toggle, issue row, Check forecast, highlight, schedule. |
+| User consequence | They can see what changed and start from the right hour. |
+| Validation | Not recorded. Speculative benefits about prediction are excluded. |
+| Portfolio interaction | Toggle and a single-issue path on one illustrative day. |
+| Classification | Design decision. The link to the baseline is inference. |
+
+---
+
+## 41. One-paragraph narrative test
+
+A resource planner staffs the day from a forecast. The day leaves that forecast: volume, handle time, or the people who were supposed to be there. The system watches the gap between forecast and actuals through the day and, only when the gap is large enough for long enough, replaces the rest of the day's forecast with a new one and keeps the original so the two can be compared. The planner did not ask for that replacement and may be looking at the schedule or at Insights when it happens, so the work was to make three things true: a customer can allow it per queue without being handed the model's rules; a run announces itself in the notification centre and on the pages where the numbers actually sit, and a mere check announces nothing; afterwards the planner can put the new forecast against the previous one, open the issue, and land on the same period in the forecast and in the schedule. That path was drawn in a high-fidelity prototype and taken to customer companies under a short timeline. What those conversations changed, whether the accuracy target of 10% was met, and whether the feature shipped, is not in the record. What the work specified is the path from an unsolicited change to a period a planner can act on.
+
+The paragraph holds. It does not depend on a canvas, a logo, or a result that was never measured. It is fit to govern the next phase.
+
+---
+
+## 42. Final recommendations
+
+1. Build the case study on §17 and §40. Do not build it on the PDF's slide order, and do not build it on another project's case study.
+2. Make §8 the editorial standard for every sentence about time. If a sentence cannot survive "is this a check or a reforecast?", cut it.
+3. Keep the 10% figure only in the wording of §29.
+4. Treat volume as the only documented detection example. Label handle time and capacity inside the scenario interaction.
+5. Show the requirements conflict on the switch. Hiding it would make the case study neater than the project.
+6. Reconstruct the UI. Label it. Keep purple out of the frame.
+7. Use one illustrative day. Label every number.
+8. Say the validation as §28 says it. Do not commission fictional quotes to fill the hole.
+9. Leave these out: ChatGPT canvases, 24/7, push, manual workflow, pattern prediction, employer identity, internal names, prototype dates, severity formulas, threshold formulas, the multiplication factor.
+10. Do not implement from this document, and do not implement from the existing Phase 2 specification, until that specification has been rewritten against this audit and explicitly approved.
+
+Next phase, when approved, is a content and interaction specification that inherits §§17–27 and §36. It is not a page build. It is not a licence to invent the open questions in §38.
+
+---
+
+## PHASE 1 STATUS
+
+`READY FOR REVIEW`
+
+No application code, routes, components, styles, or assets were changed by this document.
