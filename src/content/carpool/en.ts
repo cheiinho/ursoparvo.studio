@@ -29,6 +29,123 @@ export const carpoolEn: CarpoolContent = {
     headline: "An internal vehicle-pool benefit",
     line: "People reserved company cars for leisure or work. If the booking flow felt broken, it was easy to assume the fix sat in the product.",
   },
+  snapshot: {
+    kicker: "Research snapshot",
+    title: "What the research already made visible",
+    intro:
+      "An editorial map of documented evidence. Not analytics. Not invented rates.",
+    note: "Every panel below is mapped to the source research before it appears here.",
+    service: {
+      title: "Service",
+      body: "Carpool was an employee benefit: an internal system for reserving company pool vehicles for leisure or work.",
+    },
+    people: {
+      title: "People",
+      caveat:
+        "Leisure interviews were the strongest sample. Work and operations still needed deeper research.",
+      items: [
+        {
+          id: "aires",
+          name: "Aires",
+          role: "Leisure",
+          need: "Next usable opportunity. Weekends matter.",
+        },
+        {
+          id: "ricardo",
+          name: "Ricardo",
+          role: "Work",
+          need: "A car on a fixed date, inside a precise window.",
+        },
+        {
+          id: "rita",
+          name: "Rita",
+          role: "Operations",
+          need: "Demand versus readiness between one booking and the next.",
+        },
+      ],
+    },
+    research: {
+      title: "Research",
+      methods: [
+        "Contextual inquiry",
+        "Leisure-user interviews",
+        "Personas",
+        "Expert review",
+      ],
+    },
+    constraint: {
+      title: "Primary constraint",
+      statement: "Vehicle unavailability was the primary challenge.",
+      support:
+        "Usability concerns became secondary when vehicles were unavailable.",
+      capacity:
+        "This service had a capacity problem that showed up through the booking experience.",
+    },
+    ux: {
+      title: "User experience signals",
+      signals: [
+        "Hard to find available slots",
+        "Planning months in advance",
+        "Unexpected cancellations",
+        "Unclear confirmation",
+        "Unclear reservation status",
+        "Unclear availability",
+        "Unclear rules",
+        "Operational uncertainty",
+      ],
+    },
+    ops: {
+      title: "Operational signals",
+      signals: [
+        "Charging time",
+        "Vehicle inspection",
+        "Maintenance",
+        "Vehicle condition",
+        "Reservation limitations",
+        "Pickup and return processes",
+      ],
+    },
+    intents: {
+      title: "Work vs leisure",
+      caption:
+        "Documented need contrast. Not a claim that the product already split these flows.",
+      workLabel: "Work",
+      leisureLabel: "Leisure",
+      workNeed: "Specific dates and times",
+      leisureNeed: "Greater flexibility / next available slot",
+    },
+    readiness: {
+      title: "Available and ready",
+      available: "Available",
+      ready: "Ready",
+      line: "Charging and inspection sit between return and the next usable booking.",
+    },
+    lifecycle: {
+      title: "Service model",
+      caption: "Conceptual service model derived from the research. Not an official SOP.",
+      steps: [
+        "User",
+        "Request",
+        "Booking",
+        "Vehicle",
+        "Preparation",
+        "Charging / maintenance",
+        "Ready",
+        "Pickup",
+        "Usage",
+        "Return",
+        "Inspection",
+        "Next user",
+      ],
+      bookingHint:
+        "Booking is one node. Operations and readiness sit around it.",
+    },
+    cancelPath: {
+      title: "Reservation reliability",
+      steps: ["Booked", "Waiting", "Cancelled"],
+      note: "Documented late cancellations could arrive without a clear reason or alternative.",
+    },
+  },
   assumption: {
     kicker: "01 · Assumption",
     statement: "We thought the platform was the problem.",

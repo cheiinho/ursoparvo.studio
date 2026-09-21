@@ -2115,6 +2115,211 @@ a.form-submit {
   }
 }
 
+/* Research snapshot map */
+.carpool-snap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding-block: var(--space-12);
+}
+
+.carpool-snap__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 40rem;
+}
+
+.carpool-snap__grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .carpool-snap__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .carpool-snap__grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .carpool-snap__panel--lead {
+    grid-column: 1 / -1;
+  }
+
+  .carpool-snap__panel:not(.carpool-snap__panel--lead):not(.carpool-snap__panel--wide) {
+    grid-column: span 4;
+  }
+
+  .carpool-snap__panel--wide {
+    grid-column: span 6;
+  }
+}
+
+.carpool-snap__panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--field);
+  min-width: 0;
+}
+
+.carpool-snap__panel--lead {
+  padding: var(--space-6);
+  background: color-mix(in srgb, var(--carpool-bad) 12%, var(--field));
+  border-left: 4px solid var(--carpool-bad);
+}
+
+.carpool-snap__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.carpool-snap__bar .type-meta {
+  margin: 0;
+}
+
+.carpool-snap__constraint {
+  margin: 0;
+  max-width: 22ch;
+  text-wrap: balance;
+}
+
+.carpool-snap__capacity {
+  margin: 0;
+  max-width: 36ch;
+  color: var(--text);
+}
+
+.carpool-snap__people,
+.carpool-snap__toggle {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.carpool-snap__toggle {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 22rem;
+}
+
+.carpool-snap__people button,
+.carpool-snap__toggle button,
+.carpool-snap__flow button {
+  appearance: none;
+  border: 1px solid color-mix(in srgb, var(--text) 28%, transparent);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: var(--radius-ui);
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.45em 0.7em;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.carpool-snap__people button.is-active,
+.carpool-snap__toggle button.is-active,
+.carpool-snap__flow button.is-current {
+  background: var(--text);
+  color: var(--surface);
+  border-color: var(--text);
+}
+
+.carpool-snap__toggle button.is-active.is-warn {
+  background: var(--carpool-warn);
+  border-color: var(--carpool-warn);
+  color: var(--surface);
+}
+
+.carpool-snap__toggle button.is-active.is-ok {
+  background: var(--carpool-ready);
+  border-color: var(--carpool-ready);
+  color: var(--surface);
+}
+
+.carpool-snap__flow button.is-platform:not(.is-current) {
+  border-color: var(--carpool-ready);
+  color: var(--carpool-ready);
+}
+
+.carpool-snap__flow button.is-current.is-bad {
+  background: var(--carpool-bad);
+  border-color: var(--carpool-bad);
+  color: var(--surface);
+}
+
+.carpool-snap__flow button.is-done {
+  border-color: var(--carpool-ready);
+}
+
+.carpool-snap__people button:focus-visible,
+.carpool-snap__toggle button:focus-visible,
+.carpool-snap__flow button:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.carpool-snap__person {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-height: 4.5rem;
+}
+
+.carpool-snap__methods,
+.carpool-snap__signals {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.carpool-snap__signals {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.carpool-snap__signals li {
+  padding: 0.35em 0.65em;
+  border: 1px solid color-mix(in srgb, var(--text) 22%, transparent);
+  border-radius: var(--radius-ui);
+  font-size: var(--fs-label);
+  letter-spacing: 0.02em;
+  background: var(--surface);
+}
+
+.carpool-snap__signals--ops li {
+  border-color: color-mix(in srgb, var(--carpool-charge) 45%, transparent);
+  color: var(--text);
+  background: color-mix(in srgb, var(--carpool-charge) 10%, var(--surface));
+}
+
+.carpool-snap__methods li {
+  padding: var(--space-2) 0;
+  border-left: 3px solid var(--carpool-ready);
+  padding-left: var(--space-3);
+}
+
+.carpool-snap__flow {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .carpool-wait__panel.is-animated,
   .carpool-ready__meter.is-animated::after,

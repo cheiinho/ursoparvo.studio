@@ -21,6 +21,66 @@ export type CarpoolContent = {
     headline: string;
     line: string;
   };
+  snapshot: {
+    kicker: string;
+    title: string;
+    intro: string;
+    note: string;
+    service: { title: string; body: string };
+    people: {
+      title: string;
+      caveat: string;
+      items: readonly {
+        id: string;
+        name: string;
+        role: string;
+        need: string;
+      }[];
+    };
+    research: {
+      title: string;
+      methods: readonly string[];
+    };
+    constraint: {
+      title: string;
+      statement: string;
+      support: string;
+      capacity: string;
+    };
+    ux: {
+      title: string;
+      signals: readonly string[];
+    };
+    ops: {
+      title: string;
+      signals: readonly string[];
+    };
+    intents: {
+      title: string;
+      caption: string;
+      workLabel: string;
+      leisureLabel: string;
+      workNeed: string;
+      leisureNeed: string;
+    };
+    readiness: {
+      title: string;
+      available: string;
+      ready: string;
+      line: string;
+    };
+    lifecycle: {
+      title: string;
+      caption: string;
+      steps: readonly string[];
+      bookingHint: string;
+    };
+    cancelPath: {
+      title: string;
+      steps: readonly string[];
+      note: string;
+    };
+  };
   assumption: {
     kicker: string;
     statement: string;

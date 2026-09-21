@@ -29,6 +29,124 @@ export const carpoolPt: CarpoolContent = {
     headline: "Um benefício interno de frota partilhada",
     line: "As pessoas reservavam carros da empresa para lazer ou trabalho. Se o fluxo de reserva parecia partido, era fácil assumir que o remendo estava no produto.",
   },
+  snapshot: {
+    kicker: "Research snapshot",
+    title: "O que a pesquisa já tornava visível",
+    intro:
+      "Um mapa editorial da evidência documentada. Não é analytics. Sem taxas inventadas.",
+    note: "Cada painel abaixo foi mapeado à pesquisa de origem antes de aparecer aqui.",
+    service: {
+      title: "Serviço",
+      body: "O Carpool era um benefício de colaboradores: um sistema interno para reservar veículos da frota partilhada para lazer ou trabalho.",
+    },
+    people: {
+      title: "Pessoas",
+      caveat:
+        "As entrevistas de lazer eram a amostra mais forte. Trabalho e operações ainda precisavam de research mais profundo.",
+      items: [
+        {
+          id: "aires",
+          name: "Aires",
+          role: "Lazer",
+          need: "Próxima oportunidade utilizável. Fins-de-semana importam.",
+        },
+        {
+          id: "ricardo",
+          name: "Ricardo",
+          role: "Trabalho",
+          need: "Um carro numa data fixa, dentro de um intervalo preciso.",
+        },
+        {
+          id: "rita",
+          name: "Rita",
+          role: "Operações",
+          need: "Procura versus readiness entre uma reserva e a seguinte.",
+        },
+      ],
+    },
+    research: {
+      title: "Research",
+      methods: [
+        "Contextual inquiry",
+        "Entrevistas de lazer",
+        "Personas",
+        "Expert review",
+      ],
+    },
+    constraint: {
+      title: "Restrição principal",
+      statement: "A indisponibilidade de veículos era o desafio principal.",
+      support:
+        "As preocupações de usabilidade tornavam-se secundárias quando não havia veículos.",
+      capacity:
+        "Este serviço tinha um problema de capacidade que se manifestava na experiência de reserva.",
+    },
+    ux: {
+      title: "Sinais de experiência",
+      signals: [
+        "Difícil encontrar slots disponíveis",
+        "Planeamento com meses de antecedência",
+        "Cancelamentos inesperados",
+        "Confirmação pouco clara",
+        "Estado de reserva pouco claro",
+        "Disponibilidade pouco clara",
+        "Regras pouco claras",
+        "Incerteza operacional",
+      ],
+    },
+    ops: {
+      title: "Sinais operacionais",
+      signals: [
+        "Tempo de carregamento",
+        "Inspeção do veículo",
+        "Manutenção",
+        "Condição do veículo",
+        "Limitações de reserva",
+        "Processos de levantamento e devolução",
+      ],
+    },
+    intents: {
+      title: "Trabalho vs lazer",
+      caption:
+        "Contraste de necessidades documentado. Não é uma afirmação de que o produto já separava estes fluxos.",
+      workLabel: "Trabalho",
+      leisureLabel: "Lazer",
+      workNeed: "Datas e horários específicos",
+      leisureNeed: "Maior flexibilidade / próximo slot disponível",
+    },
+    readiness: {
+      title: "Disponível e pronto",
+      available: "Disponível",
+      ready: "Pronto",
+      line: "Carregamento e inspeção ficam entre a devolução e a próxima reserva utilizável.",
+    },
+    lifecycle: {
+      title: "Modelo de serviço",
+      caption:
+        "Modelo conceptual de serviço derivado da pesquisa. Não é um SOP oficial.",
+      steps: [
+        "Utilizador",
+        "Pedido",
+        "Reserva",
+        "Veículo",
+        "Preparação",
+        "Carregamento / manutenção",
+        "Pronto",
+        "Levantamento",
+        "Uso",
+        "Devolução",
+        "Inspeção",
+        "Próximo utilizador",
+      ],
+      bookingHint:
+        "A reserva é um nó. Operações e readiness estão à sua volta.",
+    },
+    cancelPath: {
+      title: "Fiabilidade da reserva",
+      steps: ["Reservado", "À espera", "Cancelado"],
+      note: "Cancelamentos tardios documentados podiam chegar sem motivo claro nem alternativa.",
+    },
+  },
   assumption: {
     kicker: "01 · Assunção",
     statement: "Pensámos que a plataforma era o problema.",

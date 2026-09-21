@@ -13,6 +13,7 @@ import {
   ServiceZoom,
   WaitTimeline,
 } from "@/components/carpool/CarpoolInteractive";
+import { ResearchSnapshot } from "@/components/carpool/CarpoolSnapshot";
 import type { CarpoolContent } from "@/content/carpool/types";
 
 type Props = { content: CarpoolContent };
@@ -70,6 +71,8 @@ export default function CarpoolCaseStudy({ content }: Props) {
         <h2 className="type-heading">{c.brief.headline}</h2>
         <p className="type-corpo measure">{c.brief.line}</p>
       </Section>
+
+      <ResearchSnapshot snapshot={c.snapshot} labels={c.labels} />
 
       <Section id="assumption" kicker={c.assumption.kicker}>
         <Statement>{c.assumption.statement}</Statement>
