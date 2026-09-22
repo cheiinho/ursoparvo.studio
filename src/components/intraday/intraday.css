@@ -436,7 +436,7 @@
 }
 
 .ix-scene__look span {
-  color: rgba(201, 178, 255, 0.6);
+  color: rgba(201, 178, 255, 0.78);
 }
 
 .ix-recon {
@@ -2036,6 +2036,16 @@
 }
 
 @media (max-width: 44.99rem) {
+  /*
+   * The scope and metric segments are decorative chrome: they make the screen
+   * read as a real application where there is room for them. On a phone they
+   * are three rows of noise in front of the thing each solution is about.
+   */
+  .psurface__scope,
+  .pbar .pseg {
+    display: none;
+  }
+
   /* One row in the bar: the mark, the page, and the tools. The account and
      the product name are already in the surface heading below. */
   .pwin__brand {

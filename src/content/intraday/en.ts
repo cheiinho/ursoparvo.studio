@@ -57,8 +57,8 @@ export const intradayEn: IntradayContent = {
         label: "Announce it where the planner is",
         statement: "The run announces itself on the pages the forecast lives on, and in the notification centre.",
         line: "A planner reading the schedule would otherwise watch numbers move with no explanation. Quiet checks say nothing; only a real run speaks.",
-        look: "The banner names the affected queue and the period, and offers a filter.",
-        view: { phase: 4, place: "forecast", panelOpen: true },
+        look: "The banner names the affected queue and the period. The bell carries the same notice, unread.",
+        view: { phase: 4, place: "forecast" },
       },
       {
         id: "replace",
@@ -73,7 +73,7 @@ export const intradayEn: IntradayContent = {
         label: "Keep the previous line",
         statement: "The original forecast is kept as a baseline, so the planner can put the two lines side by side.",
         line: "A replaced number on its own is not an explanation. Seeing what it replaced is how the planner judges the size of the change.",
-        look: "Turn the comparison on and the previous line appears under the new one.",
+        look: "The dashed line is the forecast this one replaced. Turn the comparison off to lose it.",
         view: { phase: 5, place: "forecast", showPrevious: true },
       },
       {
@@ -362,7 +362,7 @@ export const intradayEn: IntradayContent = {
   },
   outcome: {
     heading: "Outcome",
-    lede: "Three decisions hold the path together: allow the queue, announce the change, and make the change inspectable.",
+    lede: "The five solutions describe a path, not an algorithm. What the path does not settle is set out here.",
     design:
       "The presented design specifies a path. A customer allows a queue, or does not. A check stays silent. A reforecast announces itself on the pages where the forecast sits, at the start and at the finish. The planner can put the new forecast against the previous one and open the affected period on the forecast and on the schedule. Detection settings are not on the form.",
     unknowns: [

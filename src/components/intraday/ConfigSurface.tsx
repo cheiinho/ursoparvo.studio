@@ -66,7 +66,7 @@ export default function ConfigSurface({ content }: { content: IntradayContent })
           />
         </div>
 
-        <details className="psecondary" open>
+        <details className="psecondary">
           <summary>{one.disclosure}</summary>
           <div className="psettings">
             <p className="phelp">{one.existingNote}</p>
