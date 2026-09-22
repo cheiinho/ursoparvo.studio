@@ -221,6 +221,25 @@
   color: var(--ix-on-plum);
 }
 
+/*
+ * The studio header is fixed and transparent, so the product window would
+ * otherwise scroll under the bear. This band carries the console colour up
+ * behind it and the whole strip reads as one toolbar. It belongs to the stage,
+ * not to the console, so it can never reach up into the hero: it takes no
+ * layout space, and it sits under the console while the console is unstuck.
+ */
+.ix-stage::before {
+  content: "";
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  height: var(--header-offset);
+  margin-bottom: calc(var(--header-offset) * -1);
+  background: #211230;
+  pointer-events: none;
+}
+
 .ix-console {
   position: sticky;
   top: var(--header-offset);
@@ -228,21 +247,6 @@
   min-height: var(--ix-console-h);
   background: #211230;
   border-bottom: 1px solid rgba(244, 238, 227, 0.14);
-}
-
-/*
- * The studio header is fixed and transparent, so the product window would
- * otherwise scroll under the bear. Carry the console colour up behind it and
- * the whole strip reads as one toolbar.
- */
-.ix-console::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 100%;
-  height: var(--header-offset);
-  background: #211230;
 }
 
 .ix-console__inner {
