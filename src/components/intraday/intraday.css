@@ -2417,6 +2417,15 @@
   }
 }
 
+/* Tighten the segmented controls so the three metric labels fit a phone
+   instead of being cut off mid-word inside the pill. */
+@media (max-width: 30rem) {
+  .pseg span {
+    padding: 0 0.5rem;
+    font-size: 0.74rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .psystem__bar {
     animation: none;
