@@ -4,10 +4,10 @@ export const carpoolPt: CarpoolContent = {
   meta: {
     title: "Carpool · caso de estudo de UX research · UrsoParvo Studio",
     description:
-      "UX research sobre disponibilidade de veículos, comportamento de reserva e readiness operacional, e como essa evidência desafiou uma assunção platform-first.",
+      "Um serviço interno de frota partilhada. A interface tinha problemas reais de usabilidade, mas a pesquisa mostrou uma restrição maior: veículos podiam parecer reserváveis sem estarem disponíveis ou prontos.",
   },
   disclosure:
-    "Detalhes de cliente e produto foram anonimizados. As interfaces foram reconstruídas para efeitos de portefólio.",
+    "Detalhes de cliente e produto foram anonimizados. As interfaces foram reconstruídas para efeitos de portfólio e não são capturas de produção.",
   labels: {
     research: "Evidência de pesquisa",
     context: "Contexto de projecto",
@@ -15,258 +15,117 @@ export const carpoolPt: CarpoolContent = {
     reconstruction: "Reconstrução",
     exploration: "Exploração de design",
   },
-  cover: {
-    eyebrow: "Caso de estudo · Produto interno · Research",
-    title: "Carpool",
-    subtitle:
-      "Colaboradores podiam reservar carros da empresa. O brief parecia um problema de produto de reservas. A pesquisa disse outra coisa.",
-    meta: "UX research · Service design · Explorações de design",
-    thesis:
-      "A interface tinha problemas reais de usabilidade. A restrição dominante continuava a ser a disponibilidade de veículos e a readiness operacional.",
+  ui: {
+    stepControls: "Percorrer a cena",
+    reconstructedUi: "Interface reconstruída",
+    stateAvailable: "Disponível",
+    statePreparing: "Em preparação",
+    stateReady: "Pronto",
+    stateCancelled: "Cancelada",
+    stateAttention: "Atenção",
+    vehicleNames: ["Compact EV 01", "Compact EV 02", "Estate hybrid 01"],
   },
-  brief: {
-    kicker: "Contexto",
-    headline: "Um benefício interno de frota partilhada",
-    line: "As pessoas reservavam carros da empresa para lazer ou trabalho. Se o fluxo de reserva parecia partido, era fácil assumir que o remendo estava no produto.",
-  },
-  snapshot: {
-    kicker: "Research snapshot",
-    title: "O que a pesquisa já tornava visível",
-    intro:
-      "Um mapa editorial da evidência documentada. Não é analytics. Sem taxas inventadas.",
-    note: "Cada painel abaixo foi mapeado à pesquisa de origem antes de aparecer aqui.",
-    service: {
-      title: "Serviço",
-      body: "O Carpool era um benefício de colaboradores: um sistema interno para reservar veículos da frota partilhada para lazer ou trabalho.",
-    },
-    people: {
-      title: "Pessoas",
-      caveat:
-        "As entrevistas de lazer eram a amostra mais forte. Trabalho e operações ainda precisavam de research mais profundo.",
-      items: [
-        {
-          id: "aires",
-          name: "Aires",
-          role: "Lazer",
-          need: "Próxima oportunidade utilizável. Fins-de-semana importam.",
-        },
-        {
-          id: "ricardo",
-          name: "Ricardo",
-          role: "Trabalho",
-          need: "Um carro numa data fixa, dentro de um intervalo preciso.",
-        },
-        {
-          id: "rita",
-          name: "Rita",
-          role: "Operações",
-          need: "Procura versus readiness entre uma reserva e a seguinte.",
-        },
-      ],
-    },
-    research: {
-      title: "Research",
-      methods: [
-        "Contextual inquiry",
-        "Entrevistas de lazer",
-        "Personas",
-        "Expert review",
-      ],
-    },
-    constraint: {
-      title: "Restrição principal",
-      statement: "A indisponibilidade de veículos era o desafio principal.",
-      support:
-        "As preocupações de usabilidade tornavam-se secundárias quando não havia veículos.",
-      capacity:
-        "Este serviço tinha um problema de capacidade que se manifestava na experiência de reserva.",
-    },
-    ux: {
-      title: "Sinais de experiência",
-      signals: [
-        "Difícil encontrar slots disponíveis",
-        "Planeamento com meses de antecedência",
-        "Cancelamentos inesperados",
-        "Confirmação pouco clara",
-        "Estado de reserva pouco claro",
-        "Disponibilidade pouco clara",
-        "Regras pouco claras",
-        "Incerteza operacional",
-      ],
-    },
-    ops: {
-      title: "Sinais operacionais",
-      signals: [
-        "Tempo de carregamento",
-        "Inspeção do veículo",
-        "Manutenção",
-        "Condição do veículo",
-        "Limitações de reserva",
-        "Processos de levantamento e devolução",
-      ],
-    },
-    intents: {
-      title: "Trabalho vs lazer",
+  hero: {
+    eyebrow: "Carpool · Produto interno · UX research",
+    title: "Quando uma reserva\nnão é bem\numa reserva.",
+    lead: "Um serviço interno de frota partilhada para colaboradores. A interface tinha problemas reais de usabilidade. Mas a pesquisa revelou uma restrição maior: os veículos podiam parecer reserváveis sem estarem necessariamente disponíveis ou prontos a usar.",
+    visual: {
+      vehicle: "Compact EV 01",
+      date: "Sáb 14",
+      free: "Slot livre",
+      states: ["Carregamento", "Inspeção", "Manutenção", "Pronto"],
       caption:
-        "Contraste de necessidades documentado. Não é uma afirmação de que o produto já separava estes fluxos.",
-      workLabel: "Trabalho",
-      leisureLabel: "Lazer",
-      workNeed: "Datas e horários específicos",
-      leisureNeed: "Maior flexibilidade / próximo slot disponível",
-    },
-    readiness: {
-      title: "Disponível e pronto",
-      available: "Disponível",
-      ready: "Pronto",
-      line: "Carregamento e inspeção ficam entre a devolução e a próxima reserva utilizável.",
-    },
-    lifecycle: {
-      title: "Modelo de serviço",
-      caption:
-        "Modelo conceptual de serviço derivado da pesquisa. Não é um SOP oficial.",
-      steps: [
-        "Utilizador",
-        "Pedido",
-        "Reserva",
-        "Veículo",
-        "Preparação",
-        "Carregamento / manutenção",
-        "Pronto",
-        "Levantamento",
-        "Uso",
-        "Devolução",
-        "Inspeção",
-        "Próximo utilizador",
-      ],
-      bookingHint:
-        "A reserva é um nó. Operações e readiness estão à sua volta.",
-    },
-    cancelPath: {
-      title: "Fiabilidade da reserva",
-      steps: ["Reservado", "À espera", "Cancelado"],
-      note: "Cancelamentos tardios documentados podiam chegar sem motivo claro nem alternativa.",
+        "A camada de disponibilidade que as pessoas viam, e os estados operacionais que ficavam por baixo.",
     },
   },
   assumption: {
-    kicker: "01 · Assunção",
-    statement: "Pensámos que a plataforma era o problema.",
-    body: "Se reservar parecia partido, reconstruir o produto de reservas. Razoável. Incompleto.",
-    nodes: ["Plataforma", "Reserva", "Carro"],
-    bridge: "Antes de desenhar uma solução, investigámos o serviço.",
-    contextNote:
-      "Uma reconstrução de plataforma estava enquadrada em cerca de 6 a 12 meses. Esse número é contexto de projecto, não métrica de research.",
+    kicker: "01 · O problema aparente",
+    statement: "Pensávamos que a plataforma era o problema.",
+    chain: ["Plataforma", "Reserva", "Carro"],
+    reveal: "Serviço",
+    verdict: "Razoável. Incompleto.",
+    note: "Um ecrã de reserva é onde a frustração aparece. Nem sempre é onde a restrição vive.",
   },
-  investigation: {
-    kicker: "02 · Investigação",
-    headline: "Olhámos para além dos ecrãs",
-    line: "As operações disseram o que acontecia entre reservas. Utilizadores de lazer disseram o que era esperar. Um expert review percorreu o produto em produção, linha a linha.",
-    methods: [
-      {
-        title: "Contextual inquiry",
-        detail:
-          "Levantamento, devolução, carregamento, inspeção, políticas, condição, multas.",
-      },
-      {
-        title: "Entrevistas de lazer",
-        detail:
-          "Procurar, reservar, cancelar, e se a espera ainda compensava.",
-      },
-      {
-        title: "Personas",
-        detail: "Flexibilidade de lazer, precisão de trabalho, operações de frota.",
-      },
-      {
-        title: "Expert review",
-        detail: "Timing de regras, histórico, confirmação, clareza de erros.",
-      },
+  research: {
+    kicker: "02 · A pesquisa mudou o problema",
+    headline: "O que as pessoas descreviam não era um problema de botão.",
+    statements: [
+      "Os veículos eram difíceis de encontrar.",
+      "As pessoas planeavam com meses de antecedência.",
+      "Uma reserva podia desaparecer antes da viagem.",
+      "Disponibilidade nem sempre era readiness.",
     ],
-    caveat:
-      "Mais forte no lazer. Reservas de trabalho e operações mais profundas ficaram como próximos passos.",
-    voice:
-      "Um utilizador de lazer disse-o sem rodeios: quando havia carros, a interface deixava de ser a queixa principal.",
+    methodsTitle: "Métodos",
+    methods: ["Contextual inquiry", "Entrevistas de lazer", "Personas", "Expert review"],
+    caveat: "Não é analytics. Sem taxas inventadas.",
+    sample:
+      "Evidência qualitativa. Mais forte no uso de lazer; reservas de trabalho e operações mais profundas ficaram como próximos passos.",
   },
-  personas: {
-    headline: "Três relações com o mesmo serviço",
-    line: "Papéis comportamentais da pesquisa, não cartazes demográficos.",
-    items: [
-      {
-        name: "Aires",
-        role: "Lazer",
-        need: "A próxima oportunidade utilizável. Fins-de-semana importam.",
-        lens: "Procura flexível",
-      },
-      {
-        name: "Ricardo",
-        role: "Trabalho",
-        need: "Um carro numa data fixa, dentro de um intervalo preciso.",
-        lens: "Compromisso fixo",
-      },
-      {
-        name: "Rita",
-        role: "Operações",
-        need: "Procura versus readiness entre uma reserva e a seguinte.",
-        lens: "Frota e pedidos",
-      },
-    ],
-  },
-  availability: {
+  finding: {
     kicker: "03 · Encontrar um carro",
-    statement: "O problema não era encontrar o botão de reservar.",
-    after: "Era encontrar um carro.",
-    line: "As pessoas caçavam dias livres, planeavam com meses de antecedência, e ainda encontravam opções indisponíveis que pareciam seleccionáveis. Não havia lista de espera.",
+    headline: "O problema não era encontrar o botão Reservar.",
+    lead: "As pessoas caçavam dias livres, planeavam com meses de antecedência e ainda assim encontravam opções que pareciam seleccionáveis mas não eram, de facto, utilizáveis.",
+    mock: {
+      title: "Encontrar um veículo",
+      selectDay: "Escolher um dia",
+      days: ["Sex 12", "Sáb 13", "Dom 14", "Seg 15", "Ter 16", "Qua 17"],
+      states: [
+        { free: 1, listed: 1, preparing: 1 },
+        { free: 0, listed: 2, preparing: 1 },
+        { free: 0, listed: 1, preparing: 2 },
+        { free: 2, listed: 1, preparing: 0 },
+        { free: 0, listed: 3, preparing: 0 },
+        { free: 1, listed: 0, preparing: 2 },
+      ],
+      usable: "Utilizável",
+      listed: "Listado · não reservável",
+      preparing: "Listado · não pronto",
+      empty: "Sem veículo utilizável neste dia",
+      tryAnotherDay: "Experimentar outro dia",
+      punch: "Uma lista que parece livre não é o mesmo que um carro que se pode levar.",
+    },
   },
   wait: {
     kicker: "04 · A espera",
-    statement: "Até uma reserva podia desaparecer.",
-    line: "Um caso documentado: reservado em janeiro para setembro; cerca de vinte dias antes, o carro deixava de estar disponível. Sem explicação útil. Sem alternativa.",
-    attribution:
-      "Da pesquisa com utilizadores de lazer. Não é afirmado como regra de todas as reservas.",
+    headline: "Uma reserva podia desaparecer antes da viagem.",
+    caseLabel: "Caso documentado da pesquisa de lazer",
+    months: [
+      { month: "Jan", text: "Reserva feita" },
+      { month: "Mar", text: "Ainda reservado" },
+      { month: "Jun", text: "Ainda reservado" },
+      { month: "Ago", text: "~20 dias antes" },
+      { month: "Set", text: "Cancelada" },
+    ],
+    booked: "Reservado",
+    cancelled: "Cancelada",
+    noExplanation: "Sem explicação útil.",
+    noAlternative: "Sem alternativa.",
+    alternativeEmpty: "Alternativa: nenhuma",
+    note: "Um caso documentado da pesquisa com utilizadores de lazer. Não é uma taxa de cancelamento. Não é uma regra do sistema.",
+    stage: { vehicle: "Compact EV 02", forLabel: "para setembro" },
   },
   readiness: {
-    kicker: "05 · Disponível ≠ pronto",
-    statement: "Disponível nem sempre significava pronto.",
-    line: "Carros eléctricos de lazer precisam de tempo de carregamento. A inspeção fica entre a devolução e a próxima reserva. Uma célula livre no calendário pode ainda significar um carro que ainda não pode sair.",
-  },
-  intents: {
-    kicker: "06 · Trabalho ≠ lazer",
-    statement: "Trabalho e lazer precisavam de coisas diferentes.",
-    line: "Um modelo de interacção servia dois trabalhos: compromissos fixos e oportunidade flexível. A pesquisa recomendava declarar a intenção.",
-  },
-  rules: {
-    kicker: "07 · Regras demasiado tarde",
-    statement: "O sistema conhecia a regra antes do clique.",
-    line: "Limites como uma reserva de lazer activa apareciam depois de Reservar, não antes do compromisso.",
-  },
-  history: {
-    kicker: "08 · Histórico",
-    statement: "O estado era difícil de ver quando importava.",
-    line: "Defaults podiam esconder reservas futuras. O estado importante vinha tarde na tabela. As pessoas abriam tickets para reservas que já existiam.",
-  },
-  usage: {
-    kicker: "09 · Uso real",
-    statement: "A hora agendada não prova o que aconteceu.",
-    line: "A pesquisa recomendava registar pickup e return reais, para responsabilização quando os planos mudam.",
-    note: "Os horários abaixo são ilustrativos.",
-  },
-  turningPoint: {
-    kicker: "10 · Ponto de viragem",
-    statement:
-      "A indisponibilidade de veículos era o desafio principal. A usabilidade era secundária.",
-    qualifier:
-      "A interface tinha problemas reais. Esse finding não absolve o produto. Reordena o problema.",
-    shift:
-      "De “como melhoramos a reserva?” para “o que torna uma reserva verdadeira?”",
+    kicker: "05 · Disponibilidade ≠ readiness",
+    statement: "Disponível ≠ pronto",
+    calendarTitle: "Calendário",
+    calendarFree: "Célula livre",
+    steps: [
+      { key: "return", label: "Devolução", text: "O utilizador anterior devolve o veículo." },
+      { key: "inspection", label: "Inspeção", text: "A condição é verificada antes do uso seguinte." },
+      { key: "charging", label: "Carregamento", text: "Os carros eléctricos de lazer precisam de tempo de carga." },
+      { key: "ready", label: "Pronto", text: "Só agora o slot é genuinamente utilizável." },
+    ],
+    line: "Uma célula livre no calendário podia ainda representar um veículo que não podia sair.",
+    note: "Sequência conceptual a partir da pesquisa. Não se implicam durações de carregamento nem SLAs operacionais.",
   },
   service: {
-    kicker: "Serviço",
-    statement: "A plataforma era só uma camada do problema.",
-    steps: [
-      "Utilizador",
+    kicker: "06 · O modelo de serviço",
+    statement: "Uma reserva é só um nó do serviço.",
+    nodes: [
       "Pedido",
       "Reserva",
       "Veículo",
       "Preparação",
-      "Carregamento / manutenção",
       "Pronto",
       "Levantamento",
       "Uso",
@@ -274,164 +133,134 @@ export const carpoolPt: CarpoolContent = {
       "Inspeção",
       "Próximo utilizador",
     ],
-    diagramNote:
-      "Modelo conceptual de serviço derivado da pesquisa. Não é um SOP oficial.",
+    focus: [1, 2, 3, 4],
+    focusCaptions: [
+      "O produto vivia aqui. A reserva era a parte que as pessoas viam.",
+      "Por trás havia um veículo físico, com um estado próprio.",
+      "Preparação, carregamento e manutenção decidiam se esse veículo podia andar.",
+      "Pronto é um facto operacional. O calendário só o podia sugerir.",
+    ],
+    note: "Modelo conceptual de serviço derivado da pesquisa. Não é um SOP oficial.",
+  },
+  intents: {
+    kicker: "07 · Trabalho ≠ lazer",
+    headline: "Duas intenções, uma só forma de reservar.",
+    work: {
+      label: "Trabalho",
+      traits: ["Compromisso fixo", "Data específica", "Intervalo preciso"],
+      query: "Preciso de um veículo a 14 de setembro.",
+      result: "Procurar uma data e janela horária fixas.",
+    },
+    leisure: {
+      label: "Lazer",
+      traits: ["Próxima oportunidade utilizável", "Flexível", "Fins-de-semana importam"],
+      query: "Mostra-me o próximo fim-de-semana utilizável.",
+      result: "Procurar em frente a próxima oportunidade utilizável.",
+    },
+    recommendation: "A pesquisa recomendou declarar a intenção.",
+    caveat: "Não se afirma que o produto já separava estes fluxos. Isto é uma exploração de design.",
+  },
+  rules: {
+    kicker: "08 · Regras demasiado tarde",
+    headline: "O sistema conhecia a regra antes do clique.",
+    before: { label: "Antes", steps: ["Reservar", "A regra aparece"] },
+    after: {
+      label: "Exploração",
+      steps: ["Regra", "Confirmar elegibilidade", "Reservar"],
+    },
+    rule: "Já tem uma reserva de lazer activa.",
+    ruleEarly: "Uma reserva de lazer activa de cada vez. A sua termina a 21 Set.",
+    point: "Limites como uma reserva de lazer activa apareciam depois de Reservar, não antes do compromisso.",
+    note: "Documentado no expert review. A colocação mais cedo é uma exploração, não uma alteração publicada.",
+  },
+  history: {
+    kicker: "09 · Histórico de reservas",
+    headline: "O estado era difícil de ver quando importava.",
+    problem:
+      "Filtros por defeito podiam esconder reservas futuras, e o estado importante aparecia tarde. As pessoas abriam tickets para reservas que já existiam.",
+    exploration:
+      "Tornar as reservas futuras e o estado actual imediatamente visíveis, antes de alguém ter de perguntar.",
+    views: { original: "Default original", exploration: "Exploração" },
+    hiddenHint: "1 reserva futura não mostrada pelo filtro por defeito",
+    nextLabel: "Próxima reserva",
+    tabs: ["Próximas", "Activas", "Concluídas", "Canceladas"],
+    booking: {
+      vehicle: "Compact EV 01",
+      when: "Sáb 14 Set · 09:00 a 18:00",
+      pastWhen: "Sex 22 Ago · 09:00 a 13:00",
+      statuses: ["Confirmada", "Em uso", "Concluída", "Cancelada"],
+    },
+    empty: "Nada a mostrar",
+    note: "A fonte documenta os tickets. Não afirma qualquer redução dos mesmos.",
+  },
+  usage: {
+    kicker: "10 · Agendado ≠ real",
+    headline: "A hora agendada não prova o que aconteceu.",
+    scheduled: { label: "Agendado", pickup: "09:00", ret: "17:00" },
+    actual: { label: "Real", pickup: "09:18", ret: "16:42" },
+    pickup: "Levantamento",
+    ret: "Devolução",
+    illustrative: "Horários ilustrativos",
+    recommendation:
+      "A pesquisa recomendou registar as horas reais de levantamento e devolução, para responsabilização quando os planos mudam.",
+  },
+  pivot: {
+    kicker: "11 · A viragem",
+    lines: [
+      "A interface tinha problemas reais.",
+      "Mas a usabilidade era secundária.",
+      "A restrição dominante era a disponibilidade de veículos.",
+      "O problema mudou.",
+    ],
+    fromLabel: "De",
+    from: "Como melhoramos a reserva?",
+    toLabel: "Para",
+    to: "O que torna uma reserva verdadeira?",
   },
   software: {
-    kicker: "Limites",
-    headline: "O que o software podia ajudar, e o que não resolvia sozinho",
-    could: {
-      title: "O software podia melhorar",
+    kicker: "12 · O que o software pode e não pode",
+    headline: "O produto podia melhorar a visibilidade. Não podia criar capacidade.",
+    can: {
+      title: "O software pode ajudar com",
       items: [
         "Descoberta de disponibilidade",
         "Regras mais cedo",
-        "Estado, confirmação, histórico",
+        "Estado e confirmação",
+        "Histórico",
         "Motivos de cancelamento",
         "Sinais de readiness, se houver dados",
         "Intenção trabalho / lazer",
       ],
     },
-    couldNot: {
-      title: "O software não podia sozinho",
+    cannot: {
+      title: "O software não pode sozinho",
       items: [
         "Criar capacidade de frota",
-        "Apagar a física do carregamento",
-        "Inventar capacidade de inspeção",
+        "Eliminar o carregamento",
+        "Criar capacidade de inspeção",
         "Impedir todos os cancelamentos de manutenção",
-        "Fazer a escassez parecer abundância",
+        "Fazer a escassez desaparecer",
       ],
     },
-    closing:
-      "Dizer a verdade operacional mais cedo. Só reconstruir se a reconstrução mirar a restrição dominante.",
   },
   investment: {
-    kicker: "Investimento",
-    headline: "Se uma plataforma leva 6 a 12 meses, para que problema é esse tempo?",
-    line: "Contexto de projecto, não métrica de research. Sem ROI inventado.",
-    contextNote: "Contexto de projecto",
-    chainA: ["Nova plataforma", "Melhor UI de reserva", "Melhor acesso?"],
-    chainB: [
-      "Nova plataforma",
-      "Melhor UI de reserva",
-      "Mesma frota",
-      "Mesma restrição de disponibilidade",
-    ],
-    close:
-      "A pesquisa desafiou se reconstruir a plataforma responderia à restrição dominante.",
+    kicker: "13 · Implicação estratégica",
+    headline: "Se uma plataforma leva 6 a 12 meses, que problema está esse investimento a resolver?",
+    contextNote:
+      "“6 a 12 meses” é contexto do projecto, não uma métrica de pesquisa. Não se calcula ROI aqui.",
+    a: { title: "O plano", items: ["Nova plataforma", "Melhor UI de reserva"] },
+    b: {
+      title: "A restrição",
+      items: ["Mesma frota", "Mesma restrição de disponibilidade"],
+    },
+    insight: "Melhor acesso à mesma capacidade limitada continua a ser capacidade limitada.",
   },
-  explorations: {
-    kicker: "Explorações",
-    headline: "O que a pesquisa abre ao design",
-    intro: "Respostas conceptuais. Não produto publicado.",
-    items: [
-      {
-        title: "Encontrar disponibilidade",
-        detail: "Perguntar quando é preciso um carro antes de escolher o modelo.",
-      },
-      {
-        title: "Mostrar readiness",
-        detail: "Tornar carregamento e preparação visíveis.",
-      },
-      {
-        title: "Intenção trabalho / lazer",
-        detail: "Janela fixa versus próxima disponibilidade.",
-      },
-      {
-        title: "Explicar estado",
-        detail: "Estado que responde ao que está a acontecer agora.",
-      },
-      {
-        title: "Explicar cancelamento",
-        detail: "Motivo e próximo passo, não silêncio.",
-      },
-      {
-        title: "Registar uso real",
-        detail: "Registar pickup e return quando acontecem.",
-      },
+  closing: {
+    kicker: "14 · O que ficou",
+    lines: [
+      "A plataforma era só uma camada do problema.",
+      "Dizer a verdade sobre a disponibilidade mais cedo.",
+      "Só reconstruir quando a reconstrução responde à restrição dominante.",
     ],
-  },
-  outcome: {
-    kicker: "Resultado",
-    climax:
-      "A decisão de design mais útil foi decidir o que precisava de ser resolvido primeiro.",
-    headline: "A pesquisa mudou a pergunta",
-    line: "Um enquadramento de decisão mais afiado. Sem história de lançamento. Sem poupanças inventadas.",
-    beforeLabel: "Antes",
-    afterLabel: "Depois",
-    before: "Como construímos uma melhor plataforma de reservas?",
-    after: "O que está de facto a impedir o serviço de funcionar?",
-    arc: [
-      {
-        label: "O que pensámos",
-        text: "A plataforma de reservas era o sítio onde intervir.",
-      },
-      {
-        label: "O que encontrámos",
-        text: "Problemas reais de interface, sob uma restrição mais profunda de disponibilidade e readiness.",
-      },
-      {
-        label: "O que mudou",
-        text: "A pergunta de investimento passou de reconstruir UI para verdade de serviço.",
-      },
-      {
-        label: "Porque importava",
-        text: "Meses de trabalho de plataforma só ajudam se mirarem a restrição que as pessoas sentem.",
-      },
-    ],
-  },
-  reflection: {
-    headline: "Limites",
-    body: [
-      "Ferramentas internas herdam a física do serviço que representam. Quando esse serviço é escasso e operacionalmente tamponado, o primeiro trabalho do produto é ser verdadeiro.",
-      "A amostra era concentrada em lazer. A evidência de trabalho era mais fina. A profundidade operacional ficou por concluir. Esses limites pertencem ao espaço público.",
-    ],
-  },
-  interact: {
-    selectDate: "Escolher um dia",
-    vehicles: "Veículos",
-    noAvailability: "Sem carros utilizáveis neste dia",
-    fewerOptions: "Menos opções",
-    tryAnotherDay: "Experimentar outro dia",
-    dayLabels: ["Sex", "Sáb", "Dom", "Seg", "Ter", "Qua"],
-    vehicleOpen: "Disponível para reservar",
-    vehicleClosed: "Listado · sem slot utilizável",
-    scrubHint: "Percorrer a reserva",
-    booked: "Reservado",
-    monthsPass: "Passam meses",
-    stillBooked: "A reserva ainda existe",
-    twentyDays: "~20 dias antes",
-    cancelled: "Cancelada",
-    noReason: "Sem motivo mostrado",
-    noAlternative: "Sem alternativa oferecida",
-    playReady: "Percorrer a readiness",
-    stepReturn: "Devolução",
-    stepInspection: "Inspeção",
-    stepCharging: "Carregamento",
-    stepReady: "Pronto",
-    availableTag: "Disponível",
-    readyTag: "Pronto",
-    workMode: "Trabalho",
-    leisureMode: "Lazer",
-    workNeed: "12 Set · 09:00 a 14:00 · janela fixa",
-    leisureNeed: "Próximo fim-de-semana disponível",
-    reserve: "Reservar",
-    lateRule: "Já tem uma reserva de lazer activa.",
-    earlyRule: "1 reserva de lazer activa. Volte a reservar depois de terminar.",
-    tryAgain: "Repor",
-    showBefore: "Mostrar a regra antes do compromisso",
-    tabUpcoming: "Próximas",
-    tabActive: "Activas",
-    tabCompleted: "Concluídas",
-    tabCancelled: "Canceladas",
-    statusOpen: "Aberta",
-    statusCompleted: "Concluída",
-    statusCancelled: "Cancelada",
-    scheduled: "Agendado",
-    actual: "Real",
-    pickup: "Levantamento",
-    returnLabel: "Devolução",
-    illustrative: "Horários ilustrativos",
-    zoomHint: "Afastar da camada de reserva",
-    platformNode: "Plataforma de reservas",
   },
 };
