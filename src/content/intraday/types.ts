@@ -15,6 +15,16 @@ export type ShellState = "watching" | "inProgress" | "updated";
 
 export type SurfaceId = "forecast" | "teamSchedule" | "insights";
 
+export type ActId =
+  | "plan"
+  | "divergence"
+  | "detection"
+  | "permission"
+  | "reforecast"
+  | "inspection";
+
+export type PlaceId = SurfaceId | "issues" | "configurations";
+
 export type Quarter = {
   time: string;
   previous: number;
@@ -38,6 +48,12 @@ export type IntradayContent = {
   labels: Record<EvidenceKind, string>;
   legend: EvidenceKind[];
   sections: Array<{ id: string; label: string }>;
+  experience: {
+    label: string;
+    hint: string;
+    restart: string;
+    acts: Array<{ id: ActId; label: string; statement: string; line: string }>;
+  };
   cover: {
     kicker: string;
     thesis: string;
@@ -162,6 +178,7 @@ export type IntradayContent = {
   };
   outcome: {
     heading: string;
+    lede: string;
     design: string;
     unknowns: [string, string, string, string];
     transition: string;

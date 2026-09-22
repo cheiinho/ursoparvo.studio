@@ -13,6 +13,7 @@ type Props = {
   rows: readonly Row[];
   note: string;
   asHeading?: boolean;
+  showHeading?: boolean;
   headingRef?: Ref<HTMLHeadingElement>;
   affectedStart: string;
   affectedEnd: string;
@@ -38,6 +39,7 @@ export default function ScheduleList({
   rows,
   note,
   asHeading = false,
+  showHeading = true,
   headingRef,
   affectedStart,
   affectedEnd,
@@ -50,15 +52,17 @@ export default function ScheduleList({
 
   return (
     <div className="intraday-schedule">
-      {asHeading ? (
-        <h3 id={headingId} ref={headingRef} tabIndex={-1} className={className}>
-          {heading}
-        </h3>
-      ) : (
-        <p id={headingId} className={className}>
-          {heading}
-        </p>
-      )}
+      {showHeading ? (
+        asHeading ? (
+          <h3 id={headingId} ref={headingRef} tabIndex={-1} className={className}>
+            {heading}
+          </h3>
+        ) : (
+          <p id={headingId} className={className}>
+            {heading}
+          </p>
+        )
+      ) : null}
       <div className="intraday-schedscroll">
         <table className="intraday-schedgrid">
           <caption>{heading}</caption>

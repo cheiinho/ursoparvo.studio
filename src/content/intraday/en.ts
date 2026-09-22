@@ -38,6 +38,49 @@ export const intradayEn: IntradayContent = {
     { id: "outcome", label: "Outcome" },
     { id: "reflection", label: "Reflection" },
   ],
+  experience: {
+    label: "Walkthrough",
+    hint: "You set the pace. Nothing runs on its own.",
+    restart: "Restart",
+    acts: [
+      {
+        id: "plan",
+        label: "The plan",
+        statement: "The day is staffed from this line.",
+        line: "One queue, in the account's day and time zone.",
+      },
+      {
+        id: "divergence",
+        label: "Divergence",
+        statement: "The day diverges.",
+        line: "Actuals pull away from the plan after 10:00.",
+      },
+      {
+        id: "detection",
+        label: "Detection",
+        statement: "The gap qualifies.",
+        line: "Consecutive periods above forecast. The figures behind that call were never defined.",
+      },
+      {
+        id: "permission",
+        label: "Permission",
+        statement: "The customer allows the queue.",
+        line: "One switch. No detection settings on the form.",
+      },
+      {
+        id: "reforecast",
+        label: "Reforecast",
+        statement: "The forecast changes without being asked.",
+        line: "A run starts, and the previous line stays until it finishes.",
+      },
+      {
+        id: "inspection",
+        label: "Inspection",
+        statement: "Show me what changed, and where.",
+        line: "Previous against current, then the period on the forecast and on the schedule.",
+      },
+    ],
+  },
   cover: {
     kicker: "Product design, Q2 2023",
     thesis:
@@ -288,6 +331,7 @@ export const intradayEn: IntradayContent = {
   },
   outcome: {
     heading: "Outcome",
+    lede: "Three decisions hold the path together: allow the queue, announce the change, and make the change inspectable.",
     design:
       "The presented design specifies a path. A customer allows a queue, or does not. A check stays silent. A reforecast announces itself on the pages where the forecast sits, at the start and at the finish. The planner can put the new forecast against the previous one and open the affected period on the forecast and on the schedule. Detection settings are not on the form.",
     unknowns: [

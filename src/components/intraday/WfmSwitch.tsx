@@ -4,24 +4,33 @@ type Props = {
   label: string;
   describedBy?: string;
   labelledBy?: string;
+  disabled?: boolean;
 };
 
-export default function WfmSwitch({ checked, onChange, label, describedBy, labelledBy }: Props) {
+export default function WfmSwitch({
+  checked,
+  onChange,
+  label,
+  describedBy,
+  labelledBy,
+  disabled = false,
+}: Props) {
   return (
     <button
       type="button"
       role="switch"
-      className={`wfm-switch${checked ? " is-on" : ""}`}
+      className={`pswitch${checked ? " is-on" : ""}`}
       aria-checked={checked}
       aria-describedby={describedBy}
       aria-labelledby={labelledBy}
       aria-label={labelledBy ? undefined : label}
+      disabled={disabled}
       onClick={() => onChange(!checked)}
     >
-      <span className="wfm-switch__track" aria-hidden="true">
-        <span className="wfm-switch__thumb" />
+      <span className="pswitch__track" aria-hidden="true">
+        <span className="pswitch__thumb" />
       </span>
-      {labelledBy ? null : <span>{label}</span>}
+      {labelledBy ? null : <span className="pswitch__text">{label}</span>}
     </button>
   );
 }
