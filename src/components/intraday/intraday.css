@@ -2147,9 +2147,24 @@
     min-width: 0;
   }
 
+  /* The list scrolls. Fade its end and rule it off from the transport, so a
+     half-shown act reads as more to come rather than as a cut edge. */
+  .ix-acts::after {
+    content: "";
+    position: sticky;
+    right: 0;
+    flex: 0 0 1.75rem;
+    align-self: stretch;
+    margin-left: -1.75rem;
+    background: linear-gradient(90deg, rgba(33, 18, 48, 0), #211230 80%);
+    pointer-events: none;
+  }
+
   .ix-transport {
     flex: none;
     gap: 0.25rem;
+    padding-left: 0.5rem;
+    border-left: 1px solid rgba(244, 238, 227, 0.16);
   }
 
   .ix-transport .ixbtn {
