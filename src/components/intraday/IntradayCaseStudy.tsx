@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import DataTable from "@/components/intraday/DataTable";
 import EvidenceLabel from "@/components/intraday/EvidenceLabel";
 import ForecastChart from "@/components/intraday/ForecastChart";
@@ -12,6 +13,15 @@ import type { IntradayContent } from "@/content/intraday/types";
 import "./intraday.css";
 
 type Props = { content: IntradayContent };
+
+function More({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <details className="intraday-more">
+      <summary className="type-label">{label}</summary>
+      <div className="intraday-stack">{children}</div>
+    </details>
+  );
+}
 
 function TargetBlock({
   evidence,
@@ -36,83 +46,90 @@ export default function IntradayCaseStudy({ content }: Props) {
 
   return (
     <article className="intraday">
-      <section id="cover" className="intraday-field intraday-field--system" aria-labelledby="intraday-title">
-        <div className="site-container intraday-stack">
+      <section id="cover" className="intraday-field intraday-field--system intraday-poster" aria-labelledby="intraday-title">
+        <div className="intraday-stage intraday-stack">
           <p className="type-label">{content.cover.kicker}</p>
-          <EvidenceLabel kind="inference" text={content.labels.inference} />
-          <p className="type-display type-italic">{content.cover.thesis}</p>
-          <h1 id="intraday-title" className="type-heading">
+          <h1 id="intraday-title" className="intraday-poster__name">
             {content.cover.title}
           </h1>
-          <p className="type-meta">{content.cover.domain}</p>
-          <p className="type-meta">{content.cover.anonymity}</p>
-          <ul className="intraday-toc">
-            {content.legend.map((kind) => (
-              <li key={kind} className="type-label">
-                {content.labels[kind]}
-              </li>
-            ))}
-          </ul>
-          <nav>
+          <p className="intraday-poster__thesis">{content.cover.thesis}</p>
+          <p className="intraday-poster__meta">
+            {content.cover.domain} {content.cover.anonymity}
+          </p>
+          <More label="Contents">
             <ul className="intraday-toc">
-              {content.sections.map((section) => (
-                <li key={section.id}>
-                  <a className="type-label" href={`#${section.id}`}>
-                    {section.label}
-                  </a>
+              {content.legend.map((kind) => (
+                <li key={kind} className="type-label">
+                  {content.labels[kind]}
                 </li>
               ))}
             </ul>
-          </nav>
-          <p className="intraday-transition type-corpo">{content.cover.transition}</p>
+            <nav>
+              <ul className="intraday-toc">
+                {content.sections.map((section) => (
+                  <li key={section.id}>
+                    <a className="type-label" href={`#${section.id}`}>
+                      {section.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+            <EvidenceLabel kind="inference" text={content.labels.inference} />
+            <p className="type-corpo">{content.cover.transition}</p>
+          </More>
         </div>
       </section>
 
-      <section id="plan" aria-labelledby="plan-title">
-        <div className="site-container intraday-section intraday-stack">
-          <h2 id="plan-title" className="type-heading">
+      <section id="plan" className="intraday-beat" aria-labelledby="plan-title">
+        <div className="intraday-stage intraday-stack">
+          <h2 id="plan-title" className="intraday-beat__title">
             {content.plan.heading}
           </h2>
-          <EvidenceLabel kind="requirement" text={content.labels.requirement} />
-          <p className="type-lede">{content.plan.message}</p>
-          {content.plan.body.map((paragraph) => (
-            <p key={paragraph} className="type-corpo measure">
-              {paragraph}
-            </p>
-          ))}
-          <p className="type-label">{content.plan.chartTitle}</p>
-          <EvidenceLabel kind="illustrative" text={content.labels.illustrative} />
-          <p className="type-nota">{content.chart.planSummary}</p>
-          <ForecastChart
-            patternId="plan-band"
-            axis={hourly.map((row) => row.hour)}
-            series={[
-              {
-                id: "forecast",
-                label: content.chart.forecast,
-                style: "solid",
-                weight: "strong",
-                points: hourly.map((row) => ({ time: row.hour, value: row.total })),
-              },
-            ]}
-            tone="paper"
-            yLabel={content.chart.contacts}
-          />
-          <DataTable
-            caption={content.plan.caption}
-            columns={[content.system.columns.time, content.chart.forecast]}
-            rows={hourly.map((row) => [row.hour, String(row.total)])}
-          />
-          <p className="intraday-transition type-corpo">{content.plan.transition}</p>
+          <p className="intraday-beat__line">{content.plan.message}</p>
+          <div className="intraday-hero-chart">
+            <p className="type-label">{content.plan.chartTitle}</p>
+            <EvidenceLabel kind="illustrative" text={content.labels.illustrative} />
+            <ForecastChart
+              patternId="plan-band"
+              axis={hourly.map((row) => row.hour)}
+              series={[
+                {
+                  id: "forecast",
+                  label: content.chart.forecast,
+                  style: "solid",
+                  weight: "strong",
+                  points: hourly.map((row) => ({ time: row.hour, value: row.total })),
+                },
+              ]}
+              tone="paper"
+              yLabel={content.chart.contacts}
+            />
+            <DataTable
+              caption={content.plan.caption}
+              columns={[content.system.columns.time, content.chart.forecast]}
+              rows={hourly.map((row) => [row.hour, String(row.total)])}
+            />
+          </div>
+          <More label="How the plan is used">
+            <EvidenceLabel kind="requirement" text={content.labels.requirement} />
+            {content.plan.body.map((paragraph) => (
+              <p key={paragraph} className="type-corpo measure">
+                {paragraph}
+              </p>
+            ))}
+            <p className="type-nota">{content.chart.planSummary}</p>
+            <p className="type-corpo">{content.plan.transition}</p>
+          </More>
         </div>
       </section>
 
-      <section id="diverges" aria-labelledby="diverges-title">
-        <div className="site-container intraday-section intraday-stack">
-          <h2 id="diverges-title" className="type-heading">
+      <section id="diverges" className="intraday-beat" aria-labelledby="diverges-title">
+        <div className="intraday-stage intraday-stack">
+          <h2 id="diverges-title" className="intraday-beat__title">
             {content.diverges.heading}
           </h2>
-          <p className="type-lede">{content.diverges.message}</p>
+          <p className="intraday-beat__line">{content.diverges.message}</p>
           <ScenarioSelector
             groupLabel={content.diverges.groupLabel}
             options={content.diverges.options}
@@ -124,134 +141,129 @@ export default function IntradayCaseStudy({ content }: Props) {
             illustrative={content.labels.illustrative}
             time={content.system.columns.time}
           />
-          <p className="intraday-transition type-corpo">{content.diverges.transition}</p>
+          <More label="What the brief asked of this">
+            <p className="type-corpo">{content.diverges.transition}</p>
+          </More>
         </div>
       </section>
 
-      <section id="brief" aria-labelledby="brief-title">
-        <div className="site-container intraday-section intraday-stack">
-          <h2 id="brief-title" className="type-heading">
+      <section id="brief" className="intraday-beat" aria-labelledby="brief-title">
+        <div className="intraday-stage intraday-stack">
+          <h2 id="brief-title" className="intraday-beat__title">
             {content.brief.heading}
           </h2>
-          <EvidenceLabel kind="requirement" text={content.labels.requirement} />
-          <p className="type-lede">{content.brief.message}</p>
-          <p className="type-italic type-lede">{content.brief.story}</p>
-          <p className="type-corpo measure">{content.brief.note}</p>
-          <div className="intraday-split intraday-split--brief">
-            <div className="intraday-stack">
-              <ul>
-                {content.brief.constraints.map((item) => (
-                  <li key={item.summary} className="type-corpo">
-                    {item.body}
-                  </li>
-                ))}
-              </ul>
-              {content.brief.splits.map((item) => (
-                <details key={item.summary}>
-                  <summary className="type-label">{item.summary}</summary>
-                  <p className="type-corpo">{item.body}</p>
-                </details>
-              ))}
-            </div>
-            <TargetBlock
-              evidence={content.labels.requirement}
-              label={content.target.label}
-              body={content.target.body}
-            />
-          </div>
-          <p className="intraday-transition type-corpo">{content.brief.transition}</p>
+          <p className="intraday-beat__line">{content.brief.message}</p>
+          <p className="type-italic intraday-beat__story">{content.brief.story}</p>
+          <ul className="intraday-cards">
+            {content.brief.constraints.map((item) => (
+              <li key={item.summary} className="type-corpo">
+                {item.body}
+              </li>
+            ))}
+          </ul>
+          <TargetBlock
+            evidence={content.labels.requirement}
+            label={content.target.label}
+            body={content.target.body}
+          />
+          <More label="What was still open">
+            <EvidenceLabel kind="requirement" text={content.labels.requirement} />
+            <p className="type-corpo measure">{content.brief.note}</p>
+            {content.brief.splits.map((item) => (
+              <details key={item.summary}>
+                <summary className="type-label">{item.summary}</summary>
+                <p className="type-corpo">{item.body}</p>
+              </details>
+            ))}
+            <p className="type-corpo">{content.brief.transition}</p>
+          </More>
         </div>
       </section>
 
-      <section id="system" className="intraday-field intraday-field--system" aria-labelledby="system-title">
-        <div className="site-container site-container--wide intraday-section intraday-stack">
-          <h2 id="system-title" className="type-heading">
+      <section id="system" className="intraday-field intraday-field--system intraday-beat" aria-labelledby="system-title">
+        <div className="intraday-stage intraday-stack">
+          <h2 id="system-title" className="intraday-beat__title">
             {content.system.heading}
           </h2>
-          <EvidenceLabel kind="exploration" text={content.labels.exploration} />
-          <p className="type-lede">{content.system.message}</p>
-          <div className="intraday-step-layout">
-            <ReforecastStepper
-              groupLabel={content.system.groupLabel}
-              back={content.system.back}
-              next={content.system.next}
-              steps={content.system.steps}
-              start={content.decisionTwo.start}
-              completed={content.decisionTwo.completed}
-              time={content.system.columns.time}
-              forecast={content.system.columns.forecast}
-              actual={content.system.columns.actual}
-              newForecast={content.chart.newForecast}
-              contacts={content.chart.contacts}
-              empty={content.chart.empty}
-              summary={content.chart.stepSummary}
-              illustrative={content.labels.illustrative}
-            />
-            <div className="intraday-stack">
-              <EvidenceLabel kind="inference" text={content.labels.inference} />
-              <p className="type-corpo">{content.system.algorithm}</p>
-            </div>
-          </div>
-          <p className="type-corpo">{content.system.lowVolume}</p>
-          <p className="intraday-transition type-corpo">{content.system.transition}</p>
+          <p className="intraday-beat__line">{content.system.message}</p>
+          <ReforecastStepper
+            groupLabel={content.system.groupLabel}
+            back={content.system.back}
+            next={content.system.next}
+            steps={content.system.steps}
+            start={content.decisionTwo.start}
+            completed={content.decisionTwo.completed}
+            time={content.system.columns.time}
+            forecast={content.system.columns.forecast}
+            actual={content.system.columns.actual}
+            newForecast={content.chart.newForecast}
+            contacts={content.chart.contacts}
+            empty={content.chart.empty}
+            summary={content.chart.stepSummary}
+            illustrative={content.labels.illustrative}
+          />
+          <More label="What design did not decide">
+            <EvidenceLabel kind="exploration" text={content.labels.exploration} />
+            <EvidenceLabel kind="inference" text={content.labels.inference} />
+            <p className="type-corpo">{content.system.algorithm}</p>
+            <p className="type-corpo">{content.system.lowVolume}</p>
+            <p className="type-corpo">{content.system.transition}</p>
+          </More>
         </div>
       </section>
 
-      <section id="tensions" className="intraday-field intraday-field--questions" aria-labelledby="tensions-title">
-        <div className="site-container intraday-section intraday-stack">
-          <h2 id="tensions-title" className="type-heading">
+      <section id="tensions" className="intraday-field intraday-field--questions intraday-questions" aria-labelledby="tensions-title">
+        <div className="intraday-stage intraday-stack">
+          <h2 id="tensions-title" className="type-label">
             {content.tensions.heading}
           </h2>
-          <p className="type-lede">{content.tensions.message}</p>
           {content.tensions.questions.map((question) => (
-            <h3 key={question} className="type-lede">
-              {question}
-            </h3>
+            <h3 key={question}>{question}</h3>
           ))}
-          <p className="intraday-transition type-corpo">{content.tensions.transition}</p>
+          <More label="Why these three">
+            <p className="type-corpo">{content.tensions.message}</p>
+            <p className="type-corpo">{content.tensions.transition}</p>
+          </More>
         </div>
       </section>
 
-      <section id="decision-one" className="intraday-peak" aria-labelledby="decision-one-title">
-        <div className="site-container site-container--wide intraday-section intraday-stack">
-          <h2 id="decision-one-title" className="type-heading">
+      <section id="decision-one" className="intraday-peak intraday-beat" aria-labelledby="decision-one-title">
+        <div className="intraday-stage intraday-stack">
+          <h2 id="decision-one-title" className="intraday-beat__title">
             {content.decisionOne.heading}
           </h2>
-          <EvidenceLabel kind="designDecision" text={content.labels.designDecision} />
-          <p className="type-lede">{content.decisionOne.message}</p>
-          <div className="intraday-stack">
+          <p className="intraday-beat__line">{content.decisionOne.message}</p>
+          <QueueSwitch
+            region={content.frame.region}
+            product={content.frame.product}
+            reconstruction={content.frame.reconstruction}
+            sentence={content.frame.sentence}
+            illustrative={content.labels.illustrative}
+            accountLabel={content.frame.accountLabel}
+            queueLabel={content.decisionOne.queueLabel}
+            control={content.decisionOne.control}
+            helper={content.decisionOne.helper}
+            onLine={content.decisionOne.onLine}
+            existingNote={content.decisionOne.existingNote}
+            existingValue={content.decisionOne.existingValue}
+            fields={content.decisionOne.fields}
+            disclosure={content.decisionOne.disclosure}
+          />
+          <More label="The requirement beside the switch">
+            <EvidenceLabel kind="designDecision" text={content.labels.designDecision} />
             <EvidenceLabel kind="requirement" text={content.labels.requirement} />
             <p className="type-corpo">{content.decisionOne.conflict}</p>
-          </div>
-          <QueueSwitch
-              region={content.frame.region}
-              product={content.frame.product}
-              reconstruction={content.frame.reconstruction}
-              sentence={content.frame.sentence}
-              illustrative={content.labels.illustrative}
-              accountLabel={content.frame.accountLabel}
-              queueLabel={content.decisionOne.queueLabel}
-              control={content.decisionOne.control}
-              helper={content.decisionOne.helper}
-              onLine={content.decisionOne.onLine}
-              existingNote={content.decisionOne.existingNote}
-              existingValue={content.decisionOne.existingValue}
-              fields={content.decisionOne.fields}
-              disclosure={content.decisionOne.disclosure}
-            />
-          <p className="intraday-transition type-corpo">{content.decisionOne.transition}</p>
+            <p className="type-corpo">{content.decisionOne.transition}</p>
+          </More>
         </div>
       </section>
 
-      <section id="decision-two" className="intraday-peak" aria-labelledby="decision-two-title">
-        <div className="site-container site-container--wide intraday-section intraday-stack">
-          <h2 id="decision-two-title" className="type-heading">
+      <section id="decision-two" className="intraday-peak intraday-beat" aria-labelledby="decision-two-title">
+        <div className="intraday-stage intraday-stack">
+          <h2 id="decision-two-title" className="intraday-beat__title">
             {content.decisionTwo.heading}
           </h2>
-          <p className="type-lede">{content.decisionTwo.causal}</p>
-          <EvidenceLabel kind="designDecision" text={content.labels.designDecision} />
-          <p className="type-corpo measure">{content.decisionTwo.message}</p>
-          <p className="type-corpo">{content.decisionTwo.assumption}</p>
+          <p className="intraday-beat__line">{content.decisionTwo.causal}</p>
           <ProductShell
             region={content.frame.region}
             product={content.frame.product}
@@ -287,19 +299,21 @@ export default function IntradayCaseStudy({ content }: Props) {
             time={content.decisionThree.columns.time}
             summary={content.chart.planSummary}
           />
-          <p className="intraday-transition type-corpo">{content.decisionTwo.transition}</p>
+          <More label="Where the change has to land">
+            <EvidenceLabel kind="designDecision" text={content.labels.designDecision} />
+            <p className="type-corpo measure">{content.decisionTwo.message}</p>
+            <p className="type-corpo">{content.decisionTwo.assumption}</p>
+            <p className="type-corpo">{content.decisionTwo.transition}</p>
+          </More>
         </div>
       </section>
 
-      <section id="decision-three" className="intraday-peak" aria-labelledby="decision-three-title">
-        <div className="site-container site-container--wide intraday-section intraday-stack">
-          <h2 id="decision-three-title" className="type-heading">
+      <section id="decision-three" className="intraday-peak intraday-beat" aria-labelledby="decision-three-title">
+        <div className="intraday-stage intraday-stack">
+          <h2 id="decision-three-title" className="intraday-beat__title">
             {content.decisionThree.heading}
           </h2>
-          <p className="type-lede">{content.decisionThree.causal}</p>
-          <p className="type-corpo measure">{content.decisionThree.message}</p>
-          <EvidenceLabel kind="inference" text={content.labels.inference} />
-          <p className="type-corpo">{content.decisionThree.baseline}</p>
+          <p className="intraday-beat__line">{content.decisionThree.causal}</p>
           <ForecastCompare
             product={content.frame.product}
             reconstruction={content.frame.reconstruction}
@@ -336,48 +350,57 @@ export default function IntradayCaseStudy({ content }: Props) {
             contacts={content.chart.contacts}
             queueLabel={content.decisionOne.queueLabel}
           />
-          <p className="intraday-transition type-corpo">{content.decisionThree.transition}</p>
+          <More label="What the comparison is allowed to claim">
+            <EvidenceLabel kind="inference" text={content.labels.inference} />
+            <p className="type-corpo measure">{content.decisionThree.message}</p>
+            <p className="type-corpo">{content.decisionThree.baseline}</p>
+            <p className="type-corpo">{content.decisionThree.transition}</p>
+          </More>
         </div>
       </section>
 
-      <section id="validation" className="intraday-field intraday-field--ending" aria-labelledby="validation-title">
-        <div className="site-container intraday-section intraday-stack">
-          <h2 id="validation-title" className="type-heading">
+      <section id="validation" className="intraday-field intraday-field--ending intraday-close" aria-labelledby="validation-title">
+        <div className="intraday-stage intraday-stack">
+          <h2 id="validation-title" className="intraday-beat__title">
             {content.validation.heading}
           </h2>
           <p className="type-corpo measure">{content.validation.paragraphs[0]}</p>
-          <EvidenceLabel kind="context" text={content.labels.context} />
-          <p className="type-corpo measure">{content.validation.paragraphs[1]}</p>
-          <p className="type-corpo measure">{content.validation.paragraphs[2]}</p>
-          <p className="intraday-transition type-corpo">{content.validation.transition}</p>
+          <More label="What the sessions did not settle">
+            <EvidenceLabel kind="context" text={content.labels.context} />
+            <p className="type-corpo measure">{content.validation.paragraphs[1]}</p>
+            <p className="type-corpo measure">{content.validation.paragraphs[2]}</p>
+            <p className="type-corpo">{content.validation.transition}</p>
+          </More>
         </div>
       </section>
 
-      <section id="outcome" className="intraday-field intraday-field--ending" aria-labelledby="outcome-title">
-        <div className="site-container intraday-section intraday-stack">
-          <h2 id="outcome-title" className="type-heading">
+      <section id="outcome" className="intraday-field intraday-field--ending intraday-close" aria-labelledby="outcome-title">
+        <div className="intraday-stage intraday-stack">
+          <h2 id="outcome-title" className="intraday-beat__title">
             {content.outcome.heading}
           </h2>
-          <p className="type-lede measure">{content.outcome.design}</p>
+          <p className="intraday-beat__line">{content.outcome.design}</p>
           <TargetBlock
             evidence={content.labels.requirement}
             label={content.target.label}
             body={content.target.body}
           />
-          <ul>
+          <ul className="intraday-cards">
             {content.outcome.unknowns.map((line) => (
               <li key={line} className="type-corpo">
                 {line}
               </li>
             ))}
           </ul>
-          <p className="intraday-transition type-corpo">{content.outcome.transition}</p>
+          <More label="After the design">
+            <p className="type-corpo">{content.outcome.transition}</p>
+          </More>
         </div>
       </section>
 
-      <section id="reflection" className="intraday-field intraday-field--ending" aria-labelledby="reflection-title">
-        <div className="site-container intraday-section intraday-stack">
-          <h2 id="reflection-title" className="type-heading">
+      <section id="reflection" className="intraday-field intraday-field--ending intraday-close" aria-labelledby="reflection-title">
+        <div className="intraday-stage intraday-stack">
+          <h2 id="reflection-title" className="intraday-beat__title">
             {content.reflection.heading}
           </h2>
           <EvidenceLabel kind="inference" text={content.labels.inference} />
