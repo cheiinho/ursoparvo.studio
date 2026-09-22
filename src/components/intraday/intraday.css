@@ -803,6 +803,8 @@
   position: sticky;
   top: calc(var(--ix-chrome) + 3.25rem);
   z-index: 2;
+  /* keeps the running indicator inside the strip as it sweeps */
+  overflow: hidden;
   padding: 0.6rem 1.25rem;
   background: var(--p-surface);
   border-bottom: 1px solid var(--p-line);
@@ -1468,10 +1470,12 @@
   transform: rotate(45deg);
 }
 
+/* A closed box, so the rows that scroll out do not read as cut off. */
 .intraday-table-wrap {
   max-height: 20rem;
   overflow: auto;
   border-top: 1px solid var(--p-line);
+  border-bottom: 1px solid var(--p-line);
 }
 
 .intraday-table {
