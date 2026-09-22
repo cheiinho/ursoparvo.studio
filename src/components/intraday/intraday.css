@@ -2284,6 +2284,12 @@
 }
 
 @media (max-width: 44.99rem) {
+  /* Tighter than the other sections so the walkthrough cue clears the fold
+     on a phone rather than sitting just under it. */
+  .ix-hero {
+    padding-block: clamp(2.75rem, 7vh, 4.5rem);
+  }
+
   .ix-hero__title {
     font-size: clamp(2.6rem, 13vw, 3.6rem);
   }
