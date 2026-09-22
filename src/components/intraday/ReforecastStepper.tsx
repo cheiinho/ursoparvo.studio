@@ -15,8 +15,8 @@ import {
 import type { StepId } from "@/content/intraday/types";
 import { useAnnounce } from "./Announcer";
 import DataTable from "./DataTable";
-import EvidenceLabel from "./EvidenceLabel";
 import ForecastChart, { type ChartSeries } from "./ForecastChart";
+import ProductChrome, { PRODUCT_PLACES } from "./ProductChrome";
 
 type StepCopy = {
   id: StepId;
@@ -26,6 +26,7 @@ type StepCopy = {
 };
 
 type Props = {
+  product: string;
   groupLabel: string;
   back: string;
   next: string;
@@ -47,6 +48,7 @@ function textValue(value: number | null, empty: string): string {
 }
 
 export default function ReforecastStepper({
+  product,
   groupLabel,
   back,
   next,
@@ -115,66 +117,100 @@ export default function ReforecastStepper({
     goTo(target);
   }
 
+  const showNext = stepShowsNext(step);
+
   return (
-    <div className="intraday-stack intraday-step">
-      <fieldset>
-        <legend className="type-label">{groupLabel}</legend>
-        <div className="intraday-steps">
-          {steps.map((item) => (
-            <label key={item.id} className={item.id === step ? "is-current" : undefined}>
-              <input
-                type="radio"
-                name="intraday-step"
-                checked={item.id === step}
-                onChange={() => goTo(item.id)}
-              />
-              <span>{item.clock}</span>
-              <span className="intraday-muted">{item.stateName}</span>
-            </label>
-          ))}
+    <div className="intraday-ui wfm">
+      <ProductChrome
+        product={product}
+        section="Forecast"
+        context={dataset.account}
+        rail={PRODUCT_PLACES.map((item) => ({ ...item, current: item.id === "forecast" }))}
+      >
+        <header className="wfm-pagehead">
+          <div>
+            <p className="wfm-title">Forecast</p>
+            <p className="wfm-meta">
+              {current.stateName}. {illustrative}. {dataset.timeZone}
+            </p>
+          </div>
+          <div className="wfm-queues">
+            <span className="is-on">{dataset.queue}</span>
+            <span>{dataset.contrastQueue}</span>
+          </div>
+        </header>
+        <div className="wfm-stepper">
+          <fieldset className="wfm-states">
+            <legend className="wfm-kicker">{groupLabel}</legend>
+            <div className="wfm-segments wfm-segments--steps">
+              {steps.map((item) => (
+                <label key={item.id}>
+                  <input
+                    type="radio"
+                    name="intraday-step"
+                    checked={item.id === step}
+                    onChange={() => goTo(item.id)}
+                  />
+                  <span>{item.clock}</span>
+                  <span className="wfm-step__name">{item.stateName}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <div className="wfm-actions">
+            <button type="button" onClick={() => go(-1)} disabled={moveStep(step, -1) === null}>
+              {back}
+            </button>
+            <button type="button" onClick={() => go(1)} disabled={moveStep(step, 1) === null}>
+              {next}
+            </button>
+          </div>
         </div>
-      </fieldset>
-      {statusText ? <p className="intraday-status type-lede">{statusText}</p> : null}
-      <p className="type-lede">{current.sentence}</p>
-      <div className="intraday-actions">
-        <button type="button" onClick={() => go(-1)} disabled={moveStep(step, -1) === null}>
-          {back}
-        </button>
-        <button type="button" onClick={() => go(1)} disabled={moveStep(step, 1) === null}>
-          {next}
-        </button>
-      </div>
-      <EvidenceLabel kind="illustrative" text={illustrative} />
-      <p className="type-nota">{summary}</p>
-      <div className="intraday-chart-region">
-        <ForecastChart
-          patternId="step-band"
-          axis={times}
-          series={series}
-          markedTimes={MARKED_TIMES[step]}
-          band={
-            stepShowsBand(step) && bandEnd
-              ? {
-                  start: dataset.affected.start,
-                  end: bandEnd,
-                  label: `${dataset.affected.start} to ${dataset.affected.end}`,
-                }
-              : null
-          }
-          tone="field"
-          yLabel={contacts}
-          enter={stepShowsNext(step)}
-        />
-      </div>
-      <DataTable
-        caption={summary}
-        columns={[time, forecast, actual]}
-        rows={rows.map((quarter) => [
-          quarter.time,
-          textValue(quarter.previous, empty),
-          textValue(quarter.actual, empty),
-        ])}
-      />
+        {statusText ? (
+          <div className={`wfm-banner${status === "completed" ? " is-done" : ""}`}>
+            <span className="wfm-banner__icon" aria-hidden="true">
+              {status === "completed" ? "✓" : "!"}
+            </span>
+            <div className="wfm-banner__copy">
+              <p>{statusText}</p>
+            </div>
+          </div>
+        ) : null}
+        <div className="wfm-forecast">
+          <ForecastChart
+            patternId="step-band"
+            axis={times}
+            series={series}
+            markedTimes={MARKED_TIMES[step]}
+            band={
+              stepShowsBand(step) && bandEnd
+                ? {
+                    start: dataset.affected.start,
+                    end: bandEnd,
+                    label: `${dataset.affected.start} to ${dataset.affected.end}`,
+                  }
+                : null
+            }
+            tone="paper"
+            yLabel={contacts}
+            enter={showNext}
+          />
+          <p className="wfm-help">{current.sentence}</p>
+          <DataTable
+            caption={summary}
+            columns={showNext ? [time, forecast, actual, newForecast] : [time, forecast, actual]}
+            rows={rows.map((quarter) => {
+              const cells = [
+                quarter.time,
+                textValue(quarter.previous, empty),
+                textValue(quarter.actual, empty),
+              ];
+              if (showNext) cells.push(textValue(quarter.next, empty));
+              return cells;
+            })}
+          />
+        </div>
+      </ProductChrome>
     </div>
   );
 }

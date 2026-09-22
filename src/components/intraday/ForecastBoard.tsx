@@ -54,18 +54,19 @@ export default function ForecastBoard({
           </div>
         </header>
         <div className="wfm-forecast">
-          <div className="wfm-series" aria-hidden="true">
-            <span className="is-on">Contact volume offered</span>
-            <span>Handle time</span>
-            <span>Staff</span>
-          </div>
-          <div className="wfm-metric" aria-hidden="true">
-            <p>Contact volume offered</p>
-            <p>{forecast}</p>
-            <p>
-              <strong>{total.toLocaleString("en-GB")}</strong>
-              <span>{contacts}</span>
-            </p>
+          <div className="wfm-toolbar">
+            <div className="wfm-series" aria-hidden="true">
+              <span className="is-on">Contact volume offered</span>
+              <span>Handle time</span>
+              <span>Staff</span>
+            </div>
+            <div className="wfm-metric" aria-hidden="true">
+              <p>{forecast}</p>
+              <p>
+                <strong>{total.toLocaleString("en-GB")}</strong>
+                <span>{contacts}</span>
+              </p>
+            </div>
           </div>
           <ForecastChart
             patternId="plan-board"

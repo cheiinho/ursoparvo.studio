@@ -1104,6 +1104,30 @@
   overflow: auto;
 }
 
+.wfm-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+}
+
+.wfm-toolbar .wfm-metric {
+  padding: 0;
+  border: 0;
+}
+
+.wfm > .intraday-recon {
+  padding: 0.2rem 1rem;
+  border-bottom-color: var(--wfm-line);
+  background: var(--wfm-surface);
+}
+
+.wfm-forecast {
+  gap: 0.5rem;
+  padding: 0.55rem 1rem 0.85rem;
+}
+
 .wfm-scope,
 .wfm-queues {
   display: flex;
@@ -1761,7 +1785,11 @@
 .intraday-poster {
   min-height: 0;
   display: block;
-  padding-block: clamp(1.75rem, 4vh, 2.75rem) clamp(1rem, 3vh, 1.75rem);
+  padding-block: 0.85rem 0.35rem;
+}
+
+.intraday-poster .intraday-stack {
+  gap: 0.4rem;
 }
 
 .intraday-poster__name {
@@ -1774,11 +1802,11 @@
 
 .intraday-poster__thesis {
   margin: 0;
-  max-width: 22em;
+  max-width: 36rem;
   font-family: var(--font-brand), system-ui, sans-serif;
-  font-size: clamp(1.7rem, 3.2vw, 2.6rem);
+  font-size: clamp(1.45rem, 2.6vw, 2rem);
   font-weight: 700;
-  line-height: 1.05;
+  line-height: 1.08;
   letter-spacing: -0.03em;
   text-wrap: balance;
 }
@@ -1791,10 +1819,10 @@
 }
 
 .intraday-poster__meta {
-  max-width: 38rem;
+  max-width: 46rem;
   margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.45;
+  font-size: 0.85rem;
+  line-height: 1.35;
 }
 
 .intraday-beat {
@@ -1812,12 +1840,70 @@
   text-wrap: balance;
 }
 
+.intraday-beat--product {
+  padding-block: 0.6rem 1.75rem;
+}
+
+.intraday-beat--product .intraday-stack {
+  gap: 0.65rem;
+}
+
+.intraday-beat--product .intraday-beat__title {
+  font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+  max-width: none;
+}
+
+.intraday-beat--product .intraday-beat__line {
+  font-size: 1rem;
+  max-width: 40rem;
+}
+
 .intraday-beat__line,
 .intraday-beat__story {
   margin: 0;
   max-width: 40rem;
   font-size: 1.15rem;
   line-height: 1.45;
+}
+
+.wfm-stepper {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  background: var(--wfm-surface);
+  border-bottom: 1px solid var(--wfm-line);
+}
+
+.wfm-segments--steps {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 0.45rem;
+}
+
+.wfm-segments--steps label {
+  flex: 1 1 8.5rem;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.1rem;
+  padding-block: 0.4rem;
+  line-height: 1.2;
+}
+
+.wfm-step__name {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.wfm-segments label:has(input:checked) .wfm-step__name {
+  color: #fff;
+}
+
+.wfm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .intraday-field.intraday-poster,
