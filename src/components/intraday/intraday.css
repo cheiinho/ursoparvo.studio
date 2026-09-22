@@ -7,6 +7,9 @@
   --intraday-cream-dark: #231e1a;
   --intraday-on-cream-dark: #f3ede4;
   --intraday-band: #6a4b12;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3rem, 8vh, 5.5rem);
   color: var(--text);
 }
 
@@ -1156,6 +1159,12 @@
   overflow: hidden;
 }
 
+.wfm-pagehead > .wfm-scope,
+.wfm-pagehead > .wfm-queues,
+.wfm-toolbar .wfm-series {
+  display: flex;
+}
+
 .wfm-scope span,
 .wfm-queues span {
   display: inline-flex;
@@ -1309,6 +1318,8 @@
 .wfm-switch {
   display: inline-flex;
   align-items: center;
+  justify-self: start;
+  width: auto;
   gap: 0.75rem;
   min-height: 44px;
   padding: 0;
@@ -1889,19 +1900,20 @@
 .intraday-poster {
   min-height: 0;
   display: block;
-  padding-block: 0.85rem 0.35rem;
 }
 
 .intraday-poster .intraday-stack {
-  gap: 0.4rem;
+  gap: clamp(1.15rem, 2.6vh, 1.85rem);
 }
 
 .intraday-poster__name {
   margin: 0;
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-family: var(--font-brand), system-ui, sans-serif;
+  font-size: clamp(3rem, 8vw, 6.25rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+  text-wrap: balance;
 }
 
 .intraday-poster__thesis {
@@ -1923,10 +1935,10 @@
 }
 
 .intraday-poster__meta {
-  max-width: 46rem;
+  max-width: 36rem;
   margin: 0;
-  font-size: 0.85rem;
-  line-height: 1.35;
+  font-size: 1rem;
+  line-height: 1.45;
 }
 
 .intraday-beat {
@@ -2021,10 +2033,12 @@
   padding-top: 1rem;
 }
 
-.intraday-field.intraday-poster,
-.intraday-field.intraday-beat,
-.intraday-field.intraday-close {
-  padding-block: 0;
+.intraday > section {
+  padding-block: clamp(4.5rem, 10vh, 7rem);
+}
+
+.intraday > section.intraday-field {
+  padding-block: clamp(6rem, 14vh, 9.5rem);
 }
 
 .intraday-hero-chart {
@@ -2038,12 +2052,15 @@
   min-height: 0;
 }
 
-.intraday-chapter {
-  padding-block: clamp(3.25rem, 8vh, 5.5rem);
+.intraday-chapter .intraday-stage {
+  gap: 0.7rem;
 }
 
-.intraday-chapter .intraday-stage {
-  gap: 1.5rem;
+.intraday-questions .intraday-stack,
+.intraday-close .intraday-stack,
+.intraday-quiet .intraday-stack,
+.intraday-poster .intraday-stack {
+  gap: clamp(1.5rem, 3vh, 2.35rem);
 }
 
 .intraday-chapter .intraday-beat__title {
@@ -2057,8 +2074,8 @@
 }
 
 .intraday-statement {
-  margin: 0 0 0.35rem;
-  max-width: 18em;
+  margin: 0 0 clamp(1.75rem, 4vh, 2.75rem);
+  max-width: 16em;
   font-family: var(--font-brand), system-ui, sans-serif;
   font-size: clamp(1.85rem, 4vw, 3.15rem);
   font-weight: 700;
@@ -2068,7 +2085,7 @@
 }
 
 .intraday-quiet {
-  padding-block: clamp(2rem, 5vh, 3rem);
+  padding-block: clamp(4.5rem, 10vh, 7rem);
 }
 
 .intraday-quiet .intraday-beat__title,
@@ -2178,21 +2195,160 @@
   opacity: 0.72;
 }
 
-.intraday-close {
-  padding-block: clamp(3rem, 8vh, 6rem);
-}
-
 @media (max-width: 44.99rem) {
+  .intraday {
+    gap: 2.25rem;
+  }
+
+  .intraday > section {
+    padding-block: clamp(3.75rem, 14vw, 5rem);
+  }
+
+  .intraday > section.intraday-field {
+    padding-block: clamp(4.75rem, 18vw, 6.5rem);
+  }
+
+  .intraday-poster .intraday-stack {
+    gap: 1.15rem;
+  }
+
+  .intraday-poster__name {
+    font-size: clamp(2.6rem, 13vw, 3.5rem);
+  }
+
+  .intraday-statement {
+    max-width: 18em;
+    margin-bottom: 1.35rem;
+    font-size: clamp(1.65rem, 8vw, 2.2rem);
+  }
+
+  .intraday-questions h3 {
+    max-width: none;
+    font-size: clamp(1.45rem, 7.2vw, 1.9rem);
+  }
+
   .intraday-decisions {
     grid-template-columns: 1fr;
+  }
+
+  .intraday-decisions a {
+    min-height: 5.5rem;
   }
 
   .intraday-poster {
     min-height: 0;
   }
 
-
   .intraday-hero-chart .intraday-chart {
     min-height: 0;
+  }
+
+  .intraday-stage,
+  .intraday-ui,
+  .wfm,
+  .wfm-app,
+  .wfm-body,
+  .wfm-stage {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .wfm-app {
+    min-height: 0;
+  }
+
+  .wfm-pagehead {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.9rem;
+    padding: 1.1rem 1rem;
+  }
+
+  .wfm-appbar {
+    align-items: flex-start;
+    padding: 0.65rem 1rem;
+  }
+
+  .wfm-bell {
+    margin-left: 0;
+  }
+
+  .wfm-series,
+  .wfm-scope,
+  .wfm-queues,
+  .wfm-segments {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .wfm-series,
+  .wfm-scope,
+  .wfm-queues {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  .wfm-series span,
+  .wfm-scope span,
+  .wfm-queues span {
+    flex: 0 0 auto;
+  }
+
+  .wfm-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .wfm-switch {
+    width: auto;
+  }
+
+  .wfm-forecast,
+  .wfm-note,
+  .wfm-issue,
+  .wfm-detail,
+  .intraday-hero-chart {
+    padding: 1.1rem 1rem 1.25rem;
+  }
+
+  .wfm-banner {
+    padding: 1rem;
+  }
+
+  .wfm-banner__actions {
+    margin-left: 0;
+  }
+
+  .wfm-setting,
+  .wfm-setting--hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .wfm-setting--hero {
+    padding: 1.2rem 1rem;
+  }
+
+  .wfm-settings {
+    padding-inline: 1rem;
+  }
+
+  .wfm-segments--steps {
+    flex-direction: column;
+  }
+
+  .wfm-segments--steps label {
+    flex: none;
+    width: 100%;
+    border-right: 0;
+    border-bottom: 1px solid var(--wfm-line);
+  }
+
+  .wfm-metric strong {
+    font-size: 1.55rem;
+  }
+
+  .intraday-chart-scroll {
+    overflow-x: auto;
+    max-width: 100%;
   }
 }
