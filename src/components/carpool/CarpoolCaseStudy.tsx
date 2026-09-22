@@ -1,19 +1,16 @@
 import RevealTitle from "@/components/RevealTitle";
+import { FindVehicleMock, HistoryMock, IntentMock } from "@/components/carpool/CarpoolMockups";
+import { Chip, Kicker } from "@/components/carpool/CarpoolPrimitives";
 import {
-  ActualUsage,
-  AvailabilityPlay,
-  EvidenceLegend,
-  ExplorationGrid,
-  HistoryTabs,
-  IntentSwitch,
-  InvestmentFork,
-  MethodsStrip,
-  ReadinessPlay,
-  RuleDemo,
-  ServiceZoom,
-  WaitTimeline,
-} from "@/components/carpool/CarpoolInteractive";
-import { ResearchSnapshot } from "@/components/carpool/CarpoolSnapshot";
+  AssumptionChain,
+  HeroVisual,
+  ReadinessScene,
+  RevealLines,
+  RuleTimingScene,
+  ScheduledActualScene,
+  ServiceModelScene,
+  WaitScene,
+} from "@/components/carpool/CarpoolScenes";
 import type { CarpoolContent } from "@/content/carpool/types";
 
 type Props = { content: CarpoolContent };
@@ -21,248 +18,271 @@ type Props = { content: CarpoolContent };
 function Section({
   id,
   kicker,
+  tone,
   children,
-  tone = "default",
-  weight = "default",
 }: {
   id: string;
   kicker: string;
+  tone?: "quiet" | "centre" | "wide";
   children: React.ReactNode;
-  tone?: "default" | "pivot" | "open" | "result";
-  weight?: "default" | "lead";
 }) {
   return (
     <section
       id={id}
-      className={`carpool-section carpool-section--${tone} carpool-section--${weight}`}
-      aria-labelledby={`${id}-title`}
+      className={`cp-section${tone ? ` cp-section--${tone}` : ""}`}
+      aria-labelledby={`${id}-h`}
     >
-      <p className="carpool-section__kicker type-meta text-secondary" id={`${id}-title`}>
-        {kicker}
-      </p>
-      <div className="carpool-section__body">{children}</div>
+      <Kicker>{kicker}</Kicker>
+      <div className="cp-section__body">{children}</div>
     </section>
   );
 }
 
-function Statement({ children }: { children: React.ReactNode }) {
-  return <p className="carpool-statement type-display">{children}</p>;
-}
-
 export default function CarpoolCaseStudy({ content }: Props) {
   const c = content;
-  const i = c.interact;
+  const L = c.labels;
 
   return (
-    <article className="carpool site-container site-container--wide">
-      <header className="carpool-cover">
-        <p className="type-meta text-secondary">{c.cover.eyebrow}</p>
-        <RevealTitle id="carpool-h" text={c.cover.title} className="type-display" />
-        <p className="type-lede measure">{c.cover.subtitle}</p>
-        <p className="type-nota text-secondary">{c.cover.meta}</p>
-        <p className="carpool-thesis type-heading measure">{c.cover.thesis}</p>
-        <p className="carpool-disclosure type-nota type-italic text-secondary measure">
-          {c.disclosure}
-        </p>
-        <EvidenceLegend labels={c.labels} />
+    <article className="cp site-container site-container--wide">
+      {/* 01 Hero */}
+      <header className="cp-hero" aria-labelledby="cp-title">
+        <div className="cp-hero__copy">
+          <Kicker>{c.hero.eyebrow}</Kicker>
+          <RevealTitle id="cp-title" text={c.hero.title} className="type-display cp-hero__title" />
+          <p className="type-lede cp-hero__lead">{c.hero.lead}</p>
+        </div>
+        <HeroVisual visual={c.hero.visual} ui={c.ui} />
+        <p className="cp-hero__disclosure type-nota text-secondary">{c.disclosure}</p>
       </header>
 
-      <Section id="brief" kicker={c.brief.kicker}>
-        <h2 className="type-heading">{c.brief.headline}</h2>
-        <p className="type-corpo measure">{c.brief.line}</p>
+      {/* 02 The apparent problem */}
+      <Section id="assumption" kicker={c.assumption.kicker}>
+        <h2 id="assumption-h" className="type-heading cp-h2">
+          {c.assumption.statement}
+        </h2>
+        <div className="cp-split">
+          <AssumptionChain content={c.assumption} />
+          <div className="cp-split__aside">
+            <p className="cp-verdict type-display">{c.assumption.verdict}</p>
+            <p className="type-corpo text-secondary measure">{c.assumption.note}</p>
+            <Chip kind="inference" labels={L} />
+          </div>
+        </div>
       </Section>
 
-      <ResearchSnapshot snapshot={c.snapshot} labels={c.labels} />
-
-      <Section id="assumption" kicker={c.assumption.kicker}>
-        <Statement>{c.assumption.statement}</Statement>
-        <p className="type-corpo measure">{c.assumption.body}</p>
-        <ol className="carpool-assumption-chain">
-          {c.assumption.nodes.map((step) => (
-            <li key={step} className="type-corpo">
-              {step}
+      {/* 03 Research snapshot */}
+      <Section id="research" kicker={c.research.kicker} tone="wide">
+        <h2 id="research-h" className="type-heading cp-h2">
+          {c.research.headline}
+        </h2>
+        <ol className="cp-signals">
+          {c.research.statements.map((statement, index) => (
+            <li key={statement} className="cp-signal">
+              <span className="cp-signal__index type-label" aria-hidden="true">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <p className="cp-signal__text type-display">{statement}</p>
+              <Chip kind="research" labels={L} />
             </li>
           ))}
         </ol>
-        <p className="type-lede measure">{c.assumption.bridge}</p>
-        <p className="type-nota type-italic text-secondary measure">
-          {c.assumption.contextNote}
-        </p>
-      </Section>
-
-      <Section id="investigation" kicker={c.investigation.kicker}>
-        <h2 className="type-heading">{c.investigation.headline}</h2>
-        <p className="type-corpo measure">{c.investigation.line}</p>
-        <MethodsStrip
-          methods={c.investigation.methods}
-          caveat={c.investigation.caveat}
-          labels={c.labels}
-        />
-        <blockquote className="carpool-voice type-lede measure">
-          {c.investigation.voice}
-        </blockquote>
-        <div className="carpool-personas">
-          <h3 className="type-meta">{c.personas.headline}</h3>
-          <p className="type-nota text-secondary measure">{c.personas.line}</p>
-          <ul className="carpool-personas__grid">
-            {c.personas.items.map((persona) => (
-              <li key={persona.name}>
-                <p className="type-heading">{persona.name}</p>
-                <p className="type-meta text-secondary">{persona.role}</p>
-                <p className="type-nota text-secondary">{persona.lens}</p>
-                <p className="type-corpo">{persona.need}</p>
+        <div className="cp-methods">
+          <h3 className="type-label text-secondary">{c.research.methodsTitle}</h3>
+          <ul className="cp-methods__list">
+            {c.research.methods.map((method) => (
+              <li key={method} className="type-heading">
+                {method}
               </li>
             ))}
           </ul>
-        </div>
-      </Section>
-
-      <Section id="availability" kicker={c.availability.kicker} weight="lead">
-        <Statement>{c.availability.statement}</Statement>
-        <AvailabilityPlay
-          labels={c.labels}
-          i={i}
-          statement={c.availability.statement}
-          after={c.availability.after}
-        />
-        <p className="type-corpo measure">{c.availability.line}</p>
-      </Section>
-
-      <Section id="wait" kicker={c.wait.kicker}>
-        <Statement>{c.wait.statement}</Statement>
-        <WaitTimeline labels={c.labels} i={i} />
-        <p className="type-corpo measure">{c.wait.line}</p>
-        <p className="type-nota type-italic text-secondary measure">
-          {c.wait.attribution}
-        </p>
-      </Section>
-
-      <Section id="readiness" kicker={c.readiness.kicker} weight="lead">
-        <Statement>{c.readiness.statement}</Statement>
-        <ReadinessPlay labels={c.labels} i={i} />
-        <p className="type-corpo measure">{c.readiness.line}</p>
-      </Section>
-
-      <Section id="intents" kicker={c.intents.kicker}>
-        <Statement>{c.intents.statement}</Statement>
-        <IntentSwitch labels={c.labels} i={i} />
-        <p className="type-corpo measure">{c.intents.line}</p>
-      </Section>
-
-      <Section id="rules" kicker={c.rules.kicker}>
-        <Statement>{c.rules.statement}</Statement>
-        <RuleDemo labels={c.labels} i={i} />
-        <p className="type-corpo measure">{c.rules.line}</p>
-      </Section>
-
-      <Section id="history" kicker={c.history.kicker}>
-        <Statement>{c.history.statement}</Statement>
-        <HistoryTabs labels={c.labels} i={i} />
-        <p className="type-corpo measure">{c.history.line}</p>
-      </Section>
-
-      <Section id="usage" kicker={c.usage.kicker}>
-        <Statement>{c.usage.statement}</Statement>
-        <ActualUsage labels={c.labels} i={i} note={c.usage.note} />
-        <p className="type-corpo measure">{c.usage.line}</p>
-      </Section>
-
-      <Section id="turning-point" kicker={c.turningPoint.kicker} tone="pivot">
-        <p className="carpool-pivot type-display">{c.turningPoint.statement}</p>
-        <p className="type-lede measure">{c.turningPoint.qualifier}</p>
-        <p className="type-heading measure">{c.turningPoint.shift}</p>
-      </Section>
-
-      <Section id="service" kicker={c.service.kicker} tone="pivot" weight="lead">
-        <Statement>{c.service.statement}</Statement>
-        <ServiceZoom
-          labels={c.labels}
-          i={i}
-          steps={c.service.steps}
-          statement={c.service.statement}
-          note={c.service.diagramNote}
-        />
-      </Section>
-
-      <Section id="software" kicker={c.software.kicker}>
-        <h2 className="type-heading">{c.software.headline}</h2>
-        <div className="carpool-boundary">
-          <div>
-            <h3 className="type-meta">{c.software.could.title}</h3>
-            <ul className="carpool-list">
-              {c.software.could.items.map((item) => (
-                <li key={item} className="type-corpo">
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h3 className="type-meta">{c.software.couldNot.title}</h3>
-            <ul className="carpool-list">
-              {c.software.couldNot.items.map((item) => (
-                <li key={item} className="type-corpo">
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <p className="type-lede measure">{c.software.closing}</p>
-      </Section>
-
-      <Section id="investment" kicker={c.investment.kicker}>
-        <h2 className="type-heading">{c.investment.headline}</h2>
-        <p className="type-corpo measure">{c.investment.line}</p>
-        <InvestmentFork
-          chainA={c.investment.chainA}
-          chainB={c.investment.chainB}
-          contextNote={c.investment.contextNote}
-          labels={c.labels}
-        />
-        <p className="type-heading measure">{c.investment.close}</p>
-      </Section>
-
-      <Section id="explorations" kicker={c.explorations.kicker}>
-        <h2 className="type-heading">{c.explorations.headline}</h2>
-        <ExplorationGrid
-          items={c.explorations.items}
-          intro={c.explorations.intro}
-          labels={c.labels}
-        />
-      </Section>
-
-      <Section id="outcome" kicker={c.outcome.kicker} tone="result">
-        <p className="carpool-climax type-display">{c.outcome.climax}</p>
-        <h2 className="type-heading">{c.outcome.headline}</h2>
-        <p className="type-corpo measure">{c.outcome.line}</p>
-        <div className="carpool-questions">
-          <div>
-            <p className="type-meta text-secondary">{c.outcome.beforeLabel}</p>
-            <p className="type-lede">{c.outcome.before}</p>
-          </div>
-          <div className="carpool-questions__after">
-            <p className="type-meta">{c.outcome.afterLabel}</p>
-            <p className="type-heading">{c.outcome.after}</p>
-          </div>
-        </div>
-        <ol className="carpool-arc">
-          {c.outcome.arc.map((beat) => (
-            <li key={beat.label}>
-              <p className="type-meta text-secondary">{beat.label}</p>
-              <p className="type-corpo">{beat.text}</p>
-            </li>
-          ))}
-        </ol>
-        <h3 className="type-meta">{c.reflection.headline}</h3>
-        {c.reflection.body.map((p) => (
-          <p key={p} className="type-corpo measure">
-            {p}
+          <p className="cp-methods__caveat type-nota">
+            <strong>{c.research.caveat}</strong> {c.research.sample}
           </p>
-        ))}
-        <p className="carpool-disclosure type-nota type-italic text-secondary measure">
-          {c.disclosure}
+        </div>
+      </Section>
+
+      {/* 04 Finding a car */}
+      <Section id="finding" kicker={c.finding.kicker}>
+        <div className="cp-lead-pair">
+          <h2 id="finding-h" className="type-heading cp-h2">
+            {c.finding.headline}
+          </h2>
+          <p className="type-lede">{c.finding.lead}</p>
+        </div>
+        <FindVehicleMock content={c.finding.mock} labels={L} ui={c.ui} />
+      </Section>
+
+      {/* 05 The wait */}
+      <Section id="wait" kicker={c.wait.kicker} tone="wide">
+        <h2 id="wait-h" className="type-heading cp-h2">
+          {c.wait.headline}
+        </h2>
+        <WaitScene content={c.wait} labels={L} ui={c.ui} />
+      </Section>
+
+      {/* 06 Available ≠ ready */}
+      <Section id="readiness" kicker={c.readiness.kicker} tone="wide">
+        <h2 id="readiness-h" className="type-display cp-giant">
+          {c.readiness.statement}
+        </h2>
+        <ReadinessScene content={c.readiness} labels={L} ui={c.ui} />
+        <p className="type-lede cp-after">{c.readiness.line}</p>
+      </Section>
+
+      {/* 07 Service model */}
+      <Section id="service" kicker={c.service.kicker} tone="wide">
+        <h2 id="service-h" className="type-heading cp-h2">
+          {c.service.statement}
+        </h2>
+        <ServiceModelScene content={c.service} labels={L} ui={c.ui} />
+      </Section>
+
+      {/* 08 Work ≠ leisure */}
+      <Section id="intents" kicker={c.intents.kicker}>
+        <div className="cp-lead-pair">
+          <h2 id="intents-h" className="type-heading cp-h2">
+            {c.intents.headline}
+          </h2>
+          <ul className="cp-contrast" aria-label={c.intents.headline}>
+            <li>
+              <span className="type-label text-secondary">{c.intents.work.label}</span>
+              <span className="type-corpo">{c.intents.work.traits.join(" · ")}</span>
+            </li>
+            <li>
+              <span className="type-label text-secondary">{c.intents.leisure.label}</span>
+              <span className="type-corpo">{c.intents.leisure.traits.join(" · ")}</span>
+            </li>
+          </ul>
+        </div>
+        <IntentMock content={c.intents} labels={L} />
+      </Section>
+
+      {/* 09 Rules too late */}
+      <Section id="rules" kicker={c.rules.kicker}>
+        <div className="cp-lead-pair">
+          <h2 id="rules-h" className="type-heading cp-h2">
+            {c.rules.headline}
+          </h2>
+          <p className="type-lede">{c.rules.point}</p>
+        </div>
+        <RuleTimingScene content={c.rules} labels={L} ui={c.ui} />
+      </Section>
+
+      {/* 10 Booking history */}
+      <Section id="history" kicker={c.history.kicker}>
+        <h2 id="history-h" className="type-heading cp-h2">
+          {c.history.headline}
+        </h2>
+        <div className="cp-pair">
+          <p className="type-corpo">
+            <Chip kind="research" labels={L} /> {c.history.problem}
+          </p>
+          <p className="type-corpo">
+            <Chip kind="exploration" labels={L} /> {c.history.exploration}
+          </p>
+        </div>
+        <HistoryMock content={c.history} labels={L} ui={c.ui} />
+      </Section>
+
+      {/* 11 Scheduled ≠ actual */}
+      <Section id="usage" kicker={c.usage.kicker}>
+        <h2 id="usage-h" className="type-heading cp-h2">
+          {c.usage.headline}
+        </h2>
+        <ScheduledActualScene content={c.usage} labels={L} />
+      </Section>
+
+      {/* 12 The pivot */}
+      <Section id="pivot" kicker={c.pivot.kicker} tone="quiet">
+        <h2 id="pivot-h" className="sr-only">
+          {c.pivot.lines[3]}
+        </h2>
+        <RevealLines lines={c.pivot.lines} className="cp-pivot__line type-display" />
+        <div className="cp-shift">
+          <div>
+            <span className="type-label text-secondary">{c.pivot.fromLabel}</span>
+            <p className="type-heading cp-shift__from">{c.pivot.from}</p>
+          </div>
+          <div>
+            <span className="type-label">{c.pivot.toLabel}</span>
+            <p className="type-heading cp-shift__to">{c.pivot.to}</p>
+          </div>
+        </div>
+      </Section>
+
+      {/* 13 What software can / cannot do */}
+      <Section id="software" kicker={c.software.kicker}>
+        <h2 id="software-h" className="type-heading cp-h2">
+          {c.software.headline}
+        </h2>
+        <div className="cp-columns">
+          <div className="cp-column">
+            <h3 className="type-label">{c.software.can.title}</h3>
+            <ul className="cp-column__list">
+              {c.software.can.items.map((item) => (
+                <li key={item} className="type-lede">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="cp-column cp-column--cannot">
+            <h3 className="type-label">{c.software.cannot.title}</h3>
+            <ul className="cp-column__list">
+              {c.software.cannot.items.map((item) => (
+                <li key={item} className="type-lede">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <Chip kind="inference" labels={L} />
+      </Section>
+
+      {/* 14 Investment */}
+      <Section id="investment" kicker={c.investment.kicker}>
+        <h2 id="investment-h" className="type-heading cp-h2">
+          {c.investment.headline}
+        </h2>
+        <p className="cp-context type-nota">
+          <Chip kind="context" labels={L} /> {c.investment.contextNote}
         </p>
+        <div className="cp-compare" role="group" aria-label={c.investment.headline}>
+          <div className="cp-compare__side">
+            <h3 className="type-label text-secondary">{c.investment.a.title}</h3>
+            <ol className="cp-compare__stack">
+              {c.investment.a.items.map((item) => (
+                <li key={item} className="type-heading">
+                  {item}
+                </li>
+              ))}
+            </ol>
+          </div>
+          <span className="cp-compare__vs type-label" aria-hidden="true">
+            vs
+          </span>
+          <div className="cp-compare__side cp-compare__side--constraint">
+            <h3 className="type-label text-secondary">{c.investment.b.title}</h3>
+            <ol className="cp-compare__stack">
+              {c.investment.b.items.map((item) => (
+                <li key={item} className="type-heading">
+                  {item}
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+        <p className="cp-insight type-heading">{c.investment.insight}</p>
+      </Section>
+
+      {/* 15 Closing */}
+      <Section id="closing" kicker={c.closing.kicker} tone="quiet">
+        <h2 id="closing-h" className="sr-only">
+          {c.closing.lines[0]}
+        </h2>
+        <RevealLines lines={c.closing.lines} className="cp-closing__line type-display" />
+        <p className="cp-hero__disclosure type-nota text-secondary">{c.disclosure}</p>
       </Section>
     </article>
   );
