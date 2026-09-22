@@ -768,3 +768,33 @@ Only this document was created: `/docs/carpool-evidence-audit.md`.
 **Needs confirmation:** §35 G.
 
 **Next implementation phase:** §35 J — only after claim freeze and owner confirmations.
+
+---
+
+## 38. Editorial redesign audit (15-section page)
+
+Audit of the recomposed page (`src/components/carpool/*`, `src/content/carpool/{en,pt}.ts`) against the source hierarchy in §01. Every statement below is either traced to the source or explicitly typed as interpretation, reconstruction, exploration or project context.
+
+| Section | Statement on page | Type | Support |
+| --- | --- | --- | --- |
+| Hero | Internal shared-fleet service; interface had real usability problems; vehicles could appear bookable without being available or ready | Research evidence | Central statement §08; readiness §12 |
+| Hero visual | Free slot → Charging / Inspection / Maintenance / Ready | Reconstruction | Operational signals §12 |
+| 01 Apparent problem | “We thought the platform was the problem.” / Platform → Booking → Car → Service / “Reasonable. Incomplete.” | Project context + interpretation | §17; final narrative |
+| 02 Research | Vehicles difficult to find; planned months ahead; booking could disappear; availability ≠ readiness | Research evidence | §09, §10, §12 |
+| 02 Research | Methods: contextual inquiry, leisure interviews, personas, expert review; “Not analytics. No invented rates.”; leisure-strong sample | Research evidence (qualitative) | §04, §11, §16 |
+| 03 Finding a car | Hunting for free days, planning months ahead, options selectable but not usable; “Try another day” mock | Research evidence + reconstruction | §09; vehicle names fictional |
+| 04 The wait | Jan booking for Sep, still booked Mar/Jun, ~20 days before, cancelled; no useful explanation, no alternative | Research evidence (single documented case) | §10; labelled “documented leisure research case”, not a rate |
+| 05 Available ≠ ready | Return → Inspection → Charging → Ready; free cell can still mean a vehicle that cannot leave | Interpretation | §12; note: no durations or SLAs implied |
+| 06 Service model | Request → … → Next user; focus Booking → Vehicle → Preparation → Ready | Interpretation | §13; “Not an official SOP” kept visible |
+| 07 Work ≠ leisure | Fixed commitment / specific date / precise interval vs next usable opportunity / flexible / weekends; “The research recommended declaring intent.” | Research evidence + design exploration | §11; caveat: not a claim the product already split flows |
+| 08 Rules too late | One active leisure reservation rule appeared after Reserve; earlier placement | Research evidence (expert review) + design exploration | §14; illustrative date in exploration only |
+| 09 Booking history | Defaults could hide future bookings; state appeared late; people opened tickets for existing reservations | Research evidence + design exploration | §14; note: no ticket-reduction claim |
+| 10 Scheduled ≠ actual | 09:00/17:00 vs 09:18/16:42 | Design exploration, “Illustrative times” | §16 recommendation to capture actual pickup/return |
+| 11 Pivot | Interface had real problems; usability secondary; dominant constraint availability; from “improve the booking” to “what makes a booking real” | Research evidence + interpretation | §08 |
+| 12 Software can / cannot | Lists as given in the brief | Interpretation | §35 H |
+| 13 Investment | 6–12 months platform rebuild; same fleet + same constraint | Project context | §17; no ROI, no savings |
+| 14 Closing | Platform only one layer; tell the truth about availability earlier; only rebuild when it addresses the dominant constraint | Interpretation | Final narrative |
+
+Removed from the public page in this pass: persona names, the illustrative user quote, the exploration grid, the “Result / Limits” prose block and the research snapshot dashboard. They remain documented in `docs/` but are no longer rendered.
+
+Still absent by design: metrics, participant counts, rates, ROI, adoption, deployment status, or any claim that an exploration shipped.
