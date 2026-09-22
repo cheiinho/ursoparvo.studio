@@ -25,7 +25,7 @@ export default function IssuesSurface({ content }: { content: IntradayContent })
           <p className="peyebrow">
             {dataset.dateLabel}. {dataset.timeZone}
           </p>
-          <h3>Forecasting issues</h3>
+          <h4>Forecasting issues</h4>
         </div>
         <div className="psurface__scope">
           <div className="pseg" aria-hidden="true">

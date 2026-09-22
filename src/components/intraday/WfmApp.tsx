@@ -232,20 +232,20 @@ export default function WfmApp({ content }: { content: IntradayContent }) {
                   <p className="peyebrow">
                     {dataset.queue}. {dataset.dateLabel}. {dataset.timeZone}
                   </p>
-                  <h3>{two.surfaces[1].label}</h3>
+                  <h4>{two.surfaces[1].label}</h4>
                 </div>
               </header>
               {destination === "schedule" ? (
                 <div className="pfocus">
                   <div>
                     <p className="peyebrow">{dataset.queue}</p>
-                    <h3 id="issue-schedule-period" tabIndex={-1} className="pfocus__title">
+                    <h4 id="issue-schedule-period" tabIndex={-1} className="pfocus__title">
                       {affectedPeriodLabel(
                         three.periodPrefix,
                         dataset.affected.start,
                         dataset.affected.end,
                       )}
-                    </h3>
+                    </h4>
                   </div>
                   <button type="button" className="pbtn pbtn--quiet" onClick={() => go("issues")}>
                     <Glyph name="back" />
@@ -283,7 +283,7 @@ export default function WfmApp({ content }: { content: IntradayContent }) {
                   <p className="peyebrow">
                     {dataset.account}. {dataset.dateLabel}
                   </p>
-                  <h3>{two.surfaces[2].label}</h3>
+                  <h4>{two.surfaces[2].label}</h4>
                 </div>
               </header>
               <InsightsBody

@@ -54,9 +54,9 @@ export default function ScheduleList({
     <div className="intraday-schedule">
       {showHeading ? (
         asHeading ? (
-          <h3 id={headingId} ref={headingRef} tabIndex={-1} className={className}>
+          <h4 id={headingId} ref={headingRef} tabIndex={-1} className={className}>
             {heading}
-          </h3>
+          </h4>
         ) : (
           <p id={headingId} className={className}>
             {heading}

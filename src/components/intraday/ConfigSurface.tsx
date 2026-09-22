@@ -41,7 +41,7 @@ export default function ConfigSurface({ content }: { content: IntradayContent })
       <header className="psurface__head">
         <div className="psurface__title">
           <p className="peyebrow">Configurations. {one.queueLabel}</p>
-          <h3>{dataset.queue}</h3>
+          <h4>{dataset.queue}</h4>
         </div>
         <p className="pchip">{reforecastOn ? "Reforecast on" : "Reforecast off"}</p>
       </header>

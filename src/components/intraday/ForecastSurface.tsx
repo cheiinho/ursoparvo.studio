@@ -104,7 +104,7 @@ export default function ForecastSurface({ content }: { content: IntradayContent 
           <p className="peyebrow">
             {dataset.queue}. {dataset.dateLabel}. {dataset.timeZone}
           </p>
-          <h3>{content.decisionTwo.surfaces[0].label}</h3>
+          <h4>{content.decisionTwo.surfaces[0].label}</h4>
         </div>
         <div className="psurface__scope">
           <div className="pseg" aria-hidden="true">
@@ -127,9 +127,9 @@ export default function ForecastSurface({ content }: { content: IntradayContent 
         <div className="pfocus">
           <div>
             <p className="peyebrow">{dataset.queue}</p>
-            <h3 id="issue-forecast-period" tabIndex={-1} className="pfocus__title">
+            <h4 id="issue-forecast-period" tabIndex={-1} className="pfocus__title">
               {affectedPeriodLabel(content.decisionThree.periodPrefix, dataset.affected.start, dataset.affected.end)}
-            </h3>
+            </h4>
           </div>
           <button type="button" className="pbtn pbtn--quiet" onClick={() => setPlace("issues")}>
             <Glyph name="back" />
