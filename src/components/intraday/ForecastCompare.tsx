@@ -119,6 +119,9 @@ export default function ForecastCompare({
           <div className="wfm-queues">
             <span className="is-on">{dataset.queue}</span>
           </div>
+          <div className={`wfm-comparebar${on ? " is-on" : ""}`}>
+            <WfmSwitch checked={on} onChange={toggle} label={showPrevious} />
+          </div>
         </header>
         <div className="wfm-forecast">
           <p className="wfm-kicker">Contact volume offered</p>
@@ -137,10 +140,7 @@ export default function ForecastCompare({
             selectedTime={selected}
             onSelectTime={setSelected}
           />
-          <div className={`wfm-comparebar${on ? " is-on" : ""}`}>
-            <WfmSwitch checked={on} onChange={toggle} label={showPrevious} />
-            {on ? <p className="intraday-delta">{delta}</p> : <p className="wfm-help">{previousHidden}</p>}
-          </div>
+          {on ? <p className="intraday-delta">{delta}</p> : <p className="wfm-help">{previousHidden}</p>}
         </div>
         <p className="intraday-summary">{summary}</p>
         {selectedRow ? (

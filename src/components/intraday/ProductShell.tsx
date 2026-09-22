@@ -199,7 +199,9 @@ export default function ProductShell(props: Props) {
                   </span>
                   <div className="wfm-banner__copy">
                     <p>{banner === "start" ? props.start : props.completed}</p>
-                    {shell === "inProgress" && filterOn ? <p className="wfm-help">{props.affected}</p> : null}
+                    <p className="wfm-help">
+                      {props.affected} {dataset.affected.start} to {dataset.affected.end}
+                    </p>
                   </div>
                   {shell === "inProgress" ? (
                     <div className="wfm-banner__actions">

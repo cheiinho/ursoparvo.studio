@@ -164,6 +164,9 @@ export default function ReforecastStepper({
             <button type="button" onClick={() => go(1)} disabled={moveStep(step, 1) === null}>
               {next}
             </button>
+            <button type="button" onClick={() => goTo(1)} disabled={step === 1}>
+              Reset
+            </button>
           </div>
         </div>
         {statusText ? (
@@ -173,6 +176,9 @@ export default function ReforecastStepper({
             </span>
             <div className="wfm-banner__copy">
               <p>{statusText}</p>
+              <p className="wfm-help">
+                {dataset.queue}. {dataset.affected.start} to {dataset.affected.end}
+              </p>
             </div>
           </div>
         ) : null}

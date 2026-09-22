@@ -108,8 +108,9 @@ export default function QueueSwitch({
               describedBy="reforecast-helper"
             />
           </div>
-          <div className="wfm-settings">
-            <p className="wfm-section">{disclosure}</p>
+          <details className="wfm-secondary">
+            <summary>{disclosure}</summary>
+            <div className="wfm-settings">
             <p className="wfm-help">{existingNote}</p>
             <label className="wfm-setting">
               <span className="wfm-setting__label">
@@ -161,7 +162,8 @@ export default function QueueSwitch({
                 </div>
               </div>
             ))}
-          </div>
+            </div>
+          </details>
         </form>
       </ProductChrome>
     </section>

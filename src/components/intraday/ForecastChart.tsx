@@ -30,7 +30,7 @@ type Props = {
 };
 
 const WIDTH = 880;
-const HEIGHT = 340;
+const HEIGHT = 460;
 const PAD_L = 52;
 const PAD_R = 16;
 const PAD_T = 28;
@@ -106,10 +106,43 @@ export default function ForecastChart({
   );
   const focusTime = selectedTime ?? hover;
   const plot = tone === "paper";
+  const tip = focusTime
+    ? legend.map((item) => {
+        const value =
+          series
+            .filter((candidate) => candidate.label === item.label)
+            .map((candidate) => candidate.points.find((point) => point.time === focusTime)?.value ?? null)
+            .find((candidate) => candidate !== null && candidate !== undefined) ?? null;
+        return { label: item.label, value };
+      })
+    : [];
+  const bandWidth = Math.max(bandEnd - bandX, step);
+
+  function moveFocus(direction: -1 | 1) {
+    const index = Math.max(0, axis.indexOf(focusTime ?? axis[0] ?? ""));
+    const next = axis[Math.min(axis.length - 1, Math.max(0, index + direction))];
+    if (!next) return;
+    if (onSelectTime) onSelectTime(next);
+    else setHover(next);
+  }
 
   return (
     <div className="intraday-chartblock">
-      <div className="intraday-chart-scroll">
+      <div
+        className="intraday-chart-scroll"
+        tabIndex={0}
+        aria-label={yLabel}
+        onKeyDown={(event) => {
+          if (event.key === "ArrowRight") {
+            event.preventDefault();
+            moveFocus(1);
+          }
+          if (event.key === "ArrowLeft") {
+            event.preventDefault();
+            moveFocus(-1);
+          }
+        }}
+      >
       <svg
         className="intraday-chart"
         viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
@@ -164,7 +197,13 @@ export default function ForecastChart({
               stroke={bandStroke}
               strokeWidth="1.5"
             />
-            <text x={bandX + 8} y={PAD_T + 16} fill={bandStroke} fontSize="12">
+            <text
+              x={bandWidth < 140 ? bandX + bandWidth / 2 : bandX + 8}
+              y={PAD_T + 16}
+              textAnchor={bandWidth < 140 ? "middle" : "start"}
+              fill={bandStroke}
+              fontSize="12"
+            >
               {band.label}
             </text>
           </g>
@@ -227,7 +266,7 @@ export default function ForecastChart({
                   strokeWidth={item.weight === "strong" ? 3 : 2}
                   strokeLinejoin="round"
                   strokeLinecap="round"
-                  strokeDasharray={item.style === "dotted" ? "2 4" : undefined}
+                  strokeDasharray={item.style === "dotted" ? "1.5 6" : undefined}
                 />
               ))}
             </g>
@@ -266,7 +305,18 @@ export default function ForecastChart({
         ))}
       </svg>
       </div>
+      {tip.length > 0 ? (
+        <p className="intraday-tip" aria-hidden="true">
+          <strong>{focusTime}</strong>
+          {tip.map((item) => (
+            <span key={item.label}>
+              {item.label} {item.value === null ? "—" : item.value}
+            </span>
+          ))}
+        </p>
+      ) : null}
       <ul className="intraday-legend" aria-hidden="true">
+        {band ? <li className="wfm-period">{band.label}</li> : null}
         {legend.map((item) => (
           <li key={item.label}>
             <span

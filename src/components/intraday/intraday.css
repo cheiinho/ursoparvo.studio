@@ -225,7 +225,7 @@
 }
 
 .intraday-series-enter {
-  animation: intraday-in var(--dur-micro) var(--ease-standard);
+  animation: intraday-in 220ms var(--ease-standard);
 }
 
 .intraday-mark {
@@ -1415,6 +1415,74 @@
   padding: 0.65rem 1rem;
 }
 
+.wfm-pagehead .wfm-comparebar,
+.wfm-pagehead .wfm-comparebar.is-on {
+  margin: 0;
+  border: 0;
+  padding: 0.15rem 0.45rem;
+  background: transparent;
+}
+
+.wfm-pagehead .wfm-comparebar.is-on {
+  background: var(--wfm-accent-soft);
+}
+
+.wfm-period {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.75rem;
+  margin: 0;
+  padding: 0 0.55rem;
+  border: 1px solid #6a4b12;
+  background-color: #fff6e4;
+  background-image: repeating-linear-gradient(-32deg, rgba(106, 75, 18, 0.22) 0 1px, transparent 1px 7px);
+  color: #6b4108;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.intraday-tip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  margin: 0.45rem 0 0;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--wfm-line, #ddd8e4);
+  background: #ffffff;
+  color: var(--wfm-ink, #1a1a1a);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.intraday-chart-scroll:focus-visible {
+  outline: 2px solid var(--focus-ring, #1a1a1a);
+  outline-offset: 2px;
+}
+
+.wfm-secondary {
+  background: #f7f6f8;
+  border-top: 1px solid var(--wfm-line);
+}
+
+.wfm-secondary summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.75rem 1rem;
+  color: var(--wfm-ink);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.wfm-secondary summary:focus-visible {
+  outline: 2px solid #1a1a1a;
+  outline-offset: -2px;
+}
+
+.wfm .intraday-schedgrid td.is-shift.is-affected {
+  background-color: #e7d7b8;
+}
+
 .wfm-sheet {
   position: absolute;
   top: 3.1rem;
@@ -1655,7 +1723,8 @@
 }
 
 .wfm .intraday-schedgrid .is-affected {
-  background: var(--wfm-warn-bg);
+  background-color: var(--wfm-warn-bg);
+  background-image: repeating-linear-gradient(-32deg, rgba(106, 75, 18, 0.22) 0 1px, transparent 1px 7px);
   box-shadow: inset 0 -2px 0 var(--wfm-warn);
 }
 
@@ -1918,8 +1987,8 @@
   min-height: 0;
 }
 
-.intraday-peak .wfm-app,
-.intraday-beat .wfm-app {
+.intraday-peak .wfm-app:has(.intraday-chart),
+.intraday-beat .wfm-app:has(.intraday-chart) {
   min-height: 72vh;
 }
 
@@ -2012,8 +2081,8 @@
     min-height: 0;
   }
 
-  .intraday-peak .wfm-app,
-  .intraday-beat .wfm-app {
+  .intraday-peak .wfm-app:has(.intraday-chart),
+  .intraday-beat .wfm-app:has(.intraday-chart) {
     min-height: 0;
   }
 
