@@ -29,12 +29,12 @@ type Props = {
   onSelectTime?: (time: string) => void;
 };
 
-const WIDTH = 880;
-const HEIGHT = 460;
-const PAD_L = 52;
-const PAD_R = 16;
-const PAD_T = 28;
-const PAD_B = 36;
+const WIDTH = 960;
+const HEIGHT = 520;
+const PAD_L = 64;
+const PAD_R = 28;
+const PAD_T = 36;
+const PAD_B = 48;
 
 function segments(points: ChartPoint[], xOf: (time: string) => number, yOf: (value: number) => number) {
   const runs: string[] = [];
@@ -161,12 +161,12 @@ export default function ForecastChart({
         {yTicks.map((tick) => (
           <g key={`y-${tick}`}>
             <line x1={PAD_L} x2={WIDTH - PAD_R} y1={yOf(tick)} y2={yOf(tick)} stroke={grid} />
-            <text x={PAD_L - 8} y={yOf(tick) + 3} textAnchor="end" fill={muted} fontSize="12">
+            <text x={PAD_L - 10} y={yOf(tick) + 4} textAnchor="end" fill={muted} fontSize="13">
               {tick}
             </text>
           </g>
         ))}
-        <text x={8} y={PAD_T - 10} fill={muted} fontSize="12">
+        <text x={10} y={PAD_T - 12} fill={muted} fontSize="13">
           {yLabel}
         </text>
         {ticks.map((time) => (
@@ -197,12 +197,23 @@ export default function ForecastChart({
               stroke={bandStroke}
               strokeWidth="1.5"
             />
+            <rect
+              x={bandWidth < 140 ? bandX + bandWidth / 2 - 52 : bandX + 8}
+              y={PAD_T + 6}
+              width={bandWidth < 140 ? 104 : Math.min(118, bandWidth - 16)}
+              height="18"
+              rx="2"
+              fill="#fffaf0"
+              stroke={bandStroke}
+              strokeWidth="1"
+            />
             <text
-              x={bandWidth < 140 ? bandX + bandWidth / 2 : bandX + 8}
-              y={PAD_T + 16}
+              x={bandWidth < 140 ? bandX + bandWidth / 2 : bandX + 14}
+              y={PAD_T + 19}
               textAnchor={bandWidth < 140 ? "middle" : "start"}
               fill={bandStroke}
-              fontSize="12"
+              fontSize="13"
+              fontWeight="600"
             >
               {band.label}
             </text>
@@ -286,7 +297,7 @@ export default function ForecastChart({
           />
         ))}
         {ticks.map((time) => (
-          <text key={`tick-${time}`} x={xOf(time)} y={HEIGHT - 12} textAnchor="middle" fill={muted} fontSize="12">
+          <text key={`tick-${time}`} x={xOf(time)} y={HEIGHT - 14} textAnchor="middle" fill={muted} fontSize="13">
             {time}
           </text>
         ))}
