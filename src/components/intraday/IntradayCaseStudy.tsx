@@ -1,10 +1,34 @@
 import type { ReactNode } from "react";
 import EvidenceLabel from "@/components/intraday/EvidenceLabel";
 import Experience from "@/components/intraday/Experience";
+import { dataset } from "@/content/intraday/dataset";
 import type { IntradayContent } from "@/content/intraday/types";
 import "./intraday.css";
 
 type Props = { content: IntradayContent };
+
+const MARK_W = 1200;
+const MARK_H = 260;
+
+/** The hero line is the dataset, drawn as a brand mark. No labels, no values. */
+function heroPaths() {
+  const rows = dataset.quarters;
+  const peak = Math.max(...rows.map((row) => Math.max(row.previous, row.next ?? 0)));
+  const x = (index: number) => (index / (rows.length - 1)) * MARK_W;
+  const y = (value: number) => MARK_H - (value / peak) * (MARK_H - 24) - 12;
+  const previous = rows.map((row, index) => `${x(index).toFixed(1)},${y(row.previous).toFixed(1)}`);
+  const next = rows
+    .map((row, index) => (row.next === null ? null : `${x(index).toFixed(1)},${y(row.next).toFixed(1)}`))
+    .filter((point): point is string => point !== null);
+  const startIndex = rows.findIndex((row) => row.time === dataset.affected.start);
+  const endIndex = rows.findIndex((row) => row.time === dataset.affected.end);
+  return {
+    previous: previous.join(" "),
+    next: next.join(" "),
+    bandX: x(startIndex),
+    bandW: x(endIndex) - x(startIndex),
+  };
+}
 
 function More({ label, children }: { label: string; children: ReactNode }) {
   return (
@@ -17,10 +41,22 @@ function More({ label, children }: { label: string; children: ReactNode }) {
 
 export default function IntradayCaseStudy({ content }: Props) {
   const decisions = [content.decisionOne, content.decisionTwo, content.decisionThree];
+  const mark = heroPaths();
 
   return (
     <article className="intraday">
       <header id="cover" className="intraday-field intraday-field--system ix-hero">
+        <svg
+          className="ix-hero__mark"
+          viewBox={`0 0 ${MARK_W} ${MARK_H}`}
+          preserveAspectRatio="none"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <rect x={mark.bandX} y="0" width={mark.bandW} height={MARK_H} fill="rgba(201,178,255,0.09)" />
+          <polyline points={mark.previous} fill="none" stroke="rgba(244,238,227,0.28)" strokeWidth="2" />
+          <polyline points={mark.next} fill="none" stroke="rgba(201,178,255,0.75)" strokeWidth="3" />
+        </svg>
         <div className="ix-hero__inner">
           <p className="ix-hero__kicker">{content.cover.kicker}</p>
           <h1 className="ix-hero__title">{content.cover.title}</h1>
@@ -52,10 +88,16 @@ export default function IntradayCaseStudy({ content }: Props) {
         illustrative={content.labels.illustrative}
       />
 
-      <section id="tensions" className="ix-notes intraday-field intraday-field--questions">
+      <section
+        id="tensions"
+        className="ix-notes intraday-field intraday-field--questions"
+        aria-labelledby="tensions-heading"
+      >
         <div className="ix-notes__inner">
           <div className="ix-notes__head">
-            <p className="ix-notes__kicker">{content.tensions.heading}</p>
+            <h2 id="tensions-heading" className="ix-notes__kicker">
+              {content.tensions.heading}
+            </h2>
             <p className="ix-notes__lede">{content.tensions.message}</p>
           </div>
           <ol className="ix-questions">
@@ -69,10 +111,12 @@ export default function IntradayCaseStudy({ content }: Props) {
         </div>
       </section>
 
-      <section id="decisions" className="ix-notes">
+      <section id="decisions" className="ix-notes" aria-labelledby="decisions-heading">
         <div className="ix-notes__inner">
           <div className="ix-notes__head">
-            <p className="ix-notes__kicker">{content.outcome.heading}</p>
+            <h2 id="decisions-heading" className="ix-notes__kicker">
+              {content.outcome.heading}
+            </h2>
             <p className="ix-notes__lede">{content.outcome.lede}</p>
           </div>
           <ol className="ix-decisions">

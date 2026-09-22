@@ -80,7 +80,7 @@ function reducer(state: State, action: Action): State {
         showPrevious: action.act === "inspection" ? state.showPrevious : false,
         destination: null,
         panelOpen: false,
-        panelSeen: preset.phase >= 4 ? state.panelSeen : true,
+        panelSeen: preset.phase < 4,
         filterOn: preset.phase === 4 ? state.filterOn : false,
       };
     }
