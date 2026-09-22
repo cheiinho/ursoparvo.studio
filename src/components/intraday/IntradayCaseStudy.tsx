@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import EvidenceLabel from "@/components/intraday/EvidenceLabel";
-import Experience from "@/components/intraday/Experience";
+import Scene from "@/components/intraday/Scene";
 import { dataset } from "@/content/intraday/dataset";
 import type { IntradayContent } from "@/content/intraday/types";
 import "./intraday.css";
@@ -40,7 +40,6 @@ function More({ label, children }: { label: string; children: ReactNode }) {
 }
 
 export default function IntradayCaseStudy({ content }: Props) {
-  const decisions = [content.decisionOne, content.decisionTwo, content.decisionThree];
   const mark = heroPaths();
 
   return (
@@ -75,39 +74,66 @@ export default function IntradayCaseStudy({ content }: Props) {
               <dd>{content.cover.anonymity}</dd>
             </div>
           </dl>
-          <a className="ix-hero__cue" href="#product">
-            {content.experience.label}
-            <span aria-hidden="true">↓</span>
-          </a>
+          <nav className="ix-toc" aria-label={content.experience.label}>
+            <p className="ix-toc__label">{content.experience.label}</p>
+            <ol className="ix-toc__list">
+              {content.experience.solutions.map((solution, index) => (
+                <li key={solution.id}>
+                  <a href={`#${solution.id}`}>
+                    <span className="ix-toc__num" aria-hidden="true">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    {solution.label}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
         </div>
       </header>
 
-      <Experience
-        content={content}
-        note={content.frame.sentence}
-        illustrative={content.labels.illustrative}
-      />
-
-      <section
-        id="tensions"
-        className="ix-notes intraday-field intraday-field--questions"
-        aria-labelledby="tensions-heading"
-      >
-        <div className="ix-notes__inner">
-          <div className="ix-notes__head">
-            <h2 id="tensions-heading" className="ix-notes__kicker">
-              {content.tensions.heading}
+      <section id="problem" className="ix-problem" aria-labelledby="problem-heading">
+        <div className="ix-problem__inner">
+          <div className="ix-problem__head">
+            <h2 id="problem-heading" className="ix-notes__kicker">
+              {content.problem.heading}
             </h2>
-            <p className="ix-notes__lede">{content.tensions.message}</p>
+            <p className="ix-problem__lede">{content.problem.lede}</p>
           </div>
-          <ol className="ix-questions">
-            {content.tensions.questions.map((question, index) => (
-              <li key={question}>
-                <span className="ix-questions__num">{String(index + 1).padStart(2, "0")}</span>
-                <h3>{question}</h3>
-              </li>
+          <blockquote className="ix-story">
+            <p>{content.problem.story}</p>
+            <cite>
+              <EvidenceLabel kind="requirement" text={content.labels.requirement} />
+            </cite>
+          </blockquote>
+          <dl className="ix-facts">
+            {content.problem.facts.map((fact) => (
+              <div key={fact.term}>
+                <dt>{fact.term}</dt>
+                <dd>{fact.detail}</dd>
+              </div>
             ))}
-          </ol>
+          </dl>
+          <p className="ix-problem__note">{content.problem.undefinedNote}</p>
+        </div>
+      </section>
+
+      <section id="product" className="ix-stage" aria-labelledby="solutions-heading">
+        <div className="ix-stage__inner">
+          <div className="ix-stage__head">
+            <h2 id="solutions-heading" className="ix-stage__heading">
+              {content.experience.heading}
+            </h2>
+            <p className="ix-stage__lede">{content.experience.lede}</p>
+            <p className="ix-recon">
+              <span className="ix-recon__tag">{content.labels.illustrative}</span>
+              <span>{content.frame.sentence}</span>
+            </p>
+          </div>
+
+          {content.experience.solutions.map((solution, index) => (
+            <Scene key={solution.id} content={content} solution={solution} position={index + 1} />
+          ))}
         </div>
       </section>
 
@@ -119,15 +145,6 @@ export default function IntradayCaseStudy({ content }: Props) {
             </h2>
             <p className="ix-notes__lede">{content.outcome.lede}</p>
           </div>
-          <ol className="ix-decisions">
-            {decisions.map((decision, index) => (
-              <li key={decision.heading}>
-                <span className="ix-decisions__num">{String(index + 1).padStart(2, "0")}</span>
-                <h3>{decision.heading}</h3>
-                <p className="ix-decisions__body">{decision.message}</p>
-              </li>
-            ))}
-          </ol>
           <div className="ix-ledger">
             <div className="ix-ledger__row">
               <div className="ix-ledger__label">

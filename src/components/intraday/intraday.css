@@ -26,8 +26,6 @@
   --ix-max: 100rem;
 
   /* Walkthrough console height and border, plus everything pinned above the product */
-  --ix-console-h: 3.75rem;
-  --ix-chrome: calc(var(--header-offset) + var(--ix-console-h) + 1px);
 
   display: block;
   color: var(--text);
@@ -77,16 +75,6 @@
 .intraday-field--system {
   background: var(--ix-plum);
   color: var(--ix-on-plum);
-}
-
-.intraday-field--questions {
-  background: var(--ix-lilac);
-  color: #191325;
-}
-
-.dark .intraday-field--questions {
-  background: #2a2438;
-  color: #efeaf8;
 }
 
 /* ------------------------------------------------------------------- hero */
@@ -185,154 +173,169 @@
   line-height: 1.45;
 }
 
-.ix-hero__cue {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  justify-self: start;
-  min-height: 48px;
-  padding: 0 1.25rem;
-  border: 1px solid rgba(244, 238, 227, 0.45);
-  border-radius: 999px;
-  color: inherit;
-  font-size: 0.85rem;
+/* The whole navigation of the page: five links, named after the solutions. */
+
+.ix-toc {
+  margin-top: clamp(0.5rem, 2vh, 1.5rem);
+  padding-top: var(--ix-space-6);
+  border-top: 1px solid rgba(244, 238, 227, 0.2);
+}
+
+.ix-toc__label {
+  margin: 0 0 0.9rem;
+  font-size: 0.7rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  text-decoration: none;
-  transition: background-color 160ms ease, border-color 160ms ease;
+  color: var(--ix-on-plum-soft);
 }
 
-.ix-hero__cue:hover {
-  background: rgba(244, 238, 227, 0.12);
-  border-color: rgba(244, 238, 227, 0.8);
-}
-
-.ix-hero__cue:focus-visible {
-  outline: 2px solid var(--ix-on-plum);
-  outline-offset: 3px;
-}
-
-/* ------------------------------------------------------------------ stage */
-
-.ix-stage {
-  background: linear-gradient(180deg, var(--ix-plum-deep) 0%, #17102a 100%);
-  padding-bottom: clamp(3.5rem, 9vh, 6rem);
-  color: var(--ix-on-plum);
-}
-
-/*
- * The studio header is fixed and transparent, so the product window would
- * otherwise scroll under the bear. This band carries the console colour up
- * behind it and the whole strip reads as one toolbar. It belongs to the stage,
- * not to the console, so it can never reach up into the hero: it takes no
- * layout space, and it sits under the console while the console is unstuck.
- */
-.ix-stage::before {
-  content: "";
-  display: block;
-  position: sticky;
-  top: 0;
-  z-index: 3;
-  height: var(--header-offset);
-  margin-bottom: calc(var(--header-offset) * -1);
-  background: #211230;
-  pointer-events: none;
-}
-
-.ix-console {
-  position: sticky;
-  top: var(--header-offset);
-  z-index: 4;
-  min-height: var(--ix-console-h);
-  background: #211230;
-  border-bottom: 1px solid rgba(244, 238, 227, 0.14);
-}
-
-.ix-console__inner {
-  width: 100%;
-  max-width: var(--ix-max);
-  margin-inline: auto;
-  padding: 0.5rem var(--ix-gutter);
-  display: flex;
-  align-items: center;
-  gap: 0.75rem 1.5rem;
-  min-height: var(--ix-console-h);
-}
-
-.ix-console__label {
-  margin: 0;
-  flex: none;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(244, 238, 227, 0.62);
-}
-
-.ix-acts {
-  display: flex;
-  flex: 1 1 auto;
-  gap: 0.15rem;
+.ix-toc__list {
+  display: grid;
+  gap: 0;
   margin: 0;
   padding: 0;
   list-style: none;
-  overflow-x: auto;
-  scrollbar-width: thin;
+  max-width: 44rem;
 }
 
-.ix-acts li {
-  flex: 0 0 auto;
-}
-
-.ix-acts button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 44px;
-  padding: 0 0.8rem;
-  border: 0;
-  border-radius: var(--p-r-md);
-  background: transparent;
-  color: rgba(244, 238, 227, 0.62);
-  font: inherit;
-  font-size: 0.85rem;
-  white-space: nowrap;
-  transition: background-color 140ms ease, color 140ms ease;
-}
-
-.ix-acts button:hover {
-  background: rgba(244, 238, 227, 0.1);
-  color: var(--ix-on-plum);
-}
-
-.ix-acts button.is-done {
-  color: rgba(244, 238, 227, 0.85);
-}
-
-.ix-acts button.is-current {
-  background: rgba(244, 238, 227, 0.14);
-  color: #ffffff;
-  font-weight: 650;
-  box-shadow: inset 0 -2px 0 #c9b2ff;
-}
-
-.ix-rail__num {
-  font-variant-numeric: tabular-nums;
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  opacity: 0.7;
-}
-
-.ix-acts button.is-current .ix-rail__num {
-  color: #c9b2ff;
-  opacity: 1;
-}
-
-.ix-transport {
+.ix-toc__list a {
   display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(244, 238, 227, 0.14);
+  color: var(--ix-cream);
+  font-size: clamp(0.98rem, 1.6vw, 1.1rem);
+  line-height: 1.4;
+  text-decoration: none;
+  transition: color 0.16s ease, border-color 0.16s ease;
+}
+
+.ix-toc__list a:hover {
+  color: var(--ix-lilac);
+  border-bottom-color: rgba(201, 178, 255, 0.5);
+}
+
+.ix-toc__list a:focus-visible {
+  outline: 2px solid var(--ix-lilac);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.ix-toc__num {
   flex: none;
-  gap: 0.4rem;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  color: rgba(201, 178, 255, 0.72);
+}
+
+/* --------------------------------------------------------------- problem */
+
+.ix-problem {
+  padding-block: clamp(3rem, 8vh, 5.5rem);
+  background: var(--ix-lilac);
+  color: #191325;
+}
+
+.dark .ix-problem {
+  background: #2a2438;
+  color: #efeaf8;
+}
+
+.ix-problem__inner {
+  width: 100%;
+  max-width: var(--ix-max);
+  margin-inline: auto;
+  padding-inline: var(--ix-gutter);
+  display: grid;
+  gap: clamp(1.5rem, 4vh, 2.5rem);
+}
+
+.ix-problem__head {
+  display: grid;
+  gap: 0.85rem;
+  max-width: 44rem;
+}
+
+.ix-problem__lede {
+  margin: 0;
+  font-size: clamp(1.25rem, 2.6vw, 1.85rem);
+  line-height: 1.32;
+  letter-spacing: -0.012em;
+}
+
+.ix-story {
+  margin: 0;
+  max-width: 44rem;
+  padding-left: clamp(1rem, 2.5vw, 1.6rem);
+  border-left: 2px solid currentcolor;
+}
+
+.ix-story p {
+  margin: 0 0 0.7rem;
+  font-size: clamp(1rem, 1.7vw, 1.2rem);
+  line-height: 1.55;
+  font-style: italic;
+}
+
+.ix-story cite {
+  font-style: normal;
+}
+
+.ix-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: clamp(1rem, 2.5vw, 2rem);
+  margin: 0;
+}
+
+.ix-facts div {
+  display: grid;
+  gap: 0.3rem;
+  align-content: start;
+  padding-top: 0.85rem;
+  border-top: 1px solid color-mix(in srgb, currentcolor 26%, transparent);
+}
+
+.ix-facts dt {
+  font-size: 0.95rem;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.ix-facts dd {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  opacity: 0.82;
+}
+
+.ix-problem__note {
+  margin: 0;
+  max-width: 44rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  opacity: 0.82;
+}
+
+/* The studio header is fixed, so anything the contents list jumps to has to
+   clear it. */
+.intraday :target,
+.ix-problem,
+.ix-stage,
+.ix-scene,
+.ix-notes {
+  scroll-margin-top: calc(var(--header-offset) + 1.5rem);
+}
+
+/* ------------------------------------------------------------- solutions */
+
+.ix-stage {
+  background: linear-gradient(180deg, var(--ix-plum-deep) 0%, #17102a 100%);
+  padding-block: clamp(3.5rem, 9vh, 6rem);
+  color: var(--ix-on-plum);
 }
 
 .ix-stage__inner {
@@ -340,171 +343,100 @@
   max-width: var(--ix-max);
   margin-inline: auto;
   padding-inline: var(--ix-gutter);
-  padding-top: clamp(1.75rem, 4vh, 3rem);
 }
 
-.ixbtn {
-  min-height: 44px;
-  padding: 0 1rem;
-  border: 1px solid rgba(244, 238, 227, 0.38);
-  border-radius: var(--p-r-md);
-  background: transparent;
-  color: var(--ix-on-plum);
-  font: inherit;
-  font-size: 0.88rem;
-  font-weight: 600;
-  transition: background-color 140ms ease, border-color 140ms ease, opacity 140ms ease;
+.ix-stage__head {
+  display: grid;
+  gap: 1rem;
+  max-width: 44rem;
+  padding-bottom: clamp(2rem, 5vh, 3.25rem);
 }
 
-.ixbtn:hover:not(:disabled) {
-  background: rgba(244, 238, 227, 0.12);
+.ix-stage__heading {
+  margin: 0;
+  font-size: clamp(2rem, 4.4vw, 3rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
 }
 
-.ixbtn:disabled {
-  opacity: 0.35;
-  cursor: default;
+.ix-stage__lede {
+  margin: 0;
+  max-width: 38rem;
+  font-size: clamp(1rem, 1.5vw, 1.12rem);
+  line-height: 1.6;
+  color: rgba(244, 238, 227, 0.82);
 }
 
-.ixbtn--primary {
-  background: #f4eee3;
-  border-color: #f4eee3;
-  color: #21123a;
+/* --------------------------------------------------------------- a scene */
+
+.ix-scene {
+  padding-block: clamp(2.75rem, 7vh, 4.5rem);
+  border-top: 1px solid rgba(244, 238, 227, 0.16);
 }
 
-.ixbtn--primary:hover:not(:disabled) {
-  background: #ffffff;
-  border-color: #ffffff;
+.ix-scene__inner {
+  display: grid;
+  gap: clamp(1.25rem, 3vh, 1.75rem);
 }
 
-.ixbtn--quiet {
-  border-color: transparent;
+.ix-scene__head {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  gap: 0 clamp(1rem, 3vw, 2rem);
+  align-items: start;
+}
+
+.ix-scene__num {
+  margin: 0;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 2.25rem;
+  line-height: 1;
   font-weight: 500;
-  color: var(--ix-on-plum-soft);
-}
-
-.ixbtn:focus-visible,
-.ix-acts button:focus-visible {
-  outline: 2px solid #c9b2ff;
-  outline-offset: 2px;
-}
-
-.ix-hint {
-  margin: 0;
-  font-size: 0.78rem;
-  line-height: 1.45;
-  color: rgba(244, 238, 227, 0.62);
-}
-
-.ix-main {
-  display: grid;
-  gap: clamp(1rem, 2.5vh, 1.75rem);
-  min-width: 0;
-}
-
-.ix-act {
-  display: grid;
-  gap: 0.6rem;
-  max-width: 52rem;
-}
-
-.ix-act__index {
-  margin: 0;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  color: rgba(244, 238, 227, 0.62);
+  color: rgba(201, 178, 255, 0.55);
   font-variant-numeric: tabular-nums;
 }
 
-.ix-act__index span {
+.ix-scene__copy {
+  display: grid;
+  gap: 0.7rem;
+  max-width: 46rem;
+}
+
+.ix-scene__label {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2.15rem);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+
+.ix-scene__statement {
+  margin: 0;
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  line-height: 1.55;
   color: var(--ix-on-plum);
 }
 
-.ix-act__statement {
+.ix-scene__line {
   margin: 0;
-  font-family: var(--font-brand), system-ui, sans-serif;
-  font-size: clamp(1.7rem, 3.4vw, 2.85rem);
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -0.035em;
-  text-wrap: balance;
-  color: #ffffff;
-}
-
-.ix-act__line {
-  margin: 0;
-  max-width: 44em;
-  font-size: 1rem;
-  line-height: 1.5;
-  color: rgba(244, 238, 227, 0.78);
-}
-
-.ix-signal {
-  display: grid;
-  gap: 0.65rem;
-  margin-top: 0.35rem;
-}
-
-.ix-signal__seg {
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: 2px;
-  padding: 3px;
-  border: 1px solid rgba(244, 238, 227, 0.22);
-  border-radius: 999px;
-  background: rgba(244, 238, 227, 0.06);
-  justify-self: start;
-}
-
-.ix-signal__seg button {
-  min-height: 36px;
-  padding: 0 0.95rem;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
+  max-width: 40rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
   color: rgba(244, 238, 227, 0.74);
-  font: inherit;
-  font-size: 0.85rem;
-  font-weight: 500;
-  transition: background-color 140ms ease, color 140ms ease;
 }
 
-.ix-signal__seg button:hover {
-  color: #ffffff;
-}
-
-.ix-signal__seg button.is-on {
-  background: #f4eee3;
-  color: #21123a;
-  font-weight: 600;
-}
-
-.ix-signal__seg button:focus-visible {
-  outline: 2px solid #c9b2ff;
-  outline-offset: 2px;
-}
-
-.ix-signal__note,
-.ix-caveat {
-  margin: 0;
-  max-width: 52em;
-  font-size: 0.88rem;
-  line-height: 1.55;
-  color: rgba(244, 238, 227, 0.68);
-}
-
-.ix-caveat {
-  padding-left: 0.85rem;
-  border-left: 2px solid #c9b2ff;
-  color: rgba(244, 238, 227, 0.86);
-}
-
-.ix-foot {
+/* The one thing to look at, so the screen is not a puzzle. */
+.ix-scene__look {
   display: flex;
-  flex-wrap: wrap;
   align-items: baseline;
-  justify-content: space-between;
-  gap: 0.5rem 2rem;
+  gap: 0.6rem;
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: rgba(201, 178, 255, 0.92);
+}
+
+.ix-scene__look span {
+  color: rgba(201, 178, 255, 0.6);
 }
 
 .ix-recon {
@@ -540,13 +472,11 @@
   box-shadow:
     0 40px 80px -40px rgba(10, 4, 26, 0.75),
     0 2px 0 rgba(255, 255, 255, 0.05) inset;
-  /* clip, not hidden: the app bar and the rail stay sticky against the page */
-  overflow: clip;
+  overflow: hidden;
 }
 
 .pwin__bar {
-  position: sticky;
-  top: var(--ix-chrome);
+  position: relative;
   z-index: 3;
   display: flex;
   align-items: center;
@@ -593,6 +523,18 @@
   height: 6px;
   border-radius: 50%;
   background: var(--p-accent);
+}
+
+/* Where you are, said in the bar, so the window makes sense without a rail. */
+.pwin__place {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding-left: 1.25rem;
+  border-left: 1px solid var(--p-line);
+  color: var(--p-ink);
+  font-size: 0.82rem;
+  font-weight: 650;
 }
 
 .pwin__tools {
@@ -738,6 +680,12 @@
   min-height: 34rem;
 }
 
+/* Most solutions are about one screen, so the window drops the rail. */
+.pwin__body--plain {
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 0;
+}
+
 .pnav {
   padding: 0.75rem 0.5rem;
   background: var(--p-surface);
@@ -745,8 +693,6 @@
 }
 
 .pnav ul {
-  position: sticky;
-  top: calc(var(--ix-chrome) + 4rem);
   display: grid;
   gap: 2px;
   margin: 0;
@@ -800,9 +746,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem 0.75rem;
-  position: sticky;
-  top: calc(var(--ix-chrome) + 3.25rem);
-  z-index: 2;
+  position: relative;
   /* keeps the running indicator inside the strip as it sweeps */
   overflow: hidden;
   padding: 0.6rem 1.25rem;
@@ -1910,77 +1854,14 @@
   text-wrap: balance;
 }
 
-.ix-questions {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
-  gap: clamp(1rem, 2.5vw, 2rem);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
 
-.ix-questions li {
-  display: grid;
-  gap: 0.75rem;
-  align-content: start;
-  padding-top: 1rem;
-  border-top: 2px solid currentColor;
-}
 
-.ix-questions__num {
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  opacity: 0.6;
-}
 
-.ix-questions h3 {
-  margin: 0;
-  font-family: var(--font-brand), system-ui, sans-serif;
-  font-size: clamp(1.15rem, 1.8vw, 1.5rem);
-  font-weight: 700;
-  line-height: 1.22;
-  letter-spacing: -0.02em;
-}
 
-.ix-decisions {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
-  gap: clamp(1rem, 2vw, 1.75rem);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
 
-.ix-decisions li {
-  display: grid;
-  gap: 0.5rem;
-  align-content: start;
-  padding-top: 0.9rem;
-  border-top: 1px solid color-mix(in srgb, var(--text) 22%, transparent);
-}
 
-.ix-decisions__num {
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: var(--ix-plum-mid);
-}
 
-.ix-decisions h3 {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: -0.015em;
-}
 
-.ix-decisions__body {
-  margin: 0;
-  font-size: 0.92rem;
-  line-height: 1.55;
-  color: var(--text-secondary);
-}
 
 /*
  * A ledger, not cards. The label sits in its own column and a hairline divides
@@ -2126,65 +2007,14 @@
 
 /* ----------------------------------------------------------- responsive */
 
-@media (max-width: 68rem) {
-  .ix-console__label {
-    display: none;
-  }
-}
-
 @media (max-width: 52rem) {
-  /* One row, so the pinned console stays worth its height on a phone */
-  .ix-console {
-    --ix-console-h: 3.25rem;
+  .ix-scene__head {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.35rem;
   }
 
-  .ix-console__inner {
-    gap: 0.4rem;
-    padding-block: 0.3rem;
-  }
-
-  .ix-acts {
-    min-width: 0;
-  }
-
-  /* The list scrolls. Fade its end and rule it off from the transport, so a
-     half-shown act reads as more to come rather than as a cut edge. */
-  .ix-acts::after {
-    content: "";
-    position: sticky;
-    right: 0;
-    flex: 0 0 1.75rem;
-    align-self: stretch;
-    margin-left: -1.75rem;
-    background: linear-gradient(90deg, rgba(33, 18, 48, 0), #211230 80%);
-    pointer-events: none;
-  }
-
-  .ix-transport {
-    flex: none;
-    gap: 0.25rem;
-    padding-left: 0.5rem;
-    border-left: 1px solid rgba(244, 238, 227, 0.16);
-  }
-
-  .ix-transport .ixbtn {
-    min-height: 40px;
-    padding-inline: 0.55rem;
-  }
-
-  .ix-acts button .ix-rail__name {
-    display: none;
-  }
-
-  .ix-acts button {
-    min-width: 44px;
-    min-height: 40px;
-    justify-content: center;
-    padding-inline: 0.5rem;
-  }
-
-  .ix-acts button.is-current .ix-rail__name {
-    display: inline;
+  .ix-scene__num {
+    font-size: 1.5rem;
   }
 }
 
@@ -2194,50 +2024,33 @@
     min-height: 0;
   }
 
-  /* Three pinned rows would swallow a small screen. Let the product scroll. */
-  .pwin__bar,
-  .psystem {
-    position: relative;
-    top: auto;
-  }
-
-  .pnav ul {
-    position: static;
-    top: auto;
-  }
-
+  /*
+   * A phone gets no rail. A scrolling strip of five places is a control to
+   * operate before you can read, and the bar already says where you are.
+   * The two solutions that move between places do it with buttons in the
+   * surface, which still work.
+   */
   .pnav {
-    position: relative;
-    border-right: 0;
-    border-bottom: 1px solid var(--p-line);
-    padding: 0.4rem 0.5rem;
+    display: none;
+  }
+}
+
+@media (max-width: 44.99rem) {
+  /* One row in the bar: the mark, the page, and the tools. The account and
+     the product name are already in the surface heading below. */
+  .pwin__brand {
+    font-size: 0;
+    gap: 0;
   }
 
-  /* The rail turns into a scrolling row. Fade the edge so that is visible. */
-  .pnav::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 1px;
-    width: 2rem;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0), var(--p-surface) 70%);
-    pointer-events: none;
+  .pwin__ws {
+    display: none;
   }
 
-  .pnav ul {
-    display: flex;
-    overflow-x: auto;
-    gap: 0.25rem;
-    scrollbar-width: thin;
-  }
-
-  .pnav li {
-    flex: 0 0 auto;
-  }
-
-  .pnav button {
-    white-space: nowrap;
+  .pwin__place {
+    padding-left: 0;
+    border-left: 0;
+    font-size: 0.9rem;
   }
 }
 
@@ -2299,11 +2112,7 @@
     gap: 1rem;
   }
 
-  .ix-stage {
-    padding-inline: 0;
-  }
-
-  .ix-stage__grid {
+  .ix-stage__inner {
     padding-inline: 1rem;
   }
 
@@ -2410,8 +2219,6 @@
     font-size: 1.7rem;
   }
 
-  .ix-questions li,
-  .ix-decisions li,
   .ix-ledger__row {
     min-width: 0;
   }

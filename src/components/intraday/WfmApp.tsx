@@ -27,6 +27,7 @@ export default function WfmApp({ content }: { content: IntradayContent }) {
     place,
     shell,
     unread,
+    nav,
     panelOpen,
     setPanel,
     setPlace,
@@ -92,6 +93,7 @@ export default function WfmApp({ content }: { content: IntradayContent }) {
           <span className="pwin__ws-dot" aria-hidden="true" />
           {dataset.account}
         </p>
+        <p className="pwin__place">{PLACES.find((item) => item.id === place)?.label}</p>
         <div className="pwin__tools">
           <button
             ref={bellRef}
@@ -145,24 +147,26 @@ export default function WfmApp({ content }: { content: IntradayContent }) {
         ) : null}
       </header>
 
-      <div className="pwin__body">
-        <nav className="pnav" aria-label={content.frame.product}>
-          <ul>
-            {PLACES.map((item) => (
-              <li key={item.id}>
-                <button
-                  type="button"
-                  className={place === item.id ? "is-current" : undefined}
-                  aria-current={place === item.id ? "page" : undefined}
-                  onClick={() => go(item.id)}
-                >
-                  <Glyph name={item.id} />
-                  <span>{item.label}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
+      <div className={`pwin__body${nav ? "" : " pwin__body--plain"}`}>
+        {nav ? (
+          <nav className="pnav" aria-label={content.frame.product}>
+            <ul>
+              {PLACES.map((item) => (
+                <li key={item.id}>
+                  <button
+                    type="button"
+                    className={place === item.id ? "is-current" : undefined}
+                    aria-current={place === item.id ? "page" : undefined}
+                    onClick={() => go(item.id)}
+                  >
+                    <Glyph name={item.id} />
+                    <span>{item.label}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ) : null}
 
         <div className="pmain">
           <div className={`psystem psystem--${shell}${running ? " is-running" : ""}`}>

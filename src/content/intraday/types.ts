@@ -15,15 +15,32 @@ export type ShellState = "watching" | "inProgress" | "updated";
 
 export type SurfaceId = "forecast" | "teamSchedule" | "insights";
 
-export type ActId =
-  | "plan"
-  | "divergence"
-  | "detection"
-  | "permission"
-  | "reforecast"
-  | "inspection";
+export type SolutionId = "allow" | "announce" | "replace" | "compare" | "locate";
 
 export type PlaceId = SurfaceId | "issues" | "configurations";
+
+/** The product state a solution is shown in. Each scene fixes its own. */
+export type SceneView = {
+  phase: StepId;
+  place: PlaceId;
+  showPrevious?: boolean;
+  panelOpen?: boolean;
+  reforecastOn?: boolean;
+  /** Renders the navigation rail, for the solutions that are about moving. */
+  nav?: boolean;
+};
+
+export type Solution = {
+  id: SolutionId;
+  label: string;
+  /** What the design does, in one line. */
+  statement: string;
+  /** Why it is that way, in one line. */
+  line: string;
+  /** The single thing to look at in the screen below. */
+  look: string;
+  view: SceneView;
+};
 
 export type Quarter = {
   time: string;
@@ -51,8 +68,16 @@ export type IntradayContent = {
   experience: {
     label: string;
     hint: string;
-    restart: string;
-    acts: Array<{ id: ActId; label: string; statement: string; line: string }>;
+    heading: string;
+    lede: string;
+    solutions: Solution[];
+  };
+  problem: {
+    heading: string;
+    lede: string;
+    story: string;
+    facts: Array<{ term: string; detail: string }>;
+    undefinedNote: string;
   };
   cover: {
     kicker: string;
