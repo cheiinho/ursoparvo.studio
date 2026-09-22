@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { dataset } from "@/content/intraday/dataset";
-import ProductChrome from "./ProductChrome";
+import ProductChrome, { PRODUCT_PLACES } from "./ProductChrome";
 import WfmSwitch from "./WfmSwitch";
 
 type Props = {
@@ -76,8 +76,9 @@ export default function QueueSwitch({
       </div>
       <ProductChrome
         product={product}
-        section={queueLabel}
+        section="Configurations"
         context={`${accountLabel}: ${dataset.account}`}
+        rail={PRODUCT_PLACES.map((item) => ({ ...item, current: item.id === "configurations" }))}
       >
         <form className="wfm-form" onSubmit={(event) => event.preventDefault()}>
           <header className="wfm-pagehead">

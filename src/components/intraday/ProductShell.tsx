@@ -244,6 +244,13 @@ export default function ProductShell(props: Props) {
                   <span className="is-on">{dataset.queue}</span>
                   {showOrders ? <span>{dataset.contrastQueue}</span> : null}
                 </div>
+                {surface === "forecast" ? (
+                  <div className="wfm-series" aria-hidden="true">
+                    <span className="is-on">Contact volume offered</span>
+                    <span>Handle time</span>
+                    <span>Staff</span>
+                  </div>
+                ) : null}
                 {showOrders ? <p className="wfm-help">{props.ordersNote}</p> : null}
               </header>
               {surface === "forecast" ? (

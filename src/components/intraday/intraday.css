@@ -983,6 +983,27 @@
 .wfm-rail__list {
   display: flex;
   flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wfm-rail__list li {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 44px;
+  margin: 0;
+  padding: 0 0.75rem;
+  color: var(--wfm-muted);
+  border-left: 3px solid transparent;
+}
+
+.wfm-rail__list li.is-current {
+  color: var(--wfm-accent);
+  background: var(--wfm-accent-soft);
+  border-left-color: var(--wfm-accent);
+  font-weight: 600;
 }
 
 .wfm .wfm-rail label {
@@ -1046,6 +1067,41 @@
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.2;
+}
+
+.wfm-series {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  border: 1px solid var(--wfm-line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.wfm-series span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 0.7rem;
+  border-right: 1px solid var(--wfm-line);
+  color: var(--wfm-muted);
+  background: var(--wfm-surface);
+}
+
+.wfm-series span:last-child {
+  border-right: 0;
+}
+
+.wfm-series .is-on {
+  color: var(--wfm-accent);
+  background: var(--wfm-accent-soft);
+  font-weight: 600;
+  box-shadow: inset 0 -2px 0 var(--wfm-accent);
+}
+
+.wfm-forecast .intraday-table-wrap {
+  max-height: 16rem;
+  overflow: auto;
 }
 
 .wfm-scope,
@@ -1656,6 +1712,17 @@
     border-left-color: transparent;
   }
 
+  .wfm-rail__list li {
+    flex: 0 0 auto;
+    border-left: 0;
+    border-bottom: 3px solid transparent;
+  }
+
+  .wfm-rail__list li.is-current {
+    border-bottom-color: var(--wfm-accent);
+    border-left-color: transparent;
+  }
+
   .wfm-facts {
     grid-template-columns: 1fr;
   }
@@ -1692,10 +1759,9 @@
 }
 
 .intraday-poster {
-  min-height: 78vh;
-  display: flex;
-  align-items: flex-end;
-  padding-block: clamp(4rem, 12vh, 8rem);
+  min-height: 0;
+  display: block;
+  padding-block: clamp(1.75rem, 4vh, 2.75rem) clamp(1rem, 3vh, 1.75rem);
 }
 
 .intraday-poster__name {
@@ -1708,13 +1774,20 @@
 
 .intraday-poster__thesis {
   margin: 0;
-  max-width: 18em;
+  max-width: 22em;
   font-family: var(--font-brand), system-ui, sans-serif;
-  font-size: clamp(2.1rem, 5.4vw, 4.6rem);
+  font-size: clamp(1.7rem, 3.2vw, 2.6rem);
   font-weight: 700;
-  line-height: 0.96;
-  letter-spacing: -0.045em;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
   text-wrap: balance;
+}
+
+.intraday-poster__claim {
+  max-width: 40rem;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.45;
 }
 
 .intraday-poster__meta {
@@ -1774,6 +1847,34 @@
   letter-spacing: -0.03em;
 }
 
+.intraday-decisions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.intraday-decisions a {
+  display: flex;
+  align-items: flex-end;
+  min-height: 7rem;
+  padding: 1rem;
+  border: 1px solid currentColor;
+  color: inherit;
+  font-family: var(--font-brand), system-ui, sans-serif;
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+}
+
+.intraday-decisions a:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
 .intraday-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
@@ -1817,6 +1918,10 @@
 }
 
 @media (max-width: 44.99rem) {
+  .intraday-decisions {
+    grid-template-columns: 1fr;
+  }
+
   .intraday-poster {
     min-height: 0;
   }

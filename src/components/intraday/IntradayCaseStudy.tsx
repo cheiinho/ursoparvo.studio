@@ -1,14 +1,12 @@
 import type { ReactNode } from "react";
-import DataTable from "@/components/intraday/DataTable";
 import EvidenceLabel from "@/components/intraday/EvidenceLabel";
-import ForecastChart from "@/components/intraday/ForecastChart";
+import ForecastBoard from "@/components/intraday/ForecastBoard";
 import ForecastCompare from "@/components/intraday/ForecastCompare";
 import IssuePath from "@/components/intraday/IssuePath";
 import ProductShell from "@/components/intraday/ProductShell";
 import QueueSwitch from "@/components/intraday/QueueSwitch";
 import ReforecastStepper from "@/components/intraday/ReforecastStepper";
 import ScenarioSelector from "@/components/intraday/ScenarioSelector";
-import { hourlyPrevious } from "@/content/intraday/derive";
 import type { IntradayContent } from "@/content/intraday/types";
 import "./intraday.css";
 
@@ -42,8 +40,6 @@ function TargetBlock({
 }
 
 export default function IntradayCaseStudy({ content }: Props) {
-  const hourly = hourlyPrevious();
-
   return (
     <article className="intraday">
       <section id="cover" className="intraday-field intraday-field--system intraday-poster" aria-labelledby="intraday-title">
@@ -52,7 +48,8 @@ export default function IntradayCaseStudy({ content }: Props) {
           <h1 id="intraday-title" className="intraday-poster__name">
             {content.cover.title}
           </h1>
-          <p className="intraday-poster__thesis">{content.cover.thesis}</p>
+          <p className="intraday-poster__thesis">{content.plan.message}</p>
+          <p className="intraday-poster__claim">{content.cover.thesis}</p>
           <p className="intraday-poster__meta">
             {content.cover.domain} {content.cover.anonymity}
           </p>
@@ -87,30 +84,16 @@ export default function IntradayCaseStudy({ content }: Props) {
             {content.plan.heading}
           </h2>
           <p className="intraday-beat__line">{content.plan.message}</p>
-          <div className="intraday-hero-chart">
-            <p className="type-label">{content.plan.chartTitle}</p>
-            <EvidenceLabel kind="illustrative" text={content.labels.illustrative} />
-            <ForecastChart
-              patternId="plan-band"
-              axis={hourly.map((row) => row.hour)}
-              series={[
-                {
-                  id: "forecast",
-                  label: content.chart.forecast,
-                  style: "solid",
-                  weight: "strong",
-                  points: hourly.map((row) => ({ time: row.hour, value: row.total })),
-                },
-              ]}
-              tone="paper"
-              yLabel={content.chart.contacts}
-            />
-            <DataTable
-              caption={content.plan.caption}
-              columns={[content.system.columns.time, content.chart.forecast]}
-              rows={hourly.map((row) => [row.hour, String(row.total)])}
-            />
-          </div>
+          <ForecastBoard
+            product={content.frame.product}
+            reconstruction={content.frame.reconstruction}
+            illustrative={content.labels.illustrative}
+            forecast={content.chart.forecast}
+            contacts={content.chart.contacts}
+            time={content.system.columns.time}
+            summary={content.plan.caption}
+            chartTitle={content.plan.chartTitle}
+          />
           <More label="How the plan is used">
             <EvidenceLabel kind="requirement" text={content.labels.requirement} />
             {content.plan.body.map((paragraph) => (
@@ -379,6 +362,17 @@ export default function IntradayCaseStudy({ content }: Props) {
           <h2 id="outcome-title" className="intraday-beat__title">
             {content.outcome.heading}
           </h2>
+          <ul className="intraday-decisions">
+            <li>
+              <a href="#decision-one">{content.decisionOne.heading}</a>
+            </li>
+            <li>
+              <a href="#decision-two">{content.decisionTwo.heading}</a>
+            </li>
+            <li>
+              <a href="#decision-three">{content.decisionThree.heading}</a>
+            </li>
+          </ul>
           <p className="intraday-beat__line">{content.outcome.design}</p>
           <TargetBlock
             evidence={content.labels.requirement}
