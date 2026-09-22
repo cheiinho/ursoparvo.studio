@@ -208,7 +208,7 @@ export default function WfmApp({ content }: { content: IntradayContent }) {
                       </button>
                     ) : null}
                   </>
-                ) : (
+                ) : place === "issues" ? null : (
                   <button type="button" className="pbtn pbtn--primary" onClick={() => go("issues")}>
                     Forecasting issues
                   </button>

@@ -889,8 +889,13 @@
 
 .psurface {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.1rem;
   padding: 1.25rem 1.25rem 1.6rem;
+  min-width: 0;
+}
+
+.psurface > * {
   min-width: 0;
 }
 
@@ -2139,6 +2144,22 @@
 }
 
 @media (max-width: 48rem) {
+  .pchart {
+    position: relative;
+  }
+
+  /* The day does not fit. Fade the edge so the scroll is visible. */
+  .pchart::after {
+    content: "";
+    position: absolute;
+    top: 0.85rem;
+    right: 0.9rem;
+    bottom: 3.25rem;
+    width: 2.25rem;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0), var(--p-surface) 75%);
+    pointer-events: none;
+  }
+
   .pchart__plot {
     overflow-x: auto;
     padding-bottom: 0.25rem;
@@ -2241,6 +2262,10 @@
   .pbanner__actions .pbtn,
   .pactions .pbtn {
     width: 100%;
+  }
+
+  .pactions .pbtn .pglyph {
+    display: none;
   }
 
   .psurface__head {
