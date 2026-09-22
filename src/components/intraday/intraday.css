@@ -1948,16 +1948,15 @@
   display: grid;
   gap: 0.5rem;
   align-content: start;
-  padding: 1.1rem 1.15rem 1.25rem;
-  border: 1px solid color-mix(in srgb, var(--text) 16%, transparent);
-  border-radius: 10px;
+  padding-top: 0.9rem;
+  border-top: 1px solid color-mix(in srgb, var(--text) 22%, transparent);
 }
 
 .ix-decisions__num {
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.12em;
-  color: var(--text-secondary);
+  color: var(--ix-plum-mid);
 }
 
 .ix-decisions h3 {
@@ -1975,57 +1974,72 @@
   color: var(--text-secondary);
 }
 
-.ix-grid {
+/*
+ * A ledger, not cards. The label sits in its own column and a hairline divides
+ * the rows, so the notes read as record rather than as four more boxes.
+ */
+.ix-ledger {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
-  gap: clamp(1rem, 2vw, 1.5rem);
 }
 
-.ix-card {
+.ix-ledger__row {
   display: grid;
-  gap: 0.55rem;
+  grid-template-columns: 14rem minmax(0, 1fr);
+  gap: 0.5rem clamp(1.5rem, 4vw, 4rem);
+  padding: clamp(1.1rem, 2vw, 1.6rem) 0;
+  border-top: 1px solid color-mix(in srgb, var(--text) 14%, transparent);
+}
+
+.ix-ledger__row:last-child {
+  border-bottom: 1px solid color-mix(in srgb, var(--text) 14%, transparent);
+}
+
+.ix-ledger__label {
+  display: grid;
+  gap: 0.45rem;
   align-content: start;
-  padding: 1.15rem 1.2rem 1.3rem;
-  border: 1px solid color-mix(in srgb, var(--text) 14%, transparent);
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--text) 3%, transparent);
+  justify-items: start;
 }
 
-.ix-card h3 {
+.ix-ledger__label h3 {
   margin: 0;
-  font-size: 1rem;
+  font-size: 1.02rem;
   font-weight: 700;
   letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 
-.ix-card p {
+.ix-ledger__body {
+  display: grid;
+  gap: 0.7rem;
+  align-content: start;
+  max-width: 44rem;
+}
+
+.ix-ledger__body p {
   margin: 0;
-  font-size: 0.9rem;
-  line-height: 1.55;
+  font-size: 0.95rem;
+  line-height: 1.6;
   color: var(--text-secondary);
 }
 
-.ix-card--target {
-  border-color: color-mix(in srgb, var(--text) 30%, transparent);
-  background: transparent;
-}
-
-.ix-card--unknowns ul {
+.ix-ledger__list {
   display: grid;
   gap: 0.4rem;
   margin: 0;
   padding: 0;
   list-style: none;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
   color: var(--text-secondary);
 }
 
-.ix-card--unknowns li {
-  padding-left: 1rem;
+.ix-ledger__list li {
   position: relative;
+  padding-left: 1rem;
 }
 
-.ix-card--unknowns li::before {
+.ix-ledger__list li::before {
   content: "";
   position: absolute;
   left: 0;
@@ -2035,6 +2049,13 @@
   border-radius: 50%;
   background: currentColor;
   opacity: 0.55;
+}
+
+@media (max-width: 52rem) {
+  .ix-ledger__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.6rem;
+  }
 }
 
 .intraday-evidence {
@@ -2362,7 +2383,7 @@
 
   .ix-questions li,
   .ix-decisions li,
-  .ix-card {
+  .ix-ledger__row {
     min-width: 0;
   }
 }

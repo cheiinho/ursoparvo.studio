@@ -128,32 +128,48 @@ export default function IntradayCaseStudy({ content }: Props) {
               </li>
             ))}
           </ol>
-          <div className="ix-grid">
-            <div className="ix-card ix-card--target">
-              <EvidenceLabel kind="requirement" text={content.labels.requirement} />
-              <h3>{content.target.label}</h3>
-              <p>{content.target.body}</p>
+          <div className="ix-ledger">
+            <div className="ix-ledger__row">
+              <div className="ix-ledger__label">
+                <h3>{content.target.label}</h3>
+                <EvidenceLabel kind="requirement" text={content.labels.requirement} />
+              </div>
+              <div className="ix-ledger__body">
+                <p>{content.target.body}</p>
+              </div>
             </div>
-            <div className="ix-card">
-              <h3>{content.validation.heading}</h3>
-              <p>{content.validation.paragraphs[0]}</p>
-              <More label="What the sessions did not settle">
-                <EvidenceLabel kind="context" text={content.labels.context} />
-                <p>{content.validation.paragraphs[1]}</p>
-                <p>{content.validation.paragraphs[2]}</p>
-              </More>
+            <div className="ix-ledger__row">
+              <div className="ix-ledger__label">
+                <h3>{content.validation.heading}</h3>
+              </div>
+              <div className="ix-ledger__body">
+                <p>{content.validation.paragraphs[0]}</p>
+                <More label="What the sessions did not settle">
+                  <EvidenceLabel kind="context" text={content.labels.context} />
+                  <p>{content.validation.paragraphs[1]}</p>
+                  <p>{content.validation.paragraphs[2]}</p>
+                </More>
+              </div>
             </div>
-            <div className="ix-card">
-              <h3>{content.reflection.heading}</h3>
-              <p>{content.reflection.body}</p>
+            <div className="ix-ledger__row">
+              <div className="ix-ledger__label">
+                <h3>{content.reflection.heading}</h3>
+              </div>
+              <div className="ix-ledger__body">
+                <p>{content.reflection.body}</p>
+              </div>
             </div>
-            <div className="ix-card ix-card--unknowns">
-              <h3>Still open</h3>
-              <ul>
-                {content.outcome.unknowns.map((line) => (
-                  <li key={line}>{line}</li>
-                ))}
-              </ul>
+            <div className="ix-ledger__row">
+              <div className="ix-ledger__label">
+                <h3>Still open</h3>
+              </div>
+              <div className="ix-ledger__body">
+                <ul className="ix-ledger__list">
+                  {content.outcome.unknowns.map((line) => (
+                    <li key={line}>{line}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
           <More label="The brief, the rules and what design did not decide">
