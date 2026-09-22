@@ -8,6 +8,7 @@ import { useAnnounce } from "./Announcer";
 import DataTable from "./DataTable";
 import ForecastChart, { type ChartSeries } from "./ForecastChart";
 import ProductChrome from "./ProductChrome";
+import { useStory } from "./story";
 import WfmSwitch from "./WfmSwitch";
 
 type Props = {
@@ -51,7 +52,7 @@ export default function ForecastCompare({
   actual,
   columns,
 }: Props) {
-  const [on, setOn] = useState(false);
+  const { showPrevious: on, setShowPrevious: setOn } = useStory();
   const [selected, setSelected] = useState<string | null>(null);
   const announce = useAnnounce();
   const axis = dataset.quarters.map((quarter) => quarter.time);
@@ -102,7 +103,7 @@ export default function ForecastCompare({
 
   return (
     <section className="intraday-ui intraday-compare wfm" aria-label={chartRegion}>
-      <p className="intraday-recon">{reconstruction}</p>
+      <p className="sr-only">{reconstruction}</p>
       <ProductChrome product={product} section="Forecast" context={dataset.queue}>
         <header className="wfm-pagehead">
           <div>
@@ -142,7 +143,6 @@ export default function ForecastCompare({
           />
           {on ? <p className="intraday-delta">{delta}</p> : <p className="wfm-help">{previousHidden}</p>}
         </div>
-        <p className="intraday-summary">{summary}</p>
         {selectedRow ? (
           <p className="intraday-readout">
             {selectedRow.time}. {columns.previous} {textValue(selectedRow.previous, empty)}. {columns.current}{" "}
@@ -150,17 +150,20 @@ export default function ForecastCompare({
             {textValue(inAffected(selectedRow.time) ? selectedRow.actual : null, empty)}.
           </p>
         ) : null}
-        <DataTable
-          caption={summary}
-          columns={[columns.time, columns.previous, columns.current, columns.actual]}
-          mark={dataset.quarters.filter((quarter) => inAffected(quarter.time)).map((quarter) => quarter.time)}
-          rows={dataset.quarters.map((quarter) => [
-            quarter.time,
-            textValue(quarter.previous, empty),
-            textValue(quarter.next, empty),
-            textValue(inAffected(quarter.time) ? quarter.actual : null, empty),
-          ])}
-        />
+        <details className="intraday-values">
+          <summary>{summary}</summary>
+          <DataTable
+            caption={summary}
+            columns={[columns.time, columns.previous, columns.current, columns.actual]}
+            mark={dataset.quarters.filter((quarter) => inAffected(quarter.time)).map((quarter) => quarter.time)}
+            rows={dataset.quarters.map((quarter) => [
+              quarter.time,
+              textValue(quarter.previous, empty),
+              textValue(quarter.next, empty),
+              textValue(inAffected(quarter.time) ? quarter.actual : null, empty),
+            ])}
+          />
+        </details>
       </ProductChrome>
     </section>
   );

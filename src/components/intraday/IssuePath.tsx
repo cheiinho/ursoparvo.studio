@@ -1,12 +1,13 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { dataset } from "@/content/intraday/dataset";
 import { affectedPeriodLabel, isPresent, periodSpan } from "@/content/intraday/derive";
 import DataTable from "./DataTable";
 import ForecastChart from "./ForecastChart";
 import ProductChrome, { PRODUCT_PLACES } from "./ProductChrome";
 import ScheduleList from "./ScheduleList";
+import { useStory } from "./story";
 
 type Props = {
   product: string;
@@ -55,31 +56,37 @@ export default function IssuePath({
 }: Props) {
   const forecastRef = useRef<HTMLHeadingElement>(null);
   const scheduleRef = useRef<HTMLHeadingElement>(null);
-  const [active, setActive] = useState<"forecast" | "schedule" | null>(null);
+  const { destination, setDestination } = useStory();
   const heading = affectedPeriodLabel(periodPrefix, dataset.affected.start, dataset.affected.end);
   const span = periodSpan(dataset.affected.start, dataset.affected.end);
   const rows = dataset.quarters.filter(
     (quarter) => quarter.time >= dataset.affected.start && quarter.time < dataset.affected.end,
   );
 
-  function show(target: HTMLHeadingElement | null, which: "forecast" | "schedule") {
-    setActive(which);
+  const opened = useRef(false);
+  useEffect(() => {
+    if (!opened.current) {
+      opened.current = true;
+      return;
+    }
+    const target = destination === "forecast" ? forecastRef.current : destination === "schedule" ? scheduleRef.current : null;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     target?.focus();
     target?.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" });
+  }, [destination]);
+
+  function show(which: "forecast" | "schedule") {
+    setDestination(which);
   }
 
   return (
     <div className="intraday-stack">
+      {destination === "issue" ? (
       <section className="intraday-ui intraday-issue wfm">
-        <p className="intraday-recon">{reconstruction}</p>
-        <ProductChrome product={product} section="Forecasting issues" context={dataset.queue}>
+        <p className="sr-only">{reconstruction}</p>
           <article className="wfm-issue">
-            <header>
-              <p className="wfm-kicker">{illustrative}</p>
-              <p className="wfm-title">{dataset.queue}</p>
-              <p className="wfm-meta">{span}</p>
-            </header>
+            <p className="wfm-title">{dataset.queue}</p>
+            <p className="wfm-period">{span}</p>
             <p className="wfm-issue__body">{issue}</p>
             <dl className="wfm-facts">
               <div>
@@ -96,18 +103,19 @@ export default function IssuePath({
               </div>
             </dl>
             <div className="intraday-actions">
-              <button type="button" onClick={() => show(forecastRef.current, "forecast")}>
+              <button type="button" onClick={() => show("forecast")}>
                 {showForecast}
               </button>
-              <button type="button" onClick={() => show(scheduleRef.current, "schedule")}>
+              <button type="button" onClick={() => show("schedule")}>
                 {showSchedule}
               </button>
             </div>
-            <p className="wfm-help">{severity}</p>
+            <p className="wfm-help">{severity} {illustrative}</p>
           </article>
-        </ProductChrome>
       </section>
-      <section className={`intraday-ui intraday-destination wfm${active === "forecast" ? " is-active" : ""}`}>
+      ) : null}
+      {destination === "forecast" ? (
+      <section className="intraday-ui intraday-destination wfm is-active">
         <ProductChrome
           product={product}
           section="Forecast"
@@ -124,6 +132,9 @@ export default function IssuePath({
               </p>
             </div>
             <p className="wfm-period">{span}</p>
+            <button type="button" onClick={() => setDestination("issue")}>
+              Forecasting issues
+            </button>
           </header>
           <div className="wfm-forecast">
             <ForecastChart
@@ -166,7 +177,7 @@ export default function IssuePath({
               }}
               tone="paper"
               yLabel={contacts}
-              enter={active === "forecast"}
+              enter={destination === "forecast"}
             />
             <DataTable
               caption={heading}
@@ -182,13 +193,21 @@ export default function IssuePath({
           </div>
         </ProductChrome>
       </section>
-      <section className={`intraday-ui intraday-destination wfm${active === "schedule" ? " is-active" : ""}`}>
+      ) : null}
+      {destination === "schedule" ? (
+      <section className="intraday-ui intraday-destination wfm is-active">
         <ProductChrome
           product={product}
           section="Team schedule"
           context={dataset.account}
           rail={PRODUCT_PLACES.map((item) => ({ ...item, current: item.id === "teamSchedule" }))}
         >
+        <div className="wfm-pagehead">
+          <p className="wfm-period">{span}</p>
+          <button type="button" onClick={() => setDestination("issue")}>
+            Forecasting issues
+          </button>
+        </div>
         <ScheduleList
           asHeading
           headingRef={scheduleRef}
@@ -206,6 +225,7 @@ export default function IssuePath({
         />
         </ProductChrome>
       </section>
+      ) : null}
     </div>
   );
 }

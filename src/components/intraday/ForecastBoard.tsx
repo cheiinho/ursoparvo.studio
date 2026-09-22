@@ -75,11 +75,14 @@ export default function ForecastBoard({
             tone="paper"
             yLabel={contacts}
           />
-          <DataTable
-            caption={summary}
-            columns={[time, forecast]}
-            rows={dataset.quarters.map((quarter) => [quarter.time, String(quarter.previous)])}
-          />
+          <details className="intraday-values">
+            <summary>{summary}</summary>
+            <DataTable
+              caption={summary}
+              columns={[time, forecast]}
+              rows={dataset.quarters.map((quarter) => [quarter.time, String(quarter.previous)])}
+            />
+          </details>
         </div>
       </ProductChrome>
     </div>

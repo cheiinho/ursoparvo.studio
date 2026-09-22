@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { dataset } from "@/content/intraday/dataset";
 import { quarterByTime } from "@/content/intraday/derive";
 import {
@@ -16,7 +15,7 @@ import type { StepId } from "@/content/intraday/types";
 import { useAnnounce } from "./Announcer";
 import DataTable from "./DataTable";
 import ForecastChart, { type ChartSeries } from "./ForecastChart";
-import ProductChrome, { PRODUCT_PLACES } from "./ProductChrome";
+import { useStory } from "./story";
 
 type StepCopy = {
   id: StepId;
@@ -26,7 +25,6 @@ type StepCopy = {
 };
 
 type Props = {
-  product: string;
   groupLabel: string;
   back: string;
   next: string;
@@ -48,7 +46,6 @@ function textValue(value: number | null, empty: string): string {
 }
 
 export default function ReforecastStepper({
-  product,
   groupLabel,
   back,
   next,
@@ -64,7 +61,7 @@ export default function ReforecastStepper({
   summary,
   illustrative,
 }: Props) {
-  const [step, setStep] = useState<StepId>(1);
+  const { step, setStep } = useStory();
   const announce = useAnnounce();
   const current = steps.find((item) => item.id === step) ?? steps[0];
   const status = stepStatus(step);
@@ -120,25 +117,7 @@ export default function ReforecastStepper({
   const showNext = stepShowsNext(step);
 
   return (
-    <div className="intraday-ui wfm">
-      <ProductChrome
-        product={product}
-        section="Forecast"
-        context={dataset.account}
-        rail={PRODUCT_PLACES.map((item) => ({ ...item, current: item.id === "forecast" }))}
-      >
-        <header className="wfm-pagehead">
-          <div>
-            <p className="wfm-title">Forecast</p>
-            <p className="wfm-meta">
-              {current.stateName}. {illustrative}. {dataset.timeZone}
-            </p>
-          </div>
-          <div className="wfm-queues">
-            <span className="is-on">{dataset.queue}</span>
-            <span>{dataset.contrastQueue}</span>
-          </div>
-        </header>
+    <div className="intraday-ui wfm intraday-watch">
         <div className="wfm-stepper">
           <fieldset className="wfm-states">
             <legend className="wfm-kicker">{groupLabel}</legend>
@@ -183,6 +162,9 @@ export default function ReforecastStepper({
           </div>
         ) : null}
         <div className="wfm-forecast">
+          <p className="wfm-help">
+            {current.sentence} {illustrative}.
+          </p>
           <ForecastChart
             patternId="step-band"
             axis={times}
@@ -201,22 +183,23 @@ export default function ReforecastStepper({
             yLabel={contacts}
             enter={showNext}
           />
-          <p className="wfm-help">{current.sentence}</p>
-          <DataTable
-            caption={summary}
-            columns={showNext ? [time, forecast, actual, newForecast] : [time, forecast, actual]}
-            rows={rows.map((quarter) => {
-              const cells = [
-                quarter.time,
-                textValue(quarter.previous, empty),
-                textValue(quarter.actual, empty),
-              ];
-              if (showNext) cells.push(textValue(quarter.next, empty));
-              return cells;
-            })}
-          />
+          <details className="intraday-values">
+            <summary>{summary}</summary>
+            <DataTable
+              caption={summary}
+              columns={showNext ? [time, forecast, actual, newForecast] : [time, forecast, actual]}
+              rows={rows.map((quarter) => {
+                const cells = [
+                  quarter.time,
+                  textValue(quarter.previous, empty),
+                  textValue(quarter.actual, empty),
+                ];
+                if (showNext) cells.push(textValue(quarter.next, empty));
+                return cells;
+              })}
+            />
+          </details>
         </div>
-      </ProductChrome>
     </div>
   );
 }

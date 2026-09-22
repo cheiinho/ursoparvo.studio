@@ -11,8 +11,9 @@ import {
   ordersVisible,
   shellShowsNext,
 } from "@/content/intraday/state";
-import type { ShellState, SurfaceId } from "@/content/intraday/types";
+import type { ShellState, StepId, SurfaceId } from "@/content/intraday/types";
 import { useAnnounce } from "./Announcer";
+import { useStory } from "./story";
 import DataTable from "./DataTable";
 import ForecastChart from "./ForecastChart";
 import InsightsBody from "./InsightsBody";
@@ -56,14 +57,22 @@ type Props = {
   empty: string;
   time: string;
   summary: string;
+  viewForecast: string;
 };
+
+function shellFromStep(step: StepId): ShellState {
+  if (step >= 5) return "updated";
+  if (step === 4) return "inProgress";
+  return "watching";
+}
 
 function textValue(value: number | null, empty: string): string {
   return value === null ? empty : String(value);
 }
 
 export default function ProductShell(props: Props) {
-  const [shell, setShell] = useState<ShellState>("watching");
+  const { step } = useStory();
+  const shell = shellFromStep(step);
   const [surface, setSurface] = useState<SurfaceId>("forecast");
   const [filterOn, setFilterOn] = useState(false);
   const [panelOpen, setPanelOpen] = useState(false);
@@ -91,13 +100,6 @@ export default function ProductShell(props: Props) {
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [panelOpen]);
-
-  function chooseState(next: ShellState) {
-    const status = props.states.find((item) => item.id === next)?.status ?? "";
-    const message = announceOnChange(shell, next, status);
-    setShell(next);
-    if (message) announce(message);
-  }
 
   function chooseSurface(next: SurfaceId) {
     const label = props.surfaces.find((item) => item.id === next)?.label ?? "";
@@ -140,25 +142,10 @@ export default function ProductShell(props: Props) {
 
   return (
     <div className="intraday-stack">
-      <fieldset className="wfm-states">
-        <legend className="type-label">{props.stateGroup}</legend>
-        <div className="wfm-segments">
-          {props.states.map((item) => (
-            <label key={item.id}>
-              <input
-                type="radio"
-                name="intraday-shell-state"
-                checked={shell === item.id}
-                onChange={() => chooseState(item.id)}
-              />
-              {item.label}
-            </label>
-          ))}
-        </div>
-      </fieldset>
-      <p className="type-lede">{props.states.find((item) => item.id === shell)?.status}</p>
+      <p className="sr-only">
+        {props.reconstruction} {props.stateGroup}. {props.states.find((item) => item.id === shell)?.status}
+      </p>
       <section className="intraday-ui intraday-frame wfm" aria-labelledby="intraday-surface-name">
-        <p className="intraday-recon">{props.reconstruction}</p>
         <div className="wfm-app">
           <AppBar product={props.product} section={surfaceCopy.label} context={dataset.account}>
             <button
@@ -226,6 +213,11 @@ export default function ProductShell(props: Props) {
                       ) : null}
                     </div>
                   ) : null}
+                  {shell === "updated" ? (
+                    <div className="wfm-banner__actions">
+                      <a href="#decision-three">{props.viewForecast}</a>
+                    </div>
+                  ) : null}
                 </div>
               ) : null}
               <header className="wfm-pagehead">
@@ -290,15 +282,18 @@ export default function ProductShell(props: Props) {
                 yLabel={props.contacts}
                 enter={showNext}
               />
-              <DataTable
-                caption={props.summary}
-                columns={[props.time, showNext ? props.newForecast : props.forecast]}
-                mark={marked}
-                rows={dataset.quarters.map((quarter) => [
-                  quarter.time,
-                  textValue(showNext ? quarter.next : quarter.previous, props.empty),
-                ])}
-              />
+              <details className="intraday-values">
+                <summary>{props.summary}</summary>
+                <DataTable
+                  caption={props.summary}
+                  columns={[props.time, showNext ? props.newForecast : props.forecast]}
+                  mark={marked}
+                  rows={dataset.quarters.map((quarter) => [
+                    quarter.time,
+                    textValue(showNext ? quarter.next : quarter.previous, props.empty),
+                  ])}
+                />
+              </details>
             </div>
           ) : null}
           {surface === "teamSchedule" ? (

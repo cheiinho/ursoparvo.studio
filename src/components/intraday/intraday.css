@@ -1987,9 +1987,69 @@
   min-height: 0;
 }
 
-.intraday-peak .wfm-app:has(.intraday-chart),
-.intraday-beat .wfm-app:has(.intraday-chart) {
-  min-height: 72vh;
+.intraday-chapter {
+  padding-block: clamp(3.25rem, 8vh, 5.5rem);
+}
+
+.intraday-chapter .intraday-beat__title {
+  max-width: none;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.intraday-statement {
+  margin: 0;
+  max-width: 18em;
+  font-family: var(--font-brand), system-ui, sans-serif;
+  font-size: clamp(1.85rem, 4vw, 3.15rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.intraday-quiet {
+  padding-block: clamp(2rem, 5vh, 3rem);
+}
+
+.intraday-quiet .intraday-beat__title,
+.intraday-close .intraday-beat__title {
+  max-width: 18em;
+  font-size: clamp(1.45rem, 2.4vw, 2rem);
+}
+
+.intraday-hero-chart {
+  margin: 0;
+  padding: 1rem 1rem 1.25rem;
+}
+
+.intraday-values {
+  margin: 0;
+}
+
+.intraday-values summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.wfm-banner a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 0.9rem;
+  border: 1px solid #cdbdd8;
+  border-radius: 4px;
+  background: #ffffff;
+  color: var(--wfm-accent);
+  font-weight: 600;
+  text-decoration: none;
 }
 
 .intraday-questions h3 {
@@ -2081,10 +2141,6 @@
     min-height: 0;
   }
 
-  .intraday-peak .wfm-app:has(.intraday-chart),
-  .intraday-beat .wfm-app:has(.intraday-chart) {
-    min-height: 0;
-  }
 
   .intraday-hero-chart .intraday-chart {
     min-height: 0;

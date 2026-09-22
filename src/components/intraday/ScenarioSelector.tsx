@@ -7,12 +7,10 @@ import type { ScenarioId } from "@/content/intraday/types";
 import { useAnnounce } from "./Announcer";
 import DataTable from "./DataTable";
 import ForecastChart, { type ChartSeries } from "./ForecastChart";
-import ProductChrome, { PRODUCT_PLACES } from "./ProductChrome";
 
 type Option = { id: ScenarioId; label: string; note: string };
 
 type Props = {
-  product: string;
   groupLabel: string;
   options: readonly Option[];
   forecast: string;
@@ -29,7 +27,6 @@ function textValue(value: number | null, empty: string): string {
 }
 
 export default function ScenarioSelector({
-  product,
   groupLabel,
   options,
   forecast,
@@ -86,73 +83,57 @@ export default function ScenarioSelector({
   const bandEnd = affected.at(-1)?.time;
 
   return (
-    <div className="intraday-ui wfm">
-      <ProductChrome
-        product={product}
-        section="Forecast"
-        context={dataset.account}
-        rail={PRODUCT_PLACES.map((item) => ({ ...item, current: item.id === "forecast" }))}
-      >
-        <header className="wfm-pagehead">
-          <div>
-            <p className="wfm-title">Forecast</p>
-            <p className="wfm-meta">
-              {summary} {illustrative}. {dataset.timeZone}
-            </p>
-          </div>
-          <fieldset className="wfm-states">
-            <legend className="wfm-kicker">{groupLabel}</legend>
-            <div className="wfm-segments">
-              {options.map((option) => (
-                <label key={option.id}>
-                  <input
-                    type="radio"
-                    name="intraday-scenario"
-                    checked={selected === option.id}
-                    onChange={() => choose(option.id)}
-                  />
-                  {option.label}
-                </label>
-              ))}
-            </div>
-          </fieldset>
-          <div className="wfm-queues">
-            <span className="is-on">{dataset.queue}</span>
-            <span>{dataset.contrastQueue}</span>
-          </div>
-        </header>
-        <div className="wfm-forecast">
-          <ForecastChart
-            patternId="scenario-band"
-            axis={axis}
-            series={[forecastSeries, ...actualSeries]}
-            band={
-              view.showActuals && bandEnd
-                ? {
-                    start: dataset.affected.start,
-                    end: bandEnd,
-                    label: `${dataset.affected.start} to ${dataset.affected.end}`,
-                  }
-                : null
-            }
-            tone="paper"
-            yLabel={contacts}
-            enter={view.showActuals}
-          />
-          <p className="wfm-help">{note}</p>
-          {view.showActuals ? (
-            <DataTable
-              caption={summary}
-              columns={[time, forecast, actual]}
-              rows={affected.map((quarter) => [
-                quarter.time,
-                textValue(quarter.previous, empty),
-                textValue(quarter.actual, empty),
-              ])}
-            />
-          ) : null}
+    <figure className="intraday-hero-chart intraday-ui wfm">
+      <fieldset className="wfm-states">
+        <legend className="wfm-kicker">{groupLabel}</legend>
+        <div className="wfm-segments">
+          {options.map((option) => (
+            <label key={option.id}>
+              <input
+                type="radio"
+                name="intraday-scenario"
+                checked={selected === option.id}
+                onChange={() => choose(option.id)}
+              />
+              {option.label}
+            </label>
+          ))}
         </div>
-      </ProductChrome>
-    </div>
+      </fieldset>
+      <ForecastChart
+        patternId="scenario-band"
+        axis={axis}
+        series={[forecastSeries, ...actualSeries]}
+        band={
+          view.showActuals && bandEnd
+            ? {
+                start: dataset.affected.start,
+                end: bandEnd,
+                label: `${dataset.affected.start} to ${dataset.affected.end}`,
+              }
+            : null
+        }
+        tone="paper"
+        yLabel={contacts}
+        enter={view.showActuals}
+      />
+      <figcaption className="wfm-help">
+        {note} {illustrative}.
+      </figcaption>
+      {view.showActuals ? (
+        <details className="intraday-values">
+          <summary>{summary}</summary>
+          <DataTable
+            caption={summary}
+            columns={[time, forecast, actual]}
+            rows={affected.map((quarter) => [
+              quarter.time,
+              textValue(quarter.previous, empty),
+              textValue(quarter.actual, empty),
+            ])}
+          />
+        </details>
+      ) : null}
+    </figure>
   );
 }

@@ -7,6 +7,7 @@ import ProductShell from "@/components/intraday/ProductShell";
 import QueueSwitch from "@/components/intraday/QueueSwitch";
 import ReforecastStepper from "@/components/intraday/ReforecastStepper";
 import ScenarioSelector from "@/components/intraday/ScenarioSelector";
+import { StoryProvider } from "@/components/intraday/story";
 import type { IntradayContent } from "@/content/intraday/types";
 import "./intraday.css";
 
@@ -41,6 +42,7 @@ function TargetBlock({
 
 export default function IntradayCaseStudy({ content }: Props) {
   return (
+    <StoryProvider>
     <article className="intraday">
       <section id="cover" className="intraday-field intraday-field--system intraday-poster" aria-labelledby="intraday-title">
         <div className="intraday-stage intraday-stack">
@@ -48,7 +50,6 @@ export default function IntradayCaseStudy({ content }: Props) {
           <h1 id="intraday-title" className="intraday-poster__name">
             {content.cover.title}
           </h1>
-          <p className="intraday-poster__thesis">{content.plan.message}</p>
           <p className="intraday-poster__meta">{content.cover.anonymity}</p>
           <More label="Contents">
             <EvidenceLabel kind="inference" text={content.labels.inference} />
@@ -77,11 +78,12 @@ export default function IntradayCaseStudy({ content }: Props) {
         </div>
       </section>
 
-      <section id="plan" className="intraday-beat intraday-beat--product" aria-labelledby="plan-title">
+      <section id="plan" className="intraday-chapter" aria-labelledby="plan-title">
         <div className="intraday-stage intraday-stack">
           <h2 id="plan-title" className="intraday-beat__title">
             {content.plan.heading}
           </h2>
+          <p className="intraday-statement">{content.plan.message}</p>
           <ForecastBoard
             product={content.frame.product}
             reconstruction={content.frame.reconstruction}
@@ -105,13 +107,13 @@ export default function IntradayCaseStudy({ content }: Props) {
         </div>
       </section>
 
-      <section id="diverges" className="intraday-beat intraday-beat--product" aria-labelledby="diverges-title">
+      <section id="diverges" className="intraday-chapter" aria-labelledby="diverges-title">
         <div className="intraday-stage intraday-stack">
           <h2 id="diverges-title" className="intraday-beat__title">
             {content.diverges.heading}
           </h2>
+          <p className="intraday-statement">{content.plan.transition}</p>
           <ScenarioSelector
-            product={content.frame.product}
             groupLabel={content.diverges.groupLabel}
             options={content.diverges.options}
             forecast={content.chart.forecast}
@@ -129,12 +131,11 @@ export default function IntradayCaseStudy({ content }: Props) {
         </div>
       </section>
 
-      <section id="brief" className="intraday-beat" aria-labelledby="brief-title">
+      <section id="brief" className="intraday-quiet" aria-labelledby="brief-title">
         <div className="intraday-stage intraday-stack">
           <h2 id="brief-title" className="intraday-beat__title">
             {content.brief.heading}
           </h2>
-          <p className="intraday-beat__line">{content.brief.message}</p>
           <p className="type-italic intraday-beat__story">{content.brief.story}</p>
           <TargetBlock
             evidence={content.labels.requirement}
@@ -142,6 +143,7 @@ export default function IntradayCaseStudy({ content }: Props) {
             body={content.target.body}
           />
           <More label="What was still open">
+            <p className="type-corpo">{content.brief.message}</p>
             <ul className="intraday-cards">
               {content.brief.constraints.map((item) => (
                 <li key={item.summary} className="type-corpo">
@@ -162,13 +164,12 @@ export default function IntradayCaseStudy({ content }: Props) {
         </div>
       </section>
 
-      <section id="system" className="intraday-field intraday-field--system intraday-beat intraday-beat--product" aria-labelledby="system-title">
+      <section id="system" className="intraday-field intraday-field--system intraday-chapter" aria-labelledby="system-title">
         <div className="intraday-stage intraday-stack">
           <h2 id="system-title" className="intraday-beat__title">
             {content.system.heading}
           </h2>
           <ReforecastStepper
-            product={content.frame.product}
             groupLabel={content.system.groupLabel}
             back={content.system.back}
             next={content.system.next}
@@ -210,12 +211,12 @@ export default function IntradayCaseStudy({ content }: Props) {
         </div>
       </section>
 
-      <section id="decision-one" className="intraday-peak intraday-beat intraday-beat--product" aria-labelledby="decision-one-title">
+      <section id="decision-one" className="intraday-chapter" aria-labelledby="decision-one-title">
         <div className="intraday-stage intraday-stack">
           <h2 id="decision-one-title" className="intraday-beat__title">
-            {content.decisionOne.heading}
+            Allow the change
           </h2>
-          <p className="intraday-beat__line">{content.decisionOne.message}</p>
+          <p className="intraday-statement">{content.decisionOne.heading}</p>
           <QueueSwitch
             region={content.frame.region}
             product={content.frame.product}
@@ -233,6 +234,7 @@ export default function IntradayCaseStudy({ content }: Props) {
             disclosure={content.decisionOne.disclosure}
           />
           <More label="The requirement beside the switch">
+            <p className="type-corpo">{content.decisionOne.message}</p>
             <EvidenceLabel kind="designDecision" text={content.labels.designDecision} />
             <EvidenceLabel kind="requirement" text={content.labels.requirement} />
             <p className="type-corpo">{content.decisionOne.conflict}</p>
@@ -241,12 +243,12 @@ export default function IntradayCaseStudy({ content }: Props) {
         </div>
       </section>
 
-      <section id="decision-two" className="intraday-peak intraday-beat intraday-beat--product" aria-labelledby="decision-two-title">
+      <section id="decision-two" className="intraday-chapter" aria-labelledby="decision-two-title">
         <div className="intraday-stage intraday-stack">
           <h2 id="decision-two-title" className="intraday-beat__title">
             {content.decisionTwo.heading}
           </h2>
-          <p className="intraday-beat__line">{content.decisionTwo.causal}</p>
+          <p className="intraday-statement">{content.decisionTwo.causal}</p>
           <ProductShell
             region={content.frame.region}
             product={content.frame.product}
@@ -281,6 +283,7 @@ export default function IntradayCaseStudy({ content }: Props) {
             empty={content.chart.empty}
             time={content.decisionThree.columns.time}
             summary={content.chart.planSummary}
+            viewForecast={content.decisionThree.showForecast}
           />
           <More label="Where the change has to land">
             <EvidenceLabel kind="designDecision" text={content.labels.designDecision} />
@@ -291,12 +294,12 @@ export default function IntradayCaseStudy({ content }: Props) {
         </div>
       </section>
 
-      <section id="decision-three" className="intraday-peak intraday-beat intraday-beat--product" aria-labelledby="decision-three-title">
+      <section id="decision-three" className="intraday-chapter" aria-labelledby="decision-three-title">
         <div className="intraday-stage intraday-stack">
           <h2 id="decision-three-title" className="intraday-beat__title">
             {content.decisionThree.heading}
           </h2>
-          <p className="intraday-beat__line">{content.decisionThree.causal}</p>
+          <p className="intraday-statement">{content.decisionThree.causal}</p>
           <ForecastCompare
             product={content.frame.product}
             reconstruction={content.frame.reconstruction}
@@ -402,5 +405,6 @@ export default function IntradayCaseStudy({ content }: Props) {
         </div>
       </section>
     </article>
+    </StoryProvider>
   );
 }
