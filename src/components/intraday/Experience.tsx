@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import type { IntradayContent, ScenarioId } from "@/content/intraday/types";
 import { useAnnounce } from "./Announcer";
 import WfmApp from "./WfmApp";
@@ -22,6 +23,20 @@ function Stage({ content, note, illustrative }: Props) {
   const acts = content.experience.acts;
   const current = acts[index];
   const signalNote = content.diverges.options.find((option) => option.id === signal);
+  const actsRef = useRef<HTMLOListElement>(null);
+
+  /* Narrow screens scroll the act list. Keep the current act in view without
+     moving the page, so scrollLeft rather than scrollIntoView. */
+  useEffect(() => {
+    const list = actsRef.current;
+    const chip = list?.querySelector<HTMLElement>("button[aria-current]");
+    if (!list || !chip) return;
+    const target = chip.offsetLeft - (list.clientWidth - chip.offsetWidth) / 2;
+    const left = Math.max(0, Math.min(target, list.scrollWidth - list.clientWidth));
+    if (Math.abs(list.scrollLeft - left) < 2) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    list.scrollTo({ left, behavior: reduce ? "auto" : "smooth" });
+  }, [index]);
 
   function jump(next: (typeof acts)[number]) {
     goTo(next.id);
@@ -46,7 +61,7 @@ function Stage({ content, note, illustrative }: Props) {
       <div className="ix-console">
         <div className="ix-console__inner">
           <p className="ix-console__label">{content.experience.label}</p>
-          <ol className="ix-acts">
+          <ol className="ix-acts" ref={actsRef}>
             {acts.map((item, position) => (
               <li key={item.id}>
                 <button

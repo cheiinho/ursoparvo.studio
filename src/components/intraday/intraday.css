@@ -25,6 +25,10 @@
   --ix-gutter: clamp(1.25rem, 3.2vw, 3rem);
   --ix-max: 100rem;
 
+  /* Walkthrough console height and border, plus everything pinned above the product */
+  --ix-console-h: 3.75rem;
+  --ix-chrome: calc(var(--header-offset) + var(--ix-console-h) + 1px);
+
   display: block;
   color: var(--text);
 }
@@ -221,9 +225,24 @@
   position: sticky;
   top: var(--header-offset);
   z-index: 4;
-  background: rgba(33, 18, 58, 0.86);
-  backdrop-filter: blur(12px);
+  min-height: var(--ix-console-h);
+  background: #211230;
   border-bottom: 1px solid rgba(244, 238, 227, 0.14);
+}
+
+/*
+ * The studio header is fixed and transparent, so the product window would
+ * otherwise scroll under the bear. Carry the console colour up behind it and
+ * the whole strip reads as one toolbar.
+ */
+.ix-console::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: var(--header-offset);
+  background: #211230;
 }
 
 .ix-console__inner {
@@ -234,6 +253,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem 1.5rem;
+  min-height: var(--ix-console-h);
 }
 
 .ix-console__label {
@@ -516,11 +536,14 @@
   box-shadow:
     0 40px 80px -40px rgba(10, 4, 26, 0.75),
     0 2px 0 rgba(255, 255, 255, 0.05) inset;
-  overflow: hidden;
+  /* clip, not hidden: the app bar and the rail stay sticky against the page */
+  overflow: clip;
 }
 
 .pwin__bar {
-  position: relative;
+  position: sticky;
+  top: var(--ix-chrome);
+  z-index: 3;
   display: flex;
   align-items: center;
   gap: 0.75rem 1.25rem;
@@ -528,6 +551,7 @@
   padding: 0.5rem 0.75rem 0.5rem 1.15rem;
   background: var(--p-surface);
   border-bottom: 1px solid var(--p-line);
+  border-radius: var(--p-r-lg) var(--p-r-lg) 0 0;
 }
 
 .pwin__brand {
@@ -717,6 +741,8 @@
 }
 
 .pnav ul {
+  position: sticky;
+  top: calc(var(--ix-chrome) + 4rem);
   display: grid;
   gap: 2px;
   margin: 0;
@@ -770,7 +796,9 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem 0.75rem;
-  position: relative;
+  position: sticky;
+  top: calc(var(--ix-chrome) + 3.25rem);
+  z-index: 2;
   padding: 0.6rem 1.25rem;
   background: var(--p-surface);
   border-bottom: 1px solid var(--p-line);
@@ -2076,28 +2104,28 @@
 }
 
 @media (max-width: 52rem) {
+  /* One row, so the pinned console stays worth its height on a phone */
+  .ix-console {
+    --ix-console-h: 3.25rem;
+  }
+
   .ix-console__inner {
-    flex-wrap: wrap;
     gap: 0.4rem;
-    padding-block: 0.4rem 0.5rem;
+    padding-block: 0.3rem;
   }
 
   .ix-acts {
-    order: 2;
-    width: 100%;
-    margin-inline: calc(var(--ix-gutter) * -1);
-    padding-inline: var(--ix-gutter);
+    min-width: 0;
   }
 
   .ix-transport {
-    order: 1;
-    width: 100%;
+    flex: none;
+    gap: 0.25rem;
   }
 
   .ix-transport .ixbtn {
-    flex: 1 1 auto;
     min-height: 40px;
-    padding-inline: 0.5rem;
+    padding-inline: 0.55rem;
   }
 
   .ix-acts button .ix-rail__name {
@@ -2106,6 +2134,7 @@
 
   .ix-acts button {
     min-width: 44px;
+    min-height: 40px;
     justify-content: center;
     padding-inline: 0.5rem;
   }
@@ -2121,10 +2150,35 @@
     min-height: 0;
   }
 
+  /* Three pinned rows would swallow a small screen. Let the product scroll. */
+  .pwin__bar,
+  .psystem {
+    position: relative;
+    top: auto;
+  }
+
+  .pnav ul {
+    position: static;
+    top: auto;
+  }
+
   .pnav {
+    position: relative;
     border-right: 0;
     border-bottom: 1px solid var(--p-line);
     padding: 0.4rem 0.5rem;
+  }
+
+  /* The rail turns into a scrolling row. Fade the edge so that is visible. */
+  .pnav::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 1px;
+    width: 2rem;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0), var(--p-surface) 70%);
+    pointer-events: none;
   }
 
   .pnav ul {
